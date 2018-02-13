@@ -275,12 +275,6 @@ public class TurretBehavior : MonoBehaviour, ITurret
         Vector3 shipHeadingClean = _containingShip.transform.up;
         shipHeadingClean.y = 0;
         float angleOffset = Quaternion.FromToRotation(shipHeadingClean, forwardClean).eulerAngles.y;
-        float angleOffset2 = Mathf.Acos(Vector3.Dot(shipHeadingClean.normalized , forwardClean.normalized));
-        if (Vector3.Dot(Vector3.Cross(shipHeadingClean, forwardClean), Vector3.up) < 0)
-        {
-            angleOffset2 = -angleOffset2;
-        }
-        angleOffset2 *= Mathf.Rad2Deg;
         if (inverse)
         {
             angleOffset = -angleOffset;
@@ -338,6 +332,7 @@ public class TurretBehavior : MonoBehaviour, ITurret
         }
     }
 
+    // Rotation behavior variables:
     private float _minRotation, _maxRotation;
     private Tuple<float, float>[] _rotationAllowedRanges;
     private bool _fixed = false;
@@ -352,17 +347,34 @@ public class TurretBehavior : MonoBehaviour, ITurret
     private string[] _deadZoneAngleStrings;
     private Tuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
-    public RotationAxis MuzzleAxis;
-    public bool MuzzleReversed;
-    private Vector3 _muzzleDirection;
+
+    // Barrels, muzzles, and muzzleFx data:
     private Transform[] Barrels;
     private Transform[] Muzzles;
     private ParticleSystem[] MuzzleFx;
-    private Ship _containingShip;
     int _nextBarrel = 0;
+
+    // The ship containing the turret:
+    private Ship _containingShip;
+
+    // Weapon data:
+    public WeaponEmplacementType TurretType;
+
+    // Turret status:
+    public int MaxHitpoints;
+    public int HitPoints { get; private set; }
+    public int IsWorking { get; private set; }
+    public int IsJammed { get; private set; }
+    public TurretStatus Status { get; private set; }
 
     public enum TurretMode { Off, Manual, Auto, AutoTracking };
     public enum RotationAxis { XAxis, YAxis, ZAxis };
+
+    public enum WeaponEmplacementType { SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
+                                        MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
+                                        LargeBarbette, LargeTurret,
+                                        Special};
+    public enum TurretStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
 
     private static readonly string BarrelString = "Barrel";
     private static readonly string MuzzleString = "Muzzle";

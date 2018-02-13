@@ -108,7 +108,7 @@ public class Ship : MonoBehaviour
 
     private void RotateToHeading()
     {
-        if (transform.rotation.Equals(_autoHeadingRotation))
+        if (Quaternion.Angle(transform.rotation,_autoHeadingRotation) < 0.5f)
         {
             _autoHeading = false;
             return;

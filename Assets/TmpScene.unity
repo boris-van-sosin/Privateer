@@ -251,8 +251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RotationSpeed: 60
   TurretAxis: 1
-  MuzzleAxis: 2
-  MuzzleReversed: 1
+  TurretType: 9
+  MaxHitpoints: 50
 --- !u!1001 &467541901
 Prefab:
   m_ObjectHideFlags: 0
@@ -832,6 +832,7 @@ MonoBehaviour:
   DeadZoneAngles:
   - 0,25
   - 335,360
+  AllowedWeaponTypes: 0a000000
 --- !u!1 &1682352585
 GameObject:
   m_ObjectHideFlags: 0
