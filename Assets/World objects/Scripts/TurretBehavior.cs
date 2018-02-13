@@ -14,6 +14,19 @@ public class TurretBehavior : MonoBehaviour, ITurret
 
     void Awake()
     {
+        TurretHardpoint parentHardpoint;
+        if (transform.parent != null && (parentHardpoint = GetComponentInParent<TurretHardpoint>()) != null)
+        {
+            _minRotation = parentHardpoint.MinRotation;
+            _maxRotation = parentHardpoint.MaxRotation;
+            _deadZoneAngleStrings = parentHardpoint.DeadZoneAngles.ToArray();
+        }
+        else
+        {
+            _minRotation = 0.0f;
+            _maxRotation = 0.0f;
+            _deadZoneAngleStrings = null;
+        }
         ParseDeadZones();
         ParseMuzzles();
         _containingShip = FindContainingShip(transform.parent);
@@ -21,29 +34,33 @@ public class TurretBehavior : MonoBehaviour, ITurret
 
     private void ParseDeadZones()
     {
-        if (DeadZoneAngles != null)
+        if (_deadZoneAngleStrings != null)
         {
-            _deadZoneAngleRanges = new Tuple<float, float>[DeadZoneAngles.Length];
-            for (int i = 0; i < DeadZoneAngles.Length; ++i)
+            _deadZoneAngleRanges = new Tuple<float, float>[_deadZoneAngleStrings.Length];
+            for (int i = 0; i < _deadZoneAngleStrings.Length; ++i)
             {
-                string[] nums = DeadZoneAngles[i].Split(',');
+                string[] nums = _deadZoneAngleStrings[i].Split(',');
                 _deadZoneAngleRanges[i] = Tuple<float, float>.Create(float.Parse(nums[0]), float.Parse(nums[1]));
             }
         }
-        if (MinRotation < MaxRotation)
+        if (_minRotation < _maxRotation)
         {
             _rotationAllowedRanges = new Tuple<float, float>[1]
             {
-                Tuple<float, float>.Create(MinRotation, MaxRotation),
+                Tuple<float, float>.Create(_minRotation, _maxRotation),
             };
         }
-        else if (MaxRotation < MinRotation)
+        else if (_maxRotation < _minRotation)
         {
             _rotationAllowedRanges = new Tuple<float, float>[2]
 {
-                Tuple<float, float>.Create(MinRotation, 360),
-                Tuple<float, float>.Create(0, MaxRotation)
+                Tuple<float, float>.Create(_minRotation, 360),
+                Tuple<float, float>.Create(0, _maxRotation)
             };
+        }
+        else
+        {
+            _fixed = true;
         }
     }
 
@@ -52,10 +69,12 @@ public class TurretBehavior : MonoBehaviour, ITurret
         List<Tuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
         Barrels = new Transform[barrelsFound.Count];
         Muzzles = new Transform[barrelsFound.Count];
+        MuzzleFx = new ParticleSystem[barrelsFound.Count];
         for (int i = 0; i < barrelsFound.Count; ++i)
         {
             Barrels[i] = barrelsFound[i].Item1;
             Muzzles[i] = barrelsFound[i].Item2;
+            MuzzleFx[i] = barrelsFound[i].Item2.GetComponentInChildren<ParticleSystem>();
         }
     }
 
@@ -103,18 +122,19 @@ public class TurretBehavior : MonoBehaviour, ITurret
     void Update()
     {
         float maxRotation = RotationSpeed * Time.deltaTime;
-        if (Mathf.Abs(_targetAngle - CurrAngle) < maxRotation)
+        //Debug.Log(string.Format("Turret angle: global: {0} local: {1} target (global): {2}", CurrAngle, CurrLocalAngle, _globalTargetAngle));
+        if (Mathf.Abs(_globalTargetAngle - CurrAngle) < maxRotation)
         {
             switch (TurretAxis)
             {
                 case RotationAxis.XAxis:
-                    transform.rotation = Quaternion.Euler(_targetAngle, transform.rotation.eulerAngles.y, transform.rotation.z);
+                    transform.rotation = Quaternion.Euler(_globalTargetAngle, transform.rotation.eulerAngles.y, transform.rotation.z);
                     break;
                 case RotationAxis.YAxis:
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _targetAngle, transform.rotation.z);
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _globalTargetAngle, transform.rotation.z);
                     break;
                 case RotationAxis.ZAxis:
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.y, _targetAngle);
+                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.y, _globalTargetAngle);
                     break;
                 default:
                     break;
@@ -124,7 +144,7 @@ public class TurretBehavior : MonoBehaviour, ITurret
         {
             transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
         }
-	}
+    }
 
     public void ManualTarget(Vector3 target)
     {
@@ -136,26 +156,27 @@ public class TurretBehavior : MonoBehaviour, ITurret
         _vectorToTarget = target - transform.position;
         Vector3 flatVec = new Vector3(_vectorToTarget.x, 0, _vectorToTarget.z);
         float angleToTarget = Quaternion.LookRotation(-flatVec).eulerAngles.y;
-        Debug.Log(string.Format("Angle to target: {0}", angleToTarget));
+        float relativeAngle = AngleToShipHeading(angleToTarget);
+        //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
         bool isLegalAngle = false;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
         foreach (Tuple<float, float> r in _rotationAllowedRanges)
         {
-            if (r.Item1 < angleToTarget && angleToTarget < r.Item2)
+            if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
             {
                 isLegalAngle = true;
-                _targetAngle = angleToTarget;
+                _targetAngle = relativeAngle;
                 break;
             }
             else
             {
                 float diff1, diff2;
-                if ((diff1 = Mathf.Abs(r.Item1 - angleToTarget)) < angleDiff)
+                if ((diff1 = Mathf.Abs(r.Item1 - relativeAngle)) < angleDiff)
                 {
                     angleDiff = diff1;
                     closestLegalAngle = r.Item1;
                 }
-                else if ((diff2 = Mathf.Abs(r.Item2 - angleToTarget)) < angleDiff)
+                else if ((diff2 = Mathf.Abs(r.Item2 - relativeAngle)) < angleDiff)
                 {
                     angleDiff = diff2;
                     closestLegalAngle = r.Item2;
@@ -166,33 +187,34 @@ public class TurretBehavior : MonoBehaviour, ITurret
         {
             _targetAngle = closestLegalAngle;
         }
+        _globalTargetAngle = AngleToShipHeading(_targetAngle, true);
 
-        if (MinRotation < MaxRotation)
+        if (_minRotation < _maxRotation)
         {
-            if (MinRotation == 0.0f && MaxRotation == 360.0f)
+            if (_minRotation == 0.0f && _maxRotation == 360.0f)
             {
-                if (Mathf.Abs(_targetAngle - CurrAngle) <= 180.0f)
+                if (Mathf.Abs(_globalTargetAngle - CurrAngle) <= 180.0f)
                 {
-                    _rotationDir = Mathf.Sign(_targetAngle - CurrAngle);
+                    _rotationDir = Mathf.Sign(_globalTargetAngle - CurrAngle);
                 }
                 else
                 {
-                    _rotationDir = -Mathf.Sign(_targetAngle - CurrAngle);
+                    _rotationDir = -Mathf.Sign(_globalTargetAngle - CurrAngle);
                 }
             }
             else
             {
-                _rotationDir = Mathf.Sign(_targetAngle - CurrAngle);
+                _rotationDir = Mathf.Sign(_targetAngle - CurrLocalAngle);
             }
         }
         else
         {
-            float curr = CurrAngle;
-            if (MaxRotation < curr && MaxRotation < _targetAngle)
+            float curr = CurrLocalAngle;
+            if (_maxRotation < curr && _maxRotation < _targetAngle)
             {
                 _rotationDir = Mathf.Sign(_targetAngle - curr);
             }
-            else if (curr < MinRotation && _targetAngle < MinRotation)
+            else if (curr < _minRotation && _targetAngle < _minRotation)
             {
                 _rotationDir = Mathf.Sign(_targetAngle - curr);
             }
@@ -205,13 +227,75 @@ public class TurretBehavior : MonoBehaviour, ITurret
 
     public void Fire(Vector3 target)
     {
-        Vector3 firingVector = Muzzles[0].up;
-        firingVector.y = target.y - Muzzles[0].position.y;
+        if (_deadZoneAngleRanges != null)
+        {
+            foreach (Tuple<float, float> d in _deadZoneAngleRanges)
+            {
+                float currAngle = CurrLocalAngle;
+                if (d.Item1 < currAngle && currAngle < d.Item2)
+                {
+                    return;
+                }
+            }
+        }
+        Vector3 firingVector = Muzzles[_nextBarrel].up;
+        firingVector.y = target.y - Muzzles[_nextBarrel].position.y;
         Projectile p = ObjectFactory.CreateProjectile(firingVector, 10, 10, _containingShip);
-        p.transform.position = Muzzles[0].position;
+        p.transform.position = Muzzles[_nextBarrel].position;
+        if (MuzzleFx[_nextBarrel] != null)
+        {
+            MuzzleFx[_nextBarrel].Play(true);
+        }
+
+        if (Muzzles.Length > 1)
+        {
+            _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
+        }
     }
 
     public float CurrAngle { get { return FilterRotation(transform.rotation.eulerAngles); } }
+    public float CurrLocalAngle
+    {
+        get
+        {
+            return AngleToShipHeading(FilterRotation(transform.rotation.eulerAngles));
+        }
+    }
+
+    private float AngleToShipHeading(float globalAngle)
+    {
+        return AngleToShipHeading(globalAngle, false);
+    }
+
+    private float AngleToShipHeading(float globalAngle, bool inverse)
+    {
+        Vector3 forwardClean = Vector3.forward;
+        forwardClean.y = 0;
+        //float angleOffset = Quaternion.Angle(Quaternion.LookRotation(-Vector3.forward, Vector3.up), Quaternion.LookRotation(forwardClean, Vector3.up));
+        Vector3 shipHeadingClean = _containingShip.transform.up;
+        shipHeadingClean.y = 0;
+        float angleOffset = Quaternion.FromToRotation(shipHeadingClean, forwardClean).eulerAngles.y;
+        float angleOffset2 = Mathf.Acos(Vector3.Dot(shipHeadingClean.normalized , forwardClean.normalized));
+        if (Vector3.Dot(Vector3.Cross(shipHeadingClean, forwardClean), Vector3.up) < 0)
+        {
+            angleOffset2 = -angleOffset2;
+        }
+        angleOffset2 *= Mathf.Rad2Deg;
+        if (inverse)
+        {
+            angleOffset = -angleOffset;
+        }
+        float finalAngle = globalAngle + angleOffset;
+        if (finalAngle > 360f)
+        {
+            finalAngle -= 360f;
+        }
+        else if (finalAngle < 0)
+        {
+            finalAngle += 360;
+        }
+        return finalAngle;
+    }
 
     private float FilterRotation(Vector3 rot)
     {
@@ -254,21 +338,28 @@ public class TurretBehavior : MonoBehaviour, ITurret
         }
     }
 
-    public float MinRotation, MaxRotation;
+    private float _minRotation, _maxRotation;
     private Tuple<float, float>[] _rotationAllowedRanges;
     private bool _fixed = false;
     public float RotationSpeed;
     private float _targetAngle;
+    private float _globalTargetAngle;
+    private float _localTargetAngle;
     private Vector3 _vectorToTarget;
     private float _rotationDir;
     private float _defaultAngle;
     private bool _targeting, _onTarget;
-    public string[] DeadZoneAngles;
+    private string[] _deadZoneAngleStrings;
     private Tuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
+    public RotationAxis MuzzleAxis;
+    public bool MuzzleReversed;
+    private Vector3 _muzzleDirection;
     private Transform[] Barrels;
     private Transform[] Muzzles;
+    private ParticleSystem[] MuzzleFx;
     private Ship _containingShip;
+    int _nextBarrel = 0;
 
     public enum TurretMode { Off, Manual, Auto, AutoTracking };
     public enum RotationAxis { XAxis, YAxis, ZAxis };

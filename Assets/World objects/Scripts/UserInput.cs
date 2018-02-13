@@ -28,6 +28,10 @@ public class UserInput : MonoBehaviour
             {
                 ControlledShip.FireManual(hit.point);
             }
+            if (Input.GetMouseButtonDown(1))
+            {
+                ControlledShip.SetRequiredHeading(hit.point);
+            }
         }
 
 

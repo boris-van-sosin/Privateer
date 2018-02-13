@@ -2,10 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ship : MonoBehaviour {
+public class Ship : MonoBehaviour
+{
+    void Awake()
+    {
+        
+        if (true)
+        {
+            _userCamera = Camera.main;
+            _cameraOffset = _userCamera.transform.position - transform.position;
+        }
+    }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         Transform turret1Root = transform.Find("Turret1");
         if (turret1Root != null)
@@ -30,6 +40,15 @@ public class Ship : MonoBehaviour {
 	void Update()
     {
         transform.position += Mathf.Abs(Vector3.Dot(_velocity, transform.up.normalized)) * transform.up.normalized;
+        if (_autoHeading)
+        {
+            RotateToHeading();
+            //ApplyThrust();
+        }
+        if (_userCamera != null)
+        {
+            _userCamera.transform.position = transform.position + _cameraOffset;
+        }
 	}
 
     public void ManualTarget(Vector3 target)
@@ -79,6 +98,24 @@ public class Ship : MonoBehaviour {
         transform.rotation = deltaRot * transform.rotation;
     }
 
+    public void SetRequiredHeading(Vector3 targetPoint)
+    {
+        Vector3 requiredHeadingVector = targetPoint - transform.position;
+        requiredHeadingVector.y = 0;
+        _autoHeadingRotation = Quaternion.LookRotation(transform.forward, requiredHeadingVector);
+        _autoHeading = true;
+    }
+
+    private void RotateToHeading()
+    {
+        if (transform.rotation.Equals(_autoHeadingRotation))
+        {
+            _autoHeading = false;
+            return;
+        }
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, _autoHeadingRotation, TurnRate * Time.deltaTime);
+    }
+
     public bool MovingForward { get { return Vector3.Dot(_velocity, transform.up) > 0; } }
 
     public void FireManual(Vector3 target)
@@ -95,7 +132,12 @@ public class Ship : MonoBehaviour {
     public float Braking;
     public float TurnRate;
     private Vector3 _velocity;
+    private bool _autoHeading = false;
+    private Quaternion _autoHeadingRotation;
 
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
+
+    private Camera _userCamera;
+    private Vector3 _cameraOffset;
 }
