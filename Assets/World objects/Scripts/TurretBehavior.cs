@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class TurretBehavior : MonoBehaviour, ITurret
+public class TurretBehavior : ActiveShipComponent, ITurret
 {
 
 	// Use this for initialization
@@ -354,27 +354,14 @@ public class TurretBehavior : MonoBehaviour, ITurret
     private ParticleSystem[] MuzzleFx;
     int _nextBarrel = 0;
 
-    // The ship containing the turret:
-    private Ship _containingShip;
-
     // Weapon data:
-    public WeaponEmplacementType TurretType;
+    public ComponentSlotType TurretType;
 
     // Turret status:
-    public int MaxHitpoints;
-    public int HitPoints { get; private set; }
-    public int IsWorking { get; private set; }
     public int IsJammed { get; private set; }
-    public TurretStatus Status { get; private set; }
 
     public enum TurretMode { Off, Manual, Auto, AutoTracking };
     public enum RotationAxis { XAxis, YAxis, ZAxis };
-
-    public enum WeaponEmplacementType { SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
-                                        MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
-                                        LargeBarbette, LargeTurret,
-                                        Special};
-    public enum TurretStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
 
     private static readonly string BarrelString = "Barrel";
     private static readonly string MuzzleString = "Muzzle";
