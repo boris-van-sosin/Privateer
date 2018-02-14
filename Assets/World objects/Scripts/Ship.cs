@@ -11,6 +11,7 @@ public class Ship : MonoBehaviour
         {
             _userCamera = Camera.main;
             _cameraOffset = _userCamera.transform.position - transform.position;
+            CameraOffsetFactor = 1.0f;
         }
     }
 
@@ -64,7 +65,7 @@ public class Ship : MonoBehaviour
         }
         if (_userCamera != null)
         {
-            _userCamera.transform.position = transform.position + _cameraOffset;
+            _userCamera.transform.position = transform.position + (_cameraOffset * CameraOffsetFactor);
         }
 	}
 
@@ -160,4 +161,5 @@ public class Ship : MonoBehaviour
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;
+    public float CameraOffsetFactor { get; set; }
 }

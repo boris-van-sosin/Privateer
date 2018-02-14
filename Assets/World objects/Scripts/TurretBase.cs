@@ -9,10 +9,11 @@ public class TurretBase : ActiveShipComponent, ITurret
 	// Use this for initialization
 	void Start()
     {
-		
-	}
+        _containingShip = FindContainingShip(transform.parent);
+        _initialized = true;
+    }
 
-    void Awake()
+    protected virtual void Awake()
     {
         TurretHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TurretHardpoint>()) != null)
@@ -29,7 +30,6 @@ public class TurretBase : ActiveShipComponent, ITurret
         }
         ParseDeadZones();
         ParseMuzzles();
-        _containingShip = FindContainingShip(transform.parent);
     }
 
     private void ParseDeadZones()
@@ -148,7 +148,7 @@ public class TurretBase : ActiveShipComponent, ITurret
 
     public void ManualTarget(Vector3 target)
     {
-        if (_fixed)
+        if (!_initialized || _fixed)
         {
             return;
         }
@@ -158,13 +158,13 @@ public class TurretBase : ActiveShipComponent, ITurret
         float angleToTarget = Quaternion.LookRotation(-flatVec).eulerAngles.y;
         float relativeAngle = AngleToShipHeading(angleToTarget);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
-        bool isLegalAngle = false;
+        _isLegalAngle = false;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
         foreach (Tuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
             {
-                isLegalAngle = true;
+                _isLegalAngle = true;
                 _targetAngle = relativeAngle;
                 break;
             }
@@ -176,19 +176,20 @@ public class TurretBase : ActiveShipComponent, ITurret
                     angleDiff = diff1;
                     closestLegalAngle = r.Item1;
                 }
-                else if ((diff2 = Mathf.Abs(r.Item2 - relativeAngle)) < angleDiff)
+                if ((diff2 = Mathf.Abs(r.Item2 - relativeAngle)) < angleDiff)
                 {
                     angleDiff = diff2;
                     closestLegalAngle = r.Item2;
                 }
             }
         }
-        if (!isLegalAngle)
+        if (!_isLegalAngle)
         {
             _targetAngle = closestLegalAngle;
         }
         _globalTargetAngle = AngleToShipHeading(_targetAngle, true);
 
+        float currLocal = CurrLocalAngle;
         if (_minRotation < _maxRotation)
         {
             if (_minRotation == 0.0f && _maxRotation == 360.0f)
@@ -204,29 +205,38 @@ public class TurretBase : ActiveShipComponent, ITurret
             }
             else
             {
-                _rotationDir = Mathf.Sign(_targetAngle - CurrLocalAngle);
+                float currFixed = (currLocal == 360.0f) ? 0f : currLocal;
+                _rotationDir = Mathf.Sign(_targetAngle - currFixed);
             }
         }
         else
         {
-            float curr = CurrLocalAngle;
-            if (_maxRotation < curr && _maxRotation < _targetAngle)
+            if (_maxRotation < currLocal && _maxRotation < _targetAngle)
             {
-                _rotationDir = Mathf.Sign(_targetAngle - curr);
+                _rotationDir = Mathf.Sign(_targetAngle - currLocal);
             }
-            else if (curr < _minRotation && _targetAngle < _minRotation)
+            else if (currLocal < _minRotation && _targetAngle < _minRotation)
             {
-                _rotationDir = Mathf.Sign(_targetAngle - curr);
+                _rotationDir = Mathf.Sign(_targetAngle - currLocal);
             }
             else
             {
-                _rotationDir = Mathf.Sign(-_targetAngle + curr);
+                _rotationDir = Mathf.Sign(-_targetAngle + currLocal);
             }
         }
     }
 
     private bool CanFire()
     {
+        float currTime = Time.time;
+        if (currTime - _lastFire < FiringInterval)
+        {
+            return false;
+        }
+        if (!_isLegalAngle && Mode == TurretMode.Manual)
+        {
+            return false;
+        }
         if (_deadZoneAngleRanges != null)
         {
             foreach (Tuple<float, float> d in _deadZoneAngleRanges)
@@ -252,6 +262,7 @@ public class TurretBase : ActiveShipComponent, ITurret
         {
             return;
         }
+        _lastFire = Time.time;
         Vector3 firingVector = Muzzles[_nextBarrel].up;
         firingVector.y = target.y - Muzzles[_nextBarrel].position.y;
 
@@ -342,6 +353,8 @@ public class TurretBase : ActiveShipComponent, ITurret
         }
     }
 
+    private bool _initialized = false; // ugly hack
+
     // Rotation behavior variables:
     private float _minRotation, _maxRotation;
     private Tuple<float, float>[] _rotationAllowedRanges;
@@ -357,6 +370,7 @@ public class TurretBase : ActiveShipComponent, ITurret
     private string[] _deadZoneAngleStrings;
     private Tuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
+    bool _isLegalAngle = false;
 
     // Barrels, muzzles, and muzzleFx data:
     protected Transform[] Barrels;
@@ -371,6 +385,12 @@ public class TurretBase : ActiveShipComponent, ITurret
 
     // Turret status:
     public int IsJammed { get; private set; }
+
+    // Fire delay
+    protected float _lastFire = 0.0f;
+
+    // Auto control
+    public TurretMode Mode { get; set; }
 
     public enum TurretMode { Off, Manual, Auto, AutoTracking };
     public enum RotationAxis { XAxis, YAxis, ZAxis };

@@ -24,7 +24,7 @@ public class UserInput : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 2000, _backgroundLayerMask))
         {
             ControlledShip.ManualTarget(hit.point);
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0))
             {
                 ControlledShip.FireManual(hit.point);
             }
@@ -32,6 +32,12 @@ public class UserInput : MonoBehaviour
             {
                 ControlledShip.SetRequiredHeading(hit.point);
             }
+        }
+
+        float scroll;
+        if ((scroll = Input.GetAxis("Mouse ScrollWheel")) != 0.0f)
+        {
+            ControlledShip.CameraOffsetFactor += (-scroll * 0.1f);
         }
 
 
