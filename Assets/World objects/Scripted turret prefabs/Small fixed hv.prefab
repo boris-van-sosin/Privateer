@@ -34,7 +34,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4330647280593984}
-  - component: {fileID: 114621115143742072}
+  - component: {fileID: 114746716113576822}
   m_Layer: 0
   m_Name: Small fixed hv
   m_TagString: Untagged
@@ -158,7 +158,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1454244951583838}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.920852, y: -7.356666e-17, z: 3.3131475}
+  m_LocalPosition: {x: -0.8840607, y: -6.699862e-17, z: 3.0173492}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4209282722795702}
@@ -310,7 +310,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1506532948614274}
   m_Mesh: {fileID: 4300000, guid: 1e865dc49b19b584495e8e8b73bf1ee1, type: 3}
---- !u!114 &114621115143742072
+--- !u!114 &114746716113576822
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -318,13 +318,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1454244951583838}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: e454a9cbe89fbaa4d8b2def71d463159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHitpoints: 25
   RotationSpeed: 0
   TurretAxis: 1
   TurretType: 1
+  MaxRange: 15
+  FiringInterval: 1
+  MuzzleVelocity: 15
 --- !u!198 &198520829310235308
 ParticleSystem:
   m_ObjectHideFlags: 1

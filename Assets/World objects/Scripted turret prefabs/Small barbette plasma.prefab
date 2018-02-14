@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4756166350198502}
-  - component: {fileID: 114178772888607292}
+  - component: {fileID: 114623183599900698}
   m_Layer: 0
   m_Name: Small barbette plasma
   m_TagString: Untagged
@@ -141,7 +141,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1358737051767112}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.6330673, y: -5.197274e-17, z: 2.3406441}
+  m_LocalPosition: {x: -0.84986174, y: -6.686754e-17, z: 3.0114462}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4736443089566986}
@@ -279,7 +279,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1667550405159378}
   m_Mesh: {fileID: 4300002, guid: 63b43325a935b27479819179c99dc3a1, type: 3}
---- !u!114 &114178772888607292
+--- !u!114 &114623183599900698
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -287,10 +287,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1358737051767112}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: f804536fcc5d6f940ade5dfb8dfc2c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHitpoints: 20
-  RotationSpeed: 120
+  MaxHitpoints: 25
+  RotationSpeed: 0
   TurretAxis: 1
   TurretType: 3
+  MaxRange: 10
+  FiringInterval: 1
+  MuzzleVelocity: 8

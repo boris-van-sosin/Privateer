@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4001128032605468}
-  - component: {fileID: 114720326292494920}
+  - component: {fileID: 114492619622495868}
   m_Layer: 0
   m_Name: Small broadside howitzer
   m_TagString: Untagged
@@ -117,7 +117,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1004915666419522}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.6019476, y: -5.1205253e-17, z: 2.3060794}
+  m_LocalPosition: {x: -0.94741637, y: -6.689177e-17, z: 3.0125375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4661776134942138}
@@ -310,7 +310,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1368212349546588}
   m_Mesh: {fileID: 4300000, guid: e83369ba7df7b2549a8cffbf7d7eb03b, type: 3}
---- !u!114 &114720326292494920
+--- !u!114 &114492619622495868
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -318,13 +318,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1004915666419522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: e454a9cbe89fbaa4d8b2def71d463159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHitpoints: 35
   RotationSpeed: 0
   TurretAxis: 1
   TurretType: 2
+  MaxRange: 12
+  FiringInterval: 1
+  MuzzleVelocity: 10
 --- !u!198 &198966114614851996
 ParticleSystem:
   m_ObjectHideFlags: 1

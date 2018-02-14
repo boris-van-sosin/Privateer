@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4258653276673274}
-  - component: {fileID: 114473708420042316}
+  - component: {fileID: 114113600098446004}
   m_Layer: 0
   m_Name: Small turret laser
   m_TagString: Untagged
@@ -111,7 +111,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1240953099606506}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.93438524, y: -7.304283e-17, z: 3.289556}
+  m_LocalPosition: {x: -0.86286217, y: -6.72565e-17, z: 3.0289636}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4114058498188280}
@@ -209,7 +209,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1094590191727470}
   m_Mesh: {fileID: 4300002, guid: 496f3a70f3c96a64dade173c3fca1fc0, type: 3}
---- !u!114 &114473708420042316
+--- !u!114 &114113600098446004
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -217,10 +217,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1240953099606506}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f1caa9403d451c4898b21f49b35f467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHitpoints: 35
   RotationSpeed: 80
   TurretAxis: 1
   TurretType: 4
+  MaxRange: 11
+  FiringInterval: 2
+  BeamPulseTime: 0.1
+  BeamDuration: 1

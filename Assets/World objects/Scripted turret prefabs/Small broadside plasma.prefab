@@ -68,7 +68,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4253857045076604}
-  - component: {fileID: 114295924463259364}
+  - component: {fileID: 114035741950492650}
   m_Layer: 0
   m_Name: Small broadside plasma
   m_TagString: Untagged
@@ -83,7 +83,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1909186831970226}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.58589876, y: -5.173022e-17, z: 2.329722}
+  m_LocalPosition: {x: -0.87178415, y: -6.695013e-17, z: 3.015166}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4313614902600608}
@@ -209,7 +209,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1098272907118468}
   m_Mesh: {fileID: 4300000, guid: c7a50a2ad5cb039499fd01ea09989f44, type: 3}
---- !u!114 &114295924463259364
+--- !u!114 &114035741950492650
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -217,10 +217,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1909186831970226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: f804536fcc5d6f940ade5dfb8dfc2c92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHitpoints: 35
   RotationSpeed: 0
   TurretAxis: 1
   TurretType: 2
+  MaxRange: 10
+  FiringInterval: 1
+  MuzzleVelocity: 8

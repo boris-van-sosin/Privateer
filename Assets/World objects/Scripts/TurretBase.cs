@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class TurretBehavior : ActiveShipComponent, ITurret
+public class TurretBase : ActiveShipComponent, ITurret
 {
 
 	// Use this for initialization
@@ -225,7 +225,7 @@ public class TurretBehavior : ActiveShipComponent, ITurret
         }
     }
 
-    public void Fire(Vector3 target)
+    private bool CanFire()
     {
         if (_deadZoneAngleRanges != null)
         {
@@ -234,18 +234,28 @@ public class TurretBehavior : ActiveShipComponent, ITurret
                 float currAngle = CurrLocalAngle;
                 if (d.Item1 < currAngle && currAngle < d.Item2)
                 {
-                    return;
+                    return false;
                 }
             }
         }
+        return true;
+    }
+
+    protected virtual void FireInner(Vector3 firingVector)
+    {
+        // Stub!
+    }
+
+    public void Fire(Vector3 target)
+    {
+        if (!CanFire())
+        {
+            return;
+        }
         Vector3 firingVector = Muzzles[_nextBarrel].up;
         firingVector.y = target.y - Muzzles[_nextBarrel].position.y;
-        Projectile p = ObjectFactory.CreateProjectile(firingVector, 10, 10, _containingShip);
-        p.transform.position = Muzzles[_nextBarrel].position;
-        if (MuzzleFx[_nextBarrel] != null)
-        {
-            MuzzleFx[_nextBarrel].Play(true);
-        }
+
+        FireInner(firingVector);
 
         if (Muzzles.Length > 1)
         {
@@ -349,13 +359,15 @@ public class TurretBehavior : ActiveShipComponent, ITurret
     public RotationAxis TurretAxis;
 
     // Barrels, muzzles, and muzzleFx data:
-    private Transform[] Barrels;
-    private Transform[] Muzzles;
-    private ParticleSystem[] MuzzleFx;
-    int _nextBarrel = 0;
+    protected Transform[] Barrels;
+    protected Transform[] Muzzles;
+    protected ParticleSystem[] MuzzleFx;
+    protected int _nextBarrel = 0;
 
     // Weapon data:
     public ComponentSlotType TurretType;
+    public float MaxRange;
+    public float FiringInterval;
 
     // Turret status:
     public int IsJammed { get; private set; }

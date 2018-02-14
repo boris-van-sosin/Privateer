@@ -85,7 +85,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4604983640356712}
-  - component: {fileID: 114360056229539254}
+  - component: {fileID: 114033246838914228}
   m_Layer: 0
   m_Name: Small fixed lance
   m_TagString: Untagged
@@ -128,7 +128,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1892922285393484}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9335847, y: -7.3552106e-17, z: 3.312492}
+  m_LocalPosition: {x: -0.87507254, y: -6.699861e-17, z: 3.0173492}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4615131453481768}
@@ -279,7 +279,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1783150726697588}
   m_Mesh: {fileID: 4300004, guid: 56c7e56ebb558c341811b3cf16255731, type: 3}
---- !u!114 &114360056229539254
+--- !u!114 &114033246838914228
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -287,10 +287,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1892922285393484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dc7c416e81e615448805a7007fd4f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHitpoints: 25
   RotationSpeed: 0
   TurretAxis: 1
   TurretType: 1
+  MaxRange: 13
+  FiringInterval: 1.1
+  BeamDuration: 0.1

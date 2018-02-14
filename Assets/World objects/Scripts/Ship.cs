@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
     void Awake()
     {
-        
         if (true)
         {
             _userCamera = Camera.main;
@@ -17,10 +17,10 @@ public class Ship : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        Transform turret1Root = transform.Find("Turret1");
+        /*Transform turret1Root = transform.Find("Turret1");
         if (turret1Root != null)
         {
-            TurretBehavior t = turret1Root.GetComponentInChildren<TurretBehavior>();
+            TurretBase t = turret1Root.GetComponentInChildren<TurretBase>();
             if (t != null)
             {
                 _turrets = new ITurret[]
@@ -33,9 +33,26 @@ public class Ship : MonoBehaviour
                 };
                 _manualTurrets = selectedTurrets;
             }
-        }
+        }*/
+        FindTurrets();
+        _manualTurrets = new HashSet<ITurret>(_turrets);
     }
 	
+    private void FindTurrets()
+    {
+        TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
+        List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
+        foreach (TurretHardpoint hp in hardpoints)
+        {
+            ITurret turret = hp.GetComponentInChildren<TurretBase>();
+            if (turret != null)
+            {
+                turrets.Add(turret);
+            }
+        }
+        _turrets = turrets.ToArray();
+    }
+
 	// Update is called once per frame
 	void Update()
     {
@@ -120,10 +137,13 @@ public class Ship : MonoBehaviour
 
     public void FireManual(Vector3 target)
     {
+        StringBuilder sb = new StringBuilder();
         foreach (ITurret t in _manualTurrets)
         {
             t.Fire(target);
+            sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
         }
+        Debug.Log(sb.ToString());
     }
 
     public float MaxSpeed;

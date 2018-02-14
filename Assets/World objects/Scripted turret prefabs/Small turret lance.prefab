@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4790509691656932}
-  - component: {fileID: 114155814420120582}
+  - component: {fileID: 114889933642452080}
   m_Layer: 0
   m_Name: Small turret lance
   m_TagString: Untagged
@@ -141,7 +141,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1028012617556660}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9353517, y: -7.353992e-17, z: 3.3119435}
+  m_LocalPosition: {x: -0.8829938, y: -6.732935e-17, z: 3.0322444}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4134131325797740}
@@ -279,7 +279,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1610287675328698}
   m_Mesh: {fileID: 4300002, guid: c59c39383636e70478c9808446fae6a0, type: 3}
---- !u!114 &114155814420120582
+--- !u!114 &114889933642452080
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -287,10 +287,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1028012617556660}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 2dc7c416e81e615448805a7007fd4f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHitpoints: 35
   RotationSpeed: 80
   TurretAxis: 1
   TurretType: 4
+  MaxRange: 13
+  FiringInterval: 1.1
+  BeamDuration: 0.1

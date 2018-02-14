@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4018633066606880}
-  - component: {fileID: 114070903661334358}
+  - component: {fileID: 114991054000859748}
   m_Layer: 0
   m_Name: Small barbette dual small laser
   m_TagString: Untagged
@@ -149,7 +149,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1159083383772718}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.61749744, y: -5.164084e-17, z: 2.3256965}
+  m_LocalPosition: {x: -0.8656459, y: -6.729581e-17, z: 3.0307336}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4475493987185376}
@@ -448,7 +448,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1698813866721148}
   m_Mesh: {fileID: 4300002, guid: ae2fd67ee8b96a745baca385a54b7d20, type: 3}
---- !u!114 &114070903661334358
+--- !u!114 &114991054000859748
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -456,10 +456,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1159083383772718}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeb67cce3e5a4ae47bb3e346fe1634f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f1caa9403d451c4898b21f49b35f467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHitpoints: 20
-  RotationSpeed: 120
+  MaxHitpoints: 25
+  RotationSpeed: 0
   TurretAxis: 1
   TurretType: 5
+  MaxRange: 11
+  FiringInterval: 1
+  BeamPulseTime: 0.1
+  BeamDuration: 1
