@@ -24,5 +24,17 @@ public static class ObjectFactory
         }
     }
 
+    public static ParticleSystem CreateExplosion(Vector3 position)
+    {
+        if (_prototypes != null)
+        {
+            return _prototypes.CreateExplosion(position);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     private static ObjectPrototypes _prototypes = null;
 }

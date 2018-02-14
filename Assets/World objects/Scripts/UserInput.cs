@@ -14,6 +14,7 @@ public class UserInput : MonoBehaviour
     void Awake()
     {
         _backgroundLayerMask = LayerMask.GetMask("Background");
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Default"), true);
     }
 
     // Update is called once per frame
@@ -21,7 +22,7 @@ public class UserInput : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 2000, _backgroundLayerMask))
+        if (Physics.Raycast(ray, out hit, 2000))
         {
             ControlledShip.ManualTarget(hit.point);
             if (Input.GetMouseButton(0))
@@ -60,5 +61,6 @@ public class UserInput : MonoBehaviour
     }
 
     public Ship ControlledShip; // temporary
+    private Ship _heightTargetShip;
     private int _backgroundLayerMask = 0;
 }

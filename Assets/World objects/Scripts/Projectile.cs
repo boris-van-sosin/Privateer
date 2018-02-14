@@ -14,12 +14,30 @@ public class Projectile : MonoBehaviour
     void Awake()
     {
         Origin = transform.position;
+        _shipLayerMask = ~LayerMask.GetMask("Background");
     }
 
     // Update is called once per frame
     void Update()
     {
         float distanceToTravel = Time.deltaTime * Speed;
+        Vector3 posFlat = new Vector3(transform.position.x, -0.01f, transform.position.z);
+        Vector3 dirFlat = new Vector3(transform.up.x, 0, transform.up.z);
+        Ray r = new Ray(posFlat, dirFlat);
+        RaycastHit hit;
+        if (Physics.Raycast(r, out hit, distanceToTravel, _shipLayerMask))
+        {
+            GameObject hitobj = hit.collider.gameObject;
+            if (hitobj.GetComponent<Projectile>() == null && hitobj.GetComponent<Ship>() != OriginShip)
+            {
+                Debug.Log("Hit " + hit.collider.gameObject.ToString());
+                ParticleSystem ps = ObjectFactory.CreateExplosion(hit.point);
+                ps.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+                Destroy(ps, 5.0f);
+                Destroy(gameObject);
+                return;
+            }
+        }
         transform.position += distanceToTravel * transform.up.normalized;
         _distanceTraveled += distanceToTravel;
         if (_distanceTraveled >= Range)
@@ -28,9 +46,20 @@ public class Projectile : MonoBehaviour
         }
 	}
 
+    /*void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(collision.collider.gameObject);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Trigger: " + other.gameObject.ToString());
+    }*/
+
     public float Speed;
     public float Range;
     private float _distanceTraveled = 0.0f;
     private Vector3 Origin;
     public Ship OriginShip;
+    private int _shipLayerMask;
 }
