@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0188efd28a3b70646ae396a3fde7b6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ControlledShip: {fileID: 786182173}
+  ControlledShip: {fileID: 535581988}
 --- !u!4 &280517691
 Transform:
   m_ObjectHideFlags: 0
@@ -625,12 +625,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe28cf94e9332b45acc258c7c677c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 0.1
+  MaxSpeed: 1.8
   Mass: 4
-  Thrust: 0.01
-  Braking: 0.1
+  Thrust: 0.2
+  Braking: 1.6
   TurnRate: 30
-  Follow: 0
+  Follow: 1
 --- !u!96 &535581989
 TrailRenderer:
   serializedVersion: 2
@@ -1493,12 +1493,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe28cf94e9332b45acc258c7c677c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 0.8
+  MaxSpeed: 1.6
   Mass: 10
-  Thrust: 0.008
-  Braking: 0.08
+  Thrust: 0.16
+  Braking: 1.6
   TurnRate: 25
-  Follow: 1
+  Follow: 0
 --- !u!64 &786182174
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1890,10 +1890,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe28cf94e9332b45acc258c7c677c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 0.1
+  MaxSpeed: 1.8
   Mass: 4
-  Thrust: 0.01
-  Braking: 0.1
+  Thrust: 0.2
+  Braking: 1.6
   TurnRate: 30
   Follow: 0
 --- !u!4 &987960031 stripped
@@ -1901,6 +1901,77 @@ Transform:
   m_PrefabParentObject: {fileID: 4701284728006570, guid: 4f0fdd1b7d6f308448d4d9fa89ba60be,
     type: 2}
   m_PrefabInternal: {fileID: 1657832844}
+--- !u!1001 &992120639
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1030357734}
+    m_Modifications:
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 90
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &1030357733 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1145398144491360, guid: 4f0fdd1b7d6f308448d4d9fa89ba60be,
+    type: 2}
+  m_PrefabInternal: {fileID: 1657832844}
+--- !u!4 &1030357734 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4552059029099838, guid: 4f0fdd1b7d6f308448d4d9fa89ba60be,
+    type: 2}
+  m_PrefabInternal: {fileID: 1657832844}
+--- !u!114 &1030357735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1030357733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MinRotation: 0
+  MaxRotation: 0
+  DeadZoneAngles: []
+  AllowedWeaponTypes: 01000000
 --- !u!1 &1043036729
 GameObject:
   m_ObjectHideFlags: 0

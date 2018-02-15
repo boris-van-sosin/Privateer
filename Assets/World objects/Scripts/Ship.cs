@@ -57,7 +57,17 @@ public class Ship : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-        transform.position += Mathf.Abs(Vector3.Dot(_velocity, transform.up.normalized)) * transform.up.normalized;
+        float directionMult = 0.0f;
+        if (MovementDirection == ShipDirection.Forward)
+        {
+            directionMult = 1.0f;
+        }
+        else if (MovementDirection == ShipDirection.Reverse)
+        {
+            directionMult = -1.0f;
+        }
+        transform.position += Time.deltaTime * (ActualVelocity = Mathf.Abs(Vector3.Dot(_velocity, transform.up.normalized)) * directionMult * transform.up.normalized);
+        if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
         if (_autoHeading)
         {
             RotateToHeading();
@@ -77,7 +87,23 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void ApplyThrust()
+    public void MoveForeward()
+    {
+        if (MovementDirection == ShipDirection.Stopped)
+        {
+            MovementDirection = ShipDirection.Forward;
+        }
+        if (MovementDirection == ShipDirection.Forward)
+        {
+            ApplyThrust();
+        }
+        else if (MovementDirection == ShipDirection.Reverse)
+        {
+            ApplyBraking();
+        }
+    }
+
+    private void ApplyThrust()
     {
         Vector3 thrustVec = Thrust * Time.deltaTime * transform.up.normalized;
         Vector3 newVelocity = _velocity + thrustVec;
@@ -91,13 +117,31 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void ApplyBraking()
+    public void MoveBackward()
+    {
+        if (MovementDirection == ShipDirection.Stopped)
+        {
+            MovementDirection = ShipDirection.Reverse;
+        }
+        if (MovementDirection == ShipDirection.Forward)
+        {
+            ApplyBraking();
+        }
+        else if (MovementDirection == ShipDirection.Reverse)
+        {
+            ApplyThrust();
+        }
+
+    }
+
+    private void ApplyBraking()
     {
         Vector3 brakeVec = -1f * Braking * Time.deltaTime * _velocity.normalized;
         Vector3 newVelocity = _velocity + brakeVec;
         if (Vector3.Dot(newVelocity, transform.up) < 0)
         {
             _velocity = Vector3.zero;
+            MovementDirection = ShipDirection.Stopped;
         }
         else
         {
@@ -147,6 +191,10 @@ public class Ship : MonoBehaviour
         Debug.Log(sb.ToString());
     }
 
+    public Vector3 ActualVelocity { get; private set; }
+
+    private enum ShipDirection { Stopped, Forward, Reverse };
+
     public float MaxSpeed;
     public float Mass;
     public float Thrust;
@@ -155,6 +203,7 @@ public class Ship : MonoBehaviour
     private Vector3 _velocity;
     private bool _autoHeading = false;
     private Quaternion _autoHeadingRotation;
+    private ShipDirection MovementDirection = ShipDirection.Stopped;
 
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
@@ -162,5 +211,8 @@ public class Ship : MonoBehaviour
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     public float CameraOffsetFactor { get; set; }
+
+
+
     public bool Follow; // tmp
 }

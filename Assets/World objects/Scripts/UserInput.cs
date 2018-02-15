@@ -45,11 +45,11 @@ public class UserInput : MonoBehaviour
 
         if (Input.GetKey(KeyCode.W))
         {
-            ControlledShip.ApplyThrust();
+            ControlledShip.MoveForeward();
         }
         else if (Input.GetKey(KeyCode.S))
         {
-            ControlledShip.ApplyBraking();
+            ControlledShip.MoveBackward();
         }
         if (Input.GetKey(KeyCode.A))
         {
