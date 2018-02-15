@@ -24,14 +24,15 @@ public class UserInput : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 2000))
         {
-            ControlledShip.ManualTarget(hit.point);
+            Vector3 hitFlat = new Vector3(hit.point.x, 0, hit.point.z);
+            ControlledShip.ManualTarget(hitFlat);
             if (Input.GetMouseButton(0))
             {
-                ControlledShip.FireManual(hit.point);
+                ControlledShip.FireManual(hitFlat);
             }
             if (Input.GetMouseButtonDown(1))
             {
-                ControlledShip.SetRequiredHeading(hit.point);
+                ControlledShip.SetRequiredHeading(hitFlat);
             }
         }
 

@@ -7,7 +7,7 @@ public class Ship : MonoBehaviour
 {
     void Awake()
     {
-        if (true)
+        if (Follow)
         {
             _userCamera = Camera.main;
             _cameraOffset = _userCamera.transform.position - transform.position;
@@ -162,4 +162,5 @@ public class Ship : MonoBehaviour
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     public float CameraOffsetFactor { get; set; }
+    public bool Follow; // tmp
 }
