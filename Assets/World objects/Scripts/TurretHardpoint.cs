@@ -6,5 +6,5 @@ public class TurretHardpoint : MonoBehaviour
 {
     public float MinRotation, MaxRotation;
     public string[] DeadZoneAngles;
-    public ShipComponent.ComponentSlotType[] AllowedWeaponTypes;
+    public ComponentSlotType[] AllowedWeaponTypes;
 }

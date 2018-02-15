@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using System.Linq;
 
 public class Ship : MonoBehaviour
 {
@@ -18,23 +19,6 @@ public class Ship : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        /*Transform turret1Root = transform.Find("Turret1");
-        if (turret1Root != null)
-        {
-            TurretBase t = turret1Root.GetComponentInChildren<TurretBase>();
-            if (t != null)
-            {
-                _turrets = new ITurret[]
-                {
-                    t
-                };
-                HashSet<ITurret> selectedTurrets = new HashSet<ITurret>()
-                {
-                    t
-                };
-                _manualTurrets = selectedTurrets;
-            }
-        }*/
         FindTurrets();
         _manualTurrets = new HashSet<ITurret>(_turrets);
     }
@@ -54,6 +38,20 @@ public class Ship : MonoBehaviour
         _turrets = turrets.ToArray();
     }
 
+    private void InitComponents()
+    {
+        _components = new IShipComponent[]
+        {
+            new PowerPlant() { PowerOutput = 10 },
+            new CapacitorBank() { Capacity = 50 },
+            new HeatExchange() { CoolingRate = 20 }
+        };
+
+        _energyUsingComps = _components.Where(x => x is IEnergyUsingComponent).Select(y => y as IEnergyUsingComponent).ToArray();
+        _energyCapacityComps = _components.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
+        _heatUsingComps = _components.Where(x => x is IHeatUsingComponent).Select(y => y as IHeatUsingComponent).ToArray();
+    }
+
 	// Update is called once per frame
 	void Update()
     {
@@ -66,7 +64,8 @@ public class Ship : MonoBehaviour
         {
             directionMult = -1.0f;
         }
-        transform.position += Time.deltaTime * (ActualVelocity = Mathf.Abs(Vector3.Dot(_velocity, transform.up.normalized)) * directionMult * transform.up.normalized);
+        //transform.position += Time.deltaTime * (ActualVelocity = Mathf.Abs(Vector3.Dot(_velocity, transform.up.normalized)) * directionMult * transform.up.normalized);
+        transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
         if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
         if (_autoHeading)
         {
@@ -78,6 +77,19 @@ public class Ship : MonoBehaviour
             _userCamera.transform.position = transform.position + (_cameraOffset * CameraOffsetFactor);
         }
 	}
+
+    private IEnumerator ContinuousComponents()
+    {
+        while(true)
+        {
+            int newMaxEnergy = 0;
+            foreach (IEnergyCapacityComponent comp in _energyCapacityComps)
+            {
+                newMaxEnergy += comp.EnergyCapacity;
+            }
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
 
     public void ManualTarget(Vector3 target)
     {
@@ -105,15 +117,32 @@ public class Ship : MonoBehaviour
 
     private void ApplyThrust()
     {
-        Vector3 thrustVec = Thrust * Time.deltaTime * transform.up.normalized;
-        Vector3 newVelocity = _velocity + thrustVec;
-        if (newVelocity.sqrMagnitude > (MaxSpeed * MaxSpeed))
+        float newSpeed = _speed + Thrust * Time.deltaTime;
+        if (newSpeed > MaxSpeed)
         {
-            _velocity = newVelocity.normalized * MaxSpeed;
+            _speed = MaxSpeed;
         }
         else
         {
-            _velocity = newVelocity;
+            _speed = newSpeed;
+        }
+    }
+
+    private void ApplyThrust(float factor, float targetSpeedFactor)
+    {
+        float targetSpeed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
+        if (targetSpeed < _speed)
+        {
+            return;
+        }
+        float newSpeed = _speed + Thrust * Mathf.Clamp01(factor) * Time.deltaTime;
+        if (newSpeed > MaxSpeed * Mathf.Clamp01(targetSpeedFactor))
+        {
+            _speed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
+        }
+        else
+        {
+            _speed = newSpeed;
         }
     }
 
@@ -131,21 +160,42 @@ public class Ship : MonoBehaviour
         {
             ApplyThrust();
         }
-
     }
 
     private void ApplyBraking()
     {
-        Vector3 brakeVec = -1f * Braking * Time.deltaTime * _velocity.normalized;
-        Vector3 newVelocity = _velocity + brakeVec;
-        if (Vector3.Dot(newVelocity, transform.up) < 0)
+        float newSpeed = _speed - Braking * Time.deltaTime;
+        if (newSpeed < 0)
         {
-            _velocity = Vector3.zero;
+            _speed = 0;
             MovementDirection = ShipDirection.Stopped;
         }
         else
         {
-            _velocity = newVelocity;
+            _speed = newSpeed;
+        }
+    }
+
+    private void ApplyBraking(float factor, float targetSpeedFactor)
+    {
+        float targetSpeed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
+        float newSpeed = _speed - Braking * Mathf.Clamp01(factor) * Time.deltaTime;
+        if (targetSpeed > _speed)
+        {
+            return;
+        }
+        if (newSpeed < targetSpeed)
+        {
+            _speed = MaxSpeed * targetSpeed;
+            if (_speed <= 0)
+            {
+                MovementDirection = ShipDirection.Stopped;
+                _speed = 0;
+            }
+        }
+        else
+        {
+            _speed = newSpeed;
         }
     }
 
@@ -158,6 +208,7 @@ public class Ship : MonoBehaviour
         }
         Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * Time.deltaTime, transform.forward);
         transform.rotation = deltaRot * transform.rotation;
+        ApplyBraking(0.5f, 0.5f);
     }
 
     public void SetRequiredHeading(Vector3 targetPoint)
@@ -178,7 +229,7 @@ public class Ship : MonoBehaviour
         transform.rotation = Quaternion.RotateTowards(transform.rotation, _autoHeadingRotation, TurnRate * Time.deltaTime);
     }
 
-    public bool MovingForward { get { return Vector3.Dot(_velocity, transform.up) > 0; } }
+    public bool MovingForward { get { return MovementDirection == ShipDirection.Forward; } }
 
     public void FireManual(Vector3 target)
     {
@@ -193,6 +244,28 @@ public class Ship : MonoBehaviour
 
     public Vector3 ActualVelocity { get; private set; }
 
+    public bool TryChangeEnergy(int delta)
+    {
+        int newEnergy = Energy + delta;
+        if (0 <= newEnergy && newEnergy <= MaxEnergy)
+        {
+            Energy = newEnergy;
+            return true;
+        }
+        return false;
+    }
+
+    public bool TryChangeHeat(int delta)
+    {
+        int newHeat = Heat + delta;
+        if (0 <= newHeat && newHeat <= MaxHeat)
+        {
+            Heat = newHeat;
+            return true;
+        }
+        return false;
+    }
+
     private enum ShipDirection { Stopped, Forward, Reverse };
 
     public float MaxSpeed;
@@ -200,7 +273,7 @@ public class Ship : MonoBehaviour
     public float Thrust;
     public float Braking;
     public float TurnRate;
-    private Vector3 _velocity;
+    private float _speed;
     private bool _autoHeading = false;
     private Quaternion _autoHeadingRotation;
     private ShipDirection MovementDirection = ShipDirection.Stopped;
@@ -208,11 +281,19 @@ public class Ship : MonoBehaviour
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
 
+    private int Energy = 0;
+    private int MaxEnergy;
+    private int Heat = 0;
+    private int MaxHeat = 100;
+
+    private IShipComponent[] _components;
+    private IEnergyUsingComponent[] _energyUsingComps;
+    private IEnergyCapacityComponent[] _energyCapacityComps;
+    private IHeatUsingComponent[] _heatUsingComps;
+
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     public float CameraOffsetFactor { get; set; }
-
-
 
     public bool Follow; // tmp
 }

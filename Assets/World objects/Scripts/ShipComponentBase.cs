@@ -2,33 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShipComponent : MonoBehaviour
+public abstract class ShipComponentBase : IShipComponent
 {
-    public enum ComponentSlotType
-    {
-        // Generic:
-        ShipSystem,
-        // Weapons:
-        SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
-        MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
-        LargeBarbette, LargeTurret,
-        SpecialWeapon,
-        // Boarding tool
-        BoardingTool,
-        // Boarding / anti-boarding forces
-        BoardingForce
-    };
+    public Ship ContainingShip { get { return _containingShip; } }
 
-    public enum ComponentStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
-
-    // The ship containing the turret:
     protected Ship _containingShip;
 }
 
-public class ActiveShipComponent : ShipComponent
+public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveComponent
 {
-    public int MaxHitpoints;
-    public int HitPoints { get; protected set; }
-    public int IsWorking { get; protected set; }
+    public int ComponentMaxHitpoints { get; protected set; }
+    public int ComponentHitPoints { get; protected set; }
+    public bool ComponentIsWorking { get; protected set; }
     public ComponentStatus Status { get; protected set; }
+    //public abstract int EnergyDelta { get; }
+    //public abstract int HeatDelta { get; }
 }

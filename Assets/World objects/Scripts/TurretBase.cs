@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class TurretBase : ActiveShipComponent, ITurret
+public class TurretBase : MonoBehaviour, ITurret
 {
 
 	// Use this for initialization
@@ -391,6 +391,21 @@ public class TurretBase : ActiveShipComponent, ITurret
 
     // Auto control
     public TurretMode Mode { get; set; }
+
+    public int MaxHitpoints;
+
+    public int ComponentMaxHitpoints { get { return MaxHitpoints; } }
+
+    public int ComponentHitPoints { get; private set; }
+
+    public bool ComponentIsWorking { get; private set; }
+
+    public ComponentStatus Status { get; private set; }
+
+    public Ship ContainingShip { get { return _containingShip; } }
+
+    // The ship containing the turret:
+    protected Ship _containingShip;
 
     public enum TurretMode { Off, Manual, Auto, AutoTracking };
     public enum RotationAxis { XAxis, YAxis, ZAxis };
