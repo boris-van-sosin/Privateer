@@ -36,9 +36,7 @@ public class TurretComponent : ITurret
     private TurretBase _innerTurret;
 }
 
-
-
-public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent//, IEnergyUsingComponent, IHeatUsingComponent
+public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
 {
     public int PowerOutput, HeatOutput;
 
@@ -46,22 +44,6 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent//, I
     {
         ContainingShip.TryChangeEnergyAndHeat(PowerOutput, HeatOutput);
     }
-
-    /*public int EnergyDelta
-    {
-        get
-        {
-            return PowerOutput;
-        }
-    }
-
-    public int HeatDelta
-    {
-        get
-        {
-            return 5;
-        }
-    }*/
 
     public static PowerPlant DefaultComponent(Ship containingShip)
     {
@@ -104,10 +86,30 @@ public class CapacitorBank : ShipActiveComponentBase, IEnergyCapacityComponent
     }
 }
 
-public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent//, IEnergyUsingComponent, IHeatUsingComponent
+public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent, IShieldComponent
 {
-    public int MaxShieldPoints;
-    public int CurrShieldPoints { get; private set; }
+    public int MaxShieldPoints { get; private set; }
+    public int CurrShieldPoints
+    {
+        get
+        {
+            return _currShieldPoints;
+        }
+        private set
+        {
+            if (value <= 0)
+            {
+                _currShieldPoints = 0;
+                _isShieldActive = false;
+                _ticksSinceInactive = 0;
+            }
+            else
+            {
+                _currShieldPoints = value;
+            }
+        }
+    }
+
     public int MaxShieldPointRegeneration;
     public int PowerUsage;
     public int PowerPerShieldRegeneration;
@@ -118,22 +120,8 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
     public int HeatToRestart;
     private bool _isShieldActive;
     private int _ticksSinceInactive = 0;
+    private int _currShieldPoints;
 
-    /*public int EnergyDelta
-    {
-        get
-        {
-            return -PowerUsage;
-        }
-    }
-
-    public int HeatDelta
-    {
-        get
-        {
-            return 0;
-        }
-    }*/
     public void PeriodicAction()
     {
         if (!ContainingShip.TryChangeEnergyAndHeat(PowerUsage, HeatGeneration))

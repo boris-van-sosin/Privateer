@@ -15,6 +15,4 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
     public int ComponentHitPoints { get; protected set; }
     public bool ComponentIsWorking { get; protected set; }
     public ComponentStatus Status { get; protected set; }
-    //public abstract int EnergyDelta { get; }
-    //public abstract int HeatDelta { get; }
 }

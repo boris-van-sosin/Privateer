@@ -55,19 +55,13 @@ public interface IUserActivatedComponent : IShipComponent
     void Activate(Vector3 target);
 }
 
-// including energy generating (i.e. negative energy usage)
-/*public interface IEnergyUsingComponent
-{
-    int EnergyDelta { get; }
-}
-
-// including heat venting (i.e. negative heat generation)
-public interface IHeatUsingComponent
-{
-    int HeatDelta { get; }
-}*/
-
 public interface IEnergyCapacityComponent
 {
     int EnergyCapacity { get; }
+}
+
+public interface IShieldComponent : IShipComponent
+{
+    int MaxShieldPoints { get; }
+    int CurrShieldPoints { get; }
 }

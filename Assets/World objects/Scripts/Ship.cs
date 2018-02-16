@@ -45,17 +45,21 @@ public class Ship : MonoBehaviour
 
     private void InitComponents()
     {
-        _components = new IShipComponent[]
+        _componentSlots.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>()
         {
-            PowerPlant.DefaultComponent(this),
-            CapacitorBank.DefaultComponent(this),
-            HeatExchange.DefaultComponent(this)
-        };
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, PowerPlant.DefaultComponent(this)),
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, CapacitorBank.DefaultComponent(this)),
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, HeatExchange.DefaultComponent(this))
+        });
 
-        //_energyUsingComps = _components.Where(x => x is IEnergyUsingComponent).Select(y => y as IEnergyUsingComponent).ToArray();
-        _energyCapacityComps = _components.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
-        //_heatUsingComps = _components.Where(x => x is IHeatUsingComponent).Select(y => y as IHeatUsingComponent).ToArray();
-        _updateComponents = _components.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
+        _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
+        _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
+        _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
+    }
+
+    private void InitArmour()
+    {
+
     }
 
 	// Update is called once per frame
@@ -70,13 +74,11 @@ public class Ship : MonoBehaviour
         {
             directionMult = -1.0f;
         }
-        //transform.position += Time.deltaTime * (ActualVelocity = Mathf.Abs(Vector3.Dot(_velocity, transform.up.normalized)) * directionMult * transform.up.normalized);
         transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
         if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
         if (_autoHeading)
         {
             RotateToHeading();
-            //ApplyThrust();
         }
         if (_userCamera != null)
         {
@@ -290,7 +292,12 @@ public class Ship : MonoBehaviour
         return false;
     }
 
+    public void TakeDamage(Warhead w)
+    {
+    }
+
     private enum ShipDirection { Stopped, Forward, Reverse };
+    public enum ShipSection { Fore, Aft, Left, Right };
 
     public float MaxSpeed;
     public float Mass;
@@ -310,11 +317,29 @@ public class Ship : MonoBehaviour
     public int Heat { get; private set; }
     public int MaxHeat { get; private set; }
 
-    private IShipComponent[] _components;
-    //private IEnergyUsingComponent[] _energyUsingComps;
+    public ComponentSlotType[] ForeComponentSlots;
+    public ComponentSlotType[] AftComponentSlots;
+    public ComponentSlotType[] LeftComponentSlots;
+    public ComponentSlotType[] RightComponentSlots;
+    private Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>> _componentSlots = new Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>>();
+
+    public IEnumerable<IShipComponent> AllComponents
+    {
+        get
+        {
+            foreach (List<Tuple<ComponentSlotType, IShipComponent>> l in _componentSlots.Values)
+            {
+                foreach (Tuple<ComponentSlotType, IShipComponent> comp in l)
+                {
+                    yield return comp.Item2;
+                }
+            }
+        }
+    }
+
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
-    //private IHeatUsingComponent[] _heatUsingComps;
+    private IShieldComponent[] _shieldComponents;
 
     public int MaxHullHitPoints;
     private int HullHitponits;
@@ -322,14 +347,8 @@ public class Ship : MonoBehaviour
     public int DefaultArmorAft;
     public int DefaultArmorLeft;
     public int DefaultArmorRight;
-    private int MaxArmorFront;
-    private int MaxArmorAft;
-    private int MaxArmorLeft;
-    private int MaxArmorRight;
-    private int CurrArmorFront;
-    private int CurrArmorAft;
-    private int CurrArmorLeft;
-    private int CurrArmorRight;
+    private Dictionary<ShipSection, int> _maxArmour = new Dictionary<ShipSection, int>();
+    private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;
