@@ -14,6 +14,9 @@ public class Ship : MonoBehaviour
             _cameraOffset = _userCamera.transform.position - transform.position;
             CameraOffsetFactor = 1.0f;
         }
+        Energy = 0;
+        Heat = 0;
+        MaxHeat = 100;
         InitComponents();
     }
 
@@ -302,10 +305,10 @@ public class Ship : MonoBehaviour
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
 
-    private int Energy = 0;
-    private int MaxEnergy;
-    private int Heat = 0;
-    private int MaxHeat = 100;
+    public int Energy { get; private set; }
+    public int MaxEnergy { get; private set; }
+    public int Heat { get; private set; }
+    public int MaxHeat { get; private set; }
 
     private IShipComponent[] _components;
     //private IEnergyUsingComponent[] _energyUsingComps;

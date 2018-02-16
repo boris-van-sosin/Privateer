@@ -529,11 +529,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f1caa9403d451c4898b21f49b35f467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHitpoints: 35
   RotationSpeed: 80
   TurretAxis: 1
   TurretType: 8
   MaxRange: 14
   FiringInterval: 1.5
+  EnergyToFire: 7
+  HeatToFire: 4
+  MaxHitpoints: 35
   BeamPulseTime: 0.1
   BeamDuration: 1
