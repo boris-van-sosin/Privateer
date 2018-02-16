@@ -13,7 +13,7 @@ public class GradientBar : MonoBehaviour
 
     public void UpdateBar()
     {
-        float proprtion = ((float)Value) / MaxValue;
+        float proprtion = (MaxValue != 0) ? ((float)Value) / MaxValue : 0;
         _valueText.text = string.Format("{0}/{1}", Value, MaxValue);
         _barMask.rectTransform.localScale = new Vector3(1, proprtion, 1);
     }

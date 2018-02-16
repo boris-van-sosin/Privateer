@@ -14,10 +14,13 @@ public class Ship : MonoBehaviour
             _cameraOffset = _userCamera.transform.position - transform.position;
             CameraOffsetFactor = 1.0f;
         }
+        HullHitPoints = MaxHullHitPoints;
         Energy = 0;
         Heat = 0;
         MaxHeat = 100;
+        ComputeLength();
         InitComponents();
+        InitArmour();
     }
 
     // Use this for initialization
@@ -48,18 +51,61 @@ public class Ship : MonoBehaviour
         _componentSlots.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>()
         {
             Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, PowerPlant.DefaultComponent(this)),
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, PowerPlant.DefaultComponent(this)),
             Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, CapacitorBank.DefaultComponent(this)),
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, HeatExchange.DefaultComponent(this))
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, HeatExchange.DefaultComponent(this)),
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, ShieldGenerator.DefaultComponent(this))
         });
+        _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _componentSlots.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _componentSlots.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
+        _totalMaxShield = 0;
+        foreach (IShieldComponent shield in _shieldComponents)
+        {
+            _totalMaxShield += shield.MaxShieldPoints;
+        }
     }
 
     private void InitArmour()
     {
+        _maxArmour.Add(ShipSection.Fore, DefaultArmorFront);
+        _currArmour.Add(ShipSection.Fore, DefaultArmorFront);
+        _maxArmour.Add(ShipSection.Aft, DefaultArmorAft);
+        _currArmour.Add(ShipSection.Aft, DefaultArmorAft);
+        _maxArmour.Add(ShipSection.Left, DefaultArmorLeft);
+        _currArmour.Add(ShipSection.Left, DefaultArmorLeft);
+        _maxArmour.Add(ShipSection.Right, DefaultArmorRight);
+        _currArmour.Add(ShipSection.Right, DefaultArmorRight);
+        foreach (ShipSection section in _componentSlots.Keys)
+        {
+            foreach (Tuple<ComponentSlotType, IShipComponent> comp in _componentSlots[section])
+            {
+                if (!_maxArmour.ContainsKey(section))
+                {
+                    _maxArmour.Add(section, 0);
+                }
+                if (!_currArmour.ContainsKey(section))
+                {
+                    _currArmour.Add(section, _maxArmour[section]);
+                }
+                ExtraArmour a = comp.Item2 as ExtraArmour;
+                if (a != null)
+                {
+                    _maxArmour[section] += a.ArmourAmount;
+                    _currArmour[section] += a.ArmourAmount;
+                }
+            }
+        }
+    }
 
+    private void ComputeLength()
+    {
+        Mesh m = GetComponent<MeshFilter>().mesh;
+        _shipLength = m.bounds.size.y;
     }
 
 	// Update is called once per frame
@@ -75,7 +121,7 @@ public class Ship : MonoBehaviour
             directionMult = -1.0f;
         }
         transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
-        if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
+        //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
         if (_autoHeading)
         {
             RotateToHeading();
@@ -100,7 +146,7 @@ public class Ship : MonoBehaviour
             {
                 comp.PeriodicAction();
             }
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.25f);
         }
     }
 
@@ -292,9 +338,92 @@ public class Ship : MonoBehaviour
         return false;
     }
 
-    public void TakeDamage(Warhead w)
+    public void TakeHit(Warhead w, Vector3 location)
     {
+        Debug.Log(string.Format("Ship {0} hit in {1}", name, GetHitSection(location)));
+        // if shields are present, take shield damage
+        int shieldDamage = w.ShieldDamage;
+        bool hasShield = false;
+        do
+        {
+            hasShield = false;
+            IShieldComponent maxShield = null;
+            foreach (IShieldComponent shield in _shieldComponents)
+            {
+                if (maxShield == null || shield.CurrShieldPoints > maxShield.CurrShieldPoints)
+                {
+                    maxShield = shield;
+                }
+                if (shield.CurrShieldPoints > 0)
+                {
+                    hasShield = true;
+                }
+            }
+            if (hasShield)
+            {
+                if (maxShield.CurrShieldPoints >= shieldDamage)
+                {
+                    maxShield.CurrShieldPoints -= shieldDamage;
+                    return;
+                }
+                else
+                {
+                    shieldDamage -= maxShield.CurrShieldPoints;
+                    maxShield.CurrShieldPoints = 0;
+                }
+            }
+            if (hasShield && shieldDamage <= 0)
+            {
+                return;
+            }
+        } while (shieldDamage > 0 && hasShield);
+
+        // armour penetration
+        
     }
+
+    private ShipSection GetHitSection(Vector3 hitLocation)
+    {
+        Vector3 localHitLocation = transform.InverseTransformPoint(hitLocation);
+        if (localHitLocation.y > _shipLength / 6)
+        {
+            return ShipSection.Fore;
+        }
+        else if (localHitLocation.y < -_shipLength / 6)
+        {
+            return ShipSection.Aft;
+        }
+        else if (localHitLocation.x > 0)
+        {
+            return ShipSection.Left;
+        }
+        else
+        {
+            return ShipSection.Right;
+        }
+    }
+
+    public int ShipTotalShields
+    {
+        get
+        {
+            int totalShields = 0;
+            foreach (IShieldComponent shield in _shieldComponents)
+            {
+                totalShields += shield.CurrShieldPoints;
+            }
+            return totalShields;
+        }
+    }
+
+    public int ShipTotalMaxShields
+    {
+        get
+        {
+            return _totalMaxShield;
+        }
+    }
+
 
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right };
@@ -340,9 +469,11 @@ public class Ship : MonoBehaviour
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
+    private float _shipLength;
 
     public int MaxHullHitPoints;
-    private int HullHitponits;
+    public int HullHitPoints { get; private set; }
+    private int _totalMaxShield;
     public int DefaultArmorFront;
     public int DefaultArmorAft;
     public int DefaultArmorLeft;

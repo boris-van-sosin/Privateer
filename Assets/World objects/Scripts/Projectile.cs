@@ -28,9 +28,11 @@ public class Projectile : MonoBehaviour
         if (Physics.Raycast(r, out hit, distanceToTravel, _shipLayerMask))
         {
             GameObject hitobj = hit.collider.gameObject;
-            if (hitobj.GetComponent<Projectile>() == null && hitobj.GetComponent<Ship>() != OriginShip)
+            Ship shipHit;
+            if (hitobj.GetComponent<Projectile>() == null && (shipHit = hitobj.GetComponent<Ship>()) != OriginShip && shipHit != null)
             {
-                Debug.Log("Hit " + hit.collider.gameObject.ToString());
+                //Debug.Log("Hit " + hit.collider.gameObject.ToString());
+                shipHit.TakeHit(ProjectileWarhead, hit.point);
                 ParticleSystem ps = ObjectFactory.CreateExplosion(hit.point);
                 ps.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                 Destroy(ps, 5.0f);
@@ -62,4 +64,5 @@ public class Projectile : MonoBehaviour
     private Vector3 Origin;
     public Ship OriginShip;
     private int _shipLayerMask;
+    public Warhead ProjectileWarhead { get; set; }
 }

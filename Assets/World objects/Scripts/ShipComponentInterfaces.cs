@@ -63,5 +63,5 @@ public interface IEnergyCapacityComponent
 public interface IShieldComponent : IShipComponent
 {
     int MaxShieldPoints { get; }
-    int CurrShieldPoints { get; }
+    int CurrShieldPoints { get; set; }
 }

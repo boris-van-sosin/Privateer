@@ -12,11 +12,13 @@ public static class ObjectFactory
         }
     }
 
-    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, Warhead w, Ship origShip)
     {
         if (_prototypes != null)
         {
-            return _prototypes.CreateProjectile(firingVector, velocity, range, origShip);
+            Projectile p = _prototypes.CreateProjectile(firingVector, velocity, range, origShip);
+            p.ProjectileWarhead = w;
+            return p;
         }
         else
         {

@@ -13,7 +13,17 @@ public class UserDisplay : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-		if (EnergyBar != null)
+        if (HealthBar != null)
+        {
+            HealthBar.MaxValue = InputHandler.ControlledShip.MaxHullHitPoints;
+            HealthBar.Value = InputHandler.ControlledShip.HullHitPoints;
+        }
+        if (ShieldBar != null)
+        {
+            ShieldBar.MaxValue = InputHandler.ControlledShip.ShipTotalMaxShields;
+            ShieldBar.Value = InputHandler.ControlledShip.ShipTotalShields;
+        }
+        if (EnergyBar != null)
         {
             EnergyBar.MaxValue = InputHandler.ControlledShip.MaxEnergy;
             EnergyBar.Value = InputHandler.ControlledShip.Energy;

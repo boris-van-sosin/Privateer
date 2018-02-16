@@ -53,8 +53,8 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
             ComponentHitPoints = 40,
             ComponentIsWorking = true,
             Status = ComponentStatus.Undamaged,
-            PowerOutput = 10,
-            HeatOutput = 4,
+            PowerOutput = 3,
+            HeatOutput = 1,
             _containingShip = containingShip
         };
     }
@@ -95,7 +95,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         {
             return _currShieldPoints;
         }
-        private set
+        set
         {
             if (value <= 0)
             {
@@ -156,14 +156,14 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
             Status = ComponentStatus.Undamaged,
             MaxShieldPoints = 100,
             CurrShieldPoints = 100,
-            MaxShieldPointRegeneration = 4,
-            PowerUsage = 5,
+            MaxShieldPointRegeneration = 1,
+            PowerUsage = 2,
             HeatGeneration = 1,
-            PowerPerShieldRegeneration = 10,
-            HeatGenerationPerShieldRegeneration = 5,
+            PowerPerShieldRegeneration = 3,
+            HeatGenerationPerShieldRegeneration = 2,
             PowerToRestart = 20,
             HeatToRestart = 10,
-            RestartDelay = 20,
+            RestartDelay = 20 * 4,
             _containingShip = containingShip
         };
     }
@@ -211,7 +211,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent//, IHeat
     {
         return new HeatExchange()
         {
-            CoolingRate = 10,
+            CoolingRate = 4,
             _containingShip = containingShip
         };
     }
