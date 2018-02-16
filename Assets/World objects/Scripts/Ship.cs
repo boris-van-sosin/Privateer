@@ -340,46 +340,36 @@ public class Ship : MonoBehaviour
 
     public void TakeHit(Warhead w, Vector3 location)
     {
-        Debug.Log(string.Format("Ship {0} hit in {1}", name, GetHitSection(location)));
+        ShipSection sec = GetHitSection(location);
+        Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
         // if shields are present, take shield damage
-        int shieldDamage = w.ShieldDamage;
-        bool hasShield = false;
-        do
+        if (!Combat.DamageShields(w.ShieldDamage, _shieldComponents))
         {
-            hasShield = false;
-            IShieldComponent maxShield = null;
-            foreach (IShieldComponent shield in _shieldComponents)
-            {
-                if (maxShield == null || shield.CurrShieldPoints > maxShield.CurrShieldPoints)
-                {
-                    maxShield = shield;
-                }
-                if (shield.CurrShieldPoints > 0)
-                {
-                    hasShield = true;
-                }
-            }
-            if (hasShield)
-            {
-                if (maxShield.CurrShieldPoints >= shieldDamage)
-                {
-                    maxShield.CurrShieldPoints -= shieldDamage;
-                    return;
-                }
-                else
-                {
-                    shieldDamage -= maxShield.CurrShieldPoints;
-                    maxShield.CurrShieldPoints = 0;
-                }
-            }
-            if (hasShield && shieldDamage <= 0)
-            {
-                return;
-            }
-        } while (shieldDamage > 0 && hasShield);
+            return;
+        }
 
         // armour penetration
-        
+        int armourAtLocation = _currArmour[sec];
+        if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
+        {
+            // a random component at the section is damaged.
+            List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlots[sec].Count);
+            foreach (Tuple<ComponentSlotType, IShipComponent> c in _componentSlots[sec])
+            {
+                IShipActiveComponent c2 = c.Item2 as IShipActiveComponent;
+                if (c2 != null)
+                {
+                    damageableComps.Add(c2);
+                }
+            }
+            if (damageableComps.Count > 0)
+            {
+                IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
+                comp.ComponentHitPoints -= w.SystemDamage;
+            }
+            HullHitPoints = System.Math.Max(0, HullHitPoints - w.HullDamage);
+        }
+        _currArmour[sec] = System.Math.Max(0, _currArmour[sec] - w.ArmourDamage);
     }
 
     private ShipSection GetHitSection(Vector3 hitLocation)

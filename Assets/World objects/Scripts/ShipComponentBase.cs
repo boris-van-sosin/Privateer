@@ -12,7 +12,7 @@ public abstract class ShipComponentBase : IShipComponent
 public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveComponent
 {
     public int ComponentMaxHitpoints { get; protected set; }
-    public int ComponentHitPoints { get; protected set; }
+    public int ComponentHitPoints { get; set; }
     public bool ComponentIsWorking { get; protected set; }
     public ComponentStatus Status { get; protected set; }
 }

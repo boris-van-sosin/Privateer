@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public static class ObjectFactory
 {
@@ -36,6 +37,16 @@ public static class ObjectFactory
         {
             return null;
         }
+    }
+
+    public static T GetRandom<T>(IEnumerable<T> lst)
+    {
+        int numElems = lst.Count();
+        if (numElems == 0)
+        {
+            return lst.ElementAt(10000);
+        }
+        return lst.ElementAt(UnityEngine.Random.Range(0, numElems));
     }
 
     private static ObjectPrototypes _prototypes = null;

@@ -357,6 +357,23 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
+    public int ComponentHitPoints
+    {
+        get
+        {
+            return _currHitPoints;
+        }
+        set
+        {
+            _currHitPoints = System.Math.Max(0, value);
+            if (_currHitPoints == 0)
+            {
+                ComponentIsWorking = false;
+            }
+        }
+    }
+
+
     private bool _initialized = false; // ugly hack
 
     // Rotation behavior variables:
@@ -402,7 +419,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     public int ComponentMaxHitpoints { get { return MaxHitpoints; } }
 
-    public int ComponentHitPoints { get; private set; }
+    private int _currHitPoints;
 
     public bool ComponentIsWorking { get; private set; }
 

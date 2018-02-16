@@ -15,7 +15,7 @@ public class TurretComponent : ITurret
 
     public int ComponentMaxHitpoints { get { return _innerTurret.ComponentMaxHitpoints; } }
 
-    public int ComponentHitPoints { get { return _innerTurret.ComponentHitPoints; } }
+    public int ComponentHitPoints { get { return _innerTurret.ComponentHitPoints; } set { _innerTurret.ComponentHitPoints = value; } }
 
     public bool ComponentIsWorking { get { return _innerTurret.ComponentIsWorking; } }
 
