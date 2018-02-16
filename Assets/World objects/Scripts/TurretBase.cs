@@ -262,6 +262,10 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
+        if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
+        {
+            return;
+        }
         _lastFire = Time.time;
         Vector3 firingVector = Muzzles[_nextBarrel].up;
         firingVector.y = target.y - Muzzles[_nextBarrel].position.y;
@@ -388,6 +392,8 @@ public class TurretBase : MonoBehaviour, ITurret
 
     // Fire delay
     protected float _lastFire = 0.0f;
+    public int EnergyToFire;
+    public int HeatToFire;
 
     // Auto control
     public TurretMode Mode { get; set; }

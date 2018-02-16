@@ -672,6 +672,11 @@ MonoBehaviour:
   Thrust: 0.2
   Braking: 1.6
   TurnRate: 30
+  MaxHullHitPoints: 300
+  DefaultArmorFront: 40
+  DefaultArmorAft: 30
+  DefaultArmorLeft: 40
+  DefaultArmorRight: 40
   Follow: 0
 --- !u!96 &535581989
 TrailRenderer:
@@ -1632,6 +1637,11 @@ MonoBehaviour:
   Thrust: 0.16
   Braking: 1.6
   TurnRate: 25
+  MaxHullHitPoints: 1000
+  DefaultArmorFront: 90
+  DefaultArmorAft: 95
+  DefaultArmorLeft: 95
+  DefaultArmorRight: 80
   Follow: 0
 --- !u!64 &786182174
 MeshCollider:
@@ -2029,6 +2039,11 @@ MonoBehaviour:
   Thrust: 0.2
   Braking: 1.6
   TurnRate: 30
+  MaxHullHitPoints: 320
+  DefaultArmorFront: 35
+  DefaultArmorAft: 30
+  DefaultArmorLeft: 45
+  DefaultArmorRight: 45
   Follow: 0
 --- !u!4 &987960031 stripped
 Transform:
@@ -3328,6 +3343,11 @@ MonoBehaviour:
   Thrust: 0.18
   Braking: 1.7
   TurnRate: 28
+  MaxHullHitPoints: 700
+  DefaultArmorFront: 60
+  DefaultArmorAft: 50
+  DefaultArmorLeft: 70
+  DefaultArmorRight: 70
   Follow: 1
 --- !u!4 &1826680894 stripped
 Transform:

@@ -14,6 +14,7 @@ public class Ship : MonoBehaviour
             _cameraOffset = _userCamera.transform.position - transform.position;
             CameraOffsetFactor = 1.0f;
         }
+        InitComponents();
     }
 
     // Use this for initialization
@@ -21,6 +22,7 @@ public class Ship : MonoBehaviour
     {
         FindTurrets();
         _manualTurrets = new HashSet<ITurret>(_turrets);
+        StartCoroutine(ContinuousComponents());
     }
 	
     private void FindTurrets()
@@ -42,14 +44,15 @@ public class Ship : MonoBehaviour
     {
         _components = new IShipComponent[]
         {
-            new PowerPlant() { PowerOutput = 10 },
-            new CapacitorBank() { Capacity = 50 },
-            new HeatExchange() { CoolingRate = 20 }
+            PowerPlant.DefaultComponent(this),
+            CapacitorBank.DefaultComponent(this),
+            HeatExchange.DefaultComponent(this)
         };
 
-        _energyUsingComps = _components.Where(x => x is IEnergyUsingComponent).Select(y => y as IEnergyUsingComponent).ToArray();
+        //_energyUsingComps = _components.Where(x => x is IEnergyUsingComponent).Select(y => y as IEnergyUsingComponent).ToArray();
         _energyCapacityComps = _components.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
-        _heatUsingComps = _components.Where(x => x is IHeatUsingComponent).Select(y => y as IHeatUsingComponent).ToArray();
+        //_heatUsingComps = _components.Where(x => x is IHeatUsingComponent).Select(y => y as IHeatUsingComponent).ToArray();
+        _updateComponents = _components.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
     }
 
 	// Update is called once per frame
@@ -86,6 +89,11 @@ public class Ship : MonoBehaviour
             foreach (IEnergyCapacityComponent comp in _energyCapacityComps)
             {
                 newMaxEnergy += comp.EnergyCapacity;
+            }
+            MaxEnergy = newMaxEnergy;
+            foreach (IPeriodicActionComponent comp in _updateComponents)
+            {
+                comp.PeriodicAction();
             }
             yield return new WaitForSeconds(1.0f);
         }
@@ -247,9 +255,9 @@ public class Ship : MonoBehaviour
     public bool TryChangeEnergy(int delta)
     {
         int newEnergy = Energy + delta;
-        if (0 <= newEnergy && newEnergy <= MaxEnergy)
+        if (0 <= newEnergy)
         {
-            Energy = newEnergy;
+            Energy = System.Math.Min(newEnergy, MaxEnergy);
             return true;
         }
         return false;
@@ -258,9 +266,22 @@ public class Ship : MonoBehaviour
     public bool TryChangeHeat(int delta)
     {
         int newHeat = Heat + delta;
-        if (0 <= newHeat && newHeat <= MaxHeat)
+        if (newHeat <= MaxHeat)
         {
-            Heat = newHeat;
+            Heat = System.Math.Max(newHeat, 0);
+            return true;
+        }
+        return false;
+    }
+
+    public bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat)
+    {
+        int newEnergy = Energy + deltaEnergy;
+        int newHeat = Heat + deltaHeat;
+        if (newEnergy >= 0 && newHeat <= MaxHeat)
+        {
+            Energy = System.Math.Min(newEnergy, MaxEnergy);
+            Heat = System.Math.Max(newHeat, 0);
             return true;
         }
         return false;
@@ -287,9 +308,25 @@ public class Ship : MonoBehaviour
     private int MaxHeat = 100;
 
     private IShipComponent[] _components;
-    private IEnergyUsingComponent[] _energyUsingComps;
+    //private IEnergyUsingComponent[] _energyUsingComps;
     private IEnergyCapacityComponent[] _energyCapacityComps;
-    private IHeatUsingComponent[] _heatUsingComps;
+    private IPeriodicActionComponent[] _updateComponents;
+    //private IHeatUsingComponent[] _heatUsingComps;
+
+    public int MaxHullHitPoints;
+    private int HullHitponits;
+    public int DefaultArmorFront;
+    public int DefaultArmorAft;
+    public int DefaultArmorLeft;
+    public int DefaultArmorRight;
+    private int MaxArmorFront;
+    private int MaxArmorAft;
+    private int MaxArmorLeft;
+    private int MaxArmorRight;
+    private int CurrArmorFront;
+    private int CurrArmorAft;
+    private int CurrArmorLeft;
+    private int CurrArmorRight;
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;

@@ -38,11 +38,16 @@ public class TurretComponent : ITurret
 
 
 
-public class PowerPlant : ShipActiveComponentBase, IEnergyUsingComponent, IHeatUsingComponent
+public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent//, IEnergyUsingComponent, IHeatUsingComponent
 {
-    public int PowerOutput;
+    public int PowerOutput, HeatOutput;
 
-    public int EnergyDelta
+    public void PeriodicAction()
+    {
+        ContainingShip.TryChangeEnergyAndHeat(PowerOutput, HeatOutput);
+    }
+
+    /*public int EnergyDelta
     {
         get
         {
@@ -56,6 +61,20 @@ public class PowerPlant : ShipActiveComponentBase, IEnergyUsingComponent, IHeatU
         {
             return 5;
         }
+    }*/
+
+    public static PowerPlant DefaultComponent(Ship containingShip)
+    {
+        return new PowerPlant()
+        {
+            ComponentMaxHitpoints = 40,
+            ComponentHitPoints = 40,
+            ComponentIsWorking = true,
+            Status = ComponentStatus.Undamaged,
+            PowerOutput = 10,
+            HeatOutput = 4,
+            _containingShip = containingShip
+        };
     }
 }
 
@@ -70,9 +89,22 @@ public class CapacitorBank : ShipActiveComponentBase, IEnergyCapacityComponent
             return Capacity;
         }
     }
+
+    public static CapacitorBank DefaultComponent(Ship containingShip)
+    {
+        return new CapacitorBank()
+        {
+            ComponentMaxHitpoints = 40,
+            ComponentHitPoints = 40,
+            ComponentIsWorking = true,
+            Status = ComponentStatus.Undamaged,
+            Capacity = 50,
+            _containingShip = containingShip
+        };
+    }
 }
 
-public class ShieldGenerator : ShipActiveComponentBase, IEnergyUsingComponent, IHeatUsingComponent
+public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent//, IEnergyUsingComponent, IHeatUsingComponent
 {
     public int MaxShieldPoints;
     public int CurrShieldPoints { get; private set; }
@@ -81,8 +113,13 @@ public class ShieldGenerator : ShipActiveComponentBase, IEnergyUsingComponent, I
     public int PowerPerShieldRegeneration;
     public int PowerToRestart;
     public float RestartDelay;
+    public int HeatGeneration;
+    public int HeatGenerationPerShieldRegeneration;
+    public int HeatToRestart;
+    private bool _isShieldActive;
+    private int _ticksSinceInactive = 0;
 
-    public int EnergyDelta
+    /*public int EnergyDelta
     {
         get
         {
@@ -96,43 +133,99 @@ public class ShieldGenerator : ShipActiveComponentBase, IEnergyUsingComponent, I
         {
             return 0;
         }
+    }*/
+    public void PeriodicAction()
+    {
+        if (!ContainingShip.TryChangeEnergyAndHeat(PowerUsage, HeatGeneration))
+        {
+            CurrShieldPoints = 0;
+            _isShieldActive = false;
+            _ticksSinceInactive = 0;
+        }
+        if (_isShieldActive && CurrShieldPoints < MaxShieldPoints)
+        {
+            if (ContainingShip.TryChangeEnergyAndHeat(PowerPerShieldRegeneration, HeatGenerationPerShieldRegeneration))
+            {
+                CurrShieldPoints = System.Math.Min(MaxShieldPoints, CurrShieldPoints + MaxShieldPointRegeneration);
+            }
+        }
+        if (!_isShieldActive)
+        {
+            if (++_ticksSinceInactive >= RestartDelay && ContainingShip.TryChangeEnergyAndHeat(PowerToRestart, HeatToRestart))
+            {
+                _isShieldActive = true;
+            }
+        }
     }
 
+    public static ShieldGenerator DefaultComponent(Ship containingShip)
+    {
+        return new ShieldGenerator()
+        {
+            ComponentMaxHitpoints = 40,
+            ComponentHitPoints = 40,
+            ComponentIsWorking = true,
+            Status = ComponentStatus.Undamaged,
+            MaxShieldPoints = 100,
+            CurrShieldPoints = 100,
+            MaxShieldPointRegeneration = 4,
+            PowerUsage = 5,
+            HeatGeneration = 1,
+            PowerPerShieldRegeneration = 10,
+            HeatGenerationPerShieldRegeneration = 5,
+            PowerToRestart = 20,
+            HeatToRestart = 10,
+            RestartDelay = 20,
+            _containingShip = containingShip
+        };
+    }
 }
 
-public class DamageControlNode : ShipActiveComponentBase, IEnergyUsingComponent, IHeatUsingComponent
+public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionComponent//, IEnergyUsingComponent, IHeatUsingComponent
 {
     public int PowerUsage;
-    public int MaxHitPointRegeneration;
+    public int HullMaxHitPointRegeneration;
+    public int SystemMaxHitPointRegeneration;
+    public int MaxArmorPointRegeneration;
 
-    public int EnergyDelta
+    public void PeriodicAction()
     {
-        get
-        {
-            return -PowerUsage;
-        }
+        // nothing for now
     }
 
-    public int HeatDelta
+    public static DamageControlNode DefaultComponent(Ship containingShip)
     {
-        get
+        return new DamageControlNode()
         {
-            return 0;
-        }
+            ComponentMaxHitpoints = 40,
+            ComponentHitPoints = 40,
+            ComponentIsWorking = true,
+            Status = ComponentStatus.Undamaged,
+            HullMaxHitPointRegeneration = 10,
+            MaxArmorPointRegeneration = 1,
+            SystemMaxHitPointRegeneration = 2,
+            PowerUsage = 10,
+            _containingShip = containingShip
+        };
     }
-
 }
 
-public class HeatExchange : ShipComponentBase, IHeatUsingComponent
+public class HeatExchange : ShipComponentBase, IPeriodicActionComponent//, IHeatUsingComponent
 {
     public int CoolingRate;
 
-    public int HeatDelta
+    public void PeriodicAction()
     {
-        get
+        ContainingShip.TryChangeHeat(-CoolingRate);
+    }
+
+    public static HeatExchange DefaultComponent(Ship containingShip)
+    {
+        return new HeatExchange()
         {
-            return -CoolingRate;
-        }
+            CoolingRate = 10,
+            _containingShip = containingShip
+        };
     }
 }
 

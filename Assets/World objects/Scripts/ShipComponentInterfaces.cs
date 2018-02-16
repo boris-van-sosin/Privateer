@@ -44,8 +44,19 @@ public interface ITurret : IShipActiveComponent
     float CurrLocalAngle { get; }
 }
 
+public interface IPeriodicActionComponent : IShipComponent
+{
+    void PeriodicAction();
+}
+
+public interface IUserActivatedComponent : IShipComponent
+{
+    bool CanActivate(Vector3 target);
+    void Activate(Vector3 target);
+}
+
 // including energy generating (i.e. negative energy usage)
-public interface IEnergyUsingComponent
+/*public interface IEnergyUsingComponent
 {
     int EnergyDelta { get; }
 }
@@ -54,7 +65,7 @@ public interface IEnergyUsingComponent
 public interface IHeatUsingComponent
 {
     int HeatDelta { get; }
-}
+}*/
 
 public interface IEnergyCapacityComponent
 {
