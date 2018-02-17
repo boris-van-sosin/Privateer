@@ -45,6 +45,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
             else if (_componentCurrHitPoints <= ComponentMaxHitPoints / 4)
             {
                 Status = ComponentStatus.HeavilyDamaged;
+                Debug.Log(string.Format("{0} is heavily damaged. Time: {1}", this, Time.time));
             }
             else if (_componentCurrHitPoints <= ComponentMaxHitPoints / 2)
             {

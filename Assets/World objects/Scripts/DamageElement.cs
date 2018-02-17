@@ -63,5 +63,5 @@ public static class Combat
 
     private static readonly float _minArmourPenetration = .25f;
     private static readonly float _maxArmourPenetration = .95f;
-    private static readonly float _armourPenetrationSteepness = .05f;
+    private static readonly float _armourPenetrationSteepness = .2f;
 }

@@ -53,8 +53,8 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
     {
         return new PowerPlant()
         {
-            ComponentMaxHitPoints = 40,
-            ComponentHitPoints = 40,
+            ComponentMaxHitPoints = 400,
+            ComponentHitPoints = 400,
             Status = ComponentStatus.Undamaged,
             PowerOutput = 3,
             HeatOutput = 1,
@@ -79,8 +79,8 @@ public class CapacitorBank : ShipActiveComponentBase, IEnergyCapacityComponent
     {
         return new CapacitorBank()
         {
-            ComponentMaxHitPoints = 40,
-            ComponentHitPoints = 40,
+            ComponentMaxHitPoints = 400,
+            ComponentHitPoints = 400,
             Status = ComponentStatus.Undamaged,
             Capacity = 50,
             _containingShip = containingShip
@@ -156,12 +156,12 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
     {
         return new ShieldGenerator()
         {
-            ComponentMaxHitPoints = 40,
-            ComponentHitPoints = 40,
+            ComponentMaxHitPoints = 400,
+            ComponentHitPoints = 400,
             Status = ComponentStatus.Undamaged,
-            MaxShieldPoints = 100,
-            CurrShieldPoints = 100,
-            MaxShieldPointRegeneration = 1,
+            MaxShieldPoints = 1000,
+            CurrShieldPoints = 1000,
+            MaxShieldPointRegeneration = 8,
             PowerUsage = 2,
             HeatGeneration = 1,
             PowerPerShieldRegeneration = 3,
@@ -194,8 +194,8 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     {
         return new DamageControlNode()
         {
-            ComponentMaxHitPoints = 40,
-            ComponentHitPoints = 40,
+            ComponentMaxHitPoints = 400,
+            ComponentHitPoints = 400,
             Status = ComponentStatus.Undamaged,
             HullMaxHitPointRegeneration = 10,
             MaxArmorPointRegeneration = 1,

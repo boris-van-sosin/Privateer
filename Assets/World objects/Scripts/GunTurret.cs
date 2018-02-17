@@ -9,10 +9,10 @@ public class GunTurret : TurretBase
         base.FireInner(firingVector);
         Warhead testWarhead = new Warhead()
         {
-            ShieldDamage = 10,
-            ArmourPenetration = 20,
+            ShieldDamage = 40,
+            ArmourPenetration = 150,
             ArmourDamage = 5,
-            SystemDamage = 3,
+            SystemDamage = 10,
             HullDamage = 5
         };
         Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, testWarhead, _containingShip);
