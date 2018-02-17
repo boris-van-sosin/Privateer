@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Warhead
 {
     public int ShieldDamage { get; set; }
@@ -9,6 +10,7 @@ public class Warhead
     public int ArmourPenetration { get; set; }
     public int SystemDamage { get; set; }
     public int HullDamage { get; set; }
+    public int HeatGenerated { get; set; }
 }
 
 public static class Combat

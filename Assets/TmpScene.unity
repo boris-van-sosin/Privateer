@@ -1685,6 +1685,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114784083802151058, guid: a72a48815b601ce4696bd73a505e5582,
+        type: 2}
+      propertyPath: AmmoType
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a72a48815b601ce4696bd73a505e5582, type: 2}
   m_IsPrefabParent: 0
@@ -3027,6 +3032,11 @@ Prefab:
     - target: {fileID: 4317435531398854, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 114759024176127414, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4,
+        type: 2}
+      propertyPath: AmmoType
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 2}

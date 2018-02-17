@@ -13,7 +13,8 @@ public class GunTurret : TurretBase
             ArmourPenetration = 150,
             ArmourDamage = 5,
             SystemDamage = 10,
-            HullDamage = 5
+            HullDamage = 5,
+            HeatGenerated = 0
         };
         Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, testWarhead, _containingShip);
         p.transform.position = Muzzles[_nextBarrel].position;
@@ -24,4 +25,5 @@ public class GunTurret : TurretBase
     }
 
     public float MuzzleVelocity;
+    public ObjectFactory.AmmoType AmmoType;
 }

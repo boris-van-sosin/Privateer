@@ -526,10 +526,13 @@ MonoBehaviour:
   TurretType: 11
   MaxRange: 12
   FiringInterval: 0.5
+  TurretSize: 0
+  WeaponSize: 1
   EnergyToFire: 2
   HeatToFire: 1
   MaxHitpoints: 500
   MuzzleVelocity: 10
+  AmmoType: 0
 --- !u!198 &198081183719363530
 ParticleSystem:
   m_ObjectHideFlags: 1
