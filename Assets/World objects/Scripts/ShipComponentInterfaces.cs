@@ -28,12 +28,10 @@ public interface IShipComponent
 
 public interface IShipActiveComponent : IShipComponent
 {
-    int ComponentMaxHitpoints { get; }
+    int ComponentMaxHitPoints { get; }
     int ComponentHitPoints { get; set; }
     bool ComponentIsWorking { get; }
     ComponentStatus Status { get; }
-    //int EnergyDelta { get; }
-    //int HeatDelta { get; }
 }
 
 public interface ITurret : IShipActiveComponent

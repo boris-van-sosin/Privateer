@@ -322,16 +322,12 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             case RotationAxis.XAxis:
                 return rot.x;
-                break;
             case RotationAxis.YAxis:
                 return rot.y;
-                break;
             case RotationAxis.ZAxis:
                 return rot.z;
-                break;
             default:
                 return rot.y; // This is the most common.
-                break;
         }
     }
 
@@ -383,7 +379,6 @@ public class TurretBase : MonoBehaviour, ITurret
     public float RotationSpeed;
     private float _targetAngle;
     private float _globalTargetAngle;
-    private float _localTargetAngle;
     private Vector3 _vectorToTarget;
     private float _rotationDir;
     private float _defaultAngle;
@@ -417,7 +412,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     public int MaxHitpoints;
 
-    public int ComponentMaxHitpoints { get { return MaxHitpoints; } }
+    public int ComponentMaxHitPoints { get { return MaxHitpoints; } }
 
     private int _currHitPoints;
 

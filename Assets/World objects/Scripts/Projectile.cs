@@ -29,8 +29,17 @@ public class Projectile : MonoBehaviour
         {
             GameObject hitobj = hit.collider.gameObject;
             Ship shipHit;
-            if (hitobj.GetComponent<Projectile>() == null && (shipHit = hitobj.GetComponent<Ship>()) != OriginShip && shipHit != null)
+            if (hitobj.GetComponent<Projectile>() == null)
             {
+                shipHit = hitobj.GetComponent<Ship>();
+                if (shipHit == null)
+                {
+                    shipHit = hitobj.GetComponentInParent<Ship>();
+                }
+                if (shipHit == null || shipHit == OriginShip)
+                {
+                    return;
+                }
                 //Debug.Log("Hit " + hit.collider.gameObject.ToString());
                 shipHit.TakeHit(ProjectileWarhead, hit.point);
                 ParticleSystem ps = ObjectFactory.CreateExplosion(hit.point);

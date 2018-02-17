@@ -21,6 +21,7 @@ public class Ship : MonoBehaviour
         ComputeLength();
         InitComponents();
         InitArmour();
+        InitShield();
     }
 
     // Use this for initialization
@@ -108,8 +109,21 @@ public class Ship : MonoBehaviour
         _shipLength = m.bounds.size.y;
     }
 
-	// Update is called once per frame
-	void Update()
+    private void InitShield()
+    {
+        Transform t = transform.Find("Shield");
+        if (t != null)
+        {
+            _shieldCapsule = t.gameObject;
+            if (ShipTotalShields > 0 && _shieldCapsule)
+            {
+                _shieldCapsule.SetActive(true);
+            }
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
     {
         float directionMult = 0.0f;
         if (MovementDirection == ShipDirection.Forward)
@@ -145,6 +159,10 @@ public class Ship : MonoBehaviour
             foreach (IPeriodicActionComponent comp in _updateComponents)
             {
                 comp.PeriodicAction();
+            }
+            if (_shieldCapsule)
+            {
+                _shieldCapsule.SetActive(ShipTotalShields > 0);
             }
             yield return new WaitForSeconds(0.25f);
         }
@@ -345,7 +363,15 @@ public class Ship : MonoBehaviour
         // if shields are present, take shield damage
         if (!Combat.DamageShields(w.ShieldDamage, _shieldComponents))
         {
+            if (_shieldCapsule)
+            {
+                _shieldCapsule.SetActive(ShipTotalShields > 0);
+            }
             return;
+        }
+        if (_shieldCapsule)
+        {
+            _shieldCapsule.SetActive(ShipTotalShields > 0);
         }
 
         // armour penetration
@@ -470,6 +496,8 @@ public class Ship : MonoBehaviour
     public int DefaultArmorRight;
     private Dictionary<ShipSection, int> _maxArmour = new Dictionary<ShipSection, int>();
     private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
+
+    private GameObject _shieldCapsule;
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;

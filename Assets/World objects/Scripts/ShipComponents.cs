@@ -13,7 +13,7 @@ public class TurretComponent : ITurret
 
     public float CurrLocalAngle { get { return _innerTurret.CurrAngle; } }
 
-    public int ComponentMaxHitpoints { get { return _innerTurret.ComponentMaxHitpoints; } }
+    public int ComponentMaxHitPoints { get { return _innerTurret.ComponentMaxHitPoints; } }
 
     public int ComponentHitPoints { get { return _innerTurret.ComponentHitPoints; } set { _innerTurret.ComponentHitPoints = value; } }
 
@@ -42,6 +42,10 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
 
     public void PeriodicAction()
     {
+        if (!ComponentIsWorking)
+        {
+            return;
+        }
         ContainingShip.TryChangeEnergyAndHeat(PowerOutput, HeatOutput);
     }
 
@@ -49,9 +53,8 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
     {
         return new PowerPlant()
         {
-            ComponentMaxHitpoints = 40,
+            ComponentMaxHitPoints = 40,
             ComponentHitPoints = 40,
-            ComponentIsWorking = true,
             Status = ComponentStatus.Undamaged,
             PowerOutput = 3,
             HeatOutput = 1,
@@ -76,9 +79,8 @@ public class CapacitorBank : ShipActiveComponentBase, IEnergyCapacityComponent
     {
         return new CapacitorBank()
         {
-            ComponentMaxHitpoints = 40,
+            ComponentMaxHitPoints = 40,
             ComponentHitPoints = 40,
-            ComponentIsWorking = true,
             Status = ComponentStatus.Undamaged,
             Capacity = 50,
             _containingShip = containingShip
@@ -124,6 +126,10 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
 
     public void PeriodicAction()
     {
+        if (!ComponentIsWorking)
+        {
+            return;
+        }
         if (!ContainingShip.TryChangeEnergyAndHeat(PowerUsage, HeatGeneration))
         {
             CurrShieldPoints = 0;
@@ -150,9 +156,8 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
     {
         return new ShieldGenerator()
         {
-            ComponentMaxHitpoints = 40,
+            ComponentMaxHitPoints = 40,
             ComponentHitPoints = 40,
-            ComponentIsWorking = true,
             Status = ComponentStatus.Undamaged,
             MaxShieldPoints = 100,
             CurrShieldPoints = 100,
@@ -178,6 +183,10 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
 
     public void PeriodicAction()
     {
+        if (!ComponentIsWorking)
+        {
+            return;
+        }
         // nothing for now
     }
 
@@ -185,9 +194,8 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     {
         return new DamageControlNode()
         {
-            ComponentMaxHitpoints = 40,
+            ComponentMaxHitPoints = 40,
             ComponentHitPoints = 40,
-            ComponentIsWorking = true,
             Status = ComponentStatus.Undamaged,
             HullMaxHitPointRegeneration = 10,
             MaxArmorPointRegeneration = 1,
