@@ -30,6 +30,7 @@ public class TurretBase : MonoBehaviour, ITurret
         }
         ParseDeadZones();
         ParseMuzzles();
+        ComponentHitPoints = ComponentMaxHitPoints;
     }
 
     private void ParseDeadZones()
@@ -144,6 +145,18 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
         }
+
+        if (_targetShip != null && Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking)
+        {
+            if (_targetShip.ShipDisabled || (transform.position - _targetShip.transform.position).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
+            {
+                _targetShip = null;
+            }
+            else
+            {
+                Fire(_targetShip.transform.position);
+            }
+        }
     }
 
     public void ManualTarget(Vector3 target)
@@ -234,6 +247,10 @@ public class TurretBase : MonoBehaviour, ITurret
             return false;
         }
         if (!_isLegalAngle && Mode == TurretMode.Manual)
+        {
+            return false;
+        }
+        if ((Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking) && Mathf.Abs(_globalTargetAngle - CurrAngle) > 2.0f)
         {
             return false;
         }
@@ -339,36 +356,84 @@ public class TurretBase : MonoBehaviour, ITurret
             {
                 case RotationAxis.XAxis:
                     return Vector3.right;
-                    break;
                 case RotationAxis.YAxis:
                     return Vector3.up;
-                    break;
                 case RotationAxis.ZAxis:
                     return Vector3.forward;
-                    break;
                 default:
                     return Vector3.up; // This is the most common.
+            }
+        }
+    }
+
+    public void SetTurretBehavior(TurretMode newMode)
+    {
+        if (Mode == newMode)
+        {
+            return;
+        }
+        if ((Mode == TurretMode.Off || Mode == TurretMode.Manual) && (newMode == TurretMode.Auto || newMode == TurretMode.AutoTracking))
+        {
+            Mode = newMode;
+            StartCoroutine(TurretAutoBehavior());
+        }
+        else
+        {
+            Mode = newMode;
+        }
+    }
+
+    private IEnumerator TurretAutoBehavior()
+    {
+        while (true)
+        {
+            switch (Mode)
+            {
+                case TurretMode.Off:
+                    yield break;
+                case TurretMode.Manual:
+                    yield break;
+                case TurretMode.Auto:
+                    if (_targetShip == null)
+                    {
+                        _targetShip = AcquireTarget();
+                    }
+                    if (_targetShip != null)
+                    {
+                        ManualTarget(_targetShip.transform.position);
+                    }
+                    break;
+                case TurretMode.AutoTracking:
+                    break;
+                default:
                     break;
             }
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
-    public int ComponentHitPoints
+    private Ship AcquireTarget()
     {
-        get
+        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f);
+        Ship foundTarget = null;
+        foreach (Collider c in colliders)
         {
-            return _currHitPoints;
-        }
-        set
-        {
-            _currHitPoints = System.Math.Max(0, value);
-            if (_currHitPoints == 0)
+            Ship s = c.GetComponent<Ship>();
+            if (s == null)
             {
-                ComponentIsWorking = false;
+                continue;
+            }
+            else if (s.ShipDisabled)
+            {
+                continue;
+            }
+            if (ContainingShip.Owner.IsEnemy(s.Owner))
+            {
+                foundTarget = s;
             }
         }
+        return foundTarget;
     }
-
 
     private bool _initialized = false; // ugly hack
 
@@ -412,15 +477,11 @@ public class TurretBase : MonoBehaviour, ITurret
     // Auto control
     public TurretMode Mode { get; set; }
 
+    private Ship _targetShip = null;
+
     public int MaxHitpoints;
-
-    public int ComponentMaxHitPoints { get { return MaxHitpoints; } }
-
     private int _currHitPoints;
-
-    public bool ComponentIsWorking { get; private set; }
-
-    public ComponentStatus Status { get; private set; }
+    private ComponentStatus _status;
 
     public Ship ContainingShip { get { return _containingShip; } }
 
@@ -432,4 +493,84 @@ public class TurretBase : MonoBehaviour, ITurret
 
     private static readonly string BarrelString = "Barrel";
     private static readonly string MuzzleString = "Muzzle";
+
+    // Hit point stuff:
+    public virtual int ComponentMaxHitPoints
+    {
+        get
+        {
+            return MaxHitpoints;
+        }
+        protected set
+        {
+            if (value > 0)
+            {
+                MaxHitpoints = value;
+            }
+        }
+    }
+    public virtual int ComponentHitPoints
+    {
+        get
+        {
+            return _currHitPoints;
+        }
+        set
+        {
+            _currHitPoints = System.Math.Max(0, value);
+            if (_currHitPoints == 0)
+            {
+                Status = ComponentStatus.Destroyed;
+            }
+            else if (_currHitPoints <= ComponentMaxHitPoints / 10)
+            {
+                Status = ComponentStatus.KnockedOut;
+            }
+            else if (_currHitPoints <= ComponentMaxHitPoints / 4)
+            {
+                Status = ComponentStatus.HeavilyDamaged;
+                Debug.Log(string.Format("{0} is heavily damaged. Time: {1}", this, Time.time));
+            }
+            else if (_currHitPoints <= ComponentMaxHitPoints / 2)
+            {
+                Status = ComponentStatus.LightlyDamaged;
+            }
+            else
+            {
+                Status = ComponentStatus.Undamaged;
+            }
+        }
+    }
+    public virtual bool ComponentIsWorking
+    {
+        get
+        {
+            switch (Status)
+            {
+                case ComponentStatus.Undamaged:
+                    return true;
+                case ComponentStatus.LightlyDamaged:
+                    return true;
+                case ComponentStatus.HeavilyDamaged:
+                    return true;
+                case ComponentStatus.KnockedOut:
+                    return false;
+                case ComponentStatus.Destroyed:
+                    return false;
+                default:
+                    return false;
+            }
+        }
+    }
+    public virtual ComponentStatus Status
+    {
+        get
+        {
+            return _status;
+        }
+        protected set
+        {
+            _status = value;
+        }
+    }
 }

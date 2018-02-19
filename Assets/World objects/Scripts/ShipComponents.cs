@@ -33,6 +33,11 @@ public class TurretComponent : ITurret
         _innerTurret.ManualTarget(target);
     }
 
+    public void SetTurretBehavior(TurretBase.TurretMode newMode)
+    {
+        _innerTurret.SetTurretBehavior(newMode);
+    }
+
     private TurretBase _innerTurret;
 }
 
@@ -206,7 +211,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     }
 }
 
-public class HeatExchange : ShipComponentBase, IPeriodicActionComponent//, IHeatUsingComponent
+public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
 {
     public int CoolingRate;
 
@@ -219,7 +224,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent//, IHeat
     {
         return new HeatExchange()
         {
-            CoolingRate = 4,
+            CoolingRate = 6,
             _containingShip = containingShip
         };
     }
@@ -228,4 +233,53 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent//, IHeat
 public class ExtraArmour : ShipComponentBase
 {
     public int ArmourAmount;
+}
+
+public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
+{
+
+    public int EnergyPerThrust;
+    public int HeatPerThrust;
+    private bool _active;
+
+    public bool ComponentActive
+    {
+        get
+        {
+            return _active;
+        }
+
+        set
+        {
+            _active = value;
+        }
+    }
+
+    public bool ThrustWorks { get; private set; }
+
+    public void PeriodicAction()
+    {
+        if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerThrust, HeatPerThrust))
+        {
+            ThrustWorks = true;
+        }
+        else
+        {
+            ThrustWorks = false;
+        }
+        _active = false;
+    }
+
+    public static ShipEngine DefaultComponent(Ship containingShip)
+    {
+        return new ShipEngine()
+        {
+            ComponentMaxHitPoints = 600,
+            ComponentHitPoints = 600,
+            Status = ComponentStatus.Undamaged,
+            EnergyPerThrust = 2,
+            HeatPerThrust = 1,
+            _containingShip = containingShip
+        };
+    }
 }

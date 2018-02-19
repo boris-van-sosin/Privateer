@@ -36,11 +36,20 @@ public class Ship : MonoBehaviour
     {
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
         List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
+        _minEnergyPerShot = -1;
         foreach (TurretHardpoint hp in hardpoints)
         {
-            ITurret turret = hp.GetComponentInChildren<TurretBase>();
+            TurretBase turret = hp.GetComponentInChildren<TurretBase>();
             if (turret != null)
             {
+                if (_minEnergyPerShot < 0)
+                {
+                    _minEnergyPerShot = turret.EnergyToFire;
+                }
+                else
+                {
+                    _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, turret.EnergyToFire);
+                }
                 turrets.Add(turret);
             }
         }
@@ -57,7 +66,10 @@ public class Ship : MonoBehaviour
             Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, HeatExchange.DefaultComponent(this)),
             Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, ShieldGenerator.DefaultComponent(this))
         });
-        _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>()
+        {
+            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.Engine, (_engine = ShipEngine.DefaultComponent(this))),
+        });
         _componentSlots.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
 
@@ -194,6 +206,11 @@ public class Ship : MonoBehaviour
 
     private void ApplyThrust()
     {
+        _engine.ComponentActive = true;
+        if (_engine != null && !_engine.ThrustWorks)
+        {
+            return;
+        }
         float newSpeed = _speed + Thrust * Time.deltaTime;
         if (newSpeed > MaxSpeed)
         {
@@ -316,7 +333,7 @@ public class Ship : MonoBehaviour
             t.Fire(target);
             sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
         }
-        Debug.Log(sb.ToString());
+        //Debug.Log(sb.ToString());
     }
 
     public Vector3 ActualVelocity { get; private set; }
@@ -383,7 +400,7 @@ public class Ship : MonoBehaviour
             foreach (Tuple<ComponentSlotType, IShipComponent> c in _componentSlots[sec])
             {
                 IShipActiveComponent c2 = c.Item2 as IShipActiveComponent;
-                if (c2 != null)
+                if (c2 != null && c2.Status != ComponentStatus.Destroyed)
                 {
                     damageableComps.Add(c2);
                 }
@@ -396,6 +413,7 @@ public class Ship : MonoBehaviour
             HullHitPoints = System.Math.Max(0, HullHitPoints - w.HullDamage);
         }
         _currArmour[sec] = System.Math.Max(0, _currArmour[sec] - w.ArmourDamage);
+        CheckCriticalDamage();
     }
 
     private ShipSection GetHitSection(Vector3 hitLocation)
@@ -440,6 +458,55 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public IEnumerable<ITurret> Turrets
+    {
+        get
+        {
+            return _turrets;
+        }
+    }
+
+    private void CheckCriticalDamage()
+    {
+        bool critical = false;
+        if (HullHitPoints == 0)
+        {
+            critical = true;
+        }
+        else if (!_engine.ComponentIsWorking)
+        {
+            critical = true;
+        }
+        else
+        {
+            // no power
+            bool noPower = true;
+            foreach (IPeriodicActionComponent comp in _updateComponents)
+            {
+                PowerPlant p = comp as PowerPlant;
+                if (p != null && p.ComponentIsWorking)
+                {
+                    noPower = false;
+                    break;
+                }
+            }
+            critical = noPower && Energy < _minEnergyPerShot;
+
+            if (!critical)
+            {
+                if (_turrets.All(x => !x.ComponentIsWorking))
+                {
+                    critical = true;
+                }
+            }
+        }
+
+        if (critical)
+        {
+            Debug.Log(string.Format("Ship {0} is in critical!", this));
+            ShipDisabled = true;
+        }
+    }
 
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right };
@@ -456,6 +523,7 @@ public class Ship : MonoBehaviour
 
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
+    private int _minEnergyPerShot;
 
     public int Energy { get; private set; }
     public int MaxEnergy { get; private set; }
@@ -485,6 +553,7 @@ public class Ship : MonoBehaviour
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
+    private ShipEngine _engine;
     private float _shipLength;
 
     public int MaxHullHitPoints;
@@ -496,12 +565,15 @@ public class Ship : MonoBehaviour
     public int DefaultArmorRight;
     private Dictionary<ShipSection, int> _maxArmour = new Dictionary<ShipSection, int>();
     private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
+    public bool ShipDisabled { get; private set; }
 
     private GameObject _shieldCapsule;
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     public float CameraOffsetFactor { get; set; }
+
+    public Faction Owner;
 
     public bool Follow; // tmp
 }

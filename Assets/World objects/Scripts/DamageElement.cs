@@ -63,7 +63,7 @@ public static class Combat
         return penetrateRoll < penetrateChance;
     }
 
-    private static readonly float _minArmourPenetration = .25f;
+    private static readonly float _minArmourPenetration = .05f;
     private static readonly float _maxArmourPenetration = .95f;
     private static readonly float _armourPenetrationSteepness = .2f;
 }

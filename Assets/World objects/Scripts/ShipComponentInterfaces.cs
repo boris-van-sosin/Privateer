@@ -38,6 +38,7 @@ public interface ITurret : IShipActiveComponent
 {
     void ManualTarget(Vector3 target);
     void Fire(Vector3 target);
+    void SetTurretBehavior(TurretBase.TurretMode newMode);
     float CurrAngle { get; }
     float CurrLocalAngle { get; }
 }
@@ -51,6 +52,11 @@ public interface IUserActivatedComponent : IShipComponent
 {
     bool CanActivate(Vector3 target);
     void Activate(Vector3 target);
+}
+
+public interface IUserToggledComponent : IShipComponent
+{
+    bool ComponentActive { get; set; }
 }
 
 public interface IEnergyCapacityComponent

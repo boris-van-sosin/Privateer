@@ -982,7 +982,8 @@ MonoBehaviour:
   DefaultArmorAft: 300
   DefaultArmorLeft: 400
   DefaultArmorRight: 400
-  Follow: 0
+  Owner: {fileID: 1817640917}
+  Follow: 1
 --- !u!96 &535581989
 TrailRenderer:
   serializedVersion: 2
@@ -2261,6 +2262,7 @@ MonoBehaviour:
   DefaultArmorAft: 1100
   DefaultArmorLeft: 1350
   DefaultArmorRight: 1350
+  Owner: {fileID: 1817640917}
   Follow: 0
 --- !u!64 &786182174
 MeshCollider:
@@ -2672,6 +2674,7 @@ MonoBehaviour:
   DefaultArmorAft: 300
   DefaultArmorLeft: 450
   DefaultArmorRight: 450
+  Owner: {fileID: 1817640917}
   Follow: 0
 --- !u!4 &879298333 stripped
 Transform:
@@ -3867,6 +3870,47 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1175544946}
   m_Script: {fileID: 11500000, guid: 241bd5dd2bd17584f898a1edcb14088f, type: 3}
+--- !u!1 &1333997526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1333997528}
+  - component: {fileID: 1333997527}
+  m_Layer: 0
+  m_Name: Faction2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1333997527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1333997526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d45eb0a08756f4192cabf49fee2c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerFaction: 0
+--- !u!4 &1333997528
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1333997526}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1386811980
 Prefab:
   m_ObjectHideFlags: 0
@@ -4479,6 +4523,47 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 35d4a79c7b0eda54f94772d30c927458, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1817640916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1817640918}
+  - component: {fileID: 1817640917}
+  m_Layer: 0
+  m_Name: Faction1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1817640917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817640916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25d45eb0a08756f4192cabf49fee2c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerFaction: 1
+--- !u!4 &1817640918
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817640916}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1826680873
 Prefab:
   m_ObjectHideFlags: 0
@@ -4705,7 +4790,8 @@ MonoBehaviour:
   DefaultArmorAft: 800
   DefaultArmorLeft: 1000
   DefaultArmorRight: 1000
-  Follow: 1
+  Owner: {fileID: 1817640917}
+  Follow: 0
 --- !u!4 &1826680893 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4374970589579806, guid: 240a81d98b8d77946b5cdcfdaca11f91,
@@ -4939,6 +5025,7 @@ MonoBehaviour:
   DefaultArmorAft: 650
   DefaultArmorLeft: 750
   DefaultArmorRight: 750
+  Owner: {fileID: 1333997527}
   Follow: 0
 --- !u!4 &1833847250 stripped
 Transform:
