@@ -250,7 +250,7 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return false;
         }
-        if ((Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking) && Mathf.Abs(_globalTargetAngle - CurrAngle) > 2.0f)
+        if ((Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking) && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f)
         {
             return false;
         }
@@ -313,7 +313,6 @@ public class TurretBase : MonoBehaviour, ITurret
     {
         Vector3 forwardClean = Vector3.forward;
         forwardClean.y = 0;
-        //float angleOffset = Quaternion.Angle(Quaternion.LookRotation(-Vector3.forward, Vector3.up), Quaternion.LookRotation(forwardClean, Vector3.up));
         Vector3 shipHeadingClean = _containingShip.transform.up;
         shipHeadingClean.y = 0;
         float angleOffset = Quaternion.FromToRotation(shipHeadingClean, forwardClean).eulerAngles.y;
@@ -331,6 +330,20 @@ public class TurretBase : MonoBehaviour, ITurret
             finalAngle += 360;
         }
         return finalAngle;
+    }
+
+    private float AngleToTargetShip
+    {
+        get
+        {
+            if (_targetShip == null)
+            {
+                return 0;
+            }
+            Vector3 vecToTargetShip = _targetShip.transform.position - transform.position;
+            vecToTargetShip.y = 0;
+            return Quaternion.LookRotation(-vecToTargetShip).eulerAngles.y;
+        }
     }
 
     private float FilterRotation(Vector3 rot)
@@ -573,4 +586,6 @@ public class TurretBase : MonoBehaviour, ITurret
             _status = value;
         }
     }
+
+    public float GetMaxRange { get { return MaxRange; } }
 }

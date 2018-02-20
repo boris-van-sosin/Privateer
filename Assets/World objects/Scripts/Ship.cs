@@ -256,7 +256,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    private void ApplyBraking()
+    public void ApplyBraking()
     {
         float newSpeed = _speed - Braking * Time.deltaTime;
         if (newSpeed < 0)

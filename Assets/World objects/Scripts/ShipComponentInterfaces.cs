@@ -41,6 +41,7 @@ public interface ITurret : IShipActiveComponent
     void SetTurretBehavior(TurretBase.TurretMode newMode);
     float CurrAngle { get; }
     float CurrLocalAngle { get; }
+    float GetMaxRange { get; }
 }
 
 public interface IPeriodicActionComponent : IShipComponent

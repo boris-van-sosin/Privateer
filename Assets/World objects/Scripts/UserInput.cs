@@ -25,7 +25,10 @@ public class UserInput : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 2000))
         {
             Vector3 hitFlat = new Vector3(hit.point.x, 0, hit.point.z);
-            ControlledShip.ManualTarget(hitFlat);
+            if (!_autoTarget)
+            {
+                ControlledShip.ManualTarget(hitFlat);
+            }
             if (Input.GetMouseButton(0))
             {
                 ControlledShip.FireManual(hitFlat);
@@ -33,6 +36,21 @@ public class UserInput : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 ControlledShip.SetRequiredHeading(hitFlat);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                _autoTarget = !_autoTarget;
+                foreach (ITurret t in ControlledShip.Turrets)
+                {
+                    if (_autoTarget)
+                    {
+                        t.SetTurretBehavior(TurretBase.TurretMode.Auto);
+                    }
+                    else
+                    {
+                        t.SetTurretBehavior(TurretBase.TurretMode.Manual);
+                    }
+                }
             }
         }
 
@@ -62,6 +80,7 @@ public class UserInput : MonoBehaviour
     }
 
     public Ship ControlledShip; // temporary
+    private bool _autoTarget = false; // temporary
     private Ship _heightTargetShip;
     private int _backgroundLayerMask = 0;
 }

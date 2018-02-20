@@ -38,6 +38,8 @@ public class TurretComponent : ITurret
         _innerTurret.SetTurretBehavior(newMode);
     }
 
+    public float GetMaxRange { get { return _innerTurret.GetMaxRange; } }
+
     private TurretBase _innerTurret;
 }
 
