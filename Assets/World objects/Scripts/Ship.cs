@@ -206,10 +206,13 @@ public class Ship : MonoBehaviour
 
     private void ApplyThrust()
     {
-        _engine.ComponentActive = true;
-        if (_engine != null && !_engine.ThrustWorks)
+        if (_engine != null)
         {
-            return;
+            _engine.ComponentActive = true;
+            if (!_engine.ThrustWorks)
+            {
+                return;
+            }
         }
         float newSpeed = _speed + Thrust * Time.deltaTime;
         if (newSpeed > MaxSpeed)
@@ -224,6 +227,14 @@ public class Ship : MonoBehaviour
 
     private void ApplyThrust(float factor, float targetSpeedFactor)
     {
+        if (_engine != null)
+        {
+            _engine.ComponentActive = true;
+            if (!_engine.ThrustWorks)
+            {
+                return;
+            }
+        }
         float targetSpeed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
         if (targetSpeed < _speed)
         {
@@ -295,6 +306,14 @@ public class Ship : MonoBehaviour
 
     public void ApplyTurning(bool left)
     {
+        if (_engine != null)
+        {
+            _engine.ComponentActive = true;
+            if (!_engine.ThrustWorks)
+            {
+                return;
+            }
+        }
         float turnFactor = 1.0f;
         if (left)
         {

@@ -71,18 +71,29 @@ public class ShipAIController : MonoBehaviour
     private Vector3 AttackPosition(Ship enemmyShip)
     {
         float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
-        Vector3 Front = enemmyShip.transform.up.normalized * minRange * 0.95f;
-        Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
-        Vector3 Right = -Left;
-        Vector3 Rear = -Front;
+        Vector3 Front = enemmyShip.transform.up.normalized;
+        //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
+        //Vector3 Right = -Left;
+        //Vector3 Rear = -Front;
+        int numAngles = 12;
+        int numDistances = 3;
+        List<Vector3> positions = new List<Vector3>(numAngles * numDistances);
+        for (int i = 0; i < numAngles; ++i)
+        {
+            Vector3 dir = Quaternion.AngleAxis((float)i / numAngles * 360, Vector3.up) * Front;
+            for (int j = 0; j < numDistances; ++j)
+            {
+                float dist = minRange * 0.95f * (j + 1) / numDistances;
+                positions.Add(dir * dist);
+            }
+        }
 
-        Vector3[] positions = new Vector3[] { Front, Left, Right, Rear };
         int minPos = 0;
         float minDist = (positions[minPos] - transform.position).sqrMagnitude;
-        for (int i = 1; i < positions.Length; ++i)
+        for (int i = 1; i < positions.Count; ++i)
         {
             float currDist = (positions[i] - transform.position).sqrMagnitude;
-            if (currDist < minPos)
+            if (currDist < minDist)
             {
                 minPos = i;
                 minDist = currDist;
@@ -99,7 +110,6 @@ public class ShipAIController : MonoBehaviour
         Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
         float angleToTarget = Quaternion.FromToRotation(heading, vecToTarget).eulerAngles.y;
         bool atRequiredHeaing = false;
-        Debug.Log(angleToTarget);
         if (angleToTarget > 180 && angleToTarget < 360 -_angleEps)
         {
             _controlledShip.ApplyTurning(true);
@@ -146,13 +156,16 @@ public class ShipAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (_targetShip == null)
+            if (!_controlledShip.ShipDisabled)
             {
-                AcquireTarget();
-            }
-            if (_targetShip != null)
-            {
-                NavigateTo(AttackPosition(_targetShip));
+                if (_targetShip == null)
+                {
+                    AcquireTarget();
+                }
+                if (_targetShip != null)
+                {
+                    NavigateTo(AttackPosition(_targetShip));
+                }
             }
             yield return new WaitForSeconds(0.25f);
         }
