@@ -477,7 +477,7 @@ public class TurretBase : MonoBehaviour, ITurret
     public float MaxRange;
     public float FiringInterval;
     public ObjectFactory.WeaponSize TurretSize;
-    public ObjectFactory.WeaponType WeaponSize;
+    public ObjectFactory.WeaponType TurretWeaponType;
 
     // Turret status:
     public int IsJammed { get; private set; }

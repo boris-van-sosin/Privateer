@@ -54,14 +54,14 @@ public static class ObjectFactory
         return lst.ElementAt(UnityEngine.Random.Range(0, numElems));
     }
 
-    public static Warhead CreateWarhead(WeaponType w, WeaponSize az, AmmoType a)
+    public static Warhead CreateWarhead(WeaponType w, WeaponSize sz, AmmoType a)
     {
-        return null;
+        return _gunWarheads[Tuple<WeaponType, WeaponSize, AmmoType>.Create(w, sz, a)];
     }
 
-    public static Warhead CreateWarhead(WeaponType w, WeaponSize az)
+    public static Warhead CreateWarhead(WeaponType w, WeaponSize sz)
     {
-        return null;
+        return _otherWarheads[Tuple<WeaponType, WeaponSize>.Create(w, sz)];
     }
 
     private static void LoadWarheads()

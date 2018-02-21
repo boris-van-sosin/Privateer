@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
                 shipHit.TakeHit(ProjectileWarhead, hit.point);
                 ParticleSystem ps = ObjectFactory.CreateExplosion(hit.point);
                 ps.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-                Destroy(ps, 5.0f);
+                Destroy(ps.gameObject, 5.0f);
                 Destroy(gameObject);
                 return;
             }

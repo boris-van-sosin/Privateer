@@ -151,12 +151,13 @@ public class ShipAIController : MonoBehaviour
         _doNavigate = true;
     }
 
-    private bool BypassObstacle()
+    private Vector3? BypassObstacle(Vector3 direction)
     {
-        Vector3 forwatdVec = transform.up;
-        float projectFactor = 6.0f;
-        Vector3 projectedPath = _controlledShip.ActualVelocity * projectFactor;
-        RaycastHit[] hits = Physics.CapsuleCastAll(transform.position, transform.position + projectedPath, _controlledShip.ShipWidth * 1.1f, forwatdVec, projectFactor);
+        Vector3 directionNormalized = direction.normalized;
+        Vector3 rightVec = Quaternion.AngleAxis(90, Vector3.up) * directionNormalized;
+        float projectFactor = _controlledShip.ShipLength * 2;
+        Vector3 projectedPath = directionNormalized * projectFactor;
+        RaycastHit[] hits = Physics.CapsuleCastAll(transform.position, transform.position + projectedPath, _controlledShip.ShipWidth * 2.0f, directionNormalized, projectFactor);
         bool obstruction = false;
         List<float> dotToCorners = new List<float>(4 * hits.Length);
         float dotMin = -1;
@@ -183,7 +184,8 @@ public class ShipAIController : MonoBehaviour
                 };
                 for (int i = 0; i < otherShipCorners.Length; ++i)
                 {
-                    dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, transform.right));
+                    Debug.DrawLine(other.transform.position, otherShipCorners[i], Color.cyan, 0.25f);
+                    dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, rightVec));
                     if (dotMin < 0 || Mathf.Abs(dotToCorners[i]) < dotMin)
                     {
                         dotMin = Mathf.Abs(dotToCorners[i]);
@@ -208,22 +210,22 @@ public class ShipAIController : MonoBehaviour
             }
             if (maxLeft == -1)
             {
-                NavigateTo(transform.position - (transform.right * dotMin * 2f));
+                return (transform.position - (rightVec * dotMin * 2f));
             }
             else if (maxRight == -1)
             {
-                NavigateTo(transform.position + (transform.right * dotMin * 2f));
+                return (transform.position + (rightVec * dotMin * 2f));
             }
             else if (-dotToCorners[maxLeft] >= dotToCorners[maxRight])
             {
-                NavigateTo(transform.position + (transform.right * dotToCorners[maxRight] * 2f));
+                return (transform.position + (rightVec * dotToCorners[maxRight] * 2f));
             }
             else if (-dotToCorners[maxLeft] < dotToCorners[maxRight])
             {
-                NavigateTo(transform.position + (transform.right * dotToCorners[maxLeft] * 2f));
+                return (transform.position + (rightVec * dotToCorners[maxLeft] * 2f));
             }
         }
-        return obstruction;
+        return null;
     }
 
     private IEnumerator AcquireTargetPulse()
@@ -239,9 +241,15 @@ public class ShipAIController : MonoBehaviour
                 }
                 if (_targetShip != null)
                 {
-                    if (!BypassObstacle())
+                    Vector3 attackPos = AttackPosition(_targetShip);
+                    Vector3? bypassVec = BypassObstacle(attackPos);
+                    if (bypassVec == null)
                     {
-                        NavigateTo(AttackPosition(_targetShip));
+                        NavigateTo(attackPos);
+                    }
+                    else
+                    {
+                        NavigateTo(bypassVec.Value);
                     }
                 }
             }

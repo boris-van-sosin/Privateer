@@ -118,8 +118,8 @@ public class Ship : MonoBehaviour
     private void ComputeLength()
     {
         Mesh m = GetComponent<MeshFilter>().mesh;
-        ShipLength = m.bounds.size.y;
-        ShipWidth = m.bounds.size.x;
+        ShipLength = m.bounds.size.y * transform.lossyScale.y;
+        ShipWidth = m.bounds.size.x * transform.lossyScale.x;
     }
 
     private void InitShield()
