@@ -147,8 +147,83 @@ public class ShipAIController : MonoBehaviour
     private void NavigateTo(Vector3 target)
     {
         _navTarget = target;
-        Debug.DrawLine(transform.position, _navTarget, Color.red, 1);
+        Debug.DrawLine(transform.position, _navTarget, Color.red, 0.5f);
         _doNavigate = true;
+    }
+
+    private bool BypassObstacle()
+    {
+        Vector3 forwatdVec = transform.up;
+        float projectFactor = 6.0f;
+        Vector3 projectedPath = _controlledShip.ActualVelocity * projectFactor;
+        RaycastHit[] hits = Physics.CapsuleCastAll(transform.position, transform.position + projectedPath, _controlledShip.ShipWidth * 1.1f, forwatdVec, projectFactor);
+        bool obstruction = false;
+        List<float> dotToCorners = new List<float>(4 * hits.Length);
+        float dotMin = -1;
+        foreach (RaycastHit h in hits)
+        {
+            if (h.collider.gameObject == this.gameObject)
+            {
+                continue;
+            }
+            Ship other = h.collider.GetComponent<Ship>();
+            if (other != null)
+            {
+                obstruction = true;
+                Vector3 obstructionLocation = h.point;
+                obstructionLocation.y = 0;
+                float obstructionLength = other.ShipLength * 1.1f;
+                float obstructionWidth = other.ShipLength * 1.1f;
+                Vector3[] otherShipCorners = new Vector3[]
+                {
+                    other.transform.position + (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
+                    other.transform.position + (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
+                    other.transform.position - (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
+                    other.transform.position - (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
+                };
+                for (int i = 0; i < otherShipCorners.Length; ++i)
+                {
+                    dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, transform.right));
+                    if (dotMin < 0 || Mathf.Abs(dotToCorners[i]) < dotMin)
+                    {
+                        dotMin = Mathf.Abs(dotToCorners[i]);
+                    }
+                }
+            }
+        }
+        if (obstruction)
+        {
+            int maxRight = -1;
+            int maxLeft = -1;
+            for (int i = 0; i < dotToCorners.Count; ++i)
+            {
+                if (dotToCorners[i] > 0 && (maxRight == -1 || dotToCorners[i] > dotToCorners[maxRight]))
+                {
+                    maxRight = i;
+                }
+                else if (dotToCorners[i] < 0 && (maxLeft == -1 || dotToCorners[i] < dotToCorners[maxLeft]))
+                {
+                    maxLeft = i;
+                }
+            }
+            if (maxLeft == -1)
+            {
+                NavigateTo(transform.position - (transform.right * dotMin * 2f));
+            }
+            else if (maxRight == -1)
+            {
+                NavigateTo(transform.position + (transform.right * dotMin * 2f));
+            }
+            else if (-dotToCorners[maxLeft] >= dotToCorners[maxRight])
+            {
+                NavigateTo(transform.position + (transform.right * dotToCorners[maxRight] * 2f));
+            }
+            else if (-dotToCorners[maxLeft] < dotToCorners[maxRight])
+            {
+                NavigateTo(transform.position + (transform.right * dotToCorners[maxLeft] * 2f));
+            }
+        }
+        return obstruction;
     }
 
     private IEnumerator AcquireTargetPulse()
@@ -164,7 +239,10 @@ public class ShipAIController : MonoBehaviour
                 }
                 if (_targetShip != null)
                 {
-                    NavigateTo(AttackPosition(_targetShip));
+                    if (!BypassObstacle())
+                    {
+                        NavigateTo(AttackPosition(_targetShip));
+                    }
                 }
             }
             yield return new WaitForSeconds(0.25f);

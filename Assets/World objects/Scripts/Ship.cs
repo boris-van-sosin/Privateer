@@ -118,7 +118,8 @@ public class Ship : MonoBehaviour
     private void ComputeLength()
     {
         Mesh m = GetComponent<MeshFilter>().mesh;
-        _shipLength = m.bounds.size.y;
+        ShipLength = m.bounds.size.y;
+        ShipWidth = m.bounds.size.x;
     }
 
     private void InitShield()
@@ -438,11 +439,11 @@ public class Ship : MonoBehaviour
     private ShipSection GetHitSection(Vector3 hitLocation)
     {
         Vector3 localHitLocation = transform.InverseTransformPoint(hitLocation);
-        if (localHitLocation.y > _shipLength / 6)
+        if (localHitLocation.y > ShipLength / 6)
         {
             return ShipSection.Fore;
         }
-        else if (localHitLocation.y < -_shipLength / 6)
+        else if (localHitLocation.y < -ShipLength / 6)
         {
             return ShipSection.Aft;
         }
@@ -527,6 +528,16 @@ public class Ship : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.LogWarning(string.Format("Trigger: {0}, {1}", this, other.gameObject));
+    }
+
+    void OnCollisionEnter()
+    {
+        //Debug.LogWarning(string.Format("Collision: {0}, {1}", this, collision.gameObject));
+    }
+
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right };
 
@@ -573,7 +584,8 @@ public class Ship : MonoBehaviour
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
     private ShipEngine _engine;
-    private float _shipLength;
+    public float ShipLength { get; private set; }
+    public float ShipWidth { get; private set; }
 
     public int MaxHullHitPoints;
     public int HullHitPoints { get; private set; }

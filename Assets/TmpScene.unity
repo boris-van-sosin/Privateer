@@ -950,6 +950,7 @@ GameObject:
   - component: {fileID: 535581989}
   - component: {fileID: 535581990}
   - component: {fileID: 535581988}
+  - component: {fileID: 535581994}
   m_Layer: 0
   m_Name: Sloop - Monitor
   m_TagString: Untagged
@@ -1076,10 +1077,10 @@ MeshCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 535581987}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
+  m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 5714d9f105f269945941e0bb8e9adf8d, type: 3}
@@ -1141,6 +1142,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!54 &535581994
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 535581987}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!1001 &593506842
 Prefab:
   m_ObjectHideFlags: 0
@@ -2271,13 +2287,28 @@ MeshCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 786182164}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
+  m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 3817e4def110c744c89af7eedce01e03, type: 3}
+--- !u!54 &786182175
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 786182164}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!4 &786182177 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4329285666439386, guid: 920bf5948c9a0d44181620df15f551b5,
@@ -2642,10 +2673,10 @@ MeshCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 879298328}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
+  m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 97000f975d2b3354392472170e54d320, type: 3}
@@ -2676,6 +2707,21 @@ MonoBehaviour:
   DefaultArmorRight: 450
   Owner: {fileID: 1817640917}
   Follow: 0
+--- !u!54 &879298331
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 879298328}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!4 &879298333 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4483471643715358, guid: 3dc7854173d91154085b3d65e18ee0d3,
@@ -4758,10 +4804,10 @@ MeshCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1826680888}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
+  m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: c8dd5d86fd430a746b87003fdb7bf049, type: 3}
@@ -4792,6 +4838,21 @@ MonoBehaviour:
   DefaultArmorRight: 1000
   Owner: {fileID: 1817640917}
   Follow: 1
+--- !u!54 &1826680891
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1826680888}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!4 &1826680893 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4374970589579806, guid: 240a81d98b8d77946b5cdcfdaca11f91,
@@ -4973,10 +5034,10 @@ MeshCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1833847241}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Convex: 0
+  m_Convex: 1
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 59bf2248d4967a347a4a0b8ab2f3da8b, type: 3}
@@ -5038,6 +5099,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e7b169d25da3444b585e2e0c0831c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &1833847249
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1833847241}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!4 &1833847250 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4701304953700132, guid: b41bf2227240a8647967fa98d22fbf93,

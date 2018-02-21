@@ -264,13 +264,20 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerThrust, HeatPerThrust))
         {
             ThrustWorks = true;
+            _nextDeactivate = true;
         }
         else
         {
             ThrustWorks = false;
         }
-        _active = false;
+        if (_nextDeactivate)
+        {
+            _active = false;
+            _nextDeactivate = false;
+        }
     }
+
+    private bool _nextDeactivate = false;
 
     public static ShipEngine DefaultComponent(Ship containingShip)
     {
