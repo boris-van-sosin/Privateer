@@ -328,52 +328,52 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1680506303264566}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.0199653, y: -0.09311662, z: 0.000120000834}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 16
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!4 &4007330192516486
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1645547007157428}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.0199653, y: -0.0931166, z: 0.00012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 15
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!4 &4057159131118340
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1507389903749008}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.0269653, y: 0.0763834, z: 0.0002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!4 &4105616224702536
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1225987154765678}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: 0.0269653, y: 0.07638341, z: 0.0001999998}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -90}
 --- !u!4 &4369084120477890
 Transform:
   m_ObjectHideFlags: 1
@@ -393,13 +393,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1039448071478714}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.0269653, y: -0.07161663, z: 0.00019199848}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 14
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!4 &4412495355903252
 Transform:
   m_ObjectHideFlags: 1
@@ -458,13 +458,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1574110287985738}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0.0199653, y: 0.097883426, z: 0.0011999988}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!4 &4521007460419132
 Transform:
   m_ObjectHideFlags: 1
@@ -472,7 +472,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1686290255015638}
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -3.0772257, y: 0, z: -0.48773536}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 4441848479858762}
@@ -502,13 +502,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1005486118026942}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.0269653, y: -0.07161661, z: 0.000192}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!4 &4751830106230962
 Transform:
   m_ObjectHideFlags: 1
@@ -528,13 +528,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1935318729019130}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: -0.0199653, y: 0.0978834, z: 0.0012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4521007460419132}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!4 &4907120883932194
 Transform:
   m_ObjectHideFlags: 1
@@ -748,7 +748,7 @@ MonoBehaviour:
   MaxRotation: 135
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 2
 --- !u!114 &114210030265515000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -764,7 +764,7 @@ MonoBehaviour:
   MaxRotation: 300
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 3
 --- !u!114 &114211753354595078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -780,7 +780,7 @@ MonoBehaviour:
   MaxRotation: 105
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 2
 --- !u!114 &114222184546153960
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -841,7 +841,7 @@ MonoBehaviour:
   MaxRotation: 145
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 2
 --- !u!114 &114544746592369112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -857,7 +857,7 @@ MonoBehaviour:
   MaxRotation: 325
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 3
 --- !u!114 &114556497461399258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -873,7 +873,7 @@ MonoBehaviour:
   MaxRotation: 145
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 2
 --- !u!114 &114570753392451364
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -905,7 +905,7 @@ MonoBehaviour:
   MaxRotation: 315
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 3
 --- !u!114 &114624774157050164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -921,7 +921,7 @@ MonoBehaviour:
   MaxRotation: 360
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!114 &114727469896837642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -937,7 +937,7 @@ MonoBehaviour:
   MaxRotation: 95
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!114 &114798191002063842
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -985,7 +985,7 @@ MonoBehaviour:
   MaxRotation: 325
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 3
 --- !u!114 &114899854191395712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1001,7 +1001,7 @@ MonoBehaviour:
   MaxRotation: 110
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!114 &114922566021382350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1017,7 +1017,7 @@ MonoBehaviour:
   MaxRotation: 315
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!136 &136483318769056806
 CapsuleCollider:
   m_ObjectHideFlags: 1

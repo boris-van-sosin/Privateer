@@ -16,6 +16,10 @@ public static class ObjectFactory
         {
             LoadWarheads();
         }
+        if (_weaponMounts == null)
+        {
+            LoadWeaponsMounts();
+        }
     }
 
     public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, Warhead w, Ship origShip)
@@ -72,14 +76,31 @@ public static class ObjectFactory
     public static Ship CreateShip(string prodKey)
     {
         Ship s = _prototypes.CreateShip(prodKey);
+
         s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s));
+        foreach (TurretHardpoint hp in s.WeaponHardpoints)
+        {
+            TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], WeaponType.Howitzer);
+            s.PlaceTurret(hp, t);
+        }
         s.Activate();
         return s;
+    }
+
+    public static TurretBase CreateTurret(ComponentSlotType turretType, WeaponType weaponType)
+    {
+        string prodKey = turretType.ToString() + weaponType.ToString();
+        TurretBase t = _prototypes.CreateTurret(prodKey);
+        TurretMountDataEntry d = _weaponMounts[SlotTypeToMountKey(turretType)];
+        t.MaxHitpoints = d.HitPoints;
+        t.ComponentHitPoints = d.HitPoints;
+        t.RotationSpeed = d.RotationSpeed;
+        return t;
     }
 
     private static void LoadWarheads()
@@ -98,6 +119,55 @@ public static class ObjectFactory
             {
                 WarheadDataEntry2 d2 = WarheadDataEntry2.FromString(l);
                 _otherWarheads.Add(new Tuple<WeaponType, WeaponSize>(d2.LaunchWeaponType, d2.LaunchWeaponSize), d2.WarheadData);
+            }
+        }
+    }
+
+    private static Tuple<WeaponSize, TurretMountType> SlotTypeToMountKey(ComponentSlotType t)
+    {
+        switch (t)
+        {
+            case ComponentSlotType.SmallFixed:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Fixed);
+            case ComponentSlotType.SmallBroadside:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Broadside);
+            case ComponentSlotType.SmallBarbette:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Barbette);
+            case ComponentSlotType.SmallTurret:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Turret);
+            case ComponentSlotType.SmallBarbetteDual:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Barbette);
+            case ComponentSlotType.SmallTurretDual:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Turret);
+            case ComponentSlotType.MediumBroadside:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Barbette);
+            case ComponentSlotType.MediumBarbette:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Barbette);
+            case ComponentSlotType.MediumTurret:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Turret);
+            case ComponentSlotType.MediumBarbetteDualSmall:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Barbette);
+            case ComponentSlotType.MediumTurretDualSmall:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Turret);
+            case ComponentSlotType.LargeBarbette:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Heavy, TurretMountType.Barbette);
+            case ComponentSlotType.LargeTurret:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Heavy, TurretMountType.Turret);
+            default:
+                return null;
+        }
+    }
+
+    private static void LoadWeaponsMounts()
+    {
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "WeapoMounts.txt"));
+        _weaponMounts = new Dictionary<Tuple<WeaponSize, TurretMountType>, TurretMountDataEntry>();
+        foreach (string l in lines)
+        {
+            if (l.Trim().StartsWith("WeaponMount"))
+            {
+                TurretMountDataEntry tm = TurretMountDataEntry.FromString(l);
+                _weaponMounts.Add(Tuple<WeaponSize, TurretMountType>.Create(tm.MountSize, tm.Mount), tm);
             }
         }
     }

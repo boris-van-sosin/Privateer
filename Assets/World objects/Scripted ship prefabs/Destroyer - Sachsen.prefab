@@ -408,7 +408,7 @@ MonoBehaviour:
   MaxRotation: 295
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 2
 --- !u!114 &114206441389797348
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -453,7 +453,7 @@ MonoBehaviour:
   MaxRotation: 10
   DeadZoneAngles: []
   AllowedWeaponTypes: 03000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!114 &114400704794832708
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -484,8 +484,8 @@ MonoBehaviour:
   MinRotation: 350
   MaxRotation: 160
   DeadZoneAngles: []
-  AllowedWeaponTypes: 
-  LocationOnShip: 0
+  AllowedWeaponTypes: 03000000
+  LocationOnShip: 1
 --- !u!114 &114546650122759348
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -501,7 +501,7 @@ MonoBehaviour:
   MaxRotation: 115
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 3
 --- !u!114 &114731199211631450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -516,8 +516,8 @@ MonoBehaviour:
   MinRotation: 65
   MaxRotation: 180
   DeadZoneAngles: []
-  AllowedWeaponTypes: 
-  LocationOnShip: 0
+  AllowedWeaponTypes: 08000000
+  LocationOnShip: 3
 --- !u!114 &114977595633810374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -533,7 +533,7 @@ MonoBehaviour:
   MaxRotation: 360
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
-  LocationOnShip: 0
+  LocationOnShip: 2
 --- !u!136 &136657788195819082
 CapsuleCollider:
   m_ObjectHideFlags: 1

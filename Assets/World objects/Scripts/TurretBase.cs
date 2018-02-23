@@ -9,12 +9,6 @@ public class TurretBase : MonoBehaviour, ITurret
 	// Use this for initialization
 	void Start()
     {
-        _containingShip = FindContainingShip(transform.parent);
-        _initialized = true;
-    }
-
-    protected virtual void Awake()
-    {
         TurretHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TurretHardpoint>()) != null)
         {
@@ -30,6 +24,12 @@ public class TurretBase : MonoBehaviour, ITurret
         }
         ParseDeadZones();
         ParseMuzzles();
+        _containingShip = FindContainingShip(transform.parent);
+        _initialized = true;
+    }
+
+    protected virtual void Awake()
+    {
         ComponentHitPoints = ComponentMaxHitPoints;
     }
 

@@ -164,7 +164,11 @@ public class Ship : MonoBehaviour
         {
             return false;
         }
+        Quaternion q = Quaternion.LookRotation(-hp.transform.up);
+        t.transform.rotation = q;
         t.transform.parent = hp.transform;
+        t.transform.localScale = Vector3.one;
+        t.transform.localPosition = Vector3.zero;
         if (_minEnergyPerShot < 0)
         {
             _minEnergyPerShot = t.EnergyToFire;
@@ -173,17 +177,27 @@ public class Ship : MonoBehaviour
         {
             _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, t.EnergyToFire);
         }
-        ITurret[] newTurretArr = new ITurret[_turrets.Length + 1];
-        _turrets.CopyTo(newTurretArr, 0);
-        newTurretArr[newTurretArr.Length - 1] = t;
-        _turrets = newTurretArr;
+        if (_turrets != null)
+        {
+            ITurret[] newTurretArr = new ITurret[_turrets.Length + 1];
+            _turrets.CopyTo(newTurretArr, 0);
+            newTurretArr[newTurretArr.Length - 1] = t;
+            _turrets = newTurretArr;
+        }
+        else
+        {
+            _turrets = new ITurret[]
+            {
+                t
+            };
+        }
         _componentSlots[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(t.TurretType, t));
         return true;
     }
 
     public bool PlaceComponent(ShipSection sec, IShipComponent comp)
     {
-        if (comp.ComponentType != ComponentSlotType.ShipSystem && comp.ComponentType != ComponentSlotType.BoardingForce)
+        if (comp.ComponentType != ComponentSlotType.ShipSystem && comp.ComponentType != ComponentSlotType.BoardingForce && comp.ComponentType != ComponentSlotType.Engine)
         {
             return false;
         }

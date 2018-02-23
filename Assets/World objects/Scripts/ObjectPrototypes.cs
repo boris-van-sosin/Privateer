@@ -45,7 +45,7 @@ public class ObjectPrototypes : MonoBehaviour
         }
         if (_shipPrototypeDictionary.TryGetValue(prodKey, out res))
         {
-            return res;
+            return Instantiate(res);
         }
         else
         {
@@ -70,7 +70,7 @@ public class ObjectPrototypes : MonoBehaviour
         TurretBase res;
         if (_turretPrototypeDictionary.TryGetValue(prodKey, out res))
         {
-            return res;
+            return Instantiate(res);
         }
         foreach (TurretBase t in TurretPrototypes)
         {
@@ -79,7 +79,7 @@ public class ObjectPrototypes : MonoBehaviour
         }
         if (_turretPrototypeDictionary.TryGetValue(prodKey, out res))
         {
-            return res;
+            return Instantiate(res);
         }
         else
         {

@@ -345,7 +345,7 @@ MonoBehaviour:
   DeadZoneAngles:
   - 0,25
   - 335,360
-  AllowedWeaponTypes: 0a000000
+  AllowedWeaponTypes: 0b000000
   LocationOnShip: 0
 --- !u!114 &114779545543894162
 MonoBehaviour:
@@ -380,11 +380,11 @@ MonoBehaviour:
   Thrust: 0.2
   Braking: 1.6
   TurnRate: 30
-  CenterComponentSlots: 
+  CenterComponentSlots: 00000000000000000000000000000000
   ForeComponentSlots: 
-  AftComponentSlots: 
-  LeftComponentSlots: 
-  RightComponentSlots: 
+  AftComponentSlots: 11000000
+  LeftComponentSlots: 00000000
+  RightComponentSlots: 00000000
   MaxHullHitPoints: 3000
   DefaultArmorFront: 400
   DefaultArmorAft: 300

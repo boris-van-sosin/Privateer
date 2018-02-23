@@ -338,7 +338,7 @@ MonoBehaviour:
   - 345,360
   - 0,15
   AllowedWeaponTypes: 03000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!114 &114658742019267748
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -402,7 +402,7 @@ MonoBehaviour:
   - 340,360
   - 0,20
   AllowedWeaponTypes: 09000000
-  LocationOnShip: 0
+  LocationOnShip: 1
 --- !u!136 &136988035062051818
 CapsuleCollider:
   m_ObjectHideFlags: 1
