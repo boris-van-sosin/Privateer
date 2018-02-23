@@ -18,7 +18,11 @@ public static class ObjectFactory
         }
         if (_weaponMounts == null)
         {
-            LoadWeaponsMounts();
+            LoadWeaponMounts();
+        }
+        if (_weapons_projectile == null)
+        {
+            LoadWeapons();
         }
     }
 
@@ -96,16 +100,38 @@ public static class ObjectFactory
     {
         string prodKey = turretType.ToString() + weaponType.ToString();
         TurretBase t = _prototypes.CreateTurret(prodKey);
-        TurretMountDataEntry d = _weaponMounts[SlotTypeToMountKey(turretType)];
-        t.MaxHitpoints = d.HitPoints;
-        t.ComponentHitPoints = d.HitPoints;
-        t.RotationSpeed = d.RotationSpeed;
+        TurretMountDataEntry md = _weaponMounts[SlotTypeToMountKey(turretType)];
+        t.MaxHitpoints = md.HitPoints;
+        t.ComponentHitPoints = md.HitPoints;
+        t.RotationSpeed = md.RotationSpeed;
+        switch (weaponType)
+        {
+            case WeaponType.Autocannon:
+            case WeaponType.Howitzer:
+            case WeaponType.HVGun:
+                WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
+                GunTurret gt = t as GunTurret;
+                gt.MaxRange = wpd.MaxRange;
+                gt.MuzzleVelocity = wpd.MuzzleVelocity;
+                gt.FiringInterval = wpd.FiringInterval;
+                gt.EnergyToFire = wpd.EnergyToFire;
+                gt.HeatToFire = wpd.HeatToFire;
+                break;
+            case WeaponType.Lance:
+                break;
+            case WeaponType.Laser:
+                break;
+            case WeaponType.PlasmaCannon:
+                break;
+            default:
+                break;
+        }
         return t;
     }
 
     private static void LoadWarheads()
     {
-        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "weapons.txt"));
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.txt"));
         _gunWarheads = new Dictionary<Tuple<WeaponType, WeaponSize, AmmoType>, Warhead>();
         _otherWarheads = new Dictionary<Tuple<WeaponType, WeaponSize>, Warhead>();
         foreach (string l in lines)
@@ -158,9 +184,34 @@ public static class ObjectFactory
         }
     }
 
-    private static void LoadWeaponsMounts()
+    private static Tuple<WeaponSize, WeaponType> SlotAndWeaponToWeaponKey(ComponentSlotType t, WeaponType w)
     {
-        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "WeapoMounts.txt"));
+        switch (t)
+        {
+            case ComponentSlotType.SmallFixed:
+            case ComponentSlotType.SmallBroadside:
+            case ComponentSlotType.SmallBarbette:
+            case ComponentSlotType.SmallTurret:
+            case ComponentSlotType.SmallBarbetteDual:
+            case ComponentSlotType.SmallTurretDual:
+            case ComponentSlotType.MediumBarbetteDualSmall:
+            case ComponentSlotType.MediumTurretDualSmall:
+                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Light, w);
+            case ComponentSlotType.MediumBroadside:
+            case ComponentSlotType.MediumBarbette:
+            case ComponentSlotType.MediumTurret:
+                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Medium, w);
+            case ComponentSlotType.LargeBarbette:
+            case ComponentSlotType.LargeTurret:
+                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Heavy, w);
+            default:
+                return null;
+        }
+    }
+
+    private static void LoadWeaponMounts()
+    {
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "WeaponMounts.txt"));
         _weaponMounts = new Dictionary<Tuple<WeaponSize, TurretMountType>, TurretMountDataEntry>();
         foreach (string l in lines)
         {
@@ -168,6 +219,20 @@ public static class ObjectFactory
             {
                 TurretMountDataEntry tm = TurretMountDataEntry.FromString(l);
                 _weaponMounts.Add(Tuple<WeaponSize, TurretMountType>.Create(tm.MountSize, tm.Mount), tm);
+            }
+        }
+    }
+
+    private static void LoadWeapons()
+    {
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
+        _weapons_projectile = new Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry>();
+        foreach (string l in lines)
+        {
+            if (l.Trim().StartsWith("ProjectileWeapon"))
+            {
+                WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
+                _weapons_projectile.Add(Tuple<WeaponSize, WeaponType>.Create(w.MountSize, w.Weapon), w);
             }
         }
     }
@@ -205,7 +270,7 @@ public static class ObjectFactory
         }
 
 
-        System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","weapons.txt"), sb.ToString());
+        System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","Warheads.txt"), sb.ToString());
     }
 
     public enum TurretMountType { Fixed, Broadside, Barbette, Turret }
@@ -338,7 +403,7 @@ public static class ObjectFactory
                     MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[1].Trim(), true),
                     Mount = (TurretMountType)System.Enum.Parse(typeof(TurretMountType), elements[2].Trim(), true),
                     HitPoints = int.Parse(elements[3].Trim()),
-                    RotationSpeed = int.Parse(elements[4].Trim())
+                    RotationSpeed = float.Parse(elements[4].Trim())
                 };
             }
             else

@@ -814,11 +814,11 @@ MonoBehaviour:
   Thrust: 0.16
   Braking: 1.6
   TurnRate: 25
-  CenterComponentSlots: 
-  ForeComponentSlots: 
-  AftComponentSlots: 
-  LeftComponentSlots: 
-  RightComponentSlots: 
+  CenterComponentSlots: 000000000000000000000000000000000000000000000000
+  ForeComponentSlots: 0000000000000000
+  AftComponentSlots: 110000000000000000000000
+  LeftComponentSlots: 0000000000000000
+  RightComponentSlots: 0000000000000000
   MaxHullHitPoints: 10000
   DefaultArmorFront: 1300
   DefaultArmorAft: 1100

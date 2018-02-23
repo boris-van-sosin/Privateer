@@ -1,29 +1,10 @@
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT
-
-3,Light,Autocannon,KineticPenetrator,10,160,3,8,2,0
-3,Light,Autocannon,ShapedCharge     ,15,110,5,7,3,0
-3,Light,Autocannon,ShrapnelRound    ,35,70,3,8,1,0
-
-3,Light,HVGun,KineticPenetrator,60,350,8,40,8,0
-3,Light,HVGun,ShapedCharge     ,80,230,12,28,10,0
-3,Light,HVGun,ShrapnelRound    ,160,90,6,36,6,0
-
-3,Light,Howitzer,KineticPenetrator,50,280,6,36,6,0
-3,Light,Howitzer,ShapedCharge     ,100,260,16,34,14,0
-3,Light,Howitzer,ShrapnelRound    ,240,100,6,36,6,0
-
-2,Light,Lance       ,22,260,10,16,5,8,
-2,Light,Laser       ,100,100,5,12,4,10,
-2,Light,PlasmaCannon,45,90,6,16,4,12,
-
-3,Medium,Autocannon,KineticPenetrator,25,250,8,20,5,0
-3,Medium,Autocannon,ShapedCharge     ,35,170,12,16,6,0
-3,Medium,Autocannon,ShrapnelRound    ,55,120,7,20,3,0
-
-3,Medium,HVGun,KineticPenetrator,150,750,18,110,18,0
-3,Medium,HVGun,ShapedCharge     ,180,500,26,65,22,0
-3,Medium,HVGun,ShrapnelRound    ,240,150,14,75,15,0
-
-3,Medium,Howitzer,KineticPenetrator,110,580,18,80,18,0
-3,Medium,Howitzer,ShapedCharge     ,250,550,40,17,24,0
-3,Medium,Howitzer,ShrapnelRound    ,370,160,16,18,14,0
+#,Size,Weapon,Max Range,Muzzle Velocity,Firing Interval,Energy to Fire,Heat to Fire
+ProjectileWeapon,Light,Autocannon,10,12,0.5,2,1
+ProjectileWeapon,Light,Howitzer,12,10,2,4,2
+ProjectileWeapon,Light,HVGun,15,15,2,4,2
+ProjectileWeapon,Medium,Autocannon,13,13,0.75,3,2
+ProjectileWeapon,Medium,Howitzer,15,11,3,6,4
+ProjectileWeapon,Medium,HVGun,19,22,3,6,4
+ProjectileWeapon,Heavy,Autocannon,15,14,1,5,4
+ProjectileWeapon,Heavy,Howitzer,18,14,4,9,8
+ProjectileWeapon,Heavy,HVGun,24,26,4,9,8
