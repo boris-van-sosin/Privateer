@@ -6,6 +6,8 @@ public abstract class ShipComponentBase : IShipComponent
 {
     public Ship ContainingShip { get { return _containingShip; } }
 
+    public abstract ComponentSlotType ComponentType { get; }
+
     protected Ship _containingShip;
 }
 

@@ -40,6 +40,8 @@ public class TurretComponent : ITurret
 
     public float GetMaxRange { get { return _innerTurret.GetMaxRange; } }
 
+    public ComponentSlotType ComponentType { get { return _innerTurret.ComponentType; } }
+
     private TurretBase _innerTurret;
 }
 
@@ -56,6 +58,8 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
         ContainingShip.TryChangeEnergyAndHeat(PowerOutput, HeatOutput);
     }
 
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
     public static PowerPlant DefaultComponent(Ship containingShip)
     {
         return new PowerPlant()
@@ -70,7 +74,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
     }
 }
 
-public class CapacitorBank : ShipActiveComponentBase, IEnergyCapacityComponent
+public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
 {
     public int Capacity;
 
@@ -82,13 +86,12 @@ public class CapacitorBank : ShipActiveComponentBase, IEnergyCapacityComponent
         }
     }
 
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
     public static CapacitorBank DefaultComponent(Ship containingShip)
     {
         return new CapacitorBank()
         {
-            ComponentMaxHitPoints = 400,
-            ComponentHitPoints = 400,
-            Status = ComponentStatus.Undamaged,
             Capacity = 50,
             _containingShip = containingShip
         };
@@ -159,6 +162,8 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         }
     }
 
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
     public static ShieldGenerator DefaultComponent(Ship containingShip)
     {
         return new ShieldGenerator()
@@ -197,6 +202,8 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         // nothing for now
     }
 
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
     public static DamageControlNode DefaultComponent(Ship containingShip)
     {
         return new DamageControlNode()
@@ -222,6 +229,8 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
         ContainingShip.TryChangeHeat(-CoolingRate);
     }
 
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
     public static HeatExchange DefaultComponent(Ship containingShip)
     {
         return new HeatExchange()
@@ -235,6 +244,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
 public class ExtraArmour : ShipComponentBase
 {
     public int ArmourAmount;
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
 }
 
 public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -278,6 +288,8 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     }
 
     private bool _nextDeactivate = false;
+
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.Engine; } }
 
     public static ShipEngine DefaultComponent(Ship containingShip)
     {

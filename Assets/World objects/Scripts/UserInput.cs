@@ -20,6 +20,10 @@ public class UserInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (ControlledShip == null)
+        {
+            return;
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 2000))

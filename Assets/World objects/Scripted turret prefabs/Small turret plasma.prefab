@@ -222,11 +222,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RotationSpeed: 80
   TurretAxis: 0
-  TurretType: 0
+  TurretType: 4
   MaxRange: 10
   FiringInterval: 1
   TurretSize: 0
-  WeaponSize: 5
+  TurretWeaponType: 0
   EnergyToFire: 5
   HeatToFire: 2
   MaxHitpoints: 350

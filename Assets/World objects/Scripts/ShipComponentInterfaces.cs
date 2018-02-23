@@ -24,6 +24,7 @@ public enum ComponentStatus { Undamaged, LightlyDamaged, HeavilyDamaged, Knocked
 public interface IShipComponent
 {
     Ship ContainingShip { get; }
+    ComponentSlotType ComponentType { get; }
 }
 
 public interface IShipActiveComponent : IShipComponent

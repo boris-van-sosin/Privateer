@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ObjectPrototypes : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         ObjectFactory.SetPrototypes(this);
     }
@@ -31,7 +32,80 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
+    public Ship CreateShip(string prodKey)
+    {
+        Ship res;
+        if (_shipPrototypeDictionary.TryGetValue(prodKey, out res))
+        {
+            return Instantiate(res);
+        }
+        foreach (Ship s in ShipPrototypes)
+        {
+            _shipPrototypeDictionary[s.ProductionKey] = s;
+        }
+        if (_shipPrototypeDictionary.TryGetValue(prodKey, out res))
+        {
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public string[] GetAllShipTypes()
+    {
+        if (_shipPrototypeDictionary.Count == 0)
+        {
+            foreach (Ship s in ShipPrototypes)
+            {
+                _shipPrototypeDictionary[s.ProductionKey] = s;
+            }
+        }
+        return _shipPrototypeDictionary.Keys.ToArray();
+    }
+
+    public TurretBase CreateTurret(string prodKey)
+    {
+        TurretBase res;
+        if (_turretPrototypeDictionary.TryGetValue(prodKey, out res))
+        {
+            return res;
+        }
+        foreach (TurretBase t in TurretPrototypes)
+        {
+            string turretKey = t.TurretType.ToString() + t.TurretWeaponType.ToString();
+            _turretPrototypeDictionary[turretKey] = t;
+        }
+        if (_turretPrototypeDictionary.TryGetValue(prodKey, out res))
+        {
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public string[] GetAllTurretTypes()
+    {
+        if (_turretPrototypeDictionary.Count == 0)
+        {
+            foreach (TurretBase t in TurretPrototypes)
+            {
+                string turretKey = t.TurretType.ToString() + t.TurretWeaponType.ToString();
+                _turretPrototypeDictionary[turretKey] = t;
+            }
+        }
+        return _turretPrototypeDictionary.Keys.ToArray();
+    }
+
 
     public Projectile ProjectileTemplate;
-    public ParticleSystem SmallExplosion; 
+    public ParticleSystem SmallExplosion;
+    public Ship[] ShipPrototypes;
+    public TurretBase[] TurretPrototypes;
+
+    private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
+    private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
 }

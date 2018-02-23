@@ -64,6 +64,24 @@ public static class ObjectFactory
         return _otherWarheads[Tuple<WeaponType, WeaponSize>.Create(w, sz)];
     }
 
+    public static string[] GetAllShipTypes()
+    {
+        return _prototypes.GetAllShipTypes();
+    }
+
+    public static Ship CreateShip(string prodKey)
+    {
+        Ship s = _prototypes.CreateShip(prodKey);
+        s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s));
+        s.Activate();
+        return s;
+    }
+
     private static void LoadWarheads()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "weapons.txt"));
@@ -120,12 +138,15 @@ public static class ObjectFactory
         System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","weapons.txt"), sb.ToString());
     }
 
+    public enum TurretMountType { Fixed, Broadside, Barbette, Turret }
     public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon }
     public enum WeaponSize { Light, Medium, Heavy }
     public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
 
     private static Dictionary<Tuple<WeaponType, WeaponSize, AmmoType>, Warhead> _gunWarheads = null;
     private static Dictionary<Tuple<WeaponType, WeaponSize>, Warhead> _otherWarheads = null;
+    private static Dictionary<Tuple<WeaponSize, TurretMountType>, TurretMountDataEntry> _weaponMounts = null;
+    private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry> _weapons_projectile = null;
 
     public class WarheadDataEntry3
     {
@@ -230,5 +251,86 @@ public static class ObjectFactory
         }
     }
 
+    public class TurretMountDataEntry
+    {
+        public WeaponSize MountSize;
+        public TurretMountType Mount;
+        public int HitPoints;
+        public float RotationSpeed;
+
+        public static TurretMountDataEntry FromString(string s)
+        {
+            string[] elements = s.Trim().Split(',');
+            if (elements[0].Trim() == "WeaponMount")
+            {
+                return new TurretMountDataEntry()
+                {
+                    MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[1].Trim(), true),
+                    Mount = (TurretMountType)System.Enum.Parse(typeof(TurretMountType), elements[2].Trim(), true),
+                    HitPoints = int.Parse(elements[3].Trim()),
+                    RotationSpeed = int.Parse(elements[4].Trim())
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    public class WeaponProjectileDataEntry
+    {
+        public WeaponSize MountSize;
+        public WeaponType Weapon;
+        public float MaxRange;
+        public float MuzzleVelocity;
+        public float FiringInterval;
+        public int EnergyToFire;
+        public int HeatToFire;
+
+        public static WeaponProjectileDataEntry FromString(string s)
+        {
+            string[] elements = s.Trim().Split(',');
+            if (elements[0].Trim() == "ProjectileWeapon")
+            {
+                int i = 1;
+                return new WeaponProjectileDataEntry()
+                {
+                    MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
+                    Weapon = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
+                    MaxRange = float.Parse(elements[i++].Trim()),
+                    MuzzleVelocity = float.Parse(elements[i++].Trim()),
+                    FiringInterval = float.Parse(elements[i++].Trim()),
+                    EnergyToFire = int.Parse(elements[i++].Trim()),
+                    HeatToFire = int.Parse(elements[i++].Trim())
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
     private static ObjectPrototypes _prototypes = null;
 }
+
+public class ShipTemplate
+{
+    public string ProductionKey;
+    public float MaxSpeed;
+    public float Mass;
+    public float Thrust;
+    public float Braking;
+    public float TurnRate;
+    public ComponentSlotType[] CenterComponentSlots;
+    public ComponentSlotType[] ForeComponentSlots;
+    public ComponentSlotType[] AftComponentSlots;
+    public ComponentSlotType[] LeftComponentSlots;
+    public ComponentSlotType[] RightComponentSlots;
+    public int DefaultArmorFront;
+    public int DefaultArmorAft;
+    public int DefaultArmorLeft;
+    public int DefaultArmorRight;
+}
+

@@ -19,19 +19,24 @@ public class Ship : MonoBehaviour
         Heat = 0;
         MaxHeat = 100;
         ComputeLength();
-        InitComponents();
-        InitArmour();
-        InitShield();
+        InitComponentSlots();
     }
 
     // Use this for initialization
     void Start ()
     {
+    }
+
+    public void Activate()
+    {
+        InitComponents();
+        InitArmour();
+        InitShield();
         FindTurrets();
         _manualTurrets = new HashSet<ITurret>(_turrets);
         StartCoroutine(ContinuousComponents());
     }
-	
+
     private void FindTurrets()
     {
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
@@ -51,28 +56,29 @@ public class Ship : MonoBehaviour
                     _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, turret.EnergyToFire);
                 }
                 turrets.Add(turret);
+                _componentSlots[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(turret.TurretType, turret));
             }
         }
         _turrets = turrets.ToArray();
     }
 
-    private void InitComponents()
+    private void InitComponentSlots()
     {
-        _componentSlots.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>()
-        {
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, PowerPlant.DefaultComponent(this)),
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, PowerPlant.DefaultComponent(this)),
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, CapacitorBank.DefaultComponent(this)),
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, HeatExchange.DefaultComponent(this)),
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.ShipSystem, ShieldGenerator.DefaultComponent(this))
-        });
-        _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>()
-        {
-            Tuple<ComponentSlotType,IShipComponent>.Create(ComponentSlotType.Engine, (_engine = ShipEngine.DefaultComponent(this))),
-        });
+        _componentsSlotTypes.Add(ShipSection.Center, CenterComponentSlots);
+        _componentsSlotTypes.Add(ShipSection.Fore, ForeComponentSlots);
+        _componentsSlotTypes.Add(ShipSection.Aft, AftComponentSlots);
+        _componentsSlotTypes.Add(ShipSection.Left, LeftComponentSlots);
+        _componentsSlotTypes.Add(ShipSection.Right, RightComponentSlots);
+
+        _componentSlots.Add(ShipSection.Center, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _componentSlots.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
+    }
 
+    private void InitComponents()
+    {
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
@@ -132,6 +138,78 @@ public class Ship : MonoBehaviour
             {
                 _shieldCapsule.SetActive(true);
             }
+        }
+    }
+
+    public IEnumerable<TurretHardpoint> WeaponHardpoints
+    {
+        get
+        {
+            TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
+            foreach (TurretHardpoint hp in hardpoints)
+            {
+                yield return hp;
+            }
+        }
+    }
+
+    public bool PlaceTurret(TurretHardpoint hp, TurretBase t)
+    {
+        if (hp == null || t == null || !hp.AllowedWeaponTypes.Contains(t.TurretType))
+        {
+            return false;
+        }
+        TurretBase existingTurret = hp.GetComponentInChildren<TurretBase>();
+        if (existingTurret != null)
+        {
+            return false;
+        }
+        t.transform.parent = hp.transform;
+        if (_minEnergyPerShot < 0)
+        {
+            _minEnergyPerShot = t.EnergyToFire;
+        }
+        else
+        {
+            _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, t.EnergyToFire);
+        }
+        ITurret[] newTurretArr = new ITurret[_turrets.Length + 1];
+        _turrets.CopyTo(newTurretArr, 0);
+        newTurretArr[newTurretArr.Length - 1] = t;
+        _turrets = newTurretArr;
+        _componentSlots[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(t.TurretType, t));
+        return true;
+    }
+
+    public bool PlaceComponent(ShipSection sec, IShipComponent comp)
+    {
+        if (comp.ComponentType != ComponentSlotType.ShipSystem && comp.ComponentType != ComponentSlotType.BoardingForce)
+        {
+            return false;
+        }
+        int availableSlots = 0;
+        foreach (ComponentSlotType s in _componentsSlotTypes[sec])
+        {
+            if (s == comp.ComponentType)
+            {
+                ++availableSlots;
+            }
+        }
+        foreach (Tuple<ComponentSlotType, IShipComponent> c  in _componentSlots[sec])
+        {
+            if (c.Item1 == comp.ComponentType)
+            {
+                --availableSlots;
+            }
+        }
+        if (availableSlots > 0)
+        {
+            _componentSlots[sec].Add(Tuple<ComponentSlotType, IShipComponent>.Create(comp.ComponentType, comp));
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -425,6 +503,14 @@ public class Ship : MonoBehaviour
                     damageableComps.Add(c2);
                 }
             }
+            foreach (Tuple<ComponentSlotType, IShipComponent> c in _componentSlots[ShipSection.Center])
+            {
+                IShipActiveComponent c2 = c.Item2 as IShipActiveComponent;
+                if (c2 != null && c2.Status != ComponentStatus.Destroyed)
+                {
+                    damageableComps.Add(c2);
+                }
+            }
             if (damageableComps.Count > 0)
             {
                 IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
@@ -539,7 +625,9 @@ public class Ship : MonoBehaviour
     }
 
     private enum ShipDirection { Stopped, Forward, Reverse };
-    public enum ShipSection { Fore, Aft, Left, Right };
+    public enum ShipSection { Fore, Aft, Left, Right, Center };
+
+    public string ProductionKey;
 
     public float MaxSpeed;
     public float Mass;
@@ -560,10 +648,12 @@ public class Ship : MonoBehaviour
     public int Heat { get; private set; }
     public int MaxHeat { get; private set; }
 
+    public ComponentSlotType[] CenterComponentSlots;
     public ComponentSlotType[] ForeComponentSlots;
     public ComponentSlotType[] AftComponentSlots;
     public ComponentSlotType[] LeftComponentSlots;
     public ComponentSlotType[] RightComponentSlots;
+    private Dictionary<ShipSection, ComponentSlotType[]> _componentsSlotTypes = new Dictionary<ShipSection, ComponentSlotType[]>();
     private Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>> _componentSlots = new Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>>();
 
     public IEnumerable<IShipComponent> AllComponents

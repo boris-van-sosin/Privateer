@@ -13,6 +13,10 @@ public class UserDisplay : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (InputHandler.ControlledShip == null)
+        {
+            return;
+        }
         if (HealthBar != null)
         {
             HealthBar.MaxValue = InputHandler.ControlledShip.MaxHullHitPoints;

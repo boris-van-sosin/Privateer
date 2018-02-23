@@ -588,4 +588,6 @@ public class TurretBase : MonoBehaviour, ITurret
     }
 
     public float GetMaxRange { get { return MaxRange; } }
+
+    public ComponentSlotType ComponentType { get { return TurretType; } }
 }
