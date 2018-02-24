@@ -8,8 +8,10 @@ public class UserInput : MonoBehaviour
 	// Use this for initialization
 	void Start()
     {
-
-	}
+        _userCamera = Camera.main;
+        _cameraOffset = _userCamera.transform.position;
+        _cameraOffsetFactor = 1.0f;
+    }
 
     void Awake()
     {
@@ -61,7 +63,7 @@ public class UserInput : MonoBehaviour
         float scroll;
         if ((scroll = Input.GetAxis("Mouse ScrollWheel")) != 0.0f)
         {
-            ControlledShip.CameraOffsetFactor += (-scroll * 0.1f);
+            _cameraOffsetFactor += (-scroll * 0.1f);
         }
 
 
@@ -81,10 +83,16 @@ public class UserInput : MonoBehaviour
         {
             ControlledShip.ApplyTurning(false);
         }
+
+        _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
     }
 
     public Ship ControlledShip; // temporary
     private bool _autoTarget = false; // temporary
     private Ship _heightTargetShip;
     private int _backgroundLayerMask = 0;
+    private Camera _userCamera;
+    private Vector3 _cameraOffset;
+    private float _cameraOffsetFactor = 1.0f;
+
 }

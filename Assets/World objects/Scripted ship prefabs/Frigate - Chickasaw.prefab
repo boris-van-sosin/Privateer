@@ -133,7 +133,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1080620820191480}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -50, y: 0, z: 0.007800004}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 4452009878321438}
@@ -356,18 +356,17 @@ MonoBehaviour:
   Thrust: 0.18
   Braking: 1.6
   TurnRate: 29
-  CenterComponentSlots: 
-  ForeComponentSlots: 
-  AftComponentSlots: 
-  LeftComponentSlots: 
-  RightComponentSlots: 
+  CenterComponentSlots: 00000000000000000000000000000000
+  ForeComponentSlots: 0000000000000000
+  AftComponentSlots: 0000000011000000
+  LeftComponentSlots: 00000000
+  RightComponentSlots: 00000000
   MaxHullHitPoints: 5500
   DefaultArmorFront: 750
   DefaultArmorAft: 650
   DefaultArmorLeft: 750
   DefaultArmorRight: 750
   Owner: {fileID: 0}
-  Follow: 0
 --- !u!114 &114861612661166960
 MonoBehaviour:
   m_ObjectHideFlags: 1

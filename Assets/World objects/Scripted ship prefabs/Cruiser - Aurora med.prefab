@@ -810,7 +810,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProductionKey: Aurora
   MaxSpeed: 1.6
-  Mass: 10
+  Mass: 11
   Thrust: 0.16
   Braking: 1.6
   TurnRate: 25
@@ -825,7 +825,6 @@ MonoBehaviour:
   DefaultArmorLeft: 1350
   DefaultArmorRight: 1350
   Owner: {fileID: 0}
-  Follow: 0
 --- !u!114 &114516483274588990
 MonoBehaviour:
   m_ObjectHideFlags: 1

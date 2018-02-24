@@ -8,12 +8,6 @@ public class Ship : MonoBehaviour
 {
     void Awake()
     {
-        if (Follow)
-        {
-            _userCamera = Camera.main;
-            _cameraOffset = _userCamera.transform.position - transform.position;
-            CameraOffsetFactor = 1.0f;
-        }
         HullHitPoints = MaxHullHitPoints;
         Energy = 0;
         Heat = 0;
@@ -219,6 +213,10 @@ public class Ship : MonoBehaviour
         if (availableSlots > 0)
         {
             _componentSlots[sec].Add(Tuple<ComponentSlotType, IShipComponent>.Create(comp.ComponentType, comp));
+            if (comp.ComponentType == ComponentSlotType.Engine)
+            {
+                _engine = comp as ShipEngine;
+            }
             return true;
         }
         else
@@ -230,26 +228,44 @@ public class Ship : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float directionMult = 0.0f;
-        if (MovementDirection == ShipDirection.Forward)
+        if (!_inCollision)
         {
-            directionMult = 1.0f;
-        }
-        else if (MovementDirection == ShipDirection.Reverse)
-        {
-            directionMult = -1.0f;
-        }
-        transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
-        //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
-        if (_autoHeading)
-        {
-            RotateToHeading();
-        }
-        if (_userCamera != null)
-        {
-            _userCamera.transform.position = transform.position + (_cameraOffset * CameraOffsetFactor);
+            float directionMult = 0.0f;
+            if (MovementDirection == ShipDirection.Forward)
+            {
+                directionMult = 1.0f;
+            }
+            else if (MovementDirection == ShipDirection.Reverse)
+            {
+                directionMult = -1.0f;
+            }
+            _prevPos = transform.position;
+            _prevRot = transform.rotation;
+            transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+            //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
+            if (_autoHeading)
+            {
+                RotateToHeading();
+            }
         }
 	}
+
+    protected void RevertRotation()
+    {
+        transform.rotation = _prevRot;
+    }
+
+    private IEnumerator MoveBackAfterCollision(Vector3 collisionVec, float massFactor)
+    {
+        yield return new WaitForEndOfFrame();
+        while (_inCollision)
+        {
+            transform.position -= Time.deltaTime * 0.1f * MaxSpeed * collisionVec;
+            yield return new WaitForEndOfFrame();
+        }
+        ActualVelocity = Vector3.zero;
+        yield return null;
+    }
 
     private IEnumerator ContinuousComponents()
     {
@@ -302,12 +318,21 @@ public class Ship : MonoBehaviour
         if (_engine != null)
         {
             _engine.ComponentActive = true;
-            if (!_engine.ThrustWorks)
+            if (!_engine.ThrustWorks || !_engine.ComponentIsWorking)
             {
                 return;
             }
         }
-        float newSpeed = _speed + Thrust * Time.deltaTime;
+        float thrustCoefficient = 1.0f;
+        if (_engine.Status == ComponentStatus.LightlyDamaged)
+        {
+            thrustCoefficient = 0.9f;
+        }
+        else if (_engine.Status == ComponentStatus.HeavilyDamaged)
+        {
+            thrustCoefficient = 0.75f;
+        }
+        float newSpeed = _speed + Thrust * thrustCoefficient * Time.deltaTime;
         if (newSpeed > MaxSpeed)
         {
             _speed = MaxSpeed;
@@ -323,7 +348,7 @@ public class Ship : MonoBehaviour
         if (_engine != null)
         {
             _engine.ComponentActive = true;
-            if (!_engine.ThrustWorks)
+            if (!_engine.ThrustWorks || !_engine.ComponentIsWorking)
             {
                 return;
             }
@@ -399,10 +424,14 @@ public class Ship : MonoBehaviour
 
     public void ApplyTurning(bool left)
     {
+        if (_inCollision)
+        {
+            return;
+        }
         if (_engine != null)
         {
             _engine.ComponentActive = true;
-            if (!_engine.ThrustWorks)
+            if (!_engine.ThrustWorks || !_engine.ComponentIsWorking)
             {
                 return;
             }
@@ -412,7 +441,16 @@ public class Ship : MonoBehaviour
         {
             turnFactor = -1.0f;
         }
-        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * Time.deltaTime, transform.forward);
+        float turnCoefficient = 1.0f;
+        if (_engine.Status == ComponentStatus.LightlyDamaged)
+        {
+            turnCoefficient = 0.9f;
+        }
+        else if (_engine.Status == ComponentStatus.HeavilyDamaged)
+        {
+            turnCoefficient = 0.75f;
+        }
+        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * turnCoefficient * Time.deltaTime, transform.forward);
         transform.rotation = deltaRot * transform.rotation;
         ApplyBraking(0.5f, 0.5f);
     }
@@ -591,6 +629,13 @@ public class Ship : MonoBehaviour
         bool critical = false;
         if (HullHitPoints == 0)
         {
+            foreach (IShipActiveComponent comp in AllComponents.Where(c => c is IShipActiveComponent))
+            {
+                comp.ComponentHitPoints = 0;
+            }
+            ParticleSystem explosion = ObjectFactory.CreateExplosion(transform.position);
+            explosion.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+            Destroy(explosion.gameObject, 5.0f);
             critical = true;
         }
         else if (!_engine.ComponentIsWorking)
@@ -630,13 +675,39 @@ public class Ship : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.LogWarning(string.Format("Trigger: {0}, {1}", this, other.gameObject));
+        //Debug.LogWarning(string.Format("Trigger enter: {0}, {1}", this, other.gameObject));
+        Ship otherShip = other.GetComponent<Ship>();
+        if (otherShip != null)
+        {
+            Vector3 collisionVec = (otherShip.transform.position - transform.position).normalized;
+            RevertRotation();
+            otherShip.RevertRotation();
+            _inCollision = true;
+            float massSum = Mass + otherShip.Mass;
+            StartCoroutine(MoveBackAfterCollision(collisionVec, Mass/massSum));
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        //Debug.LogWarning(string.Format("Trigger exit: {0}, {1}", this, other.gameObject));
+        Ship otherShip = other.GetComponent<Ship>();
+        if (otherShip != null)
+        {
+            _inCollision = false;
+        }
     }
 
     void OnCollisionEnter()
     {
-        //Debug.LogWarning(string.Format("Collision: {0}, {1}", this, collision.gameObject));
+        Debug.LogWarning(string.Format("Collision: {0}", this));
     }
+
+    private void OnCollisionExit()
+    {
+        Debug.LogWarning(string.Format("Collision exit: {0},", this));
+    }
+
 
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right, Center };
@@ -702,13 +773,11 @@ public class Ship : MonoBehaviour
     private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
     public bool ShipDisabled { get; private set; }
 
+    private Vector3 _prevPos;
+    private Quaternion _prevRot;
+    private bool _inCollision = false;
+
     private GameObject _shieldCapsule;
 
-    private Camera _userCamera;
-    private Vector3 _cameraOffset;
-    public float CameraOffsetFactor { get; set; }
-
     public Faction Owner;
-
-    public bool Follow; // tmp
 }

@@ -161,7 +161,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     public void ManualTarget(Vector3 target)
     {
-        if (!_initialized || _fixed)
+        if (!_initialized || !CanRotate)
         {
             return;
         }
@@ -243,6 +243,10 @@ public class TurretBase : MonoBehaviour, ITurret
     {
         float currTime = Time.time;
         if (currTime - _lastFire < FiringInterval)
+        {
+            return false;
+        }
+        if (_status == ComponentStatus.KnockedOut || _status == ComponentStatus.Destroyed)
         {
             return false;
         }
@@ -398,6 +402,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     private IEnumerator TurretAutoBehavior()
     {
+        yield return new WaitUntil(() => _containingShip != null);
         while (true)
         {
             switch (Mode)
@@ -465,6 +470,7 @@ public class TurretBase : MonoBehaviour, ITurret
     private Tuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
     bool _isLegalAngle = false;
+    private bool CanRotate { get { return (!_fixed) && _status != ComponentStatus.HeavilyDamaged && _status != ComponentStatus.KnockedOut && _status != ComponentStatus.Destroyed; } }
 
     // Barrels, muzzles, and muzzleFx data:
     protected Transform[] Barrels;

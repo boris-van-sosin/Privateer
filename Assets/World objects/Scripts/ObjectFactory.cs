@@ -79,21 +79,7 @@ public static class ObjectFactory
 
     public static Ship CreateShip(string prodKey)
     {
-        Ship s = _prototypes.CreateShip(prodKey);
-
-        s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s));
-        foreach (TurretHardpoint hp in s.WeaponHardpoints)
-        {
-            TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], WeaponType.Howitzer);
-            s.PlaceTurret(hp, t);
-        }
-        s.Activate();
-        return s;
+        return _prototypes.CreateShip(prodKey);
     }
 
     public static TurretBase CreateTurret(ComponentSlotType turretType, WeaponType weaponType)

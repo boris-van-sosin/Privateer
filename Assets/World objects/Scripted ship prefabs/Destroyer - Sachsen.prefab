@@ -422,22 +422,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProductionKey: Sachsen
   MaxSpeed: 1.7
-  Mass: 6
+  Mass: 8
   Thrust: 0.18
   Braking: 1.7
   TurnRate: 28
-  CenterComponentSlots: 
-  ForeComponentSlots: 
-  AftComponentSlots: 
-  LeftComponentSlots: 
-  RightComponentSlots: 
+  CenterComponentSlots: 0000000000000000000000000000000000000000
+  ForeComponentSlots: 0000000000000000
+  AftComponentSlots: 0000000011000000
+  LeftComponentSlots: 0000000000000000
+  RightComponentSlots: 0000000000000000
   MaxHullHitPoints: 7000
   DefaultArmorFront: 1000
   DefaultArmorAft: 800
   DefaultArmorLeft: 1000
   DefaultArmorRight: 1000
   Owner: {fileID: 0}
-  Follow: 1
 --- !u!114 &114326025897482780
 MonoBehaviour:
   m_ObjectHideFlags: 1
