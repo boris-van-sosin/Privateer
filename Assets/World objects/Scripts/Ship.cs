@@ -478,7 +478,7 @@ public class Ship : MonoBehaviour
     public void FireManual(Vector3 target)
     {
         StringBuilder sb = new StringBuilder();
-        foreach (ITurret t in _manualTurrets)
+        foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
         {
             t.Fire(target);
             sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
@@ -778,6 +778,7 @@ public class Ship : MonoBehaviour
     private bool _inCollision = false;
 
     private GameObject _shieldCapsule;
+    public GameObject ShieldCapsule { get { return _shieldCapsule; } }
 
     public Faction Owner;
 }

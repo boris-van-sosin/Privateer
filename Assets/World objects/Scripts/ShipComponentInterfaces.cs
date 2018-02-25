@@ -40,6 +40,7 @@ public interface ITurret : IShipActiveComponent
     void ManualTarget(Vector3 target);
     void Fire(Vector3 target);
     void SetTurretBehavior(TurretBase.TurretMode newMode);
+    TurretBase.TurretMode GetTurretBehavior();
     float CurrAngle { get; }
     float CurrLocalAngle { get; }
     float GetMaxRange { get; }

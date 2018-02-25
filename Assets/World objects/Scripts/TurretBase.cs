@@ -62,6 +62,7 @@ public class TurretBase : MonoBehaviour, ITurret
         else
         {
             _fixed = true;
+            _isLegalAngle = true;
         }
     }
 
@@ -70,6 +71,7 @@ public class TurretBase : MonoBehaviour, ITurret
         List<Tuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
         Barrels = new Transform[barrelsFound.Count];
         Muzzles = new Transform[barrelsFound.Count];
+        _actualFiringInterval = FiringInterval / Barrels.Length;
         MuzzleFx = new ParticleSystem[barrelsFound.Count];
         for (int i = 0; i < barrelsFound.Count; ++i)
         {
@@ -242,7 +244,7 @@ public class TurretBase : MonoBehaviour, ITurret
     private bool CanFire()
     {
         float currTime = Time.time;
-        if (currTime - _lastFire < FiringInterval)
+        if (currTime - _lastFire < _actualFiringInterval)
         {
             return false;
         }
@@ -251,10 +253,6 @@ public class TurretBase : MonoBehaviour, ITurret
             return false;
         }
         if (!_isLegalAngle && Mode == TurretMode.Manual)
-        {
-            return false;
-        }
-        if ((Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking) && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f)
         {
             return false;
         }
@@ -267,6 +265,38 @@ public class TurretBase : MonoBehaviour, ITurret
                 {
                     return false;
                 }
+            }
+        }
+        if (Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking)
+        {
+            if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f)
+            {
+                return false;
+            }
+            Vector3 origin = Muzzles[_nextBarrel].position;
+            origin.y = 0;
+            Vector3 firingVector = Muzzles[_nextBarrel].up;
+            firingVector.y = 0;
+            RaycastHit[] hits = Physics.RaycastAll(origin, firingVector, MaxRange);
+            int closestHit = -1;
+            for (int i = 0; i < hits.Length; ++i)
+            {
+                if (hits[i].collider.gameObject == ContainingShip.gameObject || hits[i].collider.gameObject == ContainingShip.ShieldCapsule.gameObject)
+                {
+                    continue;
+                }
+                if (closestHit < 0 || hits[i].distance < hits[closestHit].distance)
+                {
+                    closestHit = i;
+                }
+            }
+            if (closestHit >= 0 && (hits[closestHit].collider.gameObject == _targetShip.gameObject || hits[closestHit].collider.gameObject == _targetShip.ShieldCapsule.gameObject))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
         return true;
@@ -400,6 +430,11 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
+    public TurretMode GetTurretBehavior()
+    {
+        return Mode;
+    }
+
     private IEnumerator TurretAutoBehavior()
     {
         yield return new WaitUntil(() => _containingShip != null);
@@ -482,6 +517,7 @@ public class TurretBase : MonoBehaviour, ITurret
     public ComponentSlotType TurretType;
     public float MaxRange;
     public float FiringInterval;
+    private float _actualFiringInterval;
     public ObjectFactory.WeaponSize TurretSize;
     public ObjectFactory.WeaponType TurretWeaponType;
 
