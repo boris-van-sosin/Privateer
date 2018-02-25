@@ -2292,7 +2292,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ProjectileTemplate: {fileID: 114460536544068484, guid: c4de730d3edb9ca4fb73a0a803fd3b67,
     type: 2}
+  PlasmaProjectile: {fileID: 198876514594677164, guid: 40e31b881d58c3042b7b8b86bd6d87e4,
+    type: 2}
+  BigExplosion: {fileID: 198000012777718758, guid: acf39d9f4addf294d93fa56fa373961b,
+    type: 2}
   SmallExplosion: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
+    type: 2}
+  FlakBurst: {fileID: 198063292261448746, guid: 7c671bf8178a4ca4fa750271994a0bf8,
+    type: 2}
+  KineticImpactSparks: {fileID: 198227421610416534, guid: 7f385a8773efdd44ebea30093fec8e6e,
+    type: 2}
+  DamageElectricSparks: {fileID: 198000012283690144, guid: 96b2ec0239d11fa4b9792311efceb8ed,
     type: 2}
   ShipPrototypes:
   - {fileID: 114294262926575966, guid: 6f0d8fd7419104546a22cc523434b56a, type: 2}

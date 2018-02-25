@@ -40,11 +40,15 @@ public static class ObjectFactory
         }
     }
 
-    public static ParticleSystem CreateExplosion(Vector3 position)
+    public static ParticleSystem CreateWeaponEffect(WeaponEffect e, Vector3 position)
     {
+        if (e == WeaponEffect.None)
+        {
+            return null;
+        }
         if (_prototypes != null)
         {
-            return _prototypes.CreateExplosion(position);
+            return _prototypes.CreateWeaponEffect(e, position);
         }
         else
         {
@@ -125,6 +129,7 @@ public static class ObjectFactory
             if (l.Trim().StartsWith("3"))
             {
                 WarheadDataEntry3 d3 = WarheadDataEntry3.FromString(l);
+
                 _gunWarheads.Add(new Tuple<WeaponType, WeaponSize, AmmoType>(d3.LaunchWeaponType, d3.LaunchWeaponSize, d3.Ammo), d3.WarheadData);
             }
             else if (l.Trim().StartsWith("2"))
@@ -263,6 +268,8 @@ public static class ObjectFactory
     public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon }
     public enum WeaponSize { Light, Medium, Heavy }
     public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
+    public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, DamageElectricSparks }
+    public enum ShipSize { Sloop, Frigate, Destroyer, Cruiser, CapitalShip }
 
     private static Dictionary<Tuple<WeaponType, WeaponSize, AmmoType>, Warhead> _gunWarheads = null;
     private static Dictionary<Tuple<WeaponType, WeaponSize>, Warhead> _otherWarheads = null;
@@ -311,7 +318,8 @@ public static class ObjectFactory
                         ArmourDamage = int.Parse(elements[6].Trim()),
                         SystemDamage = int.Parse(elements[7].Trim()),
                         HullDamage = int.Parse(elements[8].Trim()),
-                        HeatGenerated = int.Parse(elements[9].Trim())
+                        HeatGenerated = int.Parse(elements[9].Trim()),
+                        WeaponEffectScale = new Vector3(float.Parse(elements[10].Trim()), float.Parse(elements[11].Trim()), float.Parse(elements[12].Trim()))
                     }
                 };
             }
@@ -361,7 +369,8 @@ public static class ObjectFactory
                         ArmourDamage = int.Parse(elements[5].Trim()),
                         SystemDamage = int.Parse(elements[6].Trim()),
                         HullDamage = int.Parse(elements[7].Trim()),
-                        HeatGenerated = int.Parse(elements[8].Trim())
+                        HeatGenerated = int.Parse(elements[8].Trim()),
+                        WeaponEffectScale = new Vector3(float.Parse(elements[9].Trim()), float.Parse(elements[10].Trim()), float.Parse(elements[11].Trim()))
                     }
                 };
             }

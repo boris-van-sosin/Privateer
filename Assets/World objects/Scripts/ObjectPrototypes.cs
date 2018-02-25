@@ -21,9 +21,20 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
-    public ParticleSystem CreateExplosion(Vector3 position)
+    public ParticleSystem CreateWeaponEffect(ObjectFactory.WeaponEffect e, Vector3 position)
     {
-        ParticleSystem res = Instantiate(SmallExplosion);
+        if (_weaponEffectsDictionary == null)
+        {
+            _weaponEffectsDictionary = new Dictionary<ObjectFactory.WeaponEffect, ParticleSystem>()
+            {
+                { ObjectFactory.WeaponEffect.SmallExplosion, SmallExplosion },
+                { ObjectFactory.WeaponEffect.BigExplosion, BigExplosion },
+                { ObjectFactory.WeaponEffect.KineticImpactSparks, KineticImpactSparks },
+                { ObjectFactory.WeaponEffect.FlakBurst, FlakBurst},
+                { ObjectFactory.WeaponEffect.DamageElectricSparks, DamageElectricSparks},
+            };
+        }
+        ParticleSystem res = Instantiate(_weaponEffectsDictionary[e]);
         res.transform.position = position;
         ParticleSystem.MainModule m = res.main;
         m.playOnAwake = true;
@@ -102,10 +113,16 @@ public class ObjectPrototypes : MonoBehaviour
 
 
     public Projectile ProjectileTemplate;
+    public ParticleSystem PlasmaProjectile;
+    public ParticleSystem BigExplosion;
     public ParticleSystem SmallExplosion;
+    public ParticleSystem FlakBurst;
+    public ParticleSystem KineticImpactSparks;
+    public ParticleSystem DamageElectricSparks;
     public Ship[] ShipPrototypes;
     public TurretBase[] TurretPrototypes;
 
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
+    private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
 }

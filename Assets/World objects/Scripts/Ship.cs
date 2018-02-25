@@ -633,8 +633,27 @@ public class Ship : MonoBehaviour
             {
                 comp.ComponentHitPoints = 0;
             }
-            ParticleSystem explosion = ObjectFactory.CreateExplosion(transform.position);
-            explosion.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+            ParticleSystem explosion = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.BigExplosion, transform.position);
+            switch (ShipSize)
+            {
+                case ObjectFactory.ShipSize.Sloop:
+                    explosion.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    break;
+                case ObjectFactory.ShipSize.Frigate:
+                    explosion.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                    break;
+                case ObjectFactory.ShipSize.Destroyer:
+                    explosion.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+                    break;
+                case ObjectFactory.ShipSize.Cruiser:
+                    explosion.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+                    break;
+                case ObjectFactory.ShipSize.CapitalShip:
+                    explosion.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+                    break;
+                default:
+                    break;
+            }
             Destroy(explosion.gameObject, 5.0f);
             critical = true;
         }
@@ -668,7 +687,14 @@ public class Ship : MonoBehaviour
 
         if (critical)
         {
-            Debug.Log(string.Format("Ship {0} is in critical!", this));
+            if (HullHitPoints > 0)
+            {
+                Debug.Log(string.Format("Ship {0} is in critical!", this));
+            }
+            else
+            {
+                Debug.Log(string.Format("Ship {0} destroyed!", this));
+            }
             ShipDisabled = true;
         }
     }
@@ -713,6 +739,7 @@ public class Ship : MonoBehaviour
     public enum ShipSection { Fore, Aft, Left, Right, Center };
 
     public string ProductionKey;
+    public ObjectFactory.ShipSize ShipSize;
 
     public float MaxSpeed;
     public float Mass;

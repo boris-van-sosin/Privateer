@@ -41,9 +41,12 @@ public class Projectile : MonoBehaviour
                 }
                 //Debug.Log("Hit " + hit.collider.gameObject.ToString());
                 shipHit.TakeHit(ProjectileWarhead, hit.point);
-                ParticleSystem ps = ObjectFactory.CreateExplosion(hit.point);
-                ps.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-                Destroy(ps.gameObject, 5.0f);
+                ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
+                if (ps != null)
+                {
+                    ps.transform.localScale = ProjectileWarhead.WeaponEffectScale;
+                    Destroy(ps.gameObject, 5.0f);
+                }
                 Destroy(gameObject);
                 return;
             }
@@ -73,4 +76,5 @@ public class Projectile : MonoBehaviour
     public Ship OriginShip;
     private int _shipLayerMask;
     public Warhead ProjectileWarhead { get; set; }
+    public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
 }
