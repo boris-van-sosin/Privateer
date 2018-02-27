@@ -324,13 +324,13 @@ MonoBehaviour:
   TurretAxis: 1
   TurretType: 4
   MaxRange: 13
-  FiringInterval: 1.1
+  FiringInterval: 1
   TurretSize: 0
   TurretWeaponType: 3
   EnergyToFire: 5
   HeatToFire: 2
   MaxHitpoints: 350
-  BeamDuration: 0.1
+  BeamDuration: 0.2
 --- !u!120 &120529044941777590
 LineRenderer:
   m_ObjectHideFlags: 1

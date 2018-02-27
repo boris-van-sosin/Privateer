@@ -20,7 +20,7 @@ public static class ObjectFactory
         {
             LoadWeaponMounts();
         }
-        if (_weapons_projectile == null)
+        if (_weapons_projectile == null || _weapons_beam == null)
         {
             LoadWeapons();
         }
@@ -31,6 +31,20 @@ public static class ObjectFactory
         if (_prototypes != null)
         {
             Projectile p = _prototypes.CreateProjectile(firingVector, velocity, range, origShip);
+            p.ProjectileWarhead = w;
+            return p;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static Projectile CreatePlasmaProjectile(Vector3 firingVector, float velocity, float range, Warhead w, Ship origShip)
+    {
+        if (_prototypes != null)
+        {
+            Projectile p = _prototypes.CreatePlasmaProjectile(firingVector, velocity, range, origShip);
             p.ProjectileWarhead = w;
             return p;
         }
@@ -99,19 +113,48 @@ public static class ObjectFactory
             case WeaponType.Autocannon:
             case WeaponType.Howitzer:
             case WeaponType.HVGun:
-                WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
-                GunTurret gt = t as GunTurret;
-                gt.MaxRange = wpd.MaxRange;
-                gt.MuzzleVelocity = wpd.MuzzleVelocity;
-                gt.FiringInterval = wpd.FiringInterval;
-                gt.EnergyToFire = wpd.EnergyToFire;
-                gt.HeatToFire = wpd.HeatToFire;
+                {
+                    WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
+                    GunTurret gt = t as GunTurret;
+                    gt.MaxRange = wpd.MaxRange;
+                    gt.MuzzleVelocity = wpd.MuzzleVelocity;
+                    gt.FiringInterval = wpd.FiringInterval;
+                    gt.EnergyToFire = wpd.EnergyToFire;
+                    gt.HeatToFire = wpd.HeatToFire;
+                }
                 break;
             case WeaponType.Lance:
+                {
+                    WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretType, weaponType)];
+                    BeamTurret bt = t as BeamTurret;
+                    bt.MaxRange = wbd.MaxRange;
+                    bt.FiringInterval = wbd.FiringInterval;
+                    bt.BeamDuration = wbd.BeamDuration;
+                    bt.EnergyToFire = wbd.EnergyToFire;
+                    bt.HeatToFire = wbd.HeatToFire;
+                }
                 break;
             case WeaponType.Laser:
+                {
+                    WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretType, weaponType)];
+                    ContinuousBeamTurret cbt = t as ContinuousBeamTurret;
+                    cbt.MaxRange = wbd.MaxRange;
+                    cbt.FiringInterval = wbd.FiringInterval;
+                    cbt.BeamDuration = wbd.BeamDuration;
+                    cbt.EnergyToFire = wbd.EnergyToFire;
+                    cbt.HeatToFire = wbd.HeatToFire;
+                }
                 break;
             case WeaponType.PlasmaCannon:
+                {
+                    WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
+                    SpecialProjectileTurret st = t as SpecialProjectileTurret;
+                    st.MaxRange = wpd.MaxRange;
+                    st.MuzzleVelocity = wpd.MuzzleVelocity;
+                    st.FiringInterval = wpd.FiringInterval;
+                    st.EnergyToFire = wpd.EnergyToFire;
+                    st.HeatToFire = wpd.HeatToFire;
+                }
                 break;
             default:
                 break;
@@ -218,12 +261,18 @@ public static class ObjectFactory
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
         _weapons_projectile = new Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry>();
+        _weapons_beam = new Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry>();
         foreach (string l in lines)
         {
             if (l.Trim().StartsWith("ProjectileWeapon"))
             {
                 WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
                 _weapons_projectile.Add(Tuple<WeaponSize, WeaponType>.Create(w.MountSize, w.Weapon), w);
+            }
+            else if (l.Trim().StartsWith("BeamWeapon"))
+            {
+                WeaponBeamDataEntry w = WeaponBeamDataEntry.FromString(l);
+                _weapons_beam.Add(Tuple<WeaponSize, WeaponType>.Create(w.MountSize, w.Weapon), w);
             }
         }
     }
@@ -275,6 +324,7 @@ public static class ObjectFactory
     private static Dictionary<Tuple<WeaponType, WeaponSize>, Warhead> _otherWarheads = null;
     private static Dictionary<Tuple<WeaponSize, TurretMountType>, TurretMountDataEntry> _weaponMounts = null;
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry> _weapons_projectile = null;
+    private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
 
     public class WarheadDataEntry3
     {
@@ -431,6 +481,40 @@ public static class ObjectFactory
                     MaxRange = float.Parse(elements[i++].Trim()),
                     MuzzleVelocity = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
+                    EnergyToFire = int.Parse(elements[i++].Trim()),
+                    HeatToFire = int.Parse(elements[i++].Trim())
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    public class WeaponBeamDataEntry
+    {
+        public WeaponSize MountSize;
+        public WeaponType Weapon;
+        public float MaxRange;
+        public float FiringInterval;
+        public float BeamDuration;
+        public int EnergyToFire;
+        public int HeatToFire;
+
+        public static WeaponBeamDataEntry FromString(string s)
+        {
+            string[] elements = s.Trim().Split(',');
+            if (elements[0].Trim() == "BeamWeapon")
+            {
+                int i = 1;
+                return new WeaponBeamDataEntry()
+                {
+                    MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
+                    Weapon = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
+                    MaxRange = float.Parse(elements[i++].Trim()),
+                    FiringInterval = float.Parse(elements[i++].Trim()),
+                    BeamDuration = float.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())
                 };

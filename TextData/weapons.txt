@@ -3,8 +3,21 @@ ProjectileWeapon,Light,Autocannon,10,12,0.5,2,1
 ProjectileWeapon,Light,Howitzer,12,10,2,4,2
 ProjectileWeapon,Light,HVGun,15,15,2,4,2
 ProjectileWeapon,Medium,Autocannon,13,13,0.75,3,2
-ProjectileWeapon,Medium,Howitzer,15,11,3,6,4
+ProjectileWeapon,Medium,Howitzer,15,12,3,6,4
 ProjectileWeapon,Medium,HVGun,19,22,3,6,4
 ProjectileWeapon,Heavy,Autocannon,15,14,1,5,4
 ProjectileWeapon,Heavy,Howitzer,18,14,4,9,8
 ProjectileWeapon,Heavy,HVGun,24,26,4,9,8
+
+ProjectileWeapon,Light,PlasmaCannon,10,8,2,7,3
+ProjectileWeapon,Medium,PlasmaCannon,13,9,3,10,6
+ProjectileWeapon,Heavy,PlasmaCannon,18,12,4,16,12
+
+#,Size,Weapon,Max Range,Firing Interval, Beam duration,Energy to Fire,Heat to Fire
+BeamWeapon,Light,Lance,13,2,0.1,7,3
+BeamWeapon,Medium,Lance,16,3,0.1,11,6
+BeamWeapon,Heavy,Lance,21,4,0.1,17,12
+
+BeamWeapon,Light,Laser,13,2,0.8,6,3
+BeamWeapon,Medium,Laser,16,3,1.2,10,6
+BeamWeapon,Heavy,Laser,21,4,1.6,16,12
