@@ -42,6 +42,7 @@ public class ObjectPrototypes : MonoBehaviour
                 { ObjectFactory.WeaponEffect.BigExplosion, BigExplosion },
                 { ObjectFactory.WeaponEffect.KineticImpactSparks, KineticImpactSparks },
                 { ObjectFactory.WeaponEffect.FlakBurst, FlakBurst},
+                { ObjectFactory.WeaponEffect.PlasmaExplosion, PlasmsExplosion },
                 { ObjectFactory.WeaponEffect.DamageElectricSparks, DamageElectricSparks},
             };
         }
@@ -129,6 +130,7 @@ public class ObjectPrototypes : MonoBehaviour
     public ParticleSystem SmallExplosion;
     public ParticleSystem FlakBurst;
     public ParticleSystem KineticImpactSparks;
+    public ParticleSystem PlasmsExplosion;
     public ParticleSystem DamageElectricSparks;
     public Ship[] ShipPrototypes;
     public TurretBase[] TurretPrototypes;

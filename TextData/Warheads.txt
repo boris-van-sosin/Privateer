@@ -14,7 +14,7 @@
 #,Size,Weapon,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz,
 2,Light,Lance       ,45,260,10,32,8,8,0,0,0,
 2,Light,Laser       ,180,100,5,30,7,10,0,0,0,
-2,Light,PlasmaCannon,75,90,7,31,7,12,0.3,0.3,0.3,
+2,Light,PlasmaCannon,75,90,7,31,7,12,0.1,0.1,0.1,
 ,,,,,,,,,,,,
 #,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz
 3,Medium,Autocannon,KineticPenetrator,25,250,8,20,5,0,0.3,0.3,0.3
@@ -30,6 +30,6 @@
 3,Medium,Howitzer,ShrapnelRound    ,370,160,16,85,14,0,0.45,0.45,0.45
 ,,,,,,,,,,,,
 #,Size,Weapon,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz,
-2,Medium,Lance       ,100,525,22,80,20,8,0,0,0,
-2,Medium,Laser       ,270,170,12,70,18,10,0,0,0,
-2,Medium,PlasmaCannon,170,90,16,75,16,12,0.35,0.35,0.35,
+2,Medium,Lance       ,100,525,22,80,20,8,0,0,0
+2,Medium,Laser       ,270,170,12,70,18,10,0,0,0
+2,Medium,PlasmaCannon,170,150,16,75,16,12,0.125,0.125,0.125

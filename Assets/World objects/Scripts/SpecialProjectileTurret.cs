@@ -9,6 +9,7 @@ public class SpecialProjectileTurret : TurretBase
         base.FireInner(firingVector);
         Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.PlasmaCannon, TurretSize);
         Projectile p = ObjectFactory.CreatePlasmaProjectile(firingVector, MuzzleVelocity, MaxRange, w, _containingShip);
+        p.WeaponEffectKey = ObjectFactory.WeaponEffect.PlasmaExplosion;
         p.transform.position = Muzzles[_nextBarrel].position;
     }
 

@@ -317,7 +317,7 @@ public static class ObjectFactory
     public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon }
     public enum WeaponSize { Light, Medium, Heavy }
     public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
-    public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, DamageElectricSparks }
+    public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop, Frigate, Destroyer, Cruiser, CapitalShip }
 
     private static Dictionary<Tuple<WeaponType, WeaponSize, AmmoType>, Warhead> _gunWarheads = null;
