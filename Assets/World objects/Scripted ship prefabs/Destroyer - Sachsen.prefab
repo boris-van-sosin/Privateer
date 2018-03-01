@@ -421,6 +421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionKey: Sachsen
+  ShipSize: 0
   MaxSpeed: 1.7
   Mass: 8
   Thrust: 0.18
@@ -436,6 +437,10 @@ MonoBehaviour:
   DefaultArmorAft: 800
   DefaultArmorLeft: 1000
   DefaultArmorRight: 1000
+  MinArmorFront: 125
+  MinArmorAft: 125
+  MinArmorLeft: 125
+  MinArmorRight: 125
   Owner: {fileID: 0}
 --- !u!114 &114326025897482780
 MonoBehaviour:

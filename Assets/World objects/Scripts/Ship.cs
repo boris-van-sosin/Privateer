@@ -29,6 +29,8 @@ public class Ship : MonoBehaviour
         FindTurrets();
         _manualTurrets = new HashSet<ITurret>(_turrets);
         StartCoroutine(ContinuousComponents());
+        ShipDisabled = false;
+        ShipImmobilized = false;
     }
 
     private void FindTurrets()
@@ -86,12 +88,19 @@ public class Ship : MonoBehaviour
     private void InitArmour()
     {
         _maxArmour.Add(ShipSection.Fore, DefaultArmorFront);
+        _minArmour.Add(ShipSection.Fore, MinArmorFront);
         _currArmour.Add(ShipSection.Fore, DefaultArmorFront);
+
         _maxArmour.Add(ShipSection.Aft, DefaultArmorAft);
+        _minArmour.Add(ShipSection.Aft, MinArmorAft);
         _currArmour.Add(ShipSection.Aft, DefaultArmorAft);
+
         _maxArmour.Add(ShipSection.Left, DefaultArmorLeft);
+        _minArmour.Add(ShipSection.Left, MinArmorLeft);
         _currArmour.Add(ShipSection.Left, DefaultArmorLeft);
+
         _maxArmour.Add(ShipSection.Right, DefaultArmorRight);
+        _minArmour.Add(ShipSection.Right, MinArmorRight);
         _currArmour.Add(ShipSection.Right, DefaultArmorRight);
         foreach (ShipSection section in _componentSlots.Keys)
         {
@@ -118,8 +127,10 @@ public class Ship : MonoBehaviour
     private void ComputeLength()
     {
         Mesh m = GetComponent<MeshFilter>().mesh;
-        ShipLength = m.bounds.size.y * transform.lossyScale.y;
-        ShipWidth = m.bounds.size.x * transform.lossyScale.x;
+        ShipUnscaledLength = m.bounds.size.y;
+        ShipUnscaledWidth = m.bounds.size.x;
+        ShipLength = ShipUnscaledLength * transform.lossyScale.y;
+        ShipWidth = ShipUnscaledWidth * transform.lossyScale.x;
     }
 
     private void InitShield()
@@ -570,18 +581,18 @@ public class Ship : MonoBehaviour
             }
             HullHitPoints = System.Math.Max(0, HullHitPoints - w.HullDamage);
         }
-        _currArmour[sec] = System.Math.Max(0, _currArmour[sec] - w.ArmourDamage);
+        _currArmour[sec] = System.Math.Max(_minArmour[sec], _currArmour[sec] - w.ArmourDamage);
         CheckCriticalDamage();
     }
 
     private ShipSection GetHitSection(Vector3 hitLocation)
     {
         Vector3 localHitLocation = transform.InverseTransformPoint(hitLocation);
-        if (localHitLocation.y > ShipLength / 6)
+        if (localHitLocation.y > ShipUnscaledLength / 6)
         {
             return ShipSection.Fore;
         }
-        else if (localHitLocation.y < -ShipLength / 6)
+        else if (localHitLocation.y < -ShipUnscaledLength / 6)
         {
             return ShipSection.Aft;
         }
@@ -657,10 +668,6 @@ public class Ship : MonoBehaviour
             Destroy(explosion.gameObject, 5.0f);
             critical = true;
         }
-        else if (!_engine.ComponentIsWorking)
-        {
-            critical = true;
-        }
         else
         {
             // no power
@@ -696,6 +703,10 @@ public class Ship : MonoBehaviour
                 Debug.Log(string.Format("Ship {0} destroyed!", this));
             }
             ShipDisabled = true;
+        }
+        if (!_engine.ComponentIsWorking)
+        {
+            ShipImmobilized = true;
         }
     }
 
@@ -788,6 +799,8 @@ public class Ship : MonoBehaviour
     private ShipEngine _engine;
     public float ShipLength { get; private set; }
     public float ShipWidth { get; private set; }
+    public float ShipUnscaledLength { get; private set; }
+    public float ShipUnscaledWidth { get; private set; }
 
     public int MaxHullHitPoints;
     public int HullHitPoints { get; private set; }
@@ -796,9 +809,15 @@ public class Ship : MonoBehaviour
     public int DefaultArmorAft;
     public int DefaultArmorLeft;
     public int DefaultArmorRight;
+    public int MinArmorFront;
+    public int MinArmorAft;
+    public int MinArmorLeft;
+    public int MinArmorRight;
     private Dictionary<ShipSection, int> _maxArmour = new Dictionary<ShipSection, int>();
+    private Dictionary<ShipSection, int> _minArmour = new Dictionary<ShipSection, int>();
     private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
     public bool ShipDisabled { get; private set; }
+    public bool ShipImmobilized { get; private set; }
 
     private Vector3 _prevPos;
     private Quaternion _prevRot;

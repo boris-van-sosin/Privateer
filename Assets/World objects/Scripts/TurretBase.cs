@@ -118,7 +118,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     private void SetDefaultAngle()
     {
-        _defaultAngle = transform.rotation.eulerAngles.z;
+        _defaultDirection = -transform.forward;
     }
 
     // Update is called once per frame
@@ -455,6 +455,10 @@ public class TurretBase : MonoBehaviour, ITurret
                     {
                         ManualTarget(_targetShip.transform.position);
                     }
+                    else
+                    {
+                        ManualTarget(_defaultDirection);
+                    }
                     break;
                 case TurretMode.AutoTracking:
                     break;
@@ -499,7 +503,7 @@ public class TurretBase : MonoBehaviour, ITurret
     private float _globalTargetAngle;
     private Vector3 _vectorToTarget;
     private float _rotationDir;
-    private float _defaultAngle;
+    private Vector3 _defaultDirection;
     private bool _targeting, _onTarget;
     private string[] _deadZoneAngleStrings;
     private Tuple<float, float>[] _deadZoneAngleRanges;

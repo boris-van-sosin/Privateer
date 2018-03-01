@@ -375,6 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionKey: Monitor
+  ShipSize: 0
   MaxSpeed: 1.8
   Mass: 4
   Thrust: 0.2
@@ -390,6 +391,10 @@ MonoBehaviour:
   DefaultArmorAft: 300
   DefaultArmorLeft: 400
   DefaultArmorRight: 400
+  MinArmorFront: 65
+  MinArmorAft: 65
+  MinArmorLeft: 65
+  MinArmorRight: 65
   Owner: {fileID: 0}
 --- !u!136 &136962721284367600
 CapsuleCollider:

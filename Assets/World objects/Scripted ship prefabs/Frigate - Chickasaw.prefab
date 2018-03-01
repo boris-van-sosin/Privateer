@@ -351,6 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionKey: Chickasaw
+  ShipSize: 0
   MaxSpeed: 1.75
   Mass: 6
   Thrust: 0.18
@@ -366,6 +367,10 @@ MonoBehaviour:
   DefaultArmorAft: 650
   DefaultArmorLeft: 750
   DefaultArmorRight: 750
+  MinArmorFront: 95
+  MinArmorAft: 95
+  MinArmorLeft: 95
+  MinArmorRight: 95
   Owner: {fileID: 0}
 --- !u!114 &114861612661166960
 MonoBehaviour:

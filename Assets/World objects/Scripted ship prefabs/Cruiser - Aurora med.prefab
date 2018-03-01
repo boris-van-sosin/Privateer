@@ -809,6 +809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionKey: Aurora
+  ShipSize: 0
   MaxSpeed: 1.6
   Mass: 11
   Thrust: 0.16
@@ -824,6 +825,10 @@ MonoBehaviour:
   DefaultArmorAft: 1100
   DefaultArmorLeft: 1350
   DefaultArmorRight: 1350
+  MinArmorFront: 155
+  MinArmorAft: 155
+  MinArmorLeft: 155
+  MinArmorRight: 155
   Owner: {fileID: 0}
 --- !u!114 &114516483274588990
 MonoBehaviour:
