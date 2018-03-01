@@ -33,7 +33,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s));
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
-            TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
+            TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Laser);
             GunTurret gt = t as GunTurret;
             if (gt != null)
             {

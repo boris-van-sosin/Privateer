@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Warhead
+public struct Warhead
 {
     public int ShieldDamage { get; set; }
     public int ArmourDamage { get; set; }

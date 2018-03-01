@@ -243,8 +243,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     private bool CanFire()
     {
-        float currTime = Time.time;
-        if (currTime - _lastFire < _actualFiringInterval)
+        if (!ReadyToFire())
         {
             return false;
         }
@@ -300,6 +299,12 @@ public class TurretBase : MonoBehaviour, ITurret
             }
         }
         return true;
+    }
+
+    protected virtual bool ReadyToFire()
+    {
+        float currTime = Time.time;
+        return currTime - _lastFire > _actualFiringInterval;
     }
 
     protected virtual void FireInner(Vector3 firingVector)
@@ -504,7 +509,6 @@ public class TurretBase : MonoBehaviour, ITurret
     private Vector3 _vectorToTarget;
     private float _rotationDir;
     private Vector3 _defaultDirection;
-    private bool _targeting, _onTarget;
     private string[] _deadZoneAngleStrings;
     private Tuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;

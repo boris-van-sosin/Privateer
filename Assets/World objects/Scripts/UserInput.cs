@@ -89,7 +89,6 @@ public class UserInput : MonoBehaviour
 
     public Ship ControlledShip; // temporary
     private bool _autoTarget = false; // temporary
-    private Ship _heightTargetShip;
     private int _backgroundLayerMask = 0;
     private Camera _userCamera;
     private Vector3 _cameraOffset;
