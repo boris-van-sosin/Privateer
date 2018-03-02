@@ -21,6 +21,8 @@ public enum ComponentSlotType
 
 public enum ComponentStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
 
+public delegate void ComponentHitpointsChangedDelegate();
+
 public interface IShipComponent
 {
     Ship ContainingShip { get; }
@@ -33,6 +35,8 @@ public interface IShipActiveComponent : IShipComponent
     int ComponentHitPoints { get; set; }
     bool ComponentIsWorking { get; }
     ComponentStatus Status { get; }
+    string SpriteKey { get; }
+    event ComponentHitpointsChangedDelegate OnHitpointsChanged;
 }
 
 public interface ITurret : IShipActiveComponent

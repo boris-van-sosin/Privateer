@@ -558,6 +558,8 @@ public class TurretBase : MonoBehaviour, ITurret
     private static readonly string BarrelString = "Barrel";
     private static readonly string MuzzleString = "Muzzle";
 
+    public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
+
     // Hit point stuff:
     public virtual int ComponentMaxHitPoints
     {
@@ -603,6 +605,10 @@ public class TurretBase : MonoBehaviour, ITurret
             {
                 Status = ComponentStatus.Undamaged;
             }
+            if (OnHitpointsChanged != null)
+            {
+                OnHitpointsChanged();
+            }
         }
     }
     public virtual bool ComponentIsWorking
@@ -639,6 +645,8 @@ public class TurretBase : MonoBehaviour, ITurret
     }
 
     public float GetMaxRange { get { return MaxRange; } }
+
+    public string SpriteKey { get { return "Turret"; } }
 
     public ComponentSlotType ComponentType { get { return TurretType; } }
 }

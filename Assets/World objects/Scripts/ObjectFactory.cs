@@ -162,6 +162,19 @@ public static class ObjectFactory
         return t;
     }
 
+    public static Sprite GetSprite(string key)
+    {
+        return _prototypes.GetSprite(key);
+    }
+
+    public static StatusSubsystem CreateStatusSubsytem(IShipActiveComponent comp)
+    {
+        StatusSubsystem res = _prototypes.CreateStatusSprite();
+        res.SetImage(_prototypes.GetSprite(comp.SpriteKey));
+        res.AttachComponent(comp);
+        return res;
+    }
+
     private static void LoadWarheads()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.txt"));

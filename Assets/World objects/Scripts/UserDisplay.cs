@@ -17,6 +17,10 @@ public class UserDisplay : MonoBehaviour
         {
             return;
         }
+        if (StatusTopLevelDisplay.AttachedShip == null)
+        {
+            StatusTopLevelDisplay.AttachShip(InputHandler.ControlledShip);
+        }
         if (HealthBar != null)
         {
             HealthBar.MaxValue = InputHandler.ControlledShip.MaxHullHitPoints;
@@ -37,7 +41,6 @@ public class UserDisplay : MonoBehaviour
             HeatBar.MaxValue = InputHandler.ControlledShip.MaxHeat;
             HeatBar.Value = InputHandler.ControlledShip.Heat;
         }
-
     }
 
     public UserInput InputHandler;
@@ -45,4 +48,5 @@ public class UserDisplay : MonoBehaviour
     public GradientBar ShieldBar;
     public GradientBar EnergyBar;
     public GradientBar HeatBar;
+    public StatusTopLevel StatusTopLevelDisplay;
 }

@@ -57,6 +57,10 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
             {
                 Status = ComponentStatus.Undamaged;
             }
+            if (OnHitpointsChanged != null)
+            {
+                OnHitpointsChanged();
+            }
         }
     }
     public virtual bool ComponentIsWorking
@@ -91,6 +95,10 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
             _status = value;
         }
     }
+
+    public abstract string SpriteKey { get; }
+
+    public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
 
     protected int _componentMaxHitPoints;
     protected int _componentCurrHitPoints;

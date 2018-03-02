@@ -15,8 +15,8 @@ public class TurretComponent : ITurret
     public float CurrLocalAngle { get { return _innerTurret.CurrAngle; } }
 
     public int ComponentMaxHitPoints { get { return _innerTurret.ComponentMaxHitPoints; } }
-
-    public int ComponentHitPoints { get { return _innerTurret.ComponentHitPoints; } set { _innerTurret.ComponentHitPoints = value; } }
+    
+    public int ComponentHitPoints { get { return _innerTurret.ComponentHitPoints; } set { _innerTurret.ComponentHitPoints = value; if (OnHitpointsChanged != null) { OnHitpointsChanged(); } } }
 
     public bool ComponentIsWorking { get { return _innerTurret.ComponentIsWorking; } }
 
@@ -48,7 +48,11 @@ public class TurretComponent : ITurret
 
     public ComponentSlotType ComponentType { get { return _innerTurret.ComponentType; } }
 
+    public string SpriteKey { get { return "Turret"; } }
+
     private TurretBase _innerTurret;
+
+    public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
 }
 
 public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
@@ -65,6 +69,8 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
     }
 
     public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
+    public override string SpriteKey { get { return "Power plant"; } }
 
     public static PowerPlant DefaultComponent(Ship containingShip)
     {
@@ -170,6 +176,8 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
 
     public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
 
+    public override string SpriteKey { get { return "Shield generator"; } }
+
     public static ShieldGenerator DefaultComponent(Ship containingShip)
     {
         return new ShieldGenerator()
@@ -248,6 +256,8 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     }
 
     public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
+    public override string SpriteKey { get { return "Damage control"; } }
 
     public static DamageControlNode DefaultComponent(Ship containingShip)
     {
@@ -336,6 +346,8 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     private bool _nextDeactivate = false;
 
     public override ComponentSlotType ComponentType { get { return ComponentSlotType.Engine; } }
+
+    public override string SpriteKey { get { return "Engine"; } }
 
     public static ShipEngine DefaultComponent(Ship containingShip)
     {

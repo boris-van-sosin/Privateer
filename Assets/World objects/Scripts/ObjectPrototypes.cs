@@ -123,6 +123,35 @@ public class ObjectPrototypes : MonoBehaviour
         return _turretPrototypeDictionary.Keys.ToArray();
     }
 
+    public StatusSubsystem CreateStatusSprite()
+    {
+        StatusSubsystem res = Instantiate(SubsystemStatusSprite);
+        return res;
+    }
+
+    public Sprite GetSprite(string key)
+    {
+        Sprite res;
+        if(!_sprites.TryGetValue(key, out res))
+        {
+            for (int i = 0; i < SpriteKeys.Length; i++)
+            {
+                _sprites[SpriteKeys[i]] = Sprites[i];
+            }
+            if (_sprites.TryGetValue(key, out res))
+            {
+                return res;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return res;
+        }
+    }
 
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
@@ -135,7 +164,13 @@ public class ObjectPrototypes : MonoBehaviour
     public Ship[] ShipPrototypes;
     public TurretBase[] TurretPrototypes;
 
+    public StatusSubsystem SubsystemStatusSprite;
+
+    public string[] SpriteKeys;
+    public Sprite[] Sprites;
+
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
     private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
+    private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
 }
