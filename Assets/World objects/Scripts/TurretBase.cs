@@ -327,6 +327,7 @@ public class TurretBase : MonoBehaviour, ITurret
         firingVector.y = target.y - Muzzles[_nextBarrel].position.y;
 
         FireInner(firingVector);
+        _containingShip.NotifyInComabt();
 
         if (Muzzles.Length > 1)
         {

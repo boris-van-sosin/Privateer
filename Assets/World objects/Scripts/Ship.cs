@@ -31,6 +31,7 @@ public class Ship : MonoBehaviour
         StartCoroutine(ContinuousComponents());
         ShipDisabled = false;
         ShipImmobilized = false;
+        LastInCombat = Time.time;
     }
 
     private void FindTurrets()
@@ -538,6 +539,7 @@ public class Ship : MonoBehaviour
     {
         ShipSection sec = GetHitSection(location);
         Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
+        LastInCombat = Time.time;
         // if shields are present, take shield damage
         if (!Combat.DamageShields(w.ShieldDamage, _shieldComponents))
         {
@@ -710,6 +712,83 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public bool ArmourAtFull
+    {
+        get
+        {
+            foreach (ShipSection sec in _currArmour.Keys)
+            {
+                if (_currArmour[sec] != _maxArmour[sec])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    public bool ComponentsAtFull
+    {
+        get
+        {
+            foreach (IShipActiveComponent c in AllComponents.Where(x => x is IShipActiveComponent).Select(y => y as IShipActiveComponent))
+            {
+                if (c.ComponentMaxHitPoints != c.ComponentHitPoints)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    public void RepairHull(int maxRepairPoints)
+    {
+        HullHitPoints = System.Math.Min(HullHitPoints + maxRepairPoints, MaxHullHitPoints);
+    }
+
+    public void RepairArmour(int maxRepairPoints)
+    {
+        int repairPointsLeft = maxRepairPoints;
+        while (repairPointsLeft > 0)
+        {
+            ShipSection minArmourSec = ShipSection.Fore;
+            int minArmour = -1;
+            bool needsRepair = false;
+            foreach (ShipSection sec in _currArmour.Keys)
+            {
+                if (_currArmour[sec] != _maxArmour[sec])
+                {
+                    needsRepair = true;
+                    if (minArmour < 0 || _currArmour[sec] < minArmour)
+                    {
+                        minArmourSec = sec;
+                        minArmour = _currArmour[sec];
+                    }
+                }
+            }
+            if (!needsRepair)
+            {
+                return;
+            }
+            if (_maxArmour[minArmourSec] - _currArmour[minArmourSec] <= repairPointsLeft)
+            {
+                repairPointsLeft -= _maxArmour[minArmourSec] - _currArmour[minArmourSec];
+                _currArmour[minArmourSec] = _maxArmour[minArmourSec];
+            }
+            else
+            {
+                _currArmour[minArmourSec] += repairPointsLeft;
+                repairPointsLeft = 0;
+            }
+        }
+    }
+
+    public void NotifyInComabt()
+    {
+        LastInCombat = Time.time;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //Debug.LogWarning(string.Format("Trigger enter: {0}, {1}", this, other.gameObject));
@@ -721,6 +800,7 @@ public class Ship : MonoBehaviour
             otherShip.RevertRotation();
             _inCollision = true;
             float massSum = Mass + otherShip.Mass;
+            NotifyInComabt();
             StartCoroutine(MoveBackAfterCollision(collisionVec, Mass/massSum));
         }
     }
@@ -803,7 +883,7 @@ public class Ship : MonoBehaviour
     public float ShipUnscaledWidth { get; private set; }
 
     public int MaxHullHitPoints;
-    public int HullHitPoints { get; private set; }
+    public int HullHitPoints { get; set; }
     private int _totalMaxShield;
     public int DefaultArmorFront;
     public int DefaultArmorAft;
@@ -822,6 +902,8 @@ public class Ship : MonoBehaviour
     private Vector3 _prevPos;
     private Quaternion _prevRot;
     private bool _inCollision = false;
+
+    public float LastInCombat { get; private set; }
 
     private GameObject _shieldCapsule;
     public GameObject ShieldCapsule { get { return _shieldCapsule; } }

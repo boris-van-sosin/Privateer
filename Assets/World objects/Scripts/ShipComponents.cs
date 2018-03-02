@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TurretComponent : ITurret
 {
@@ -196,7 +197,8 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     public int PowerUsage;
     public int HullMaxHitPointRegeneration;
     public int SystemMaxHitPointRegeneration;
-    public int MaxArmorPointRegeneration;
+    public int ArmorMaxPointRegeneration;
+    public float TimeOutOfCombatToRepair;
 
     public void PeriodicAction()
     {
@@ -204,7 +206,45 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         {
             return;
         }
-        // nothing for now
+        if (Time.time - _containingShip.LastInCombat < TimeOutOfCombatToRepair)
+        {
+            return;
+        }
+        bool armourAtFull = _containingShip.ArmourAtFull;
+        bool componentsAtFull = _containingShip.ComponentsAtFull;
+        if (_containingShip.HullHitPoints == _containingShip.MaxHullHitPoints && armourAtFull && componentsAtFull)
+        {
+            return;
+        }
+
+        if (!ContainingShip.TryChangeEnergyAndHeat(PowerUsage, 0))
+        {
+            return;
+        }
+
+        if (!componentsAtFull)
+        {
+            int SystemPointRegenLeft = SystemMaxHitPointRegeneration;
+            foreach (IShipActiveComponent c in _containingShip.AllComponents.Where(x => x is IShipActiveComponent).Select(y => y as IShipActiveComponent))
+            {
+                if (c.ComponentMaxHitPoints - c.ComponentHitPoints <= SystemPointRegenLeft)
+                {
+                    SystemPointRegenLeft -= (c.ComponentMaxHitPoints - c.ComponentHitPoints);
+                    c.ComponentHitPoints = c.ComponentMaxHitPoints;
+                }
+                else
+                {
+                    c.ComponentHitPoints += SystemPointRegenLeft;
+                    SystemPointRegenLeft = 0;
+                    break;
+                }
+            }
+        }
+        _containingShip.RepairHull(HullMaxHitPointRegeneration);
+        if (!armourAtFull)
+        {
+            _containingShip.RepairArmour(ArmorMaxPointRegeneration);
+        }
     }
 
     public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
@@ -217,8 +257,9 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
             ComponentHitPoints = 400,
             Status = ComponentStatus.Undamaged,
             HullMaxHitPointRegeneration = 10,
-            MaxArmorPointRegeneration = 1,
+            ArmorMaxPointRegeneration = 1,
             SystemMaxHitPointRegeneration = 2,
+            TimeOutOfCombatToRepair = 5.0f,
             PowerUsage = 10,
             _containingShip = containingShip
         };
