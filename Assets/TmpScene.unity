@@ -874,6 +874,10 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1246438402242920, guid: caffa308ec3639a42a6bade5ccc34398, type: 2}
+      propertyPath: m_Name
+      value: ShipStatusPanel - Sachsen
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: caffa308ec3639a42a6bade5ccc34398, type: 2}
   m_IsPrefabParent: 0
@@ -2110,12 +2114,14 @@ MonoBehaviour:
   - Engine
   - Shield generator
   - Power plant
+  - Damage control
   - Sachsen
   Sprites:
   - {fileID: 21300000, guid: 463fd345a3df81b459d4421fe7e69bd6, type: 3}
   - {fileID: 21300000, guid: 55ede17e1473e9e498d530a497a0a654, type: 3}
   - {fileID: 21300000, guid: d649645e38ab68741a3cdd2e7a1a565c, type: 3}
   - {fileID: 21300000, guid: ada6652268623aa45afd08547e45161e, type: 3}
+  - {fileID: 21300000, guid: f9db9d8ec1911c748962fa498b4a5c7f, type: 3}
   - {fileID: 21300000, guid: ae8287df7bb9cc543994df20914ce3cf, type: 3}
 --- !u!4 &1243081520
 Transform:

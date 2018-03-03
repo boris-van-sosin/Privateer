@@ -10,6 +10,10 @@ public class UserInput : MonoBehaviour
     {
         _userCamera = Camera.main;
         _cameraOffset = _userCamera.transform.position;
+        //
+        _cameraOffset.z = 0;
+        _userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
+        //
         _cameraOffsetFactor = 1.0f;
     }
 

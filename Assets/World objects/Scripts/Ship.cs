@@ -731,7 +731,7 @@ public class Ship : MonoBehaviour
     {
         get
         {
-            foreach (IShipActiveComponent c in AllComponents.Where(x => x is IShipActiveComponent).Select(y => y as IShipActiveComponent))
+            foreach (IShipActiveComponent c in AllComponents.Where(x => x is IShipActiveComponent).Select(y => y as IShipActiveComponent).Where(z => z.Status != ComponentStatus.Destroyed))
             {
                 if (c.ComponentMaxHitPoints != c.ComponentHitPoints)
                 {

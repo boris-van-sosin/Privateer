@@ -233,7 +233,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         if (!componentsAtFull)
         {
             int SystemPointRegenLeft = SystemMaxHitPointRegeneration;
-            foreach (IShipActiveComponent c in _containingShip.AllComponents.Where(x => x is IShipActiveComponent).Select(y => y as IShipActiveComponent))
+            foreach (IShipActiveComponent c in _containingShip.AllComponents.Where(x =>  x is IShipActiveComponent).Select(y => y as IShipActiveComponent).Where(z => z.Status != ComponentStatus.Destroyed))
             {
                 if (c.ComponentMaxHitPoints - c.ComponentHitPoints <= SystemPointRegenLeft)
                 {

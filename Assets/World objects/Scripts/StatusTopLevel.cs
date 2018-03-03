@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class StatusTopLevel : MonoBehaviour
 {
+    void Start()
+    {
+        _compsPanel = transform.Find("CompsPanel").GetComponent<RectTransform>();
+    }
+
     public void AttachShip(Ship s)
     {
         if (_attachedShip != null)
@@ -28,6 +34,13 @@ public class StatusTopLevel : MonoBehaviour
                     }
                 }
             }
+
+            foreach (IShipActiveComponent comp in _attachedShip.AllComponents.Where(x => x is IShipActiveComponent && !(x is TurretBase)).Select(y => y as IShipActiveComponent))
+            {
+                StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(comp);
+                RectTransform compRT = compStatus.GetComponent<RectTransform>();
+                compRT.SetParent(_compsPanel);
+            }
         }
     }
 
@@ -39,4 +52,5 @@ public class StatusTopLevel : MonoBehaviour
     public Ship AttachedShip { get { return _attachedShip; } }
 
     private Ship _attachedShip = null;
+    private RectTransform _compsPanel;
 }
