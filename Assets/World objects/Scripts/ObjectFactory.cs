@@ -175,6 +175,22 @@ public static class ObjectFactory
         return res;
     }
 
+    public static StatusTopLevel CreateStatusPanel(string prodKey)
+    {
+        StatusTopLevel res = _prototypes.CreateStatusPanel(prodKey);
+        return res;
+    }
+
+    public static StatusTopLevel CreateStatusPanel(Ship s, Transform containingPanel)
+    {
+        StatusTopLevel res = CreateStatusPanel(s.ProductionKey);
+        RectTransform rt = res.GetComponent<RectTransform>();
+        rt.SetParent(containingPanel);
+        res.AttachShip(s);
+        return res;
+    }
+
+
     private static void LoadWarheads()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.txt"));

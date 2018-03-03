@@ -5,9 +5,13 @@ using System.Linq;
 
 public class StatusTopLevel : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         _compsPanel = transform.Find("CompsPanel").GetComponent<RectTransform>();
+        _healthBar = transform.Find("HitPointBar").GetComponent<GradientBar>();
+        _shieldBar = transform.Find("ShieldBar").GetComponent<GradientBar>();
+        _energyBar = transform.Find("EnergyBar").GetComponent<GradientBar>();
+        _heatBar  = transform.Find("HeatBar").GetComponent<GradientBar>();
     }
 
     public void AttachShip(Ship s)
@@ -41,6 +45,11 @@ public class StatusTopLevel : MonoBehaviour
                 RectTransform compRT = compStatus.GetComponent<RectTransform>();
                 compRT.SetParent(_compsPanel);
             }
+
+            _healthBar.MaxValue = _attachedShip.MaxHullHitPoints;
+            _shieldBar.MaxValue = _attachedShip.ShipTotalMaxShields;
+            _energyBar.MaxValue = _attachedShip.MaxEnergy;
+            _heatBar.MaxValue = _attachedShip.MaxHeat;
         }
     }
 
@@ -49,8 +58,24 @@ public class StatusTopLevel : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if (_attachedShip != null)
+        {
+            _healthBar.Value = _attachedShip.HullHitPoints;
+            _shieldBar.Value = _attachedShip.ShipTotalShields;
+            _energyBar.Value = _attachedShip.Energy;
+            _heatBar.Value = _attachedShip.Heat;
+        }
+    }
+
+    public string ShipProductionKey;
     public Ship AttachedShip { get { return _attachedShip; } }
 
     private Ship _attachedShip = null;
+    private GradientBar _healthBar;
+    private GradientBar _shieldBar;
+    private GradientBar _energyBar;
+    private GradientBar _heatBar;
     private RectTransform _compsPanel;
 }

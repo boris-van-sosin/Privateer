@@ -25,6 +25,7 @@ public class TurretBase : MonoBehaviour, ITurret
         ParseDeadZones();
         ParseMuzzles();
         _containingShip = FindContainingShip(transform.parent);
+        SetDefaultAngle();
         _initialized = true;
     }
 
@@ -463,7 +464,7 @@ public class TurretBase : MonoBehaviour, ITurret
                     }
                     else
                     {
-                        ManualTarget(_defaultDirection);
+                        ManualTarget(transform.position + _defaultDirection);
                     }
                     break;
                 case TurretMode.AutoTracking:

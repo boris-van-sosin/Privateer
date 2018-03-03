@@ -10,9 +10,9 @@ public class UserInput : MonoBehaviour
     {
         _userCamera = Camera.main;
         _cameraOffset = _userCamera.transform.position;
-        //
-        _cameraOffset.z = 0;
-        _userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
+        // Use for grabbing top-down views of ships:
+        //_cameraOffset.z = 0;
+        //_userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
         //
         _cameraOffsetFactor = 1.0f;
     }
@@ -29,6 +29,10 @@ public class UserInput : MonoBehaviour
         if (ControlledShip == null)
         {
             return;
+        }
+        if (_statusTopLevelDisplay == null)
+        {
+            _statusTopLevelDisplay = ObjectFactory.CreateStatusPanel(ControlledShip, ShipStatusPanel);
         }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -93,6 +97,8 @@ public class UserInput : MonoBehaviour
 
     public Ship ControlledShip; // temporary
     private bool _autoTarget = false; // temporary
+    private StatusTopLevel _statusTopLevelDisplay = null;
+    public Transform ShipStatusPanel;
     private int _backgroundLayerMask = 0;
     private Camera _userCamera;
     private Vector3 _cameraOffset;

@@ -30,7 +30,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-        //s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s));
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
