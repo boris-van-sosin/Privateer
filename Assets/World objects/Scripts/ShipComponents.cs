@@ -329,11 +329,19 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     {
         if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerThrust, HeatPerThrust))
         {
+            if (!ThrustWorks && OnToggle != null)
+            {
+                OnToggle(true);
+            }
             ThrustWorks = true;
             _nextDeactivate = true;
         }
         else
         {
+            if (ThrustWorks && OnToggle != null)
+            {
+                OnToggle(false);
+            }
             ThrustWorks = false;
         }
         if (_nextDeactivate)
@@ -344,6 +352,8 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     }
 
     private bool _nextDeactivate = false;
+
+    public event ComponentToggledDelegate OnToggle;
 
     public override ComponentSlotType ComponentType { get { return ComponentSlotType.Engine; } }
 
@@ -358,6 +368,68 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
             Status = ComponentStatus.Undamaged,
             EnergyPerThrust = 2,
             HeatPerThrust = 1,
+            _containingShip = containingShip
+        };
+    }
+}
+
+public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
+{
+
+    public int EnergyPerPulse;
+    public int HeatPerPulse;
+    private bool _active;
+
+    public bool ComponentActive
+    {
+        get
+        {
+            return _active;
+        }
+
+        set
+        {
+            _active = value;
+        }
+    }
+
+    public bool ClampsWorking { get; private set; }
+
+    public void PeriodicAction()
+    {
+        if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerPulse, HeatPerPulse))
+        {
+            if (!ClampsWorking && OnToggle != null)
+            {
+                OnToggle(true);
+            }
+            ClampsWorking = true;
+        }
+        else
+        {
+            if (ClampsWorking && OnToggle != null)
+            {
+                OnToggle(false);
+            }
+            ClampsWorking = false;
+        }
+    }
+
+    public event ComponentToggledDelegate OnToggle;
+
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.Hidden; } }
+
+    public override string SpriteKey { get { return "Electromagentic Clamps"; } }
+
+    public static ElectromagneticClamps DefaultComponent(Ship containingShip)
+    {
+        return new ElectromagneticClamps()
+        {
+            ComponentMaxHitPoints = 1,
+            ComponentHitPoints = 1,
+            Status = ComponentStatus.Undamaged,
+            EnergyPerPulse = 1,
+            HeatPerPulse = 0,
             _containingShip = containingShip
         };
     }

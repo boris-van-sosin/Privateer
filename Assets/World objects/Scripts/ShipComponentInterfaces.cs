@@ -16,12 +16,15 @@ public enum ComponentSlotType
     // Boarding / anti-boarding forces
     BoardingForce,
     // Engine
-    Engine
+    Engine,
+    // Special
+    Hidden
 };
 
 public enum ComponentStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
 
 public delegate void ComponentHitpointsChangedDelegate();
+public delegate void ComponentToggledDelegate(bool active);
 
 public interface IShipComponent
 {
@@ -64,6 +67,7 @@ public interface IUserActivatedComponent : IShipComponent
 public interface IUserToggledComponent : IShipComponent
 {
     bool ComponentActive { get; set; }
+    event ComponentToggledDelegate OnToggle;
 }
 
 public interface IEnergyCapacityComponent

@@ -75,21 +75,29 @@ public class UserInput : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(_keyMapping[UserOperation.Forward]))
         {
             ControlledShip.MoveForeward();
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(_keyMapping[UserOperation.Backward]))
         {
             ControlledShip.MoveBackward();
         }
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(_keyMapping[UserOperation.Left]))
         {
             ControlledShip.ApplyTurning(true);
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(_keyMapping[UserOperation.Right]))
         {
             ControlledShip.ApplyTurning(false);
+        }
+        else if (Input.GetKey(_keyMapping[UserOperation.Break]))
+        {
+            ControlledShip.ApplyBraking();
+        }
+        else if (Input.GetKeyDown(_keyMapping[UserOperation.MagneticClamps]))
+        {
+            ControlledShip.ToggleElectromagneticClamps();
         }
 
         _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
@@ -104,4 +112,28 @@ public class UserInput : MonoBehaviour
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;
 
+    public enum UserOperation
+    {
+        Forward, Backward, Left, Right, Break, MagneticClamps, BoardingTool,
+        ControlGroup1,
+        ControlGroup2,
+        ControlGroup3,
+        ControlGroup4,
+        ControlGroup5,
+        ControlGroup6,
+        ControlGroup7,
+        ControlGroup8,
+        ControlGroup9,
+        ControlGroup0
+    }
+
+    private Dictionary<UserOperation, KeyCode> _keyMapping = new Dictionary<UserOperation, KeyCode>()
+    {
+        { UserOperation.Forward, KeyCode.W },
+        { UserOperation.Left, KeyCode.A },
+        { UserOperation.Backward, KeyCode.S },
+        { UserOperation.Right, KeyCode.D },
+        { UserOperation.Break, KeyCode.X },
+        { UserOperation.MagneticClamps, KeyCode.Alpha0 },
+    };
 }

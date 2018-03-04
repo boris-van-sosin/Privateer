@@ -23,6 +23,7 @@ public class Ship : MonoBehaviour
 
     public void Activate()
     {
+        InitElectromagneticClamps();
         InitComponents();
         InitArmour();
         InitShield();
@@ -72,10 +73,15 @@ public class Ship : MonoBehaviour
         _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _componentSlots.Add(ShipSection.Hidden, new List<Tuple<ComponentSlotType, IShipComponent>>());
     }
 
     private void InitComponents()
     {
+        _electromagneticClamps = ElectromagneticClamps.DefaultComponent(this);
+        _electromagneticClamps.OnToggle += ElectromagneticClampsToggled;
+        _componentSlots[ShipSection.Hidden].Add(Tuple<ComponentSlotType, IShipComponent>.Create(ComponentSlotType.Hidden, _electromagneticClamps));
+
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
@@ -144,6 +150,15 @@ public class Ship : MonoBehaviour
             {
                 _shieldCapsule.SetActive(true);
             }
+        }
+    }
+
+    private void InitElectromagneticClamps()
+    {
+        Transform t = transform.Find("MagneticField");
+        if (t != null)
+        {
+            _electromagneticClampsEffect = t.GetComponent<ParticleSystem>();
         }
     }
 
@@ -255,7 +270,7 @@ public class Ship : MonoBehaviour
             _prevRot = transform.rotation;
             transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
             //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
-            if (_autoHeading)
+            if (_autoHeading && !ShipImmobilized && !ShipDisabled)
             {
                 RotateToHeading();
             }
@@ -469,20 +484,25 @@ public class Ship : MonoBehaviour
 
     public void SetRequiredHeading(Vector3 targetPoint)
     {
-        Vector3 requiredHeadingVector = targetPoint - transform.position;
-        requiredHeadingVector.y = 0;
-        _autoHeadingRotation = Quaternion.LookRotation(transform.forward, requiredHeadingVector);
+        if (ShipImmobilized || ShipDisabled)
+        {
+            return;
+        }
+        _autoHeadingVector = targetPoint - transform.position;
+        _autoHeadingVector.y = 0;
+        _autoHeadingVector.Normalize();
         _autoHeading = true;
     }
 
     private void RotateToHeading()
     {
-        if (Quaternion.Angle(transform.rotation,_autoHeadingRotation) < 0.5f)
+        if (Mathf.Abs(Vector3.Cross(transform.up, _autoHeadingVector).y) < 0.1f)
         {
             _autoHeading = false;
             return;
         }
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, _autoHeadingRotation, TurnRate * Time.deltaTime);
+
+        ApplyTurning(Vector3.Cross(transform.up, _autoHeadingVector).y < 0);
     }
 
     public bool MovingForward { get { return MovementDirection == ShipDirection.Forward; } }
@@ -789,19 +809,33 @@ public class Ship : MonoBehaviour
         LastInCombat = Time.time;
     }
 
+    public void ToggleElectromagneticClamps()
+    {
+        if (_electromagneticClamps != null)
+        {
+            _electromagneticClamps.ComponentActive = !_electromagneticClamps.ComponentActive;
+        }
+    }
+    public bool ElectromagneticClampsActive { get { return _electromagneticClamps != null &&_electromagneticClamps.ComponentActive; } }
+    private void ElectromagneticClampsToggled(bool active)
+    {
+        if (active)
+        {
+            _electromagneticClampsEffect.Play();
+        }
+        else
+        {
+            _electromagneticClampsEffect.Stop();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //Debug.LogWarning(string.Format("Trigger enter: {0}, {1}", this, other.gameObject));
         Ship otherShip = other.GetComponent<Ship>();
         if (otherShip != null)
         {
-            Vector3 collisionVec = (otherShip.transform.position - transform.position).normalized;
-            RevertRotation();
-            otherShip.RevertRotation();
-            _inCollision = true;
-            float massSum = Mass + otherShip.Mass;
-            NotifyInComabt();
-            StartCoroutine(MoveBackAfterCollision(collisionVec, Mass/massSum));
+            ResolveCollision(otherShip);
         }
     }
 
@@ -825,9 +859,19 @@ public class Ship : MonoBehaviour
         Debug.LogWarning(string.Format("Collision exit: {0},", this));
     }
 
+    private void ResolveCollision(Ship otherShip)
+    {
+        Vector3 collisionVec = (otherShip.transform.position - transform.position).normalized;
+        RevertRotation();
+        otherShip.RevertRotation();
+        _inCollision = true;
+        float massSum = Mass + otherShip.Mass;
+        NotifyInComabt();
+        StartCoroutine(MoveBackAfterCollision(collisionVec, Mass / massSum));
+    }
 
     private enum ShipDirection { Stopped, Forward, Reverse };
-    public enum ShipSection { Fore, Aft, Left, Right, Center };
+    public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };
 
     public string ProductionKey;
     public ObjectFactory.ShipSize ShipSize;
@@ -839,7 +883,7 @@ public class Ship : MonoBehaviour
     public float TurnRate;
     private float _speed;
     private bool _autoHeading = false;
-    private Quaternion _autoHeadingRotation;
+    private Vector3 _autoHeadingVector;
     private ShipDirection MovementDirection = ShipDirection.Stopped;
 
     private ITurret[] _turrets;
@@ -881,6 +925,9 @@ public class Ship : MonoBehaviour
     public float ShipWidth { get; private set; }
     public float ShipUnscaledLength { get; private set; }
     public float ShipUnscaledWidth { get; private set; }
+
+    private ElectromagneticClamps _electromagneticClamps;
+    private ParticleSystem _electromagneticClampsEffect;
 
     public int MaxHullHitPoints;
     public int HullHitPoints { get; set; }

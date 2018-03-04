@@ -39,7 +39,7 @@ public class StatusTopLevel : MonoBehaviour
                 }
             }
 
-            foreach (IShipActiveComponent comp in _attachedShip.AllComponents.Where(x => x is IShipActiveComponent && !(x is TurretBase)).Select(y => y as IShipActiveComponent))
+            foreach (IShipActiveComponent comp in _attachedShip.AllComponents.Where(x => x is IShipActiveComponent && !(x is TurretBase) && x.ComponentType != ComponentSlotType.Hidden).Select(y => y as IShipActiveComponent))
             {
                 StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(comp);
                 RectTransform compRT = compStatus.GetComponent<RectTransform>();
