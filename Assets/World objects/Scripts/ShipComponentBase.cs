@@ -9,6 +9,9 @@ public abstract class ShipComponentBase : IShipComponent
     public abstract ComponentSlotType ComponentType { get; }
 
     protected Ship _containingShip;
+
+    public ObjectFactory.ShipSize MinShipSize { get; protected set; }
+    public ObjectFactory.ShipSize MaxShipSize { get; protected set; }
 }
 
 public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveComponent

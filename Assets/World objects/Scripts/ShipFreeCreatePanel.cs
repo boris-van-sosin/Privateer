@@ -25,13 +25,17 @@ public class ShipFreeCreatePanel : MonoBehaviour
         bool userShip = UserToggle.isOn;
         Ship s = ObjectFactory.CreateShip(shipKey);
 
-        s.PlaceComponent(Ship.ShipSection.Left, DamageControlNode.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Left, DamageControlNode.DefaultComponent(s.ShipSize, s));
+        s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s.ShipSize, s));
+        s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s.ShipSize, s));
+        s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s.ShipSize, s));
+        if (s.ShipSize == ObjectFactory.ShipSize.Cruiser || s.ShipSize == ObjectFactory.ShipSize.Destroyer)
+        {
+            s.PlaceComponent(Ship.ShipSection.Fore, HeatExchange.DefaultComponent(s));
+        }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
             TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
@@ -41,6 +45,10 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
             }
             s.PlaceTurret(hp, t);
+        }
+        for (int i = 0; i < s.OperationalCrew; ++i)
+        {
+            s.Crew.Add(ShipCharacter.GenerateTerranShipCrew());
         }
         s.Activate();
 

@@ -233,7 +233,7 @@ public class ShipAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (!_controlledShip.ShipDisabled)
+            if (!_controlledShip.ShipDisabled && !_controlledShip.ShipSurrendered)
             {
                 if (_targetShip == null)
                 {
@@ -252,6 +252,10 @@ public class ShipAIController : MonoBehaviour
                         NavigateTo(bypassVec.Value);
                     }
                 }
+            }
+            else if (_controlledShip.HullHitPoints == 0 || _controlledShip.ShipSurrendered)
+            {
+                yield break;
             }
             yield return new WaitForSeconds(0.25f);
         }

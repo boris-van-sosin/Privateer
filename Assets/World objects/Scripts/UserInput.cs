@@ -99,6 +99,10 @@ public class UserInput : MonoBehaviour
         {
             ControlledShip.ToggleElectromagneticClamps();
         }
+        else if (Input.GetKeyDown(_keyMapping[UserOperation.Shields]))
+        {
+            ControlledShip.ToggleShields();
+        }
 
         _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
     }
@@ -114,7 +118,7 @@ public class UserInput : MonoBehaviour
 
     public enum UserOperation
     {
-        Forward, Backward, Left, Right, Break, MagneticClamps, BoardingTool,
+        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, BoardingTool,
         ControlGroup1,
         ControlGroup2,
         ControlGroup3,
@@ -134,6 +138,7 @@ public class UserInput : MonoBehaviour
         { UserOperation.Backward, KeyCode.S },
         { UserOperation.Right, KeyCode.D },
         { UserOperation.Break, KeyCode.X },
-        { UserOperation.MagneticClamps, KeyCode.Alpha0 },
+        { UserOperation.MagneticClamps, KeyCode.F },
+        { UserOperation.Shields, KeyCode.G },
     };
 }

@@ -426,6 +426,9 @@ MonoBehaviour:
   MinArmorAft: 65
   MinArmorLeft: 65
   MinArmorRight: 65
+  OperationalCrew: 20
+  MaxCrew: 35
+  MaxSpecialCharacters: 3
   Owner: {fileID: 0}
 --- !u!136 &136962721284367600
 CapsuleCollider:

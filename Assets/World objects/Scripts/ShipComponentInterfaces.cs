@@ -30,6 +30,8 @@ public interface IShipComponent
 {
     Ship ContainingShip { get; }
     ComponentSlotType ComponentType { get; }
+    ObjectFactory.ShipSize MinShipSize { get; }
+    ObjectFactory.ShipSize MaxShipSize { get; }
 }
 
 public interface IShipActiveComponent : IShipComponent
@@ -75,7 +77,7 @@ public interface IEnergyCapacityComponent
     int EnergyCapacity { get; }
 }
 
-public interface IShieldComponent : IShipComponent
+public interface IShieldComponent : IShipComponent, IUserToggledComponent
 {
     int MaxShieldPoints { get; }
     int CurrShieldPoints { get; set; }

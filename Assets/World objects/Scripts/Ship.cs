@@ -14,6 +14,7 @@ public class Ship : MonoBehaviour
         MaxHeat = 100;
         ComputeLength();
         InitComponentSlots();
+        InitCrew();
     }
 
     // Use this for initialization
@@ -32,6 +33,8 @@ public class Ship : MonoBehaviour
         StartCoroutine(ContinuousComponents());
         ShipDisabled = false;
         ShipImmobilized = false;
+        ShipSurrendered = false;
+        InBoarding = false;
         LastInCombat = Time.time;
     }
 
@@ -74,6 +77,12 @@ public class Ship : MonoBehaviour
         _componentSlots.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
         _componentSlots.Add(ShipSection.Hidden, new List<Tuple<ComponentSlotType, IShipComponent>>());
+    }
+
+    private void InitCrew()
+    {
+        Crew = new List<ShipCharacter>(MaxCrew);
+        SpecialCharacters = new List<ShipCharacter>(MaxSpecialCharacters);
     }
 
     private void InitComponents()
@@ -219,6 +228,10 @@ public class Ship : MonoBehaviour
     public bool PlaceComponent(ShipSection sec, IShipComponent comp)
     {
         if (comp.ComponentType != ComponentSlotType.ShipSystem && comp.ComponentType != ComponentSlotType.BoardingForce && comp.ComponentType != ComponentSlotType.Engine)
+        {
+            return false;
+        }
+        if (ShipSize < comp.MinShipSize || ShipSize > comp.MaxShipSize)
         {
             return false;
         }
@@ -814,9 +827,14 @@ public class Ship : MonoBehaviour
         if (_electromagneticClamps != null)
         {
             _electromagneticClamps.ComponentActive = !_electromagneticClamps.ComponentActive;
+            if (_electromagneticClamps.ComponentActive && _useShields)
+            {
+                // turn off shields if magnetic clamps are on
+                ToggleShields();
+            }
         }
     }
-    public bool ElectromagneticClampsActive { get { return _electromagneticClamps != null &&_electromagneticClamps.ComponentActive; } }
+    public bool ElectromagneticClampsActive { get { return _electromagneticClamps != null &&_electromagneticClamps.ClampsWorking; } }
     private void ElectromagneticClampsToggled(bool active)
     {
         if (active)
@@ -828,6 +846,34 @@ public class Ship : MonoBehaviour
             _electromagneticClampsEffect.Stop();
         }
     }
+    public void ToggleShields()
+    {
+        if (_shieldComponents != null)
+        {
+            _useShields = !_useShields;
+            if (_useShields && _electromagneticClamps != null && _electromagneticClamps.ComponentActive)
+            {
+                ToggleElectromagneticClamps();
+            }
+            foreach (IShieldComponent shield in _shieldComponents)
+            {
+                shield.ComponentActive = _useShields;
+            }
+        }
+    }
+
+    public void ResolveBoardingAction(Ship otherShip, bool captured)
+    {
+        if (captured)
+        {
+            ShipSurrendered = true;
+            foreach (ITurret t in Turrets)
+            {
+                t.SetTurretBehavior(TurretBase.TurretMode.Off);
+            }
+        }
+        ResolveCollision(otherShip, Mass + otherShip.Mass);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -835,7 +881,27 @@ public class Ship : MonoBehaviour
         Ship otherShip = other.GetComponent<Ship>();
         if (otherShip != null)
         {
-            ResolveCollision(otherShip);
+            RevertRotation();
+            otherShip.RevertRotation();
+            _inCollision = true;
+            float massSum = Mass + otherShip.Mass;
+            NotifyInComabt();
+
+            if (ElectromagneticClampsActive &&
+                (!InBoarding && !otherShip.InBoarding) &&
+                (!ShipSurrendered && !otherShip.ShipSurrendered) &&
+                ((otherShip.ShipImmobilized || otherShip.ShipDisabled) && otherShip.HullHitPoints > 0))
+            {
+                StartCoroutine(Combat.BoardingCombat(this, otherShip));
+            }
+            else if (otherShip.ElectromagneticClampsActive)
+            {
+                //?
+            }
+            else
+            {
+                ResolveCollision(otherShip, massSum);
+            }
         }
     }
 
@@ -859,14 +925,9 @@ public class Ship : MonoBehaviour
         Debug.LogWarning(string.Format("Collision exit: {0},", this));
     }
 
-    private void ResolveCollision(Ship otherShip)
+    private void ResolveCollision(Ship otherShip, float massSum)
     {
         Vector3 collisionVec = (otherShip.transform.position - transform.position).normalized;
-        RevertRotation();
-        otherShip.RevertRotation();
-        _inCollision = true;
-        float massSum = Mass + otherShip.Mass;
-        NotifyInComabt();
         StartCoroutine(MoveBackAfterCollision(collisionVec, Mass / massSum));
     }
 
@@ -917,9 +978,30 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public IEnumerable<ShipCharacter> AllCrew
+    {
+        get
+        {
+            if (Captain != null)
+            {
+                yield return Captain;
+            }
+            foreach (ShipCharacter c in SpecialCharacters)
+            {
+                yield return c;
+            }
+            foreach (ShipCharacter c in Crew)
+            {
+                yield return c;
+            }
+
+        }
+    }
+
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
+    private bool _useShields = true;
     private ShipEngine _engine;
     public float ShipLength { get; private set; }
     public float ShipWidth { get; private set; }
@@ -945,6 +1027,15 @@ public class Ship : MonoBehaviour
     private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
     public bool ShipDisabled { get; private set; }
     public bool ShipImmobilized { get; private set; }
+    public bool ShipSurrendered { get; private set; }
+    public bool InBoarding { get; private set; }
+
+    public int OperationalCrew;
+    public int MaxCrew;
+    public int MaxSpecialCharacters;
+    public List<ShipCharacter> Crew { get; set; }
+    public List<ShipCharacter> SpecialCharacters { get; set; }
+    public ShipCharacter Captain { get; set; }
 
     private Vector3 _prevPos;
     private Quaternion _prevRot;

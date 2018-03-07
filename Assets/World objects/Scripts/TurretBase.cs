@@ -650,4 +650,7 @@ public class TurretBase : MonoBehaviour, ITurret
     public string SpriteKey { get { return "Turret"; } }
 
     public ComponentSlotType ComponentType { get { return TurretType; } }
+
+    public ObjectFactory.ShipSize MinShipSize { get { return ObjectFactory.ShipSize.Sloop; } }
+    public ObjectFactory.ShipSize MaxShipSize { get { return ObjectFactory.ShipSize.CapitalShip; } }
 }

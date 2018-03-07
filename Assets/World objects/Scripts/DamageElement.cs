@@ -65,21 +65,49 @@ public static class Combat
         return penetrateRoll < penetrateChance;
     }
 
-    public static IEnumerator BoardingCombat(IEnumerable<ShipCharacter> side1, IEnumerable<ShipCharacter> side2)
+    public static IEnumerator BoardingCombat(Ship attacker, Ship defender)
     {
-        LinkedList<ShipCharacter> side1Q = new LinkedList<ShipCharacter>(side1.OrderBy(x => Random.value));
+        LinkedList<ShipCharacter> side1Q = new LinkedList<ShipCharacter>(attacker.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
         yield return new WaitForEndOfFrame();
-        LinkedList<ShipCharacter> side2Q = new LinkedList<ShipCharacter>(side2.OrderBy(x => Random.value));
+        LinkedList<ShipCharacter> side2Q = new LinkedList<ShipCharacter>(defender.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
         yield return new WaitForEndOfFrame();
+        int initialAttackerForce = side1Q.Count;
+        int initialDefenderForce = side2Q.Count;
         while (side1Q.Count > 0 && side2Q.Count > 0)
         {
             BoardingCombatPulse(side1Q, side2Q);
+            if (side2Q.Count > 0 && side2Q.Count < initialDefenderForce / _defenderSurrenderRatio)
+            {
+                if (Random.value < _surrenderChance)
+                {
+                    foreach (ShipCharacter c in side2Q)
+                    {
+                        c.Status = ShipCharacter.CharacterStaus.Incapacitated;
+                    }
+                    side2Q.Clear();
+                    break;
+                }
+            }
+            if (side1Q.Count > 0 && side1Q.Count < initialAttackerForce / _attackerSurrenderRatio)
+            {
+                if (Random.value < _surrenderChance)
+                {
+                    foreach (ShipCharacter c in side1Q)
+                    {
+                        c.Status = ShipCharacter.CharacterStaus.Incapacitated;
+                    }
+                    side1Q.Clear();
+                    break;
+                }
+            }
             yield return new WaitForSeconds(1.0f);
         }
+        attacker.ResolveBoardingAction(defender, side1Q.Count == 0);
+        defender.ResolveBoardingAction(attacker, side2Q.Count == 0);
         yield return null;
     }
 
-    public static void BoardingCombatPulse(LinkedList<ShipCharacter> side1, LinkedList<ShipCharacter> side2)
+    private static void BoardingCombatPulse(LinkedList<ShipCharacter> side1, LinkedList<ShipCharacter> side2)
     {
         int side1Strength = 0, side2Strength = 0;
         LinkedListNode<ShipCharacter> side1Iter = side1.Last, side2Iter = side2.Last;
@@ -149,4 +177,7 @@ public static class Combat
 
     private static readonly int _soldiersInCombatPulse = 10;
     private static readonly float _combatDeathChance = 0.2f;
+    private static readonly float _surrenderChance = 0.2f;
+    private static readonly int _attackerSurrenderRatio = 2;
+    private static readonly int _defenderSurrenderRatio = 4;
 }

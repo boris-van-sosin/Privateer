@@ -85,9 +85,9 @@ GameObject:
   - component: {fileID: 4500105200578780}
   - component: {fileID: 33749348571127812}
   - component: {fileID: 23798164440623788}
+  - component: {fileID: 114294262926575966}
   - component: {fileID: 54792771181453728}
   - component: {fileID: 64797826462041976}
-  - component: {fileID: 114294262926575966}
   m_Layer: 0
   m_Name: Sloop - Richmond
   m_TagString: Untagged
@@ -472,6 +472,9 @@ MonoBehaviour:
   MinArmorAft: 65
   MinArmorLeft: 65
   MinArmorRight: 65
+  OperationalCrew: 20
+  MaxCrew: 35
+  MaxSpecialCharacters: 3
   Owner: {fileID: 0}
 --- !u!114 &114325525285303680
 MonoBehaviour:
