@@ -151,7 +151,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
         if (_targetShip != null && Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking)
         {
-            if (_targetShip.ShipDisabled || (transform.position - _targetShip.transform.position).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
+            if (_targetShip.ShipDisabled || _targetShip.ShipSurrendered || _targetShip.InBoarding || (transform.position - _targetShip.transform.position).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
             {
                 _targetShip = null;
             }

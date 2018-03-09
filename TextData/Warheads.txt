@@ -1,35 +1,53 @@
 #,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz
 3,Light,Autocannon,KineticPenetrator,10,160,3,8,2,0,0.2,0.2,0.2
 3,Light,Autocannon,ShapedCharge     ,15,110,5,7,3,0,0.2,0.2,0.2
-3,Light,Autocannon,ShrapnelRound    ,35,70,3,8,1,0,0.3,0.3,0.3
+3,Light,Autocannon,ShrapnelRound    ,20,70,3,8,1,0,0.3,0.3,0.3
 ,,,,,,,,,,,,
 3,Light,HVGun,KineticPenetrator,60,350,8,40,8,0,0.3,0.3,0.3
 3,Light,HVGun,ShapedCharge     ,80,230,12,28,10,0,0.3,0.3,0.3
-3,Light,HVGun,ShrapnelRound    ,160,90,6,30,6,0,0.35,0.35,0.35
+3,Light,HVGun,ShrapnelRound    ,90,90,6,30,6,0,0.35,0.35,0.35
 ,,,,,,,,,,,,
 3,Light,Howitzer,KineticPenetrator,50,280,6,36,6,0,0.3,0.3,0.3
 3,Light,Howitzer,ShapedCharge     ,100,260,16,34,14,0,0.35,0.35,0.35
-3,Light,Howitzer,ShrapnelRound    ,240,100,6,35,6,0,0.35,0.35,0.35
+3,Light,Howitzer,ShrapnelRound    ,120,100,6,35,6,0,0.35,0.35,0.35
 ,,,,,,,,,,,,
 #,Size,Weapon,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz,
 2,Light,Lance       ,45,260,10,32,8,8,0,0,0,
-2,Light,Laser       ,180,100,5,30,7,10,0,0,0,
+2,Light,Laser       ,100,100,5,30,7,10,0,0,0,
 2,Light,PlasmaCannon,75,90,7,31,7,12,0.1,0.1,0.1,
 ,,,,,,,,,,,,
 #,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz
 3,Medium,Autocannon,KineticPenetrator,25,250,8,20,5,0,0.3,0.3,0.3
 3,Medium,Autocannon,ShapedCharge     ,35,170,12,16,6,0,0.3,0.3,0.3
-3,Medium,Autocannon,ShrapnelRound    ,55,120,7,20,3,0,0.35,0.35,0.35
+3,Medium,Autocannon,ShrapnelRound    ,45,120,7,20,3,0,0.35,0.35,0.35
 ,,,,,,,,,,,,
 3,Medium,HVGun,KineticPenetrator,150,750,18,110,18,0,0.35,0.35,0.35
 3,Medium,HVGun,ShapedCharge     ,180,500,26,65,22,0,0.35,0.35,0.35
-3,Medium,HVGun,ShrapnelRound    ,240,150,14,75,15,0,0.4,0.4,0.4
+3,Medium,HVGun,ShrapnelRound    ,190,150,14,75,15,0,0.4,0.4,0.4
 ,,,,,,,,,,,,
-3,Medium,Howitzer,KineticPenetrator,110,580,18,80,18,0,0.35,0.35,0.35
+3,Medium,Howitzer,KineticPenetrator,110,580,17,80,18,0,0.35,0.35,0.35
 3,Medium,Howitzer,ShapedCharge     ,250,550,40,75,24,0,0.45,0.45,0.45
-3,Medium,Howitzer,ShrapnelRound    ,370,160,16,85,14,0,0.45,0.45,0.45
+3,Medium,Howitzer,ShrapnelRound    ,270,160,17,85,14,0,0.45,0.45,0.45
 ,,,,,,,,,,,,
 #,Size,Weapon,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz,
-2,Medium,Lance       ,100,525,22,80,20,8,0,0,0
-2,Medium,Laser       ,270,170,12,70,18,10,0,0,0
-2,Medium,PlasmaCannon,170,150,16,75,16,12,0.125,0.125,0.125
+2,Medium,Lance       ,100,525,22,80,20,8,0,0,0,
+2,Medium,Laser       ,250,170,12,70,18,10,0,0,0,
+2,Medium,PlasmaCannon,170,150,16,75,16,12,0.125,0.125,0.125,
+,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz
+3,Heavy,Autocannon,KineticPenetrator,55,310,17,42,10,0,0.3,0.3,0.3
+3,Heavy,Autocannon,ShapedCharge     ,70,270,25,38,12,0,0.3,0.3,0.3
+3,Heavy,Autocannon,ShrapnelRound    ,100,180,15,42,6,0,0.35,0.35,0.35
+,,,,,,,,,,,,
+3,Heavy,HVGun,KineticPenetrator,320,1000,40,240,38,0,0.4,0.4,0.4
+3,Heavy,HVGun,ShapedCharge     ,390,650,54,145,45,0,0.45,0.45,0.45
+3,Heavy,HVGun,ShrapnelRound    ,400,180,30,170,30,0,0.5,0.5,0.5
+,,,,,,,,,,,,
+3,Heavy,Howitzer,KineticPenetrator,240,650,40,165,38,0,0.4,0.4,0.4
+3,Heavy,Howitzer,ShapedCharge     ,550,640,85,160,50,0,0.5,0.5,0.5
+3,Heavy,Howitzer,ShrapnelRound    ,570,160,40,180,34,0,0.55,0.55,0.55
+,,,,,,,,,,,,
+#,Size,Weapon,SD,AP,AD,CD,HD,HT,Sx,Sy,Sz,
+2,Heavy,Lance       ,210,625,50,165,41,12,0,0,0,
+2,Heavy,Laser       ,560,270,25,150,38,14,0,0,0,
+2,Heavy,PlasmaCannon,370,180,35,160,36,16,1.5,1.5,1.5,

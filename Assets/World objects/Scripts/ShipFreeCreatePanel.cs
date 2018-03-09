@@ -36,6 +36,15 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             s.PlaceComponent(Ship.ShipSection.Fore, HeatExchange.DefaultComponent(s));
         }
+        else if (s.ShipSize == ObjectFactory.ShipSize.CapitalShip)
+        {
+            s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s.ShipSize, s));
+        }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
             TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
@@ -48,8 +57,14 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
         for (int i = 0; i < s.OperationalCrew; ++i)
         {
-            s.Crew.Add(ShipCharacter.GenerateTerranShipCrew());
+            s.AddCrew(ShipCharacter.GenerateTerranShipCrew());
         }
+        if (friendly && userShip)
+        {
+            CombatDetachment d = CombatDetachment.DefaultComponent(s.ShipSize, s);
+            s.PlaceComponent(Ship.ShipSection.Center, d);
+        }
+
         s.Activate();
 
         Faction[] factions = FindObjectsOfType<Faction>();
@@ -57,6 +72,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
         if (friendly)
         {
             s.Owner = faction1;
+
+            for (int i = 0; i < 100; ++i)
+            {
+                s.AddCrew(ShipCharacter.GenerateTerranCombatCrew(30));
+            }
         }
         else
         {

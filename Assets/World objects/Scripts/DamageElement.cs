@@ -67,19 +67,31 @@ public static class Combat
 
     public static IEnumerator BoardingCombat(Ship attacker, Ship defender)
     {
+        Tuple<Canvas, BoardingProgressPanel> panel = ObjectFactory.CreateBoardingProgressPanel();
+        panel.Item1.transform.position = (defender.transform.position + attacker.transform.position) / 2 + new Vector3(0, 0.1f, 1.0f);
+        panel.Item2.StartBreaching(attacker, defender);
         LinkedList<ShipCharacter> side1Q = new LinkedList<ShipCharacter>(attacker.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
         yield return new WaitForEndOfFrame();
         LinkedList<ShipCharacter> side2Q = new LinkedList<ShipCharacter>(defender.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
         yield return new WaitForEndOfFrame();
+        for (int i = 0; i < 100; ++i)
+        {
+            panel.Item2.UpdateBreaching(i + 1);
+            yield return new WaitForSeconds(0.1f);
+        }
         int initialAttackerForce = side1Q.Count;
         int initialDefenderForce = side2Q.Count;
+        panel.Item2.StartBoarding(initialAttackerForce, initialDefenderForce);
+        yield return new WaitForSeconds(0.1f);
         while (side1Q.Count > 0 && side2Q.Count > 0)
         {
             BoardingCombatPulse(side1Q, side2Q);
+            panel.Item2.UpdateBoarding(side1Q.Count, side2Q.Count);
             if (side2Q.Count > 0 && side2Q.Count < initialDefenderForce / _defenderSurrenderRatio)
             {
                 if (Random.value < _surrenderChance)
                 {
+                    // defending ship surrenders
                     foreach (ShipCharacter c in side2Q)
                     {
                         c.Status = ShipCharacter.CharacterStaus.Incapacitated;
@@ -92,11 +104,7 @@ public static class Combat
             {
                 if (Random.value < _surrenderChance)
                 {
-                    foreach (ShipCharacter c in side1Q)
-                    {
-                        c.Status = ShipCharacter.CharacterStaus.Incapacitated;
-                    }
-                    side1Q.Clear();
+                    // attacking ship surrenders
                     break;
                 }
             }
@@ -104,6 +112,7 @@ public static class Combat
         }
         attacker.ResolveBoardingAction(defender, side1Q.Count == 0);
         defender.ResolveBoardingAction(attacker, side2Q.Count == 0);
+        Object.Destroy(panel.Item1.gameObject);
         yield return null;
     }
 

@@ -15,6 +15,7 @@ public class Ship : MonoBehaviour
         ComputeLength();
         InitComponentSlots();
         InitCrew();
+        InitDamageEffects();
     }
 
     // Use this for initialization
@@ -81,8 +82,17 @@ public class Ship : MonoBehaviour
 
     private void InitCrew()
     {
-        Crew = new List<ShipCharacter>(MaxCrew);
-        SpecialCharacters = new List<ShipCharacter>(MaxSpecialCharacters);
+        _crew = new List<ShipCharacter>(MaxCrew);
+        _specialCharacters = new List<SpecialCharacter>(MaxSpecialCharacters);
+    }
+
+    private void InitDamageEffects()
+    {
+        Transform t = transform.Find("Damage smoke effect");
+        if (t != null)
+        {
+            _engineDamageSmoke = t.GetComponent<ParticleSystem>();
+        }
     }
 
     private void InitComponents()
@@ -94,6 +104,7 @@ public class Ship : MonoBehaviour
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
+        _combatDetachments = AllComponents.Where(x => x is CombatDetachment).Select(y => y as CombatDetachment).ToArray();
         _totalMaxShield = 0;
         foreach (IShieldComponent shield in _shieldComponents)
         {
@@ -324,6 +335,11 @@ public class Ship : MonoBehaviour
             if (_shieldCapsule)
             {
                 _shieldCapsule.SetActive(ShipTotalShields > 0);
+            }
+
+            if (HullHitPoints <= 0)
+            {
+                yield break;
             }
             yield return new WaitForSeconds(0.25f);
         }
@@ -742,6 +758,12 @@ public class Ship : MonoBehaviour
         if (!_engine.ComponentIsWorking)
         {
             ShipImmobilized = true;
+            _engineDamageSmoke.Play();
+        }
+        else
+        {
+            ShipImmobilized = false;
+            _engineDamageSmoke.Stop();
         }
     }
 
@@ -872,6 +894,7 @@ public class Ship : MonoBehaviour
                 t.SetTurretBehavior(TurretBase.TurretMode.Off);
             }
         }
+        InBoarding = false;
         ResolveCollision(otherShip, Mass + otherShip.Mass);
     }
 
@@ -892,6 +915,8 @@ public class Ship : MonoBehaviour
                 (!ShipSurrendered && !otherShip.ShipSurrendered) &&
                 ((otherShip.ShipImmobilized || otherShip.ShipDisabled) && otherShip.HullHitPoints > 0))
             {
+                InBoarding = true;
+                otherShip.InBoarding = true;
                 StartCoroutine(Combat.BoardingCombat(this, otherShip));
             }
             else if (otherShip.ElectromagneticClampsActive)
@@ -929,6 +954,40 @@ public class Ship : MonoBehaviour
     {
         Vector3 collisionVec = (otherShip.transform.position - transform.position).normalized;
         StartCoroutine(MoveBackAfterCollision(collisionVec, Mass / massSum));
+    }
+
+    public void AddCrew(ShipCharacter c)
+    {
+        switch (c.Role)
+        {
+            case ShipCharacter.CharacterProfession.Crew:
+                if (_crew.Count < MaxCrew)
+                {
+                    _crew.Add(c);
+                }
+                break;
+            case ShipCharacter.CharacterProfession.Captain:
+                break;
+            case ShipCharacter.CharacterProfession.Combat:
+                foreach (CombatDetachment cd in _combatDetachments)
+                {
+                    if (cd.Forces.Count < cd.CrewCapacity)
+                    {
+                        cd.Forces.Add(c);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void AddCrew(IEnumerable<ShipCharacter> crew)
+    {
+        foreach (ShipCharacter c in crew)
+        {
+            AddCrew(c);
+        }
     }
 
     private enum ShipDirection { Stopped, Forward, Reverse };
@@ -994,13 +1053,20 @@ public class Ship : MonoBehaviour
             {
                 yield return c;
             }
-
+            foreach (CombatDetachment combatGroup in _combatDetachments)
+            {
+                foreach (ShipCharacter c in combatGroup.Forces)
+                {
+                    yield return c;
+                }
+            }
         }
     }
 
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
+    private CombatDetachment[] _combatDetachments;
     private bool _useShields = true;
     private ShipEngine _engine;
     public float ShipLength { get; private set; }
@@ -1033,8 +1099,10 @@ public class Ship : MonoBehaviour
     public int OperationalCrew;
     public int MaxCrew;
     public int MaxSpecialCharacters;
-    public List<ShipCharacter> Crew { get; set; }
-    public List<ShipCharacter> SpecialCharacters { get; set; }
+    public IEnumerable<ShipCharacter> Crew { get { return _crew; } }
+    private List<ShipCharacter> _crew;
+    public IEnumerable<SpecialCharacter> SpecialCharacters { get { return _specialCharacters; } }
+    private List<SpecialCharacter> _specialCharacters;
     public ShipCharacter Captain { get; set; }
 
     private Vector3 _prevPos;
@@ -1045,6 +1113,8 @@ public class Ship : MonoBehaviour
 
     private GameObject _shieldCapsule;
     public GameObject ShieldCapsule { get { return _shieldCapsule; } }
+
+    private ParticleSystem _engineDamageSmoke;
 
     public Faction Owner;
 }

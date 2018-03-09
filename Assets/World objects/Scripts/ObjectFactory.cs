@@ -190,6 +190,10 @@ public static class ObjectFactory
         return res;
     }
 
+    public static Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
+    {
+        return _prototypes.CreateBoardingProgressPanel();
+    }
 
     private static void LoadWarheads()
     {

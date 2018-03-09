@@ -174,6 +174,12 @@ public class ObjectPrototypes : MonoBehaviour
         }
     }
 
+    public Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
+    {
+        Canvas boardibfCanvas = Instantiate(BoardingStatusCanvas);
+        return Tuple<Canvas, BoardingProgressPanel>.Create(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
+    }
+
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public ParticleSystem BigExplosion;
@@ -190,6 +196,8 @@ public class ObjectPrototypes : MonoBehaviour
 
     public string[] SpriteKeys;
     public Sprite[] Sprites;
+
+    public Canvas BoardingStatusCanvas;
 
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();

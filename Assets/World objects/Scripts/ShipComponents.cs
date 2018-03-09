@@ -626,6 +626,57 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
 public class CombatDetachment : ShipComponentBase
 {
     public int CrewCapacity;
-    public List<ShipCharacter> Forces;
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.BoardingForce; } }
+    public List<ShipCharacter> Forces { get; private set; }
+
+    public void AddForces(IEnumerable<ShipCharacter> forces)
+    {
+        foreach (ShipCharacter c in forces)
+        {
+            if (Forces.Count >= CrewCapacity)
+            {
+                break;
+            }
+            Forces.Add(c);
+        }
+    }
+    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+
+    public static CombatDetachment DefaultComponent(Ship s)
+    {
+        return new CombatDetachment()
+        {
+            CrewCapacity = 10,
+            Forces = new List<ShipCharacter>(),
+            _containingShip = s
+        };
+    }
+
+    public static CombatDetachment DefaultComponent(ObjectFactory.ShipSize grade, Ship s)
+    {
+        CombatDetachment res = DefaultComponent(s);
+        switch (grade)
+        {
+            case ObjectFactory.ShipSize.Sloop:
+                res.CrewCapacity = 15;
+                break;
+            case ObjectFactory.ShipSize.Frigate:
+                res.CrewCapacity = 20;
+                break;
+            case ObjectFactory.ShipSize.Destroyer:
+                res.CrewCapacity = 30;
+                break;
+            case ObjectFactory.ShipSize.Cruiser:
+                res.CrewCapacity = 45;
+                break;
+            case ObjectFactory.ShipSize.CapitalShip:
+                res.CrewCapacity = 65;
+                break;
+            default:
+                break;
+        }
+        res.Forces.Capacity = res.CrewCapacity;
+        res.MinShipSize = grade;
+        res.MaxShipSize = ObjectFactory.ShipSize.CapitalShip;
+        return res;
+    }
 }
