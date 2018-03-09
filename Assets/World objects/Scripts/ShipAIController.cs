@@ -16,6 +16,11 @@ public class ShipAIController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (_controlledShip.ShipDisabled || _controlledShip.HullHitPoints <= 0 || _controlledShip.ShipSurrendered)
+        {
+            return;
+        }
+
         if (_doNavigate)
         {
             AdvanceToTarget();

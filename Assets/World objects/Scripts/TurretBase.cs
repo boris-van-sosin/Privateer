@@ -119,7 +119,7 @@ public class TurretBase : MonoBehaviour, ITurret
 
     private void SetDefaultAngle()
     {
-        _defaultDirection = -transform.forward;
+        _defaultDirection = _containingShip.transform.InverseTransformDirection(-transform.forward);
     }
 
     // Update is called once per frame
@@ -464,7 +464,8 @@ public class TurretBase : MonoBehaviour, ITurret
                     }
                     else
                     {
-                        ManualTarget(transform.position + _defaultDirection);
+                        ManualTarget(transform.position + _containingShip.transform.TransformDirection(_defaultDirection));
+                        Debug.DrawLine(transform.position, transform.position + (_containingShip.transform.TransformDirection(_defaultDirection) * 1), Color.magenta, 0.1f);
                     }
                     break;
                 case TurretMode.AutoTracking:
