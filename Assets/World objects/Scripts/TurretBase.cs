@@ -324,8 +324,8 @@ public class TurretBase : MonoBehaviour, ITurret
             return;
         }
         _lastFire = Time.time;
-        Vector3 firingVector = Muzzles[_nextBarrel].up;
-        firingVector.y = target.y - Muzzles[_nextBarrel].position.y;
+        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
+        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
 
         FireInner(firingVector);
         _containingShip.NotifyInComabt();
