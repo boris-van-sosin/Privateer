@@ -547,6 +547,18 @@ public class Ship : MonoBehaviour
         //Debug.Log(sb.ToString());
     }
 
+    // temporary
+    public void FireHarpaxManual(Vector3 target)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
+        {
+            t.FireGrapplingTool(target);
+            sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+        }
+        //Debug.Log(sb.ToString());
+    }
+
     public Vector3 ActualVelocity { get; private set; }
 
     public bool TryChangeEnergy(int delta)

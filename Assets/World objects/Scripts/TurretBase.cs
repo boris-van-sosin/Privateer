@@ -6,8 +6,8 @@ using System.Linq;
 public class TurretBase : MonoBehaviour, ITurret
 {
 
-	// Use this for initialization
-	void Start()
+    // Use this for initialization
+    void Start()
     {
         TurretHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TurretHardpoint>()) != null)
@@ -336,6 +336,44 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
+    public bool HasGrapplingTool()
+    {
+        return InstalledTurretMod == TurretMod.Harpax || InstalledTurretMod == TurretMod.TractorBeam;
+    }
+
+    protected virtual void FireGrapplingToolInner(Vector3 firingVector)
+    {
+        // Stub!
+    }
+
+    public void FireGrapplingTool(Vector3 target)
+    {
+        if (!HasGrapplingTool())
+        {
+            return;
+        }
+
+        if (!CanFire())
+        {
+            return;
+        }
+        if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
+        {
+            return;
+        }
+        _lastFire = Time.time;
+        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
+        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        FireGrapplingToolInner(firingVector);
+        _containingShip.NotifyInComabt();
+
+        if (Muzzles.Length > 1)
+        {
+            _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
+        }
+    }
+
+
     public float CurrAngle { get { return FilterRotation(transform.rotation.eulerAngles); } }
     public float CurrLocalAngle
     {
@@ -499,6 +537,27 @@ public class TurretBase : MonoBehaviour, ITurret
         }
         return foundTarget;
     }
+
+    public virtual bool IsTurretModCombatible(TurretMod m)
+    {
+        return m == TurretMod.None;
+    }
+
+    public TurretMod InstalledTurretMod
+    {
+        get
+        {
+            return _turretMod;
+        }
+        set
+        {
+            if (IsTurretModCombatible(value))
+            {
+                _turretMod = value;
+            }
+        }
+    }
+    protected TurretMod _turretMod;
 
     private bool _initialized = false; // ugly hack
 

@@ -45,7 +45,14 @@ public class UserInput : MonoBehaviour
             }
             if (Input.GetMouseButton(0))
             {
-                ControlledShip.FireManual(hitFlat);
+                if (!_grapplingMode)
+                {
+                    ControlledShip.FireManual(hitFlat);
+                }
+                else
+                {
+                    ControlledShip.FireHarpaxManual(hitFlat);
+                }
             }
             if (Input.GetMouseButtonDown(1))
             {
@@ -103,12 +110,24 @@ public class UserInput : MonoBehaviour
         {
             ControlledShip.ToggleShields();
         }
+        else if (Input.GetKeyDown(_keyMapping[UserOperation.GrapplingTool]))
+        {
+            if (_grapplingMode)
+            {
+                _grapplingMode = false;
+            }
+            else if (!_grapplingMode)
+            {
+                _grapplingMode = true;
+            }
+        }
 
         _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
     }
 
     public Ship ControlledShip; // temporary
     private bool _autoTarget = false; // temporary
+    private bool _grapplingMode = false; // temporary
     private StatusTopLevel _statusTopLevelDisplay = null;
     public Transform ShipStatusPanel;
     private int _backgroundLayerMask = 0;
@@ -118,7 +137,7 @@ public class UserInput : MonoBehaviour
 
     public enum UserOperation
     {
-        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, BoardingTool,
+        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, GrapplingTool,
         ControlGroup1,
         ControlGroup2,
         ControlGroup3,
@@ -140,5 +159,6 @@ public class UserInput : MonoBehaviour
         { UserOperation.Break, KeyCode.X },
         { UserOperation.MagneticClamps, KeyCode.F },
         { UserOperation.Shields, KeyCode.G },
+        { UserOperation.GrapplingTool, KeyCode.H },
     };
 }

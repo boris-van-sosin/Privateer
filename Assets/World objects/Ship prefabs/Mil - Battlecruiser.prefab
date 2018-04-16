@@ -156,6 +156,7 @@ GameObject:
   - component: {fileID: 4808433179812028}
   - component: {fileID: 33784562004040166}
   - component: {fileID: 23346442890989208}
+  - component: {fileID: 64096816154045516}
   m_Layer: 0
   m_Name: Mil - Battlecruiser
   m_TagString: Untagged
@@ -486,3 +487,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1734244444479200}
   m_Mesh: {fileID: 4300002, guid: ea9165f6fbfb67a4eb3fda902dead4e5, type: 3}
+--- !u!64 &64096816154045516
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1734244444479200}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
+  m_Mesh: {fileID: 4300000, guid: b71a47b9fbee6994aa9f2fbf864a0c64, type: 3}

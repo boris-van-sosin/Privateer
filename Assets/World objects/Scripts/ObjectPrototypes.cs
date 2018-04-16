@@ -32,6 +32,17 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
+    public HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    {
+        HarpaxBehavior res = Instantiate(HarpaxTemplate);
+        Quaternion q = Quaternion.FromToRotation(res.transform.up, firingVector);
+        res.transform.rotation = q;
+        res.Speed = velocity;
+        res.Range = range;
+        res.OriginShip = origShip;
+        return res;
+    }
+
     public ParticleSystem CreateWeaponEffect(ObjectFactory.WeaponEffect e, Vector3 position)
     {
         if (_weaponEffectsDictionary == null)
@@ -182,6 +193,7 @@ public class ObjectPrototypes : MonoBehaviour
 
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
+    public HarpaxBehavior HarpaxTemplate;
     public ParticleSystem BigExplosion;
     public ParticleSystem SmallExplosion;
     public ParticleSystem FlakBurst;

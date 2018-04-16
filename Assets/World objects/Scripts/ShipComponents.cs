@@ -44,6 +44,16 @@ public class TurretComponent : ITurret
         return _innerTurret.GetTurretBehavior();
     }
 
+    public bool HasGrapplingTool()
+    {
+        return _innerTurret.HasGrapplingTool();
+    }
+
+    public void FireGrapplingTool(Vector3 target)
+    {
+        _innerTurret.FireGrapplingTool(target);
+    }
+
     public float GetMaxRange { get { return _innerTurret.GetMaxRange; } }
 
     public ComponentSlotType ComponentType { get { return _innerTurret.ComponentType; } }

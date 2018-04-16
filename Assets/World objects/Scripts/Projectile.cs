@@ -10,14 +10,14 @@ public class Projectile : MonoBehaviour
     {
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         Origin = transform.position;
         _shipLayerMask = ~LayerMask.GetMask("Background");
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         float distanceToTravel = Time.deltaTime * Speed;
         Vector3 posFlat = new Vector3(transform.position.x, -0.01f, transform.position.z);
@@ -40,14 +40,7 @@ public class Projectile : MonoBehaviour
                     return;
                 }
                 //Debug.Log("Hit " + hit.collider.gameObject.ToString());
-                shipHit.TakeHit(ProjectileWarhead, hit.point);
-                ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
-                if (ps != null)
-                {
-                    ps.transform.localScale = ProjectileWarhead.WeaponEffectScale;
-                    Destroy(ps.gameObject, 5.0f);
-                }
-                Destroy(gameObject);
+                DoHit(hit, shipHit);
                 return;
             }
         }
@@ -58,6 +51,18 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
         }
 	}
+
+    protected virtual void DoHit(RaycastHit hit, Ship shipHit)
+    {
+        shipHit.TakeHit(ProjectileWarhead, hit.point);
+        ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
+        if (ps != null)
+        {
+            ps.transform.localScale = ProjectileWarhead.WeaponEffectScale;
+            Destroy(ps.gameObject, 5.0f);
+        }
+        Destroy(gameObject);
+    }
 
     /*void OnCollisionEnter(Collision collision)
     {

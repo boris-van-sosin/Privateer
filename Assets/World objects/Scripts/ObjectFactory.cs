@@ -54,6 +54,19 @@ public static class ObjectFactory
         }
     }
 
+    public static HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    {
+        if (_prototypes != null)
+        {
+            HarpaxBehavior p = _prototypes.CreateHarpaxProjectile(firingVector, velocity, range, origShip);
+            return p;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static ParticleSystem CreateWeaponEffect(WeaponEffect e, Vector3 position)
     {
         if (e == WeaponEffect.None)

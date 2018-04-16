@@ -74,6 +74,22 @@ public class ContinuousBeamTurret : GeneralBeamTurret
         yield return null;
     }
 
+    public override bool IsTurretModCombatible(TurretMod m)
+    {
+        switch (m)
+        {
+            case TurretMod.None:
+            case TurretMod.TractorBeam:
+            case TurretMod.ImprovedCapacitors:
+                return true;
+            case TurretMod.Harpax:
+            case TurretMod.Accelerator:
+            case TurretMod.AdvancedTargeting:
+            default:
+                return false;
+        }
+    }
+
     public float BeamPulseTime;
     public float BeamDuration;
     private bool _firing;

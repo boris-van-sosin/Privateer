@@ -13,5 +13,21 @@ public class SpecialProjectileTurret : TurretBase
         p.transform.position = Muzzles[_nextBarrel].position;
     }
 
+    public override bool IsTurretModCombatible(TurretMod m)
+    {
+        switch (m)
+        {
+            case TurretMod.None:
+            case TurretMod.ImprovedCapacitors:
+            case TurretMod.AdvancedTargeting:
+                return true;
+            case TurretMod.TractorBeam:
+            case TurretMod.Harpax:
+            case TurretMod.Accelerator:
+            default:
+                return false;
+        }
+    }
+
     public float MuzzleVelocity;
 }

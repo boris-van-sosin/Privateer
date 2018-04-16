@@ -30,6 +30,33 @@ public class GunTurret : TurretBase
         }
     }
 
+    public override bool IsTurretModCombatible(TurretMod m)
+    {
+        switch (m)
+        {
+            case TurretMod.None:
+            case TurretMod.Harpax:
+            case TurretMod.Accelerator:
+            case TurretMod.AdvancedTargeting:
+                return true;
+            case TurretMod.TractorBeam:
+            case TurretMod.ImprovedCapacitors:
+            default:
+                return false;
+        }
+    }
+
+    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    {
+        base.FireGrapplingToolInner(firingVector);
+        HarpaxBehavior p = ObjectFactory.CreateHarpaxProjectile(firingVector, MuzzleVelocity, MaxRange, _containingShip);
+        p.transform.position = Muzzles[_nextBarrel].position;
+        if (MuzzleFx[_nextBarrel] != null)
+        {
+            MuzzleFx[_nextBarrel].Play(true);
+        }
+    }
+
     public float MuzzleVelocity;
     public ObjectFactory.AmmoType AmmoType;
 }

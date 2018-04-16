@@ -52,6 +52,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             if (gt != null)
             {
                 gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
+                t.InstalledTurretMod = TurretMod.Harpax;
             }
             s.PlaceTurret(hp, t);
         }
