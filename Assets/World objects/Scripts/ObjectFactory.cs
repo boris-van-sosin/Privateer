@@ -113,6 +113,18 @@ public static class ObjectFactory
         return _prototypes.CreateShip(prodKey);
     }
 
+    public static Ship GetShipTemplate(string prodKey)
+    {
+        foreach (Ship s in _prototypes.ShipPrototypes)
+        {
+            if (s.ProductionKey == prodKey)
+            {
+                return s;
+            }
+        }
+        return null;
+    }
+
     public static TurretBase CreateTurret(ComponentSlotType turretType, WeaponType weaponType)
     {
         string prodKey = turretType.ToString() + weaponType.ToString();
@@ -206,6 +218,13 @@ public static class ObjectFactory
     public static Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         return _prototypes.CreateBoardingProgressPanel();
+    }
+
+    public static WeaponCtrlCfgLine CreateWeaponCtrlCfgLine(string label)
+    {
+        WeaponCtrlCfgLine res = _prototypes.CreateWeaponCtrlCfgLine();
+        res.WeaponTextBox.text = label;
+        return res;
     }
 
     private static void LoadWarheads()

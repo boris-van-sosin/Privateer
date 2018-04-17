@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4071888146867778}
   - component: {fileID: 114405686976541798}
   m_Layer: 0
-  m_Name: Aft R
+  m_Name: Fore R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,6 +114,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1435693961279012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4879132715234200}
+  - component: {fileID: 114472103088782110}
+  m_Layer: 0
+  m_Name: Aft L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1616346579007268
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +141,22 @@ GameObject:
   - component: {fileID: 114546650122759348}
   m_Layer: 0
   m_Name: TurretCr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1741686829807600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4903022465769482}
+  - component: {fileID: 114610945660061280}
+  m_Layer: 0
+  m_Name: Aft R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,7 +205,7 @@ GameObject:
   - component: {fileID: 4874763198431866}
   - component: {fileID: 114326025897482780}
   m_Layer: 0
-  m_Name: Aft L
+  m_Name: Fore L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -201,13 +233,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1130332475925206}
-  m_LocalRotation: {x: 0, y: 0, z: -0.92387956, w: 0.38268343}
-  m_LocalPosition: {x: 0.0176, y: -0.04861401, z: 0.0002}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
+  m_LocalPosition: {x: 0.018, y: 0.036, z: 0.0002}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4481990295313450}
   m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
 --- !u!4 &4076679854078448
 Transform:
   m_ObjectHideFlags: 1
@@ -232,7 +264,7 @@ Transform:
   m_LocalScale: {x: 0.07, y: 0.115000054, z: 0.07000003}
   m_Children: []
   m_Father: {fileID: 4481990295313450}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!4 &4143766577558414
 Transform:
@@ -271,7 +303,7 @@ Transform:
   m_LocalScale: {x: 0.025, y: 0.1, z: 0.01}
   m_Children: []
   m_Father: {fileID: 4481990295313450}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4295858147332768
 Transform:
@@ -284,7 +316,7 @@ Transform:
   m_LocalScale: {x: 0.015, y: 0.015, z: 0.015}
   m_Children: []
   m_Father: {fileID: 4481990295313450}
-  m_RootOrder: 9
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4481990295313450
 Transform:
@@ -293,7 +325,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1234742361160932}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -7.156028, y: 0, z: -0.4877354}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 4676342634313236}
@@ -303,6 +335,8 @@ Transform:
   - {fileID: 4193711762933576}
   - {fileID: 4874763198431866}
   - {fileID: 4071888146867778}
+  - {fileID: 4879132715234200}
+  - {fileID: 4903022465769482}
   - {fileID: 4087101793081880}
   - {fileID: 4293367350664970}
   - {fileID: 4295858147332768}
@@ -341,13 +375,39 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1815139289894792}
+  m_LocalRotation: {x: 0, y: 0, z: 0.38268343, w: 0.92387956}
+  m_LocalPosition: {x: -0.018, y: 0.036, z: 0.0002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4481990295313450}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 45}
+--- !u!4 &4879132715234200
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1435693961279012}
   m_LocalRotation: {x: 0, y: 0, z: 0.92387956, w: 0.38268343}
   m_LocalPosition: {x: -0.0176, y: -0.04861401, z: 0.0002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4481990295313450}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 135}
+--- !u!4 &4903022465769482
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1741686829807600}
+  m_LocalRotation: {x: 0, y: 0, z: -0.92387956, w: 0.38268343}
+  m_LocalPosition: {x: 0.0176, y: -0.04861401, z: 0.0002}
+  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4481990295313450}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -135}
 --- !u!23 &23042121511147732
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -466,11 +526,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Central forward-left gun
   MinRotation: 180
   MaxRotation: 295
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 2
+  DefaultGroup: 2
 --- !u!114 &114206441389797348
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -518,11 +580,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinRotation: 210
-  MaxRotation: 10
+  DisplayString: Fore left light gun
+  MinRotation: 200
+  MaxRotation: 335
   DeadZoneAngles: []
   AllowedWeaponTypes: 03000000
-  LocationOnShip: 1
+  LocationOnShip: 0
+  DefaultGroup: 4
 --- !u!114 &114400704794832708
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -534,11 +598,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Fore medium gun
   MinRotation: 55
   MaxRotation: 305
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 0
+  DefaultGroup: 1
 --- !u!114 &114405686976541798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -550,11 +616,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinRotation: 350
+  DisplayString: Fore right light gun
+  MinRotation: 25
   MaxRotation: 160
   DeadZoneAngles: []
   AllowedWeaponTypes: 03000000
+  LocationOnShip: 0
+  DefaultGroup: 4
+--- !u!114 &114472103088782110
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1435693961279012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DisplayString: Aft left light gun
+  MinRotation: 210
+  MaxRotation: 10
+  DeadZoneAngles: []
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 1
+  DefaultGroup: 4
 --- !u!114 &114546650122759348
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -566,11 +652,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Central aft-right gun
   MinRotation: 0
   MaxRotation: 115
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 3
+  DefaultGroup: 3
+--- !u!114 &114610945660061280
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1741686829807600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DisplayString: Aft right light gun
+  MinRotation: 350
+  MaxRotation: 160
+  DeadZoneAngles: []
+  AllowedWeaponTypes: 03000000
+  LocationOnShip: 1
+  DefaultGroup: 4
 --- !u!114 &114731199211631450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -582,11 +688,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Central forward-right gun
   MinRotation: 65
   MaxRotation: 180
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 3
+  DefaultGroup: 3
 --- !u!114 &114977595633810374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -598,11 +706,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Central aft-left gun
   MinRotation: 245
   MaxRotation: 360
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 2
+  DefaultGroup: 2
 --- !u!136 &136657788195819082
 CapsuleCollider:
   m_ObjectHideFlags: 1
@@ -675,7 +785,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 645221104
+  randomSeed: -651333876
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3847,7 +3957,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 1907284483
+  randomSeed: -99035967
   InitialModule:
     serializedVersion: 3
     enabled: 1

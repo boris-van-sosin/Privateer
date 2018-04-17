@@ -466,11 +466,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Broadside left 3
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 2
+  DefaultGroup: 3
 --- !u!114 &114294262926575966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -518,11 +520,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Broadside right 3
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 3
+  DefaultGroup: 2
 --- !u!114 &114700916377462940
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -534,11 +538,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Fore fixed gun
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 01000000
   LocationOnShip: 0
+  DefaultGroup: 1
 --- !u!114 &114819794789978142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -550,11 +556,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Broadside left 2
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 2
+  DefaultGroup: 3
 --- !u!114 &114943407059376778
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -566,11 +574,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Broadside right 1
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 3
+  DefaultGroup: 2
 --- !u!114 &114955217068938378
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -582,11 +592,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Broadside left 1
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 2
+  DefaultGroup: 3
 --- !u!114 &114981488518187768
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -598,11 +610,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Broadside right 2
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 3
+  DefaultGroup: 2
 --- !u!136 &136512068017788332
 CapsuleCollider:
   m_ObjectHideFlags: 1

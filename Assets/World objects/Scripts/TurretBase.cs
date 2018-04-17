@@ -149,7 +149,7 @@ public class TurretBase : MonoBehaviour, ITurret
             transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
         }
 
-        if (_targetShip != null && Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking)
+        if (_targetShip != null && Mode == TurretMode.Auto)
         {
             if (_targetShip.ShipDisabled || _targetShip.ShipSurrendered || _targetShip.InBoarding || (transform.position - _targetShip.transform.position).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
             {
@@ -267,7 +267,7 @@ public class TurretBase : MonoBehaviour, ITurret
                 }
             }
         }
-        if (Mode == TurretMode.Auto || Mode == TurretMode.AutoTracking)
+        if (Mode == TurretMode.Auto)
         {
             if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f)
             {
@@ -464,7 +464,7 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
-        if ((Mode == TurretMode.Off || Mode == TurretMode.Manual) && (newMode == TurretMode.Auto || newMode == TurretMode.AutoTracking))
+        if ((Mode == TurretMode.Off || Mode == TurretMode.Manual) && newMode == TurretMode.Auto)
         {
             Mode = newMode;
             StartCoroutine(TurretAutoBehavior());
@@ -505,8 +505,6 @@ public class TurretBase : MonoBehaviour, ITurret
                         ManualTarget(transform.position + _containingShip.transform.TransformDirection(_defaultDirection));
                         Debug.DrawLine(transform.position, transform.position + (_containingShip.transform.TransformDirection(_defaultDirection) * 1), Color.magenta, 0.1f);
                     }
-                    break;
-                case TurretMode.AutoTracking:
                     break;
                 default:
                     break;
@@ -613,7 +611,7 @@ public class TurretBase : MonoBehaviour, ITurret
     // The ship containing the turret:
     protected Ship _containingShip;
 
-    public enum TurretMode { Off, Manual, Auto, AutoTracking };
+    public enum TurretMode { Off, Manual, Auto };
     public enum RotationAxis { XAxis, YAxis, ZAxis };
 
     private static readonly string BarrelString = "Barrel";

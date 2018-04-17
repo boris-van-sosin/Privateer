@@ -191,6 +191,11 @@ public class ObjectPrototypes : MonoBehaviour
         return Tuple<Canvas, BoardingProgressPanel>.Create(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
     }
 
+    public WeaponCtrlCfgLine CreateWeaponCtrlCfgLine()
+    {
+        return Instantiate(WeaponCtrlCfgLinePrototype);
+    }
+
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
@@ -203,6 +208,7 @@ public class ObjectPrototypes : MonoBehaviour
     public Ship[] ShipPrototypes;
     public TurretBase[] TurretPrototypes;
     public StatusTopLevel[] StatusPanelPrototypes;
+    public WeaponCtrlCfgLine WeaponCtrlCfgLinePrototype;
 
     public StatusSubsystem SubsystemStatusSprite;
 

@@ -58,21 +58,6 @@ public class UserInput : MonoBehaviour
             {
                 ControlledShip.SetRequiredHeading(hitFlat);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                _autoTarget = !_autoTarget;
-                foreach (ITurret t in ControlledShip.Turrets)
-                {
-                    if (_autoTarget)
-                    {
-                        t.SetTurretBehavior(TurretBase.TurretMode.Auto);
-                    }
-                    else
-                    {
-                        t.SetTurretBehavior(TurretBase.TurretMode.Manual);
-                    }
-                }
-            }
         }
 
         float scroll;
@@ -121,6 +106,20 @@ public class UserInput : MonoBehaviour
                 _grapplingMode = true;
             }
         }
+        foreach (Tuple<UserOperation, int> cg in _controlGroupKeys)
+        {
+            if (Input.GetKeyDown(_keyMapping[cg.Item1]))
+            {
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    ControlledShip.WeaponGroups.ToggleGroupAuto(cg.Item2);
+                }
+                else
+                {
+                    ControlledShip.WeaponGroups.SetGroupToMode(cg.Item2, TurretBase.TurretMode.Manual);
+                }
+            }
+        }
 
         _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
     }
@@ -150,7 +149,7 @@ public class UserInput : MonoBehaviour
         ControlGroup0
     }
 
-    private Dictionary<UserOperation, KeyCode> _keyMapping = new Dictionary<UserOperation, KeyCode>()
+    private readonly Dictionary<UserOperation, KeyCode> _keyMapping = new Dictionary<UserOperation, KeyCode>()
     {
         { UserOperation.Forward, KeyCode.W },
         { UserOperation.Left, KeyCode.A },
@@ -160,5 +159,19 @@ public class UserInput : MonoBehaviour
         { UserOperation.MagneticClamps, KeyCode.F },
         { UserOperation.Shields, KeyCode.G },
         { UserOperation.GrapplingTool, KeyCode.H },
+        { UserOperation.ControlGroup1, KeyCode.Alpha1 },
+        { UserOperation.ControlGroup2, KeyCode.Alpha2 },
+        { UserOperation.ControlGroup3, KeyCode.Alpha3 },
+        { UserOperation.ControlGroup4, KeyCode.Alpha4 },
+        { UserOperation.ControlGroup5, KeyCode.Alpha5 },
+    };
+
+    private readonly Tuple<UserOperation, int>[] _controlGroupKeys = new Tuple<UserOperation, int>[]
+    {
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup1, 1),
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup2, 2),
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup3, 3),
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup4, 4),
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup5, 5)
     };
 }

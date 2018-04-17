@@ -10,7 +10,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
 	void Start ()
     {
         ShipDropdown.AddOptions(ObjectFactory.GetAllShipTypes().ToList());
-	}
+        ShipDropdown.onValueChanged.AddListener(ShipSelectChanged);
+        _weaponsCfgPanel = FindObjectOfType<WeaponControlGroupCfgPanel>();
+        _cfgPanelVisible = false;
+        _weaponsCfgPanel.gameObject.SetActive(false);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -47,7 +51,17 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
-            TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
+            TurretBase t;
+            if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.SmallBarbette) ||
+                hp.AllowedWeaponTypes.Contains(ComponentSlotType.SmallBarbetteDual))
+            {
+                t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
+            }
+            else
+            {
+                t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
+            }
+            //TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
             GunTurret gt = t as GunTurret;
             if (gt != null)
             {
@@ -64,8 +78,17 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             CombatDetachment d = CombatDetachment.DefaultComponent(s.ShipSize, s);
             s.PlaceComponent(Ship.ShipSection.Center, d);
-        }
 
+            if (_cfgPanelVisible)
+            {
+                s.SetTurretConfig(TurretControlGrouping.FromConfig(s, _weaponsCfgPanel.Compile()));
+            }
+        }
+        else
+        {
+            s.SetTurretConfigAllAuto();
+        }
+        
         s.Activate();
 
         Faction[] factions = FindObjectsOfType<Faction>();
@@ -93,9 +116,35 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             s.gameObject.AddComponent<ShipAIController>();
         }
+
+        _cfgPanelVisible = false;
+        _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
+    }
+
+    private void ShipSelectChanged(int i)
+    {
+        if (_cfgPanelVisible)
+        {
+            string shipKey = ShipDropdown.options[i].text;
+            Ship s = ObjectFactory.GetShipTemplate(shipKey);
+            _weaponsCfgPanel.Clear();
+            _weaponsCfgPanel.SetShipTemplate(s);
+        }
+    }
+
+    public void ToggleConfigPanel()
+    {
+        _cfgPanelVisible = !_cfgPanelVisible;
+        _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
+        if (_cfgPanelVisible)
+        {
+            ShipSelectChanged(ShipDropdown.value);
+        }
     }
 
     public UnityEngine.UI.Dropdown ShipDropdown;
     public UnityEngine.UI.Dropdown SideDropdown;
     public UnityEngine.UI.Toggle UserToggle;
+    private WeaponControlGroupCfgPanel _weaponsCfgPanel;
+    private bool _cfgPanelVisible;
 }

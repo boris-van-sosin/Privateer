@@ -38,6 +38,7 @@ public class GunTurret : TurretBase
             case TurretMod.Harpax:
             case TurretMod.Accelerator:
             case TurretMod.AdvancedTargeting:
+            case TurretMod.FastAutoloader:
                 return true;
             case TurretMod.TractorBeam:
             case TurretMod.ImprovedCapacitors:

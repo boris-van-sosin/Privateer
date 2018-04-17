@@ -806,11 +806,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left medium gun 1
   MinRotation: 60
   MaxRotation: 135
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 2
+  DefaultGroup: 2
 --- !u!114 &114210030265515000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -822,11 +824,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right medium gun 1
   MinRotation: 225
   MaxRotation: 300
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 3
+  DefaultGroup: 1
 --- !u!114 &114211753354595078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -838,11 +842,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left medium gun 4
   MinRotation: 30
   MaxRotation: 105
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 2
+  DefaultGroup: 2
 --- !u!114 &114222184546153960
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -854,11 +860,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left light gun 1
   MinRotation: 70
   MaxRotation: 180
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 0
+  DefaultGroup: 4
 --- !u!114 &114248074947831548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -906,11 +914,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left medium gun 2
   MinRotation: 35
   MaxRotation: 145
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 2
+  DefaultGroup: 2
 --- !u!114 &114544746592369112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -922,11 +932,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right medium gun 2
   MinRotation: 215
   MaxRotation: 325
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 3
+  DefaultGroup: 1
 --- !u!114 &114556497461399258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -938,11 +950,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left medium gun 3
   MinRotation: 35
   MaxRotation: 145
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 2
+  DefaultGroup: 2
 --- !u!114 &114570753392451364
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -954,11 +968,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left light gun 2
   MinRotation: 75
   MaxRotation: 130
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 0
+  DefaultGroup: 4
 --- !u!114 &114604808340979820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -970,11 +986,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right medium gun 4
   MinRotation: 240
   MaxRotation: 315
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 3
+  DefaultGroup: 1
 --- !u!114 &114624774157050164
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -986,11 +1004,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right light gun 4
   MinRotation: 265
   MaxRotation: 360
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 1
+  DefaultGroup: 3
 --- !u!114 &114727469896837642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1002,11 +1022,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left light gun 4
   MinRotation: 0
   MaxRotation: 95
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 1
+  DefaultGroup: 4
 --- !u!114 &114798191002063842
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1018,11 +1040,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right light gun 1
   MinRotation: 180
   MaxRotation: 290
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 0
+  DefaultGroup: 3
 --- !u!114 &114848577499491288
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1034,11 +1058,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right light gun 2
   MinRotation: 230
   MaxRotation: 285
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 0
+  DefaultGroup: 3
 --- !u!114 &114864308031683114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1050,11 +1076,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right medium gun 3
   MinRotation: 215
   MaxRotation: 325
   DeadZoneAngles: []
   AllowedWeaponTypes: 08000000
   LocationOnShip: 3
+  DefaultGroup: 1
 --- !u!114 &114899854191395712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1066,11 +1094,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Left light gun 3
   MinRotation: 45
   MaxRotation: 110
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 1
+  DefaultGroup: 4
 --- !u!114 &114922566021382350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1082,11 +1112,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Right light gun 3
   MinRotation: 250
   MaxRotation: 315
   DeadZoneAngles: []
   AllowedWeaponTypes: 05000000
   LocationOnShip: 1
+  DefaultGroup: 3
 --- !u!136 &136483318769056806
 CapsuleCollider:
   m_ObjectHideFlags: 1

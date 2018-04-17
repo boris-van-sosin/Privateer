@@ -402,6 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Turret
   MinRotation: 0
   MaxRotation: 360
   DeadZoneAngles:
@@ -409,6 +410,7 @@ MonoBehaviour:
   - 335,360
   AllowedWeaponTypes: 0b000000
   LocationOnShip: 0
+  DefaultGroup: 1
 --- !u!114 &114779545543894162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -420,11 +422,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DisplayString: Fore fixed gun
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
   AllowedWeaponTypes: 01000000
   LocationOnShip: 0
+  DefaultGroup: 2
 --- !u!114 &114919541509226048
 MonoBehaviour:
   m_ObjectHideFlags: 1

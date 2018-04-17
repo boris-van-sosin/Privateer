@@ -82,6 +82,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
             case TurretMod.TractorBeam:
             case TurretMod.ImprovedCapacitors:
                 return true;
+            case TurretMod.FastAutoloader:
             case TurretMod.Harpax:
             case TurretMod.Accelerator:
             case TurretMod.AdvancedTargeting:

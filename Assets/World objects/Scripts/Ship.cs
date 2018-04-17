@@ -16,6 +16,7 @@ public class Ship : MonoBehaviour
         InitComponentSlots();
         InitCrew();
         InitDamageEffects();
+        WeaponGroups = null;
     }
 
     // Use this for initialization
@@ -347,9 +348,19 @@ public class Ship : MonoBehaviour
 
     public void ManualTarget(Vector3 target)
     {
-        foreach (ITurret t in _manualTurrets)
+        if (WeaponGroups == null)
         {
-            t.ManualTarget(target);
+            foreach (ITurret t in _manualTurrets)
+            {
+                t.ManualTarget(target);
+            }
+        }
+        else
+        {
+            foreach (ITurret t in WeaponGroups.ManualTurrets)
+            {
+                t.ManualTarget(target);
+            }
         }
     }
 
@@ -539,10 +550,21 @@ public class Ship : MonoBehaviour
     public void FireManual(Vector3 target)
     {
         StringBuilder sb = new StringBuilder();
-        foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
+        if (WeaponGroups == null)
         {
-            t.Fire(target);
-            sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+            foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
+            {
+                t.Fire(target);
+                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+            }
+        }
+        else
+        {
+            foreach (ITurret t in WeaponGroups.ManualTurrets)
+            {
+                t.Fire(target);
+                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+            }
         }
         //Debug.Log(sb.ToString());
     }
@@ -551,10 +573,21 @@ public class Ship : MonoBehaviour
     public void FireHarpaxManual(Vector3 target)
     {
         StringBuilder sb = new StringBuilder();
-        foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
+        if (WeaponGroups == null)
         {
-            t.FireGrapplingTool(target);
-            sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+            foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
+            {
+                t.FireGrapplingTool(target);
+                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+            }
+        }
+        else
+        {
+            foreach (ITurret t in WeaponGroups.ManualTurrets)
+            {
+                t.FireGrapplingTool(target);
+                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+            }
         }
         //Debug.Log(sb.ToString());
     }
@@ -1002,6 +1035,15 @@ public class Ship : MonoBehaviour
         }
     }
 
+    public void SetTurretConfig(TurretControlGrouping cfg)
+    {
+        WeaponGroups = cfg;
+    }
+    public void SetTurretConfigAllAuto()
+    {
+        WeaponGroups = TurretControlGrouping.AllAuto(this);
+    }
+
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };
 
@@ -1020,6 +1062,7 @@ public class Ship : MonoBehaviour
 
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
+    public TurretControlGrouping WeaponGroups { get; private set; }
     private int _minEnergyPerShot;
 
     public int Energy { get; private set; }

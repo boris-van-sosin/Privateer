@@ -21,6 +21,7 @@ public class SpecialProjectileTurret : TurretBase
             case TurretMod.ImprovedCapacitors:
             case TurretMod.AdvancedTargeting:
                 return true;
+            case TurretMod.FastAutoloader:
             case TurretMod.TractorBeam:
             case TurretMod.Harpax:
             case TurretMod.Accelerator:
