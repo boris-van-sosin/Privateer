@@ -55,11 +55,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
             if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.SmallBarbette) ||
                 hp.AllowedWeaponTypes.Contains(ComponentSlotType.SmallBarbetteDual))
             {
-                t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
+                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Autocannon);
             }
             else
             {
-                t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
+                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);
             }
             //TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
             GunTurret gt = t as GunTurret;
@@ -140,6 +140,42 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             ShipSelectChanged(ShipDropdown.value);
         }
+    }
+
+    private ComponentSlotType BestWeapon(IEnumerable<ComponentSlotType> slotTypes)
+    {
+        Dictionary<ComponentSlotType, int> strength = new Dictionary<ComponentSlotType, int>()
+        {
+            { ComponentSlotType.SmallBarbette, 1 },
+            { ComponentSlotType.SmallTurret, 1 },
+            { ComponentSlotType.SmallFixed, 1 },
+            { ComponentSlotType.SmallBroadside, 1 },
+            { ComponentSlotType.SmallBarbetteDual, 2 },
+            { ComponentSlotType.MediumBarbetteDualSmall, 3 },
+            { ComponentSlotType.MediumTurretDualSmall, 3 },
+            { ComponentSlotType.MediumBroadside, 4 },
+            { ComponentSlotType.MediumBarbette, 5 },
+            { ComponentSlotType.MediumTurret, 5 },
+            { ComponentSlotType.LargeBarbette, 6 },
+            { ComponentSlotType.LargeTurret, 6 },
+        };
+
+        IEnumerator<ComponentSlotType> iter = slotTypes.GetEnumerator();
+        iter.MoveNext();
+        ComponentSlotType res = iter.Current;
+        while (iter.MoveNext())
+        {
+            if (!strength.ContainsKey(res))
+            {
+                res = iter.Current;
+            }
+            else if (strength.ContainsKey(res) && strength.ContainsKey(iter.Current) &&
+                strength[iter.Current] > strength[res])
+            {
+                res = iter.Current;
+            }
+        }
+        return res;
     }
 
     public UnityEngine.UI.Dropdown ShipDropdown;

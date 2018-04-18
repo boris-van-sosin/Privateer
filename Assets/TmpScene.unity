@@ -2538,6 +2538,21 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 21.5
       objectReference: {fileID: 0}
+    - target: {fileID: 224177943567324512, guid: bc226280ecd900145bd76c8bf930047e,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177943567324512, guid: bc226280ecd900145bd76c8bf930047e,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224177943567324512, guid: bc226280ecd900145bd76c8bf930047e,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: -17
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bc226280ecd900145bd76c8bf930047e, type: 2}
   m_IsPrefabParent: 0
