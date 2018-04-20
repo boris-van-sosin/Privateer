@@ -17,6 +17,7 @@ public class Ship : MonoBehaviour
         InitCrew();
         InitDamageEffects();
         WeaponGroups = null;
+        rigidBody = GetComponent<Rigidbody>();
     }
 
     // Use this for initialization
@@ -293,7 +294,9 @@ public class Ship : MonoBehaviour
             }
             _prevPos = transform.position;
             _prevRot = transform.rotation;
-            transform.position += Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+            Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+            Vector3 rbVelocity = rigidBody.velocity;
+            rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
             //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
             if (_autoHeading && !ShipImmobilized && !ShipDisabled)
             {
@@ -1059,6 +1062,7 @@ public class Ship : MonoBehaviour
     private bool _autoHeading = false;
     private Vector3 _autoHeadingVector;
     private ShipDirection MovementDirection = ShipDirection.Stopped;
+    private Rigidbody rigidBody;
 
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
