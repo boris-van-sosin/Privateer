@@ -43,6 +43,11 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
+    public GameObject CreateHarpaxCableSeg()
+    {
+        return Instantiate<GameObject>(HarpaxCableSegTemplate);
+    }
+
     public ParticleSystem CreateWeaponEffect(ObjectFactory.WeaponEffect e, Vector3 position)
     {
         if (_weaponEffectsDictionary == null)
@@ -199,6 +204,8 @@ public class ObjectPrototypes : MonoBehaviour
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
+    //public LineRenderer HarpaxCableTemplate;
+    public GameObject HarpaxCableSegTemplate;
     public ParticleSystem BigExplosion;
     public ParticleSystem SmallExplosion;
     public ParticleSystem FlakBurst;

@@ -67,6 +67,35 @@ public static class ObjectFactory
         }
     }
 
+    public static GameObject[] CreateHarpaxTowCable(Vector3 start, Vector3 end)
+    {
+        float HarapxCableSegLength = 0.5f;
+        Vector3 cableVec = end - start, cableDir = cableVec.normalized;
+        float length = cableVec.magnitude;
+        int numSegs = Mathf.CeilToInt(length / HarapxCableSegLength);
+        Quaternion cableRotation = Quaternion.FromToRotation(Vector3.up, cableDir);
+
+        Vector3 currPt = start;
+        GameObject[] res = new GameObject[numSegs];
+        Joint prevJoint = null;
+        for (int i = 0; i < numSegs; ++i)
+        {
+            GameObject currSeg = _prototypes.CreateHarpaxCableSeg();
+            currSeg.transform.position = currPt + (0.5f * HarapxCableSegLength * cableDir);
+            currSeg.transform.rotation = cableRotation;
+            if (prevJoint != null)
+            {
+                Rigidbody rb = currSeg.GetComponent<Rigidbody>();
+                prevJoint.connectedBody = rb;
+            }
+            prevJoint = currSeg.GetComponent<Joint>();
+            currPt += (cableDir * HarapxCableSegLength);
+            res[i] = currSeg;
+        }
+
+        return res;
+    }
+
     public static ParticleSystem CreateWeaponEffect(WeaponEffect e, Vector3 position)
     {
         if (e == WeaponEffect.None)

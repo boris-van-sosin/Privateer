@@ -20,8 +20,30 @@ public class HarpaxBehavior : Projectile
 
     protected override void DoHit(RaycastHit hit, Ship shipHit)
     {
-        Destroy(gameObject);
+        if (shipHit.ShipTotalShields > 0)
+        {
+            Destroy(gameObject, 10f);
+            return;
+        }
+        if (_attached)
+        {
+            return;
+        }
+        _attached = true;
+        GameObject[] cableSegs = ObjectFactory.CreateHarpaxTowCable(OriginShip.transform.position, hit.point);
+        _cableRenderer.positionCount = cableSegs.Length;
+        for (int i = 0; i < cableSegs.Length; ++i)
+        {
+            _cableRenderer.SetPosition(i, cableSegs[i].transform.position);
+        }
+        Joint hj = OriginShip.gameObject.AddComponent<SpringJoint>();
+        //hj.axis = Vector3.forward;
+        hj.anchor = Vector3.zero;
+        hj.connectedBody = cableSegs[0].GetComponent<Rigidbody>();
+        cableSegs[cableSegs.Length - 1].GetComponent<Joint>().connectedBody = shipHit.GetComponent<Rigidbody>();
+        Destroy(gameObject, 10f);
     }
 
     private LineRenderer _cableRenderer;
+    private bool _attached = false;
 }
