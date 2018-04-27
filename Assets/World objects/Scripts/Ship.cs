@@ -952,6 +952,9 @@ public class Ship : MonoBehaviour
         Ship otherShip = other.GetComponent<Ship>();
         if (otherShip != null)
         {
+            // Stop immediately
+            rigidBody.AddForce(-rigidBody.velocity, ForceMode.VelocityChange);
+
             RevertRotation();
             otherShip.RevertRotation();
             _inCollision = true;
@@ -963,6 +966,7 @@ public class Ship : MonoBehaviour
                 (!ShipSurrendered && !otherShip.ShipSurrendered) &&
                 ((otherShip.ShipImmobilized || otherShip.ShipDisabled) && otherShip.HullHitPoints > 0))
             {
+                _speed = 0f;
                 InBoarding = true;
                 otherShip.InBoarding = true;
                 StartCoroutine(Combat.BoardingCombat(this, otherShip));
@@ -970,6 +974,7 @@ public class Ship : MonoBehaviour
             else if (otherShip.ElectromagneticClampsActive)
             {
                 //?
+                _speed = 0f;
             }
             else
             {
