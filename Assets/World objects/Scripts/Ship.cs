@@ -17,6 +17,7 @@ public class Ship : MonoBehaviour
         InitCrew();
         InitDamageEffects();
         WeaponGroups = null;
+        TowedByHarpax = null;
         rigidBody = GetComponent<Rigidbody>();
     }
 
@@ -296,8 +297,16 @@ public class Ship : MonoBehaviour
             _prevRot = transform.rotation;
             Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
             Vector3 rbVelocity = rigidBody.velocity;
-            rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
+
+            Vector3 towVelocity = Vector3.zero;
+            if (TowedByHarpax != null)
+            {
+                towVelocity = rbVelocity * Vector3.Dot(rbVelocity, TowedByHarpax.TowVector);
+            }
+
+            rigidBody.AddForce(targetVelocity - rbVelocity + towVelocity, ForceMode.VelocityChange);
             //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
+            //if (rigidBody.velocity.sqrMagnitude >= 0) Debug.Log(string.Format("RigidBofy Velocity vector: {0}", rigidBody.velocity));
             if (_autoHeading && !ShipImmobilized && !ShipDisabled)
             {
                 RotateToHeading();
@@ -1172,6 +1181,7 @@ public class Ship : MonoBehaviour
     private Vector3 _prevPos;
     private Quaternion _prevRot;
     private bool _inCollision = false;
+    public CableBehavior TowedByHarpax { get; set; }
 
     public float LastInCombat { get; private set; }
 

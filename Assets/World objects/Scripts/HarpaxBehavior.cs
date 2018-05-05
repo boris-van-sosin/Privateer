@@ -22,7 +22,7 @@ public class HarpaxBehavior : Projectile
     {
         if (shipHit.ShipTotalShields > 0)
         {
-            Destroy(gameObject, 10f);
+            Destroy(gameObject);
             return;
         }
         if (_attached)
@@ -30,18 +30,26 @@ public class HarpaxBehavior : Projectile
             return;
         }
         _attached = true;
-        GameObject[] cableSegs = ObjectFactory.CreateHarpaxTowCable(OriginShip.transform.position, hit.point);
-        _cableRenderer.positionCount = cableSegs.Length;
-        for (int i = 0; i < cableSegs.Length; ++i)
-        {
-            _cableRenderer.SetPosition(i, cableSegs[i].transform.position);
-        }
-        Joint hj = OriginShip.gameObject.AddComponent<SpringJoint>();
-        //hj.axis = Vector3.forward;
-        hj.anchor = Vector3.zero;
-        hj.connectedBody = cableSegs[0].GetComponent<Rigidbody>();
-        cableSegs[cableSegs.Length - 1].GetComponent<Joint>().connectedBody = shipHit.GetComponent<Rigidbody>();
+
+        Rigidbody origRB = OriginShip.GetComponent<Rigidbody>();
+        Rigidbody targetRB = shipHit.GetComponent<Rigidbody>();
+        targetRB.drag = 10; targetRB.angularDrag = 10;
+        CableBehavior cable = ObjectFactory.CreateHarpaxTowCable(origRB, targetRB, hit.point);
+        shipHit.TowedByHarpax = cable;
+        cable.MinRopeLength = 0.01f;
+        cable.MaxRopeLength = (OriginShip.transform.position - hit.point).magnitude;
+
+        //StartCoroutine(Bleh(hj));
         Destroy(gameObject, 10f);
+    }
+
+    private IEnumerator Bleh(Joint j)
+    {
+        while (true)
+        {
+            Debug.Log(string.Format("Joint force: {0}", j.currentForce));
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     private LineRenderer _cableRenderer;

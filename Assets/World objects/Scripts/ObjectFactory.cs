@@ -67,32 +67,17 @@ public static class ObjectFactory
         }
     }
 
-    public static GameObject[] CreateHarpaxTowCable(Vector3 start, Vector3 end)
+    public static CableBehavior CreateHarpaxTowCable(Rigidbody obj1, Rigidbody obj2)
     {
-        float HarapxCableSegLength = 0.5f;
-        Vector3 cableVec = end - start, cableDir = cableVec.normalized;
-        float length = cableVec.magnitude;
-        int numSegs = Mathf.CeilToInt(length / HarapxCableSegLength);
-        Quaternion cableRotation = Quaternion.FromToRotation(Vector3.up, cableDir);
+        CableBehavior res = _prototypes.CreateHarpaxCable();
+        res.Connect(obj1, obj2);
+        return res;
+    }
 
-        Vector3 currPt = start;
-        GameObject[] res = new GameObject[numSegs];
-        Joint prevJoint = null;
-        for (int i = 0; i < numSegs; ++i)
-        {
-            GameObject currSeg = _prototypes.CreateHarpaxCableSeg();
-            currSeg.transform.position = currPt + (0.5f * HarapxCableSegLength * cableDir);
-            currSeg.transform.rotation = cableRotation;
-            if (prevJoint != null)
-            {
-                Rigidbody rb = currSeg.GetComponent<Rigidbody>();
-                prevJoint.connectedBody = rb;
-            }
-            prevJoint = currSeg.GetComponent<Joint>();
-            currPt += (cableDir * HarapxCableSegLength);
-            res[i] = currSeg;
-        }
-
+    public static CableBehavior CreateHarpaxTowCable(Rigidbody obj1, Rigidbody obj2, Vector3 targetConnectionPoint)
+    {
+        CableBehavior res = _prototypes.CreateHarpaxCable();
+        res.Connect(obj1, obj2, targetConnectionPoint);
         return res;
     }
 
