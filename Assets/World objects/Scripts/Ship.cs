@@ -297,14 +297,23 @@ public class Ship : MonoBehaviour
             _prevRot = transform.rotation;
             Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
             Vector3 rbVelocity = rigidBody.velocity;
-
-            Vector3 towVelocity = Vector3.zero;
-            if (TowedByHarpax != null)
+            if (TowedByHarpax)
             {
-                towVelocity = rbVelocity * Vector3.Dot(rbVelocity, TowedByHarpax.TowVector);
+                _prevForceTow = (targetVelocity - rbVelocity) * rigidBody.mass;
+                if (!_hasPrevForceTow)
+                {
+                    rigidBody.AddForce((targetVelocity - rbVelocity) * rigidBody.mass, ForceMode.Impulse);
+                }
+                else
+                {
+                    rigidBody.AddForce((targetVelocity - rbVelocity) * rigidBody.mass - _prevForceTow, ForceMode.Impulse);
+                }
+                _hasPrevForceTow = true;
             }
-
-            rigidBody.AddForce(targetVelocity - rbVelocity + towVelocity, ForceMode.VelocityChange);
+            else
+            {
+                rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
+            }
             //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
             //if (rigidBody.velocity.sqrMagnitude >= 0) Debug.Log(string.Format("RigidBofy Velocity vector: {0}", rigidBody.velocity));
             if (_autoHeading && !ShipImmobilized && !ShipDisabled)
@@ -1182,6 +1191,8 @@ public class Ship : MonoBehaviour
     private Quaternion _prevRot;
     private bool _inCollision = false;
     public CableBehavior TowedByHarpax { get; set; }
+    private Vector3 _prevForceTow;
+    private bool _hasPrevForceTow = false;
 
     public float LastInCombat { get; private set; }
 
