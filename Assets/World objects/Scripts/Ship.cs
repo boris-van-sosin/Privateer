@@ -17,7 +17,9 @@ public class Ship : MonoBehaviour
         InitCrew();
         InitDamageEffects();
         WeaponGroups = null;
+        TowingByHarpax = null;
         TowedByHarpax = null;
+        GrapplingMode = false;
         rigidBody = GetComponent<Rigidbody>();
     }
 
@@ -297,7 +299,7 @@ public class Ship : MonoBehaviour
             _prevRot = transform.rotation;
             Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
             Vector3 rbVelocity = rigidBody.velocity;
-            if (TowedByHarpax)
+            if (TowedByHarpax != null)
             {
                 _prevForceTow = (targetVelocity - rbVelocity) * rigidBody.mass;
                 if (!_hasPrevForceTow)
@@ -336,6 +338,7 @@ public class Ship : MonoBehaviour
             transform.position -= Time.deltaTime * 0.1f * MaxSpeed * collisionVec;
             yield return new WaitForEndOfFrame();
         }
+        ResetSpeed();
         ActualVelocity = Vector3.zero;
         yield return null;
     }
@@ -570,6 +573,18 @@ public class Ship : MonoBehaviour
 
     public void FireManual(Vector3 target)
     {
+        if (!GrapplingMode)
+        {
+            FireWeaponManual(target);
+        }
+        else
+        {
+            FireHarpaxManual(target);
+        }
+    }
+
+    public void FireWeaponManual(Vector3 target)
+    {
         StringBuilder sb = new StringBuilder();
         if (WeaponGroups == null)
         {
@@ -590,7 +605,6 @@ public class Ship : MonoBehaviour
         //Debug.Log(sb.ToString());
     }
 
-    // temporary
     public void FireHarpaxManual(Vector3 target)
     {
         StringBuilder sb = new StringBuilder();
@@ -612,6 +626,71 @@ public class Ship : MonoBehaviour
         }
         //Debug.Log(sb.ToString());
     }
+
+    public void DisconnectHarpaxTowing()
+    {
+        CableBehavior cable;
+        if ((cable = TowingByHarpax) != null)
+        {
+            cable.DisconnectAndDestroy();
+        }
+    }
+
+    public CableBehavior TowingByHarpax
+    {
+        get
+        {
+            if (_towing)
+            {
+                return _connectedHarpax;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        set
+        {
+            if (value != null)
+            {
+                _towing = true;
+                _connectedHarpax = value;
+            }
+            else
+            {
+                _connectedHarpax = null;
+                _hasPrevForceTow = false;
+            }
+        }
+    }
+    public CableBehavior TowedByHarpax
+    {
+        get
+        {
+            if (!_towing)
+            {
+                return _connectedHarpax;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        set
+        {
+            if (value != null)
+            {
+                _towing = false;
+                _connectedHarpax = value;
+            }
+            else
+            {
+                _connectedHarpax = null;
+                _hasPrevForceTow = false;
+            }
+        }
+    }
+
 
     public Vector3 ActualVelocity { get; private set; }
 
@@ -964,6 +1043,11 @@ public class Ship : MonoBehaviour
         ResolveCollision(otherShip, Mass + otherShip.Mass);
     }
 
+    private void ResetSpeed()
+    {
+        _speed = 0f;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         //Debug.LogWarning(string.Format("Trigger enter: {0}, {1}", this, other.gameObject));
@@ -984,7 +1068,7 @@ public class Ship : MonoBehaviour
                 (!ShipSurrendered && !otherShip.ShipSurrendered) &&
                 ((otherShip.ShipImmobilized || otherShip.ShipDisabled) && otherShip.HullHitPoints > 0))
             {
-                _speed = 0f;
+                ResetSpeed();
                 InBoarding = true;
                 otherShip.InBoarding = true;
                 StartCoroutine(Combat.BoardingCombat(this, otherShip));
@@ -992,7 +1076,7 @@ public class Ship : MonoBehaviour
             else if (otherShip.ElectromagneticClampsActive)
             {
                 //?
-                _speed = 0f;
+                ResetSpeed();
             }
             else
             {
@@ -1190,7 +1274,10 @@ public class Ship : MonoBehaviour
     private Vector3 _prevPos;
     private Quaternion _prevRot;
     private bool _inCollision = false;
-    public CableBehavior TowedByHarpax { get; set; }
+
+    public bool GrapplingMode { get; set; }
+    private CableBehavior _connectedHarpax = null;
+    private bool _towing = false;
     private Vector3 _prevForceTow;
     private bool _hasPrevForceTow = false;
 

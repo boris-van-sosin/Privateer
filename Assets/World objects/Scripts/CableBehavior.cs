@@ -161,4 +161,16 @@ public class CableBehavior : MonoBehaviour
             return (WhatIsHangingFromTheRope.position - WhatTheRopeIsConnectedTo.position).normalized;
         }
     }
+
+    public void DisconnectAndDestroy()
+    {
+        Ship ship1 = WhatTheRopeIsConnectedTo.GetComponent<Ship>();
+        Ship ship2 = WhatIsHangingFromTheRope.GetComponent<Ship>();
+        if (ship1 != null && ship2 != null)
+        {
+            ship1.TowingByHarpax = null;
+            ship2.TowedByHarpax = null;
+        }
+        Destroy(gameObject);
+    }
 }

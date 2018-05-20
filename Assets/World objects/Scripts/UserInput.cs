@@ -97,13 +97,13 @@ public class UserInput : MonoBehaviour
         }
         else if (Input.GetKeyDown(_keyMapping[UserOperation.GrapplingTool]))
         {
-            if (_grapplingMode)
+            if (ControlledShip.TowingByHarpax == null)
             {
-                _grapplingMode = false;
+                ControlledShip.GrapplingMode = !ControlledShip.GrapplingMode;
             }
-            else if (!_grapplingMode)
+            else
             {
-                _grapplingMode = true;
+                ControlledShip.DisconnectHarpaxTowing();
             }
         }
         foreach (Tuple<UserOperation, int> cg in _controlGroupKeys)

@@ -25,22 +25,25 @@ public class HarpaxBehavior : Projectile
             Destroy(gameObject);
             return;
         }
-        if (_attached)
+        if (_attached || OriginShip.TowedByHarpax != null || OriginShip.TowingByHarpax != null || shipHit.TowedByHarpax != null || shipHit.TowingByHarpax != null)
         {
+            Destroy(gameObject);
             return;
         }
         _attached = true;
+        OriginShip.GrapplingMode = false;
 
         Rigidbody origRB = OriginShip.GetComponent<Rigidbody>();
         Rigidbody targetRB = shipHit.GetComponent<Rigidbody>();
         targetRB.drag = 10; targetRB.angularDrag = 10;
+        origRB.drag = 10; origRB.angularDrag = 10;
         CableBehavior cable = ObjectFactory.CreateHarpaxTowCable(origRB, targetRB, hit.point);
+        OriginShip.TowingByHarpax = cable;
         shipHit.TowedByHarpax = cable;
         cable.MinRopeLength = 0.01f;
         cable.MaxRopeLength = (OriginShip.transform.position - hit.point).magnitude;
 
-        //StartCoroutine(Bleh(hj));
-        Destroy(gameObject, 10f);
+        Destroy(gameObject);
     }
 
     private IEnumerator Bleh(Joint j)
