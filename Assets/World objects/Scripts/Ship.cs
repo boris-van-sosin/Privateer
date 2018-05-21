@@ -322,6 +322,19 @@ public class Ship : MonoBehaviour
             {
                 RotateToHeading();
             }
+
+            // Breaking free from a Harpax
+            if (!ShipImmobilized && !ShipDisabled && TowedByHarpax != null)
+            {
+                if (Time.time - _towedTime > 5.0f)
+                {
+                    DisconnectHarpaxTowed();
+                }
+            }
+            else if (TowedByHarpax)
+            {
+                _towedTime = Time.time;
+            }
         }
 	}
 
@@ -635,6 +648,14 @@ public class Ship : MonoBehaviour
             cable.DisconnectAndDestroy();
         }
     }
+    private void DisconnectHarpaxTowed()
+    {
+        CableBehavior cable;
+        if ((cable = TowedByHarpax) != null)
+        {
+            cable.DisconnectAndDestroy();
+        }
+    }
 
     public CableBehavior TowingByHarpax
     {
@@ -687,6 +708,7 @@ public class Ship : MonoBehaviour
             {
                 _connectedHarpax = null;
                 _hasPrevForceTow = false;
+                _towedTime = Time.time;
             }
         }
     }
@@ -1280,6 +1302,7 @@ public class Ship : MonoBehaviour
     private bool _towing = false;
     private Vector3 _prevForceTow;
     private bool _hasPrevForceTow = false;
+    private float _towedTime;
 
     public float LastInCombat { get; private set; }
 
