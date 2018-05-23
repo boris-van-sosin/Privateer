@@ -703,12 +703,12 @@ public class Ship : MonoBehaviour
             {
                 _towing = false;
                 _connectedHarpax = value;
+                _towedTime = Time.time;
             }
             else
             {
                 _connectedHarpax = null;
                 _hasPrevForceTow = false;
-                _towedTime = Time.time;
             }
         }
     }
