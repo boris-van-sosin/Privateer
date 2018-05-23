@@ -125,28 +125,31 @@ public class TurretBase : MonoBehaviour, ITurret
     // Update is called once per frame
     void Update()
     {
-        float maxRotation = RotationSpeed * Time.deltaTime;
-        //Debug.Log(string.Format("Turret angle: global: {0} local: {1} target (global): {2}", CurrAngle, CurrLocalAngle, _globalTargetAngle));
-        if (Mathf.Abs(_globalTargetAngle - CurrAngle) < maxRotation)
+        if (CanRotate)
         {
-            switch (TurretAxis)
+            float maxRotation = RotationSpeed * Time.deltaTime;
+            //Debug.Log(string.Format("Turret angle: global: {0} local: {1} target (global): {2}", CurrAngle, CurrLocalAngle, _globalTargetAngle));
+            if (Mathf.Abs(_globalTargetAngle - CurrAngle) < maxRotation)
             {
-                case RotationAxis.XAxis:
-                    transform.rotation = Quaternion.Euler(_globalTargetAngle, transform.rotation.eulerAngles.y, transform.rotation.z);
-                    break;
-                case RotationAxis.YAxis:
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _globalTargetAngle, transform.rotation.z);
-                    break;
-                case RotationAxis.ZAxis:
-                    transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.y, _globalTargetAngle);
-                    break;
-                default:
-                    break;
+                switch (TurretAxis)
+                {
+                    case RotationAxis.XAxis:
+                        transform.rotation = Quaternion.Euler(_globalTargetAngle, transform.rotation.eulerAngles.y, transform.rotation.z);
+                        break;
+                    case RotationAxis.YAxis:
+                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _globalTargetAngle, transform.rotation.z);
+                        break;
+                    case RotationAxis.ZAxis:
+                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.y, _globalTargetAngle);
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
-        else
-        {
-            transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
+            else
+            {
+                transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
+            }
         }
 
         if (_targetShip != null && Mode == TurretMode.Auto)
