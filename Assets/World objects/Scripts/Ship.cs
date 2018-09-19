@@ -292,7 +292,7 @@ public class Ship : MonoBehaviour
             for (int i = 0; i < t.childCount; ++i)
             {
                 ParticleSystem p = t.GetChild(i).GetComponent<ParticleSystem>();
-                if (p != null)
+                if (p != null && p.gameObject.activeInHierarchy)
                 {
                     p.Stop();
                     tmpPS.Add(p);
@@ -312,7 +312,7 @@ public class Ship : MonoBehaviour
             for (int i = 0; i < t.childCount; ++i)
             {
                 ParticleSystem p = t.GetChild(i).GetComponent<ParticleSystem>();
-                if (p != null)
+                if (p != null && p.gameObject.activeInHierarchy)
                 {
                     p.Play();
                     tmpPS.Add(p);
@@ -998,11 +998,19 @@ public class Ship : MonoBehaviour
         {
             ShipImmobilized = true;
             _engineDamageSmoke.Play();
+            foreach (ParticleSystem p in _engineExhaustsOn.Union(_engineExhaustsIdle))
+            {
+                p.gameObject.SetActive(false);
+            }
         }
         else
         {
             ShipImmobilized = false;
             _engineDamageSmoke.Stop();
+            foreach (ParticleSystem p in _engineExhaustsOn.Union(_engineExhaustsIdle))
+            {
+                p.gameObject.SetActive(true);
+            }
         }
     }
 
