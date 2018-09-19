@@ -322,13 +322,17 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
+        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
+        if (Vector3.Dot(Muzzles[_nextBarrel].up, vecToTarget) < 0)
+        {
+            return;
+        }
+        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
         if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
         {
             return;
         }
         _lastFire = Time.time;
-        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
-        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
 
         FireInner(firingVector);
         _containingShip.NotifyInComabt();
@@ -360,13 +364,17 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
+        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
+        if (Vector3.Dot(Muzzles[_nextBarrel].up, vecToTarget) < 0)
+        {
+            return;
+        }
+        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
         if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
         {
             return;
         }
         _lastFire = Time.time;
-        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
-        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
         FireGrapplingToolInner(firingVector);
         _containingShip.NotifyInComabt();
 
