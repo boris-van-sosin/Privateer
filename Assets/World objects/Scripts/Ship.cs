@@ -35,6 +35,7 @@ public class Ship : MonoBehaviour
         InitArmour();
         InitShield();
         FindTurrets();
+        InitEngines();
         _manualTurrets = new HashSet<ITurret>(_turrets);
         StartCoroutine(ContinuousComponents());
         ShipDisabled = false;
@@ -272,12 +273,83 @@ public class Ship : MonoBehaviour
             if (comp.ComponentType == ComponentSlotType.Engine)
             {
                 _engine = comp as ShipEngine;
+                _engine.OnToggle += SetEngineParticleSystems;
             }
             return true;
         }
         else
         {
             return false;
+        }
+    }
+
+    private void InitEngines()
+    {
+        Transform t = transform.Find("Engine exhaust on");
+        if (t != null)
+        {
+            List<ParticleSystem> tmpPS = new List<ParticleSystem>(t.childCount);
+            for (int i = 0; i < t.childCount; ++i)
+            {
+                ParticleSystem p = t.GetChild(i).GetComponent<ParticleSystem>();
+                if (p != null)
+                {
+                    p.Stop();
+                    tmpPS.Add(p);
+                }
+            }
+            _engineExhaustsOn = tmpPS.ToArray();
+        }
+        else
+        {
+            _engineExhaustsOn = new ParticleSystem[0];
+        }
+
+        t = transform.Find("Engine exhaust idle");
+        if (t != null)
+        {
+            List<ParticleSystem> tmpPS = new List<ParticleSystem>(t.childCount);
+            for (int i = 0; i < t.childCount; ++i)
+            {
+                ParticleSystem p = t.GetChild(i).GetComponent<ParticleSystem>();
+                if (p != null)
+                {
+                    p.Play();
+                    tmpPS.Add(p);
+                }
+            }
+            _engineExhaustsIdle = tmpPS.ToArray();
+        }
+        else
+        {
+            _engineExhaustsIdle = new ParticleSystem[0];
+        }
+    }
+
+    private void SetEngineParticleSystems(bool On)
+    {
+        if (On)
+        {
+            foreach (ParticleSystem p in _engineExhaustsOn)
+            {
+                p.Play();
+            }
+            foreach (ParticleSystem p in _engineExhaustsIdle)
+            {
+                p.Stop();
+            }
+        }
+        else
+        {
+            foreach (ParticleSystem p in _engineExhaustsOn)
+            {
+                p.Stop();
+            }
+            foreach (ParticleSystem p in _engineExhaustsIdle)
+            {
+                p.Play();
+            }
+
         }
     }
 
@@ -1310,6 +1382,8 @@ public class Ship : MonoBehaviour
     public GameObject ShieldCapsule { get { return _shieldCapsule; } }
 
     private ParticleSystem _engineDamageSmoke;
+
+    private ParticleSystem[] _engineExhaustsOn, _engineExhaustsIdle;
 
     public Faction Owner;
 }
