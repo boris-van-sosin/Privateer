@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GunTurret : TurretBase
 {
@@ -56,6 +57,14 @@ public class GunTurret : TurretBase
         {
             MuzzleFx[_nextBarrel].Play(true);
         }
+    }
+
+    public ValueTuple<float, float, float> DebugGetDPS()
+    {
+        int numBarrels = FindBarrels(transform).Count();
+        float fireRate = numBarrels / FiringInterval;
+        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
+        return ValueTuple<float, float, float>.Create(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);
     }
 
     public float MuzzleVelocity;

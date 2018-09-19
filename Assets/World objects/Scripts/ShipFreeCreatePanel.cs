@@ -121,6 +121,27 @@ public class ShipFreeCreatePanel : MonoBehaviour
         _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
     }
 
+    private void TestWeapons()
+    {
+        ComponentSlotType[] slotTypes = new ComponentSlotType[] { ComponentSlotType.SmallBarbetteDual, ComponentSlotType.MediumBarbette, ComponentSlotType.LargeBarbette };
+        ObjectFactory.WeaponType[] weaponTypes = new ObjectFactory.WeaponType[] { ObjectFactory.WeaponType.Autocannon, ObjectFactory.WeaponType.Howitzer, ObjectFactory.WeaponType.HVGun };
+        ObjectFactory.AmmoType[] ammoTypes = new ObjectFactory.AmmoType[] { ObjectFactory.AmmoType.KineticPenetrator, ObjectFactory.AmmoType.ShapedCharge, ObjectFactory.AmmoType.ShrapnelRound };
+        foreach (ComponentSlotType cst in slotTypes)
+        {
+            foreach (ObjectFactory.WeaponType wt in weaponTypes)
+            {
+                GunTurret tb = ObjectFactory.CreateTurret(ComponentSlotType.SmallBarbetteDual, ObjectFactory.WeaponType.Autocannon) as GunTurret;
+                foreach (ObjectFactory.AmmoType at in ammoTypes)
+                {
+                    tb.AmmoType = at;
+                    ValueTuple<float, float, float> dps = tb.DebugGetDPS();
+                    Debug.Log(string.Format("Weapon: {0} {1}, {2}: SH={3} SY={4} HL={5}", cst, wt, at, dps.Item1, dps.Item2, dps.Item3));
+                }
+                Destroy(tb);
+            }
+        }
+    }
+
     private void ShipSelectChanged(int i)
     {
         if (_cfgPanelVisible)

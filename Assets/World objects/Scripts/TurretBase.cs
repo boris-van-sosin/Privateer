@@ -82,7 +82,7 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private static IEnumerable<Tuple<Transform, Transform>> FindBarrels(Transform root)
+    protected static IEnumerable<Tuple<Transform, Transform>> FindBarrels(Transform root)
     {
         if (root.name.StartsWith(BarrelString))
         {
