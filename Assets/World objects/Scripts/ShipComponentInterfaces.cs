@@ -10,7 +10,7 @@ public enum ComponentSlotType
     SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
     MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
     LargeBarbette, LargeTurret,
-    SpecialWeapon,
+    TorpedoTube, SpecialWeapon,
     // Boarding tool
     BoardingTool,
     // Boarding / anti-boarding forces

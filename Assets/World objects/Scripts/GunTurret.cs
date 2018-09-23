@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GunTurret : TurretBase
+public class GunTurret : DirectionlTurret
 {
     protected override void FireInner(Vector3 firingVector)
     {
-        base.FireInner(firingVector);
         Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
         Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, warhead, _containingShip);
         switch (AmmoType)
@@ -50,7 +49,6 @@ public class GunTurret : TurretBase
 
     protected override void FireGrapplingToolInner(Vector3 firingVector)
     {
-        base.FireGrapplingToolInner(firingVector);
         HarpaxBehavior p = ObjectFactory.CreateHarpaxProjectile(firingVector, MuzzleVelocity, MaxRange, _containingShip);
         p.transform.position = Muzzles[_nextBarrel].position;
         if (MuzzleFx[_nextBarrel] != null)

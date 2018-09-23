@@ -6,7 +6,6 @@ public class ContinuousBeamTurret : GeneralBeamTurret
 {
     protected override void FireInner(Vector3 firingVector)
     {
-        base.FireInner(firingVector);
         bool prevFiring = _firing;
         _firing = true;
         _firingVector = firingVector;
@@ -89,6 +88,11 @@ public class ContinuousBeamTurret : GeneralBeamTurret
             default:
                 return false;
         }
+    }
+
+    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    {
+        // Not implemeted yet
     }
 
     public float BeamPulseTime;

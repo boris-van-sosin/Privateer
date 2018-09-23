@@ -16,9 +16,7 @@ public class BeamTurret : GeneralBeamTurret
     }
 
     protected override void FireInner(Vector3 firingVector)
-    {
-        base.FireInner(firingVector);
-        _firingVector = firingVector;
+    {        _firingVector = firingVector;
         _beamOrigin = Muzzles[_nextBarrel].position;
         StartCoroutine(HandleBeam());
     }
@@ -38,6 +36,11 @@ public class BeamTurret : GeneralBeamTurret
             default:
                 return false;
         }
+    }
+
+    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    {
+        // Not implemented yet
     }
 
     public float BeamDuration;

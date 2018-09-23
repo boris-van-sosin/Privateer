@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class TurretBase : MonoBehaviour, ITurret
+public abstract class TurretBase : MonoBehaviour, ITurret
 {
 
     // Use this for initialization
@@ -117,41 +117,11 @@ public class TurretBase : MonoBehaviour, ITurret
         return FindContainingShip(t.parent);
     }
 
-    private void SetDefaultAngle()
-    {
-        _defaultDirection = _containingShip.transform.InverseTransformDirection(-transform.forward);
-    }
+    protected abstract void SetDefaultAngle();
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        if (CanRotate)
-        {
-            float maxRotation = RotationSpeed * Time.deltaTime;
-            //Debug.Log(string.Format("Turret angle: global: {0} local: {1} target (global): {2}", CurrAngle, CurrLocalAngle, _globalTargetAngle));
-            if (Mathf.Abs(_globalTargetAngle - CurrAngle) < maxRotation)
-            {
-                switch (TurretAxis)
-                {
-                    case RotationAxis.XAxis:
-                        transform.rotation = Quaternion.Euler(_globalTargetAngle, transform.rotation.eulerAngles.y, transform.rotation.z);
-                        break;
-                    case RotationAxis.YAxis:
-                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _globalTargetAngle, transform.rotation.z);
-                        break;
-                    case RotationAxis.ZAxis:
-                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.y, _globalTargetAngle);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
-            }
-        }
-
         if (_targetShip != null && Mode == TurretMode.Auto)
         {
             if (_targetShip.ShipDisabled || _targetShip.ShipSurrendered || _targetShip.InBoarding || (transform.position - _targetShip.transform.position).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
@@ -165,87 +135,11 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    public void ManualTarget(Vector3 target)
+    public virtual void ManualTarget(Vector3 target)
     {
-        if (!_initialized || !CanRotate)
-        {
-            return;
-        }
-
-        _vectorToTarget = target - transform.position;
-        Vector3 flatVec = new Vector3(_vectorToTarget.x, 0, _vectorToTarget.z);
-        float angleToTarget = Quaternion.LookRotation(-flatVec).eulerAngles.y;
-        float relativeAngle = AngleToShipHeading(angleToTarget);
-        //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
-        _isLegalAngle = false;
-        float closestLegalAngle = 0.0f, angleDiff = 360.0f;
-        foreach (Tuple<float, float> r in _rotationAllowedRanges)
-        {
-            if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
-            {
-                _isLegalAngle = true;
-                _targetAngle = relativeAngle;
-                break;
-            }
-            else
-            {
-                float diff1, diff2;
-                if ((diff1 = Mathf.Abs(r.Item1 - relativeAngle)) < angleDiff)
-                {
-                    angleDiff = diff1;
-                    closestLegalAngle = r.Item1;
-                }
-                if ((diff2 = Mathf.Abs(r.Item2 - relativeAngle)) < angleDiff)
-                {
-                    angleDiff = diff2;
-                    closestLegalAngle = r.Item2;
-                }
-            }
-        }
-        if (!_isLegalAngle)
-        {
-            _targetAngle = closestLegalAngle;
-        }
-        _globalTargetAngle = AngleToShipHeading(_targetAngle, true);
-
-        float currLocal = CurrLocalAngle;
-        if (_minRotation < _maxRotation)
-        {
-            if (_minRotation == 0.0f && _maxRotation == 360.0f)
-            {
-                if (Mathf.Abs(_globalTargetAngle - CurrAngle) <= 180.0f)
-                {
-                    _rotationDir = Mathf.Sign(_globalTargetAngle - CurrAngle);
-                }
-                else
-                {
-                    _rotationDir = -Mathf.Sign(_globalTargetAngle - CurrAngle);
-                }
-            }
-            else
-            {
-                float currFixed = (currLocal == 360.0f) ? 0f : currLocal;
-                _rotationDir = Mathf.Sign(_targetAngle - currFixed);
-            }
-        }
-        else
-        {
-            if (_maxRotation < currLocal && _maxRotation < _targetAngle)
-            {
-                _rotationDir = Mathf.Sign(_targetAngle - currLocal);
-            }
-            else if (currLocal < _minRotation && _targetAngle < _minRotation)
-            {
-                _rotationDir = Mathf.Sign(_targetAngle - currLocal);
-            }
-            else
-            {
-                _rotationDir = Mathf.Sign(-_targetAngle + currLocal);
-            }
-        }
     }
 
-    private bool CanFire()
+    protected virtual bool CanFire()
     {
         if (!ReadyToFire())
         {
@@ -311,10 +205,9 @@ public class TurretBase : MonoBehaviour, ITurret
         return currTime - _lastFire > _actualFiringInterval;
     }
 
-    protected virtual void FireInner(Vector3 firingVector)
-    {
-        // Stub!
-    }
+    protected abstract void FireInner(Vector3 firingVector);
+
+    protected abstract Vector3 GetFiringVector(Vector3 vecToTarget);
 
     public void Fire(Vector3 target)
     {
@@ -327,7 +220,7 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
-        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        Vector3 firingVector = GetFiringVector(vecToTarget);
         if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
         {
             return;
@@ -348,10 +241,7 @@ public class TurretBase : MonoBehaviour, ITurret
         return InstalledTurretMod == TurretMod.Harpax || InstalledTurretMod == TurretMod.TractorBeam;
     }
 
-    protected virtual void FireGrapplingToolInner(Vector3 firingVector)
-    {
-        // Stub!
-    }
+    protected abstract void FireGrapplingToolInner(Vector3 firingVector);
 
     public void FireGrapplingTool(Vector3 target)
     {
@@ -369,7 +259,7 @@ public class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
-        Vector3 firingVector = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        Vector3 firingVector = GetFiringVector(vecToTarget);
         if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
         {
             return;
@@ -394,12 +284,12 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private float AngleToShipHeading(float globalAngle)
+    protected float AngleToShipHeading(float globalAngle)
     {
         return AngleToShipHeading(globalAngle, false);
     }
 
-    private float AngleToShipHeading(float globalAngle, bool inverse)
+    protected float AngleToShipHeading(float globalAngle, bool inverse)
     {
         Vector3 forwardClean = Vector3.forward;
         forwardClean.y = 0;
@@ -451,7 +341,7 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private Vector3 TurretAxisVector
+    protected Vector3 TurretAxisVector
     {
         get
         {
@@ -524,28 +414,7 @@ public class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private Ship AcquireTarget()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f);
-        Ship foundTarget = null;
-        foreach (Collider c in colliders)
-        {
-            Ship s = c.GetComponent<Ship>();
-            if (s == null)
-            {
-                continue;
-            }
-            else if (s.ShipDisabled)
-            {
-                continue;
-            }
-            if (ContainingShip.Owner.IsEnemy(s.Owner))
-            {
-                foundTarget = s;
-            }
-        }
-        return foundTarget;
-    }
+    protected abstract Ship AcquireTarget();
 
     public virtual bool IsTurretModCombatible(TurretMod m)
     {
@@ -568,23 +437,23 @@ public class TurretBase : MonoBehaviour, ITurret
     }
     protected TurretMod _turretMod;
 
-    private bool _initialized = false; // ugly hack
+    protected bool _initialized = false; // ugly hack
 
     // Rotation behavior variables:
-    private float _minRotation, _maxRotation;
-    private Tuple<float, float>[] _rotationAllowedRanges;
+    protected float _minRotation, _maxRotation;
+    protected Tuple<float, float>[] _rotationAllowedRanges;
     private bool _fixed = false;
     public float RotationSpeed;
-    private float _targetAngle;
-    private float _globalTargetAngle;
-    private Vector3 _vectorToTarget;
-    private float _rotationDir;
-    private Vector3 _defaultDirection;
+    protected float _targetAngle;
+    protected float _globalTargetAngle;
+    protected Vector3 _vectorToTarget;
+
+    protected Vector3 _defaultDirection;
     private string[] _deadZoneAngleStrings;
     private Tuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
-    bool _isLegalAngle = false;
-    private bool CanRotate { get { return (!_fixed) && _status != ComponentStatus.HeavilyDamaged && _status != ComponentStatus.KnockedOut && _status != ComponentStatus.Destroyed; } }
+    protected bool _isLegalAngle = false;
+    protected bool CanRotate { get { return (!_fixed) && _status != ComponentStatus.HeavilyDamaged && _status != ComponentStatus.KnockedOut && _status != ComponentStatus.Destroyed; } }
 
     // Barrels, muzzles, and muzzleFx data:
     protected Transform[] Barrels;

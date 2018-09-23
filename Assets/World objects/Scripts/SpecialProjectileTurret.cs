@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpecialProjectileTurret : TurretBase
+public class SpecialProjectileTurret : DirectionlTurret
 {
     protected override void FireInner(Vector3 firingVector)
     {
-        base.FireInner(firingVector);
         Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.PlasmaCannon, TurretSize);
         Projectile p = ObjectFactory.CreatePlasmaProjectile(firingVector, MuzzleVelocity, MaxRange, w, _containingShip);
         p.WeaponEffectKey = ObjectFactory.WeaponEffect.PlasmaExplosion;
@@ -28,6 +27,10 @@ public class SpecialProjectileTurret : TurretBase
             default:
                 return false;
         }
+    }
+
+    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    {
     }
 
     public float MuzzleVelocity;
