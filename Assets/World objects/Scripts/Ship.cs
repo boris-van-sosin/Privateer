@@ -211,7 +211,7 @@ public class Ship : MonoBehaviour
         {
             return false;
         }
-        Quaternion q = Quaternion.LookRotation(-hp.transform.up);
+        Quaternion q = Quaternion.LookRotation(-hp.transform.up, hp.transform.forward);
         t.transform.rotation = q;
         t.transform.parent = hp.transform;
         t.transform.localScale = Vector3.one;

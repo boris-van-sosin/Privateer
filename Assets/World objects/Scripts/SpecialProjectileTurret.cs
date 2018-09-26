@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpecialProjectileTurret : DirectionlTurret
+public class SpecialProjectileTurret : DirectionalTurret
 {
     protected override void FireInner(Vector3 firingVector)
     {

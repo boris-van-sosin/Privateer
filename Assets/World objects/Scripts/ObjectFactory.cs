@@ -81,6 +81,20 @@ public static class ObjectFactory
         return res;
     }
 
+    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, Ship origShip)
+    {
+        if (_prototypes != null)
+        {
+            Torpedo p = _prototypes.CreateTorpedo(launchVector, launchOrientation, target, range, origShip);
+            p.ProjectileWarhead = w;
+            return p;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static ParticleSystem CreateWeaponEffect(WeaponEffect e, Vector3 position)
     {
         if (e == WeaponEffect.None)
@@ -195,6 +209,15 @@ public static class ObjectFactory
                     st.HeatToFire = wpd.HeatToFire;
                 }
                 break;
+            case WeaponType.TorpedoTube:
+                {
+                    WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
+                    TorpedoTurret tt = t as TorpedoTurret;
+                    tt.FiringInterval = tordpedoData.FiringInterval;
+                    tt.EnergyToFire = tordpedoData.EnergyToFire;
+                    tt.HeatToFire = tordpedoData.HeatToFire;
+                }
+                break;
             default:
                 break;
         }
@@ -292,6 +315,8 @@ public static class ObjectFactory
                 return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Heavy, TurretMountType.Barbette);
             case ComponentSlotType.LargeTurret:
                 return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Heavy, TurretMountType.Turret);
+            case ComponentSlotType.TorpedoTube:
+                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.TorpedoTube, TurretMountType.TorpedoTube);
             default:
                 return null;
         }
@@ -353,6 +378,10 @@ public static class ObjectFactory
                 WeaponBeamDataEntry w = WeaponBeamDataEntry.FromString(l);
                 _weapons_beam.Add(Tuple<WeaponSize, WeaponType>.Create(w.MountSize, w.Weapon), w);
             }
+            else if (l.Trim().StartsWith("TorpedoWeapon"))
+            {
+                _weapons_torpedo = WeaponTorpedoDataEntry.FromString(l);
+            }
         }
     }
 
@@ -392,9 +421,9 @@ public static class ObjectFactory
         System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","Warheads.txt"), sb.ToString());
     }
 
-    public enum TurretMountType { Fixed, Broadside, Barbette, Turret }
-    public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon }
-    public enum WeaponSize { Light, Medium, Heavy }
+    public enum TurretMountType { Fixed, Broadside, Barbette, Turret, TorpedoTube }
+    public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon, TorpedoTube }
+    public enum WeaponSize { Light, Medium, Heavy, TorpedoTube }
     public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
@@ -404,6 +433,7 @@ public static class ObjectFactory
     private static Dictionary<Tuple<WeaponSize, TurretMountType>, TurretMountDataEntry> _weaponMounts = null;
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry> _weapons_projectile = null;
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
+    private static WeaponTorpedoDataEntry _weapons_torpedo = null;
 
     public class WarheadDataEntry3
     {
@@ -594,6 +624,32 @@ public static class ObjectFactory
                     MaxRange = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
                     BeamDuration = float.Parse(elements[i++].Trim()),
+                    EnergyToFire = int.Parse(elements[i++].Trim()),
+                    HeatToFire = int.Parse(elements[i++].Trim())
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    public class WeaponTorpedoDataEntry
+    {
+        public float FiringInterval;
+        public int EnergyToFire;
+        public int HeatToFire;
+
+        public static WeaponTorpedoDataEntry FromString(string s)
+        {
+            string[] elements = s.Trim().Split(',');
+            if (elements[0].Trim() == "TorpedoWeapon")
+            {
+                int i = 1;
+                return new WeaponTorpedoDataEntry()
+                {
+                    FiringInterval = float.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())
                 };

@@ -48,6 +48,16 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate<CableBehavior>(HarpaxCableTemplate);
     }
 
+    public Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Ship origShip)
+    {
+        Torpedo res = Instantiate(TorpedoTemplate);
+        Quaternion q = Quaternion.FromToRotation(res.transform.up, launchOrientation);
+        res.transform.rotation = q;
+        res.OriginShip = origShip;
+        res.Target = target;
+        return res;
+    }
+
     public ParticleSystem CreateWeaponEffect(ObjectFactory.WeaponEffect e, Vector3 position)
     {
         if (_weaponEffectsDictionary == null)
@@ -205,6 +215,7 @@ public class ObjectPrototypes : MonoBehaviour
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
     public CableBehavior HarpaxCableTemplate;
+    public Torpedo TorpedoTemplate;
     public ParticleSystem BigExplosion;
     public ParticleSystem SmallExplosion;
     public ParticleSystem FlakBurst;

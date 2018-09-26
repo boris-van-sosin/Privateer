@@ -7,7 +7,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 {
 
     // Use this for initialization
-    void Start()
+    protected virtual void Start()
     {
         TurretHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TurretHardpoint>()) != null)
@@ -67,7 +67,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private void ParseMuzzles()
+    protected virtual void ParseMuzzles()
     {
         List<Tuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
         Barrels = new Transform[barrelsFound.Count];
@@ -135,9 +135,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    public virtual void ManualTarget(Vector3 target)
-    {
-    }
+    public abstract void ManualTarget(Vector3 target);
 
     protected virtual bool CanFire()
     {
@@ -445,7 +443,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     private bool _fixed = false;
     public float RotationSpeed;
     protected float _targetAngle;
-    protected float _globalTargetAngle;
     protected Vector3 _vectorToTarget;
 
     protected Vector3 _defaultDirection;
@@ -465,7 +462,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public ComponentSlotType TurretType;
     public float MaxRange;
     public float FiringInterval;
-    private float _actualFiringInterval;
+    protected float _actualFiringInterval;
     public ObjectFactory.WeaponSize TurretSize;
     public ObjectFactory.WeaponType TurretWeaponType;
 
@@ -494,8 +491,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public enum TurretMode { Off, Manual, Auto };
     public enum RotationAxis { XAxis, YAxis, ZAxis };
 
-    private static readonly string BarrelString = "Barrel";
-    private static readonly string MuzzleString = "Muzzle";
+    protected static readonly string BarrelString = "Barrel";
+    protected static readonly string MuzzleString = "Muzzle";
 
     public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
 

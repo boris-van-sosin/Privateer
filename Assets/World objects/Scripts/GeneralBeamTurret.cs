@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GeneralBeamTurret : DirectionlTurret
+public abstract class GeneralBeamTurret : DirectionalTurret
 {
     protected override void Awake()
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GunTurret : DirectionlTurret
+public class GunTurret : DirectionalTurret
 {
     protected override void FireInner(Vector3 firingVector)
     {

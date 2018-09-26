@@ -57,6 +57,10 @@ public class ShipFreeCreatePanel : MonoBehaviour
             {
                 t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Autocannon);
             }
+            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.TorpedoTube))
+            {
+                t = ObjectFactory.CreateTurret(ComponentSlotType.TorpedoTube, ObjectFactory.WeaponType.TorpedoTube);
+            }
             else
             {
                 t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);

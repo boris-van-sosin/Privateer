@@ -23,24 +23,28 @@ public class Torpedo : MonoBehaviour
         {
 
         }
+        else
+        {
+            Debug.DrawLine(transform.position, Target, Color.red, Time.deltaTime);
+        }
         Quaternion rotToTarget = Quaternion.FromToRotation(transform.up, vecToTarget);
         if (transform.position.y > _altEpsilon)
         {
             Quaternion rotDown = Quaternion.AngleAxis(-TurnRate, transform.right);
             float factor = Mathf.Exp(-transform.position.y);
-            rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
+            //rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
         }
         else if (transform.position.y < - _altEpsilon)
         {
             Quaternion rotDown = Quaternion.AngleAxis(TurnRate, transform.right);
             float factor = Mathf.Exp(transform.position.y);
-            rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
+            //rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
         }
         Vector3 rotAxis;
         float rotAngle;
         rotToTarget.ToAngleAxis(out rotAngle, out rotAxis);
         Quaternion actualRot = Quaternion.AngleAxis(Mathf.Min(rotAngle, Time.deltaTime * TurnRate), rotAxis);
-        Debug.Log(string.Format("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles));
+        //Debug.Log(string.Format("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles));
         transform.rotation = actualRot * transform.rotation;
         float distanceToTravel = Time.deltaTime * Speed;
 
