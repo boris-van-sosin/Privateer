@@ -55,6 +55,7 @@ public class ObjectPrototypes : MonoBehaviour
         res.transform.rotation = q;
         res.OriginShip = origShip;
         res.Target = target;
+        res.ColdLaunchVec = launchVector;
         return res;
     }
 

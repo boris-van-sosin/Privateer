@@ -189,9 +189,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223ceef49509b4e4c87a06e3d487d631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 2.5
+  BurnAcceleration: 0.25
+  MaxSpeed: 2.5
+  ColdPhaseSpeed: 1.5
   TurnRate: 50
-  Range: 50
+  Range: 80
+  StepSize: 5
+  ColdLaunchDist: 1.5
   OriginShip: {fileID: 0}
   Target: {x: 0, y: 0, z: 0}
 --- !u!136 &136511100542383514
@@ -219,7 +223,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -4752,7 +4756,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
@@ -9225,7 +9229,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
