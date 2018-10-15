@@ -47,6 +47,10 @@ public class TorpedoTurret : TurretBase
 
         _vectorToTarget = target - transform.position;
         Vector3 flatVec = new Vector3(_vectorToTarget.x, 0, _vectorToTarget.z);
+        if (flatVec == Vector3.zero)
+        {
+            return;
+        }
         float angleToTarget = Quaternion.LookRotation(-flatVec).eulerAngles.y;
         float relativeAngle = AngleToShipHeading(angleToTarget);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
@@ -65,7 +69,7 @@ public class TorpedoTurret : TurretBase
 
     protected override void FireInner(Vector3 firingVector)
     {
-        _torpedoTarget = transform.position + firingVector;
+        _torpedoTarget = Muzzles[_nextBarrel].position + firingVector;
         if (_torpedoTubeDoorsAnim)
         {
             _torpedoTubeDoorsAnim.SetBool("DoorsOpen", true);
@@ -80,6 +84,11 @@ public class TorpedoTurret : TurretBase
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
     {
         return vecToTarget;// - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+    }
+
+    protected override bool MuzzleOppositeDirCheck(Transform Muzzle, Vector3 vecToTarget)
+    {
+        return true;
     }
 
     protected override void FireGrapplingToolInner(Vector3 firingVector)

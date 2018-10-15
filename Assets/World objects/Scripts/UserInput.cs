@@ -164,6 +164,7 @@ public class UserInput : MonoBehaviour
         { UserOperation.ControlGroup3, KeyCode.Alpha3 },
         { UserOperation.ControlGroup4, KeyCode.Alpha4 },
         { UserOperation.ControlGroup5, KeyCode.Alpha5 },
+        { UserOperation.ControlGroup6, KeyCode.Alpha6 },
     };
 
     private readonly Tuple<UserOperation, int>[] _controlGroupKeys = new Tuple<UserOperation, int>[]
@@ -172,6 +173,7 @@ public class UserInput : MonoBehaviour
         Tuple<UserOperation, int>.Create(UserOperation.ControlGroup2, 2),
         Tuple<UserOperation, int>.Create(UserOperation.ControlGroup3, 3),
         Tuple<UserOperation, int>.Create(UserOperation.ControlGroup4, 4),
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup5, 5)
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup5, 5),
+        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup6, 6)
     };
 }

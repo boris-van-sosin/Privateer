@@ -207,6 +207,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected abstract Vector3 GetFiringVector(Vector3 vecToTarget);
 
+    protected virtual bool MuzzleOppositeDirCheck(Transform Muzzle, Vector3 vecToTarget)
+    {
+        return Vector3.Dot(Muzzle.up, vecToTarget) >= 0;
+    }
+
     public void Fire(Vector3 target)
     {
         if (!CanFire())
@@ -214,7 +219,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             return;
         }
         Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
-        if (Vector3.Dot(Muzzles[_nextBarrel].up, vecToTarget) < 0)
+        if (!MuzzleOppositeDirCheck(Muzzles[_nextBarrel], vecToTarget))
         {
             return;
         }

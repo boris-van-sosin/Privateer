@@ -56,7 +56,7 @@ public class WeaponControlGroupCfgPanel : MonoBehaviour
         WeaponsConfigCompiled res = new WeaponsConfigCompiled() { WeaponGroups = new Dictionary<int, Tuple<IEnumerable<string>, bool>>() };
 
         WeaponCtrlCfgLine footerCfg = Footer.GetComponent<WeaponCtrlCfgLine>();
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < 6; ++i)
         {
             List<string> hardpointsInGroup = new List<string>();
             for (int j = 1; j < WeaponConfigsBox.childCount - 1; ++j)

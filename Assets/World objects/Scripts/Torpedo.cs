@@ -11,6 +11,7 @@ public class Torpedo : MonoBehaviour
         _collider = GetComponent<Collider>();
         _shipLayerMask = ~LayerMask.GetMask("Background");
         WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
+        _targetReached = false;
     }
 
     void Awake()
@@ -54,14 +55,19 @@ public class Torpedo : MonoBehaviour
             {
                 if (vecToTarget.sqrMagnitude < (Time.deltaTime * Time.deltaTime * Speed * Speed))
                 {
-                    vecToTarget = _lastVecToTarget;
-                }
-                else
-                {
-                    _lastVecToTarget = vecToTarget;
+                    _targetReached = true;
                 }
             }
-            Quaternion rotToTarget = Quaternion.FromToRotation(transform.up, vecToTarget);
+            if (!_targetReached)
+            {
+                Quaternion rotToTarget = Quaternion.FromToRotation(transform.up, vecToTarget);
+                Vector3 rotAxis;
+                float rotAngle;
+                rotToTarget.ToAngleAxis(out rotAngle, out rotAxis);
+                Quaternion actualRot = Quaternion.AngleAxis(Mathf.Min(rotAngle, Time.deltaTime * TurnRate), rotAxis);
+                //Debug.Log(string.Format("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles));
+                transform.rotation = actualRot * transform.rotation;
+            }
 
             /*if (transform.position.y > _altEpsilon)
             {
@@ -75,13 +81,6 @@ public class Torpedo : MonoBehaviour
                 float factor = Mathf.Exp(transform.position.y);
                 //rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
             }*/
-
-            Vector3 rotAxis;
-            float rotAngle;
-            rotToTarget.ToAngleAxis(out rotAngle, out rotAxis);
-            Quaternion actualRot = Quaternion.AngleAxis(Mathf.Min(rotAngle, Time.deltaTime * TurnRate), rotAxis);
-            //Debug.Log(string.Format("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles));
-            transform.rotation = actualRot * transform.rotation;
 
             // Accelerate:
             if (Speed < MaxSpeed)
@@ -146,7 +145,8 @@ public class Torpedo : MonoBehaviour
     public float ColdLaunchDist;
     private readonly float _altEpsilon = 1e-3f;
     private float _distanceTraveled = 0.0f;
-    private Vector3 _lastVecToTarget;
+    //private Vector3 _lastVecToTarget;
+    private bool _targetReached;
     private Vector3 Origin;
     public Ship OriginShip;
     private bool _inBurnPhase = false;
