@@ -73,10 +73,10 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
-    private Vector3 AttackPosition(Ship enemmyShip)
+    private Vector3 AttackPosition(Ship enemyShip)
     {
         float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
-        Vector3 Front = enemmyShip.transform.up.normalized;
+        Vector3 Front = enemyShip.transform.up.normalized;
         //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
         //Vector3 Right = -Left;
         //Vector3 Rear = -Front;
@@ -104,7 +104,7 @@ public class ShipAIController : MonoBehaviour
                 minDist = currDist;
             }
         }
-        return enemmyShip.transform.position + positions[minPos];
+        return enemyShip.transform.position + positions[minPos];
     }
 
     private void AdvanceToTarget()

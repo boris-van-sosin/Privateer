@@ -216,6 +216,7 @@ public static class ObjectFactory
                     tt.FiringInterval = tordpedoData.FiringInterval;
                     tt.EnergyToFire = tordpedoData.EnergyToFire;
                     tt.HeatToFire = tordpedoData.HeatToFire;
+                    tt.MaxRange = _prototypes.TorpedoTemplate.Range; ; //TODO: Set range from torpedo type
                 }
                 break;
             default:

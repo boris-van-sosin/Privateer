@@ -894,7 +894,7 @@ Prefab:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 100.00001
+      value: 100.000046
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 2}
@@ -2487,6 +2487,7 @@ MonoBehaviour:
   - {fileID: 114658742019267748, guid: 3ce29f4c0dd345b45851a2f1e7b83e6a, type: 2}
   - {fileID: 114206441389797348, guid: c0b7d06ee4002964e85857b6bcfb7500, type: 2}
   - {fileID: 114248074947831548, guid: da22b26bf4e774b459b0267183a20e4e, type: 2}
+  - {fileID: 114932092806717634, guid: 979aa53004b071949b979e9701ef4052, type: 2}
   - {fileID: 114298267387497442, guid: 0f51071563df82746bb0d023195a867f, type: 2}
   TurretPrototypes:
   - {fileID: 114088224525879660, guid: 26f3785b44fd76f4cab8d1fd708aad08, type: 2}
@@ -2549,12 +2550,12 @@ MonoBehaviour:
   - {fileID: 114486302167710632, guid: 227f0e6979e885c4787314d7be333178, type: 2}
   - {fileID: 114848235472779022, guid: 78456a87ad6d1094e85723d38c0e1b65, type: 2}
   - {fileID: 114624451925560912, guid: daf70844fa53c4a47b48e3aa74b72b51, type: 2}
-  - {fileID: 114487266154255198, guid: 508acc0a911131340887443923e74386, type: 2}
-  - {fileID: 114301156121772724, guid: f74f2c0ad2fb2514b8fe41108f9a8bd8, type: 2}
-  - {fileID: 114264630003324386, guid: 8529fe62a7b78c8438a4911812ad16e8, type: 2}
-  - {fileID: 114654832385492728, guid: bd5d45587c6df5d46aad8f279845fce2, type: 2}
-  - {fileID: 114621283869876854, guid: 4e81f746bfd6ce045819e2591a83d30d, type: 2}
-  - {fileID: 114164874154258064, guid: 63c230da247e0ad4dab7e5d1d2088f9d, type: 2}
+  - {fileID: 114917505967805762, guid: d827333fe15384c40a9aecf95b4a9cc8, type: 2}
+  - {fileID: 114860518885474220, guid: 4b3a7d597606aca4b85ac7cad049677c, type: 2}
+  - {fileID: 114634995974760544, guid: cfa103ec8358d344d84059d21c18bdb9, type: 2}
+  - {fileID: 114446645580098450, guid: 6b936adab2dc746459696ebcf467b25a, type: 2}
+  - {fileID: 114823216693775974, guid: acc95dae141ca7b4c9cc02df331cfa59, type: 2}
+  - {fileID: 114896360864804128, guid: 266b0ac5633b6ee4084dca965f366b86, type: 2}
   - {fileID: 114071742926028826, guid: 168a20a7e442d784db06192c86836d6b, type: 2}
   StatusPanelPrototypes:
   - {fileID: 114112208806003978, guid: d06812204951c0f4dba7171e723f6c42, type: 2}
@@ -2562,6 +2563,7 @@ MonoBehaviour:
   - {fileID: 114798951487490382, guid: e4cfe83310c6952499755c240413f846, type: 2}
   - {fileID: 114215967643328342, guid: 4d7cb008c9fc51e4fbe439aaaebb8180, type: 2}
   - {fileID: 114723100617057828, guid: 35c3bd1aa1bdb5241b5136ae4d193d78, type: 2}
+  - {fileID: 114365246727710628, guid: 4114b803d330aaf4b99058e214065cd3, type: 2}
   - {fileID: 114663418541518270, guid: 9e82c7d5b442cf944ac8a29e3946f092, type: 2}
   WeaponCtrlCfgLinePrototype: {fileID: 114809578661190334, guid: 234f89d7609c6ac47a7448da4c991b57,
     type: 2}

@@ -20,7 +20,7 @@ public class Ship : MonoBehaviour
         TowingByHarpax = null;
         TowedByHarpax = null;
         GrapplingMode = false;
-        rigidBody = GetComponent<Rigidbody>();
+        _rigidBody = GetComponent<Rigidbody>();
     }
 
     // Use this for initialization
@@ -370,23 +370,28 @@ public class Ship : MonoBehaviour
             _prevPos = transform.position;
             _prevRot = transform.rotation;
             Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
-            Vector3 rbVelocity = rigidBody.velocity;
+            Vector3 rbVelocity = _rigidBody.velocity;
             if (TowedByHarpax != null)
             {
-                _prevForceTow = (targetVelocity - rbVelocity) * rigidBody.mass;
+                _prevForceTow = (targetVelocity - rbVelocity) * _rigidBody.mass;
                 if (!_hasPrevForceTow)
                 {
-                    rigidBody.AddForce((targetVelocity - rbVelocity) * rigidBody.mass, ForceMode.Impulse);
+                    _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass, ForceMode.Impulse);
                 }
                 else
                 {
-                    rigidBody.AddForce((targetVelocity - rbVelocity) * rigidBody.mass - _prevForceTow, ForceMode.Impulse);
+                    _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass - _prevForceTow, ForceMode.Impulse);
                 }
                 _hasPrevForceTow = true;
             }
+            else if (MovementDirection == ShipDirection.Stopped)
+            {
+                _rigidBody.angularVelocity = Vector3.zero;
+                _rigidBody.velocity = Vector3.zero;
+            }
             else
             {
-                rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
+                _rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
             }
             //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
             //if (rigidBody.velocity.sqrMagnitude >= 0) Debug.Log(string.Format("RigidBofy Velocity vector: {0}", rigidBody.velocity));
@@ -1157,7 +1162,7 @@ public class Ship : MonoBehaviour
         if (otherShip != null)
         {
             // Stop immediately
-            rigidBody.AddForce(-rigidBody.velocity, ForceMode.VelocityChange);
+            _rigidBody.AddForce(-_rigidBody.velocity, ForceMode.VelocityChange);
 
             RevertRotation();
             otherShip.RevertRotation();
@@ -1271,7 +1276,7 @@ public class Ship : MonoBehaviour
     private bool _autoHeading = false;
     private Vector3 _autoHeadingVector;
     private ShipDirection MovementDirection = ShipDirection.Stopped;
-    private Rigidbody rigidBody;
+    private Rigidbody _rigidBody;
 
     private ITurret[] _turrets;
     private IEnumerable<ITurret> _manualTurrets;
