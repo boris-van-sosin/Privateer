@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-
-	// Use this for initialization
-	void Start()
-    {
-    }
-
     protected virtual void Awake()
     {
-        Origin = transform.position;
         _shipLayerMask = ~LayerMask.GetMask("Background");
+        _trail = GetComponent<TrailRenderer>();
+    }
+
+    protected virtual void Start()
+    {
+        Origin = transform.position;
     }
 
     // Update is called once per frame
@@ -58,10 +57,19 @@ public class Projectile : MonoBehaviour
         ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
         if (ps != null)
         {
-            ps.transform.localScale = ProjectileWarhead.WeaponEffectScale;
+            ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
             Destroy(ps.gameObject, 5.0f);
         }
         Destroy(gameObject);
+    }
+
+    public void SetScale(float sc)
+    {
+        transform.localScale = new Vector3(sc, 2 * sc, sc);
+        if (_trail != null)
+        {
+            _trail.widthMultiplier = (sc * _trailWidthFactor);
+        }
     }
 
     /*void OnCollisionEnter(Collision collision)
@@ -82,4 +90,6 @@ public class Projectile : MonoBehaviour
     private int _shipLayerMask;
     public Warhead ProjectileWarhead { get; set; }
     public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
+    private TrailRenderer _trail;
+    private static float _trailWidthFactor = 1.0f; // 1.0f/0.01f;
 }

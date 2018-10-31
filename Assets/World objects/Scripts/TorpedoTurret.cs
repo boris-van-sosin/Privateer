@@ -19,6 +19,9 @@ public class TorpedoTurret : TurretBase
             _launchDirection = new Vector3(0, 1, 0);
         }
         _torpedoTubeDoorsAnim = GetComponent<Animator>();
+        Tuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
+        MaxRange = launchData.Item2;
+        TorpedoesInSpread = launchData.Item1;
     }
 
     protected override void SetDefaultAngle()
@@ -134,8 +137,8 @@ public class TorpedoTurret : TurretBase
         for (int i = 0; i < TorpedoesInSpread; ++i)
         {
             Vector3 actualLaunchVector = (LaunchVector + (Random.onUnitSphere * 0.001f)).normalized;
-            Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.Howitzer, ObjectFactory.WeaponSize.Heavy, ObjectFactory.AmmoType.ShapedCharge);
-            Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, 18, w, ContainingShip);
+            Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
+            Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, MaxRange, w, ContainingShip);
             t.transform.position = Muzzles[_nextBarrel].position;
             _torpedoTubeDoorsAnim.SetBool("DoorsOpen", false);
             yield return new WaitForSeconds(0.1f);
@@ -148,6 +151,7 @@ public class TorpedoTurret : TurretBase
     private bool TorpedoDoorsOpen { get; set; }
 
     public int TorpedoesInSpread;
+    public ObjectFactory.TorpedoType LoadedTorpedoType;
     private Vector3 _launchDirection;
     private Vector3 LaunchVector { get { return transform.TransformDirection(_launchDirection); } }
     private Vector3 LaunchOrientation { get { return -transform.forward; } }

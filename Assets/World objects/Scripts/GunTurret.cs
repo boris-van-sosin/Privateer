@@ -8,7 +8,7 @@ public class GunTurret : DirectionalTurret
     protected override void FireInner(Vector3 firingVector)
     {
         Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
-        Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, warhead, _containingShip);
+        Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
         switch (AmmoType)
         {
             case ObjectFactory.AmmoType.KineticPenetrator:
@@ -65,6 +65,7 @@ public class GunTurret : DirectionalTurret
         return ValueTuple<float, float, float>.Create(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);
     }
 
+    public float ProjectileScale;
     public float MuzzleVelocity;
     public ObjectFactory.AmmoType AmmoType;
 }

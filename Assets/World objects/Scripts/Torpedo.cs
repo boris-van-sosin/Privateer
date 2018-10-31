@@ -130,7 +130,7 @@ public class Torpedo : MonoBehaviour
         ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
         if (ps != null)
         {
-            ps.transform.localScale = ProjectileWarhead.WeaponEffectScale;
+            ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
             Destroy(ps.gameObject, 5.0f);
         }
         Destroy(gameObject);

@@ -12,7 +12,8 @@ public struct Warhead
     public int SystemDamage { get; set; }
     public int HullDamage { get; set; }
     public int HeatGenerated { get; set; }
-    public Vector3 WeaponEffectScale { get; set; }
+    public int SystemHitMultiplicity { get; set; }
+    public float WeaponEffectScale { get; set; }
 }
 
 public static class Combat

@@ -26,11 +26,12 @@ public static class ObjectFactory
         }
     }
 
-    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, Warhead w, Ship origShip)
+    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, Ship origShip)
     {
         if (_prototypes != null)
         {
             Projectile p = _prototypes.CreateProjectile(firingVector, velocity, range, origShip);
+            p.SetScale(projectileScale);
             p.ProjectileWarhead = w;
             return p;
         }
@@ -131,6 +132,17 @@ public static class ObjectFactory
         return _otherWarheads[Tuple<WeaponType, WeaponSize>.Create(w, sz)];
     }
 
+    public static Warhead CreateWarhead(TorpedoType tt)
+    {
+        return _torpedoWarheads[tt].WarheadData;
+    }
+
+    public static Tuple<int, float> TorpedoLaunchDataFromTorpedoType(TorpedoType tt)
+    {
+        WarheadDataEntry4 tropData = _torpedoWarheads[tt];
+        return Tuple<int, float>.Create(tropData.SpeardSize, tropData.MaxRange);
+    }
+
     public static string[] GetAllShipTypes()
     {
         return _prototypes.GetAllShipTypes();
@@ -169,6 +181,7 @@ public static class ObjectFactory
                 {
                     WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
                     GunTurret gt = t as GunTurret;
+                    gt.ProjectileScale = wpd.ProjectileScale;
                     gt.MaxRange = wpd.MaxRange;
                     gt.MuzzleVelocity = wpd.MuzzleVelocity;
                     gt.FiringInterval = wpd.FiringInterval;
@@ -216,7 +229,6 @@ public static class ObjectFactory
                     tt.FiringInterval = tordpedoData.FiringInterval;
                     tt.EnergyToFire = tordpedoData.EnergyToFire;
                     tt.HeatToFire = tordpedoData.HeatToFire;
-                    tt.MaxRange = _prototypes.TorpedoTemplate.Range; ; //TODO: Set range from torpedo type
                 }
                 break;
             default:
@@ -269,6 +281,7 @@ public static class ObjectFactory
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.txt"));
         _gunWarheads = new Dictionary<Tuple<WeaponType, WeaponSize, AmmoType>, Warhead>();
+        _torpedoWarheads = new Dictionary<TorpedoType, WarheadDataEntry4>();
         _otherWarheads = new Dictionary<Tuple<WeaponType, WeaponSize>, Warhead>();
         foreach (string l in lines)
         {
@@ -282,6 +295,11 @@ public static class ObjectFactory
             {
                 WarheadDataEntry2 d2 = WarheadDataEntry2.FromString(l);
                 _otherWarheads.Add(new Tuple<WeaponType, WeaponSize>(d2.LaunchWeaponType, d2.LaunchWeaponSize), d2.WarheadData);
+            }
+            else if (l.Trim().StartsWith("4"))
+            {
+                WarheadDataEntry4 d4 = WarheadDataEntry4.FromString(l);
+                _torpedoWarheads.Add(d4.LaunchTorpedoType, d4);
             }
         }
     }
@@ -426,11 +444,13 @@ public static class ObjectFactory
     public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon, TorpedoTube }
     public enum WeaponSize { Light, Medium, Heavy, TorpedoTube }
     public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
+    public enum TorpedoType { LongRange, Heavy, Tracking }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
 
     private static Dictionary<Tuple<WeaponType, WeaponSize, AmmoType>, Warhead> _gunWarheads = null;
     private static Dictionary<Tuple<WeaponType, WeaponSize>, Warhead> _otherWarheads = null;
+    private static Dictionary<TorpedoType, WarheadDataEntry4> _torpedoWarheads = null;
     private static Dictionary<Tuple<WeaponSize, TurretMountType>, TurretMountDataEntry> _weaponMounts = null;
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry> _weapons_projectile = null;
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
@@ -456,7 +476,9 @@ public static class ObjectFactory
                 WarheadData.ArmourDamage.ToString(),
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
-                WarheadData.HeatGenerated.ToString()
+                WarheadData.HeatGenerated.ToString(),
+                WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.WeaponEffectScale.ToString()
             };
             return string.Join(",", elements);
         }
@@ -479,7 +501,8 @@ public static class ObjectFactory
                         SystemDamage = int.Parse(elements[7].Trim()),
                         HullDamage = int.Parse(elements[8].Trim()),
                         HeatGenerated = int.Parse(elements[9].Trim()),
-                        WeaponEffectScale = new Vector3(float.Parse(elements[10].Trim()), float.Parse(elements[11].Trim()), float.Parse(elements[12].Trim()))
+                        SystemHitMultiplicity = int.Parse(elements[10].Trim()),
+                        WeaponEffectScale = float.Parse(elements[11].Trim())
                     }
                 };
             }
@@ -508,7 +531,10 @@ public static class ObjectFactory
                 WarheadData.ArmourDamage.ToString(),
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
-                WarheadData.HeatGenerated.ToString()
+                WarheadData.HeatGenerated.ToString(),
+                WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.WeaponEffectScale.ToString()
+
             };
             return string.Join(",", elements);
         }
@@ -530,8 +556,69 @@ public static class ObjectFactory
                         SystemDamage = int.Parse(elements[6].Trim()),
                         HullDamage = int.Parse(elements[7].Trim()),
                         HeatGenerated = int.Parse(elements[8].Trim()),
-                        WeaponEffectScale = new Vector3(float.Parse(elements[9].Trim()), float.Parse(elements[10].Trim()), float.Parse(elements[11].Trim()))
+                        SystemHitMultiplicity = int.Parse(elements[9].Trim()),
+                        WeaponEffectScale = float.Parse(elements[10].Trim())
                     }
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    public class WarheadDataEntry4
+    {
+        public TorpedoType LaunchTorpedoType;
+        public int SpeardSize;
+        public float MaxRange;
+        public Warhead WarheadData;
+        public float ProjectileScale;
+
+        public string ToTextLine()
+        {
+            string[] elements = new string[]
+            {
+                "4",
+                LaunchTorpedoType.ToString(),
+                SpeardSize.ToString(),
+                MaxRange.ToString(),
+                WarheadData.ShieldDamage.ToString(),
+                WarheadData.ArmourPenetration.ToString(),
+                WarheadData.ArmourDamage.ToString(),
+                WarheadData.SystemDamage.ToString(),
+                WarheadData.HullDamage.ToString(),
+                WarheadData.HeatGenerated.ToString(),
+                WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.WeaponEffectScale.ToString(),
+                ProjectileScale.ToString()
+            };
+            return string.Join(",", elements);
+        }
+
+        public static WarheadDataEntry4 FromString(string s)
+        {
+            string[] elements = s.Trim().Split(',');
+            if (elements[0].Trim() == "4")
+            {
+                return new WarheadDataEntry4()
+                {
+                    LaunchTorpedoType = (TorpedoType)System.Enum.Parse(typeof(TorpedoType), elements[1].Trim(), true),
+                    SpeardSize = int.Parse(elements[2].Trim()),
+                    MaxRange = float.Parse(elements[3].Trim()),
+                    WarheadData = new Warhead()
+                    {
+                        ShieldDamage = int.Parse(elements[4].Trim()),
+                        ArmourPenetration = int.Parse(elements[5].Trim()),
+                        ArmourDamage = int.Parse(elements[6].Trim()),
+                        SystemDamage = int.Parse(elements[7].Trim()),
+                        HullDamage = int.Parse(elements[8].Trim()),
+                        HeatGenerated = int.Parse(elements[9].Trim()),
+                        SystemHitMultiplicity = int.Parse(elements[10].Trim()),
+                        WeaponEffectScale = float.Parse(elements[11].Trim())
+                    },
+                    ProjectileScale = float.Parse(elements[12].Trim())
                 };
             }
             else
@@ -575,6 +662,7 @@ public static class ObjectFactory
         public float MaxRange;
         public float MuzzleVelocity;
         public float FiringInterval;
+        public float ProjectileScale;
         public int EnergyToFire;
         public int HeatToFire;
 
@@ -591,6 +679,7 @@ public static class ObjectFactory
                     MaxRange = float.Parse(elements[i++].Trim()),
                     MuzzleVelocity = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
+                    ProjectileScale = float.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())
                 };
@@ -609,6 +698,7 @@ public static class ObjectFactory
         public float MaxRange;
         public float FiringInterval;
         public float BeamDuration;
+        public float BeamScale;
         public int EnergyToFire;
         public int HeatToFire;
 
@@ -625,6 +715,7 @@ public static class ObjectFactory
                     MaxRange = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
                     BeamDuration = float.Parse(elements[i++].Trim()),
+                    BeamScale = float.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())
                 };

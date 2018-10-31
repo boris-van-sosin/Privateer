@@ -91,11 +91,11 @@ public class CableBehavior : MonoBehaviour
 
         //Upper control point
         //To get a little curve at the top than at the bottom
-        Vector3 B = A + WhatTheRopeIsConnectedTo.up * (-(A - D).magnitude * 0.1f);
+        //Vector3 B = A + WhatTheRopeIsConnectedTo.up * (-(A - D).magnitude * 0.1f);
         //B = A;
 
         //Lower control point
-        Vector3 C = D + WhatIsHangingFromTheRope.up * ((A - D).magnitude * 0.5f);
+        //Vector3 C = D + WhatIsHangingFromTheRope.up * ((A - D).magnitude * 0.5f);
 
         //Get the positions
         //BezierCurve.GetBezierCurve(A, B, C, D, allRopeSections);
