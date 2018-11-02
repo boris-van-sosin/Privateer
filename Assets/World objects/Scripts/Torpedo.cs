@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Torpedo : MonoBehaviour
+public class Torpedo : MonoBehaviour, ITargetableEntity
 {
 	// Use this for initialization
 	void Start ()
@@ -12,6 +12,7 @@ public class Torpedo : MonoBehaviour
         _shipLayerMask = ~LayerMask.GetMask("Background");
         WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
         _targetReached = false;
+        Targetable = true;
     }
 
     void Awake()
@@ -101,11 +102,7 @@ public class Torpedo : MonoBehaviour
                 Ship shipHit;
                 if (hitobj.GetComponent<Projectile>() == null && hitobj.GetComponent<Torpedo>() == null)
                 {
-                    shipHit = hitobj.GetComponent<Ship>();
-                    if (shipHit == null)
-                    {
-                        shipHit = hitobj.GetComponentInParent<Ship>();
-                    }
+                    shipHit = Ship.FromCollider(hit.collider);
                     if (shipHit == null || shipHit == OriginShip)
                     {
                         return;
@@ -135,6 +132,15 @@ public class Torpedo : MonoBehaviour
         }
         Destroy(gameObject);
     }
+
+    void OnDestroy()
+    {
+        Targetable = false;
+    }
+
+    // TargetableEntity properties:
+    public Vector3 EntityLocation { get { return transform.position; } }
+    public bool Targetable { get; private set; }
 
     public float BurnAcceleration;
     public float MaxSpeed;

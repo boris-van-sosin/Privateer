@@ -478,6 +478,7 @@ public static class ObjectFactory
                 WarheadData.HullDamage.ToString(),
                 WarheadData.HeatGenerated.ToString(),
                 WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.BlastRadius.ToString(),
                 WarheadData.WeaponEffectScale.ToString()
             };
             return string.Join(",", elements);
@@ -502,7 +503,8 @@ public static class ObjectFactory
                         HullDamage = int.Parse(elements[8].Trim()),
                         HeatGenerated = int.Parse(elements[9].Trim()),
                         SystemHitMultiplicity = int.Parse(elements[10].Trim()),
-                        WeaponEffectScale = float.Parse(elements[11].Trim())
+                        BlastRadius = float.Parse(elements[11].Trim()),
+                        WeaponEffectScale = float.Parse(elements[12].Trim())
                     }
                 };
             }

@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using System.Linq;
 
-public class Ship : MonoBehaviour
+public class Ship : MonoBehaviour, ITargetableEntity
 {
     void Awake()
     {
@@ -1261,6 +1261,21 @@ public class Ship : MonoBehaviour
         WeaponGroups = TurretControlGrouping.AllAuto(this);
     }
 
+    public static Ship FromCollider(Collider c)
+    {
+        Ship s;
+        if ((s = c.GetComponent<Ship>()) != null || (s = c.GetComponentInParent<Ship>()) != null)
+        {
+            return s;
+        }
+        return null;
+    }
+
+    // TargetableEntity properties:
+    public Vector3 EntityLocation { get { return transform.position; } }
+    public bool Targetable { get { return !ShipDisabled; } }
+
+    // Fields
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };
 

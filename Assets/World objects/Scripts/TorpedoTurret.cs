@@ -99,10 +99,10 @@ public class TorpedoTurret : TurretBase
         throw new System.NotImplementedException();
     }
 
-    protected override Ship AcquireTarget()
+    protected override ITargetableEntity AcquireTarget()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f);
-        Ship foundTarget = null;
+        ITargetableEntity foundTarget = null;
         foreach (Collider c in colliders)
         {
             Ship s = c.GetComponent<Ship>();

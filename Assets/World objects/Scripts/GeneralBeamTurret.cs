@@ -26,11 +26,7 @@ public abstract class GeneralBeamTurret : DirectionalTurret
             {
                 continue;
             }
-            Ship currHitShip = hits[i].collider.GetComponent<Ship>();
-            if (currHitShip == null)
-            {
-                currHitShip = hits[i].collider.GetComponentInParent<Ship>();
-            }
+            Ship currHitShip = Ship.FromCollider(hits[i].collider);
             if (currHitShip != null && (closestHit < 0 || hits[i].distance < hits[closestHit].distance))
             {
                 hitShip = currHitShip;

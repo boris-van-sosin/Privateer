@@ -125,24 +125,31 @@ public abstract class DirectionalTurret : TurretBase
         return vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
     }
 
-    protected override Ship AcquireTarget()
+    protected override ITargetableEntity AcquireTarget()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f);
-        Ship foundTarget = null;
+        ITargetableEntity foundTarget = null;
         foreach (Collider c in colliders)
         {
-            Ship s = c.GetComponent<Ship>();
-            if (s == null)
+            Ship s;
+            Torpedo t;
+            if ((s = Ship.FromCollider(c)) != null)
             {
-                continue;
+                if (s.ShipDisabled)
+                {
+                    continue;
+                }
+                if (ContainingShip.Owner.IsEnemy(s.Owner))
+                {
+                    foundTarget = s;
+                }
             }
-            else if (s.ShipDisabled)
+            if ((t = c.GetComponent<Torpedo>()) != null)
             {
-                continue;
-            }
-            if (ContainingShip.Owner.IsEnemy(s.Owner))
-            {
-                foundTarget = s;
+                //if (t.OriginShip != null && ContainingShip.Owner.IsEnemy(t.OriginShip.Owner))
+                {
+                    foundTarget = t;
+                }
             }
         }
         return foundTarget;

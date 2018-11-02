@@ -13,12 +13,15 @@ public class GunTurret : DirectionalTurret
         {
             case ObjectFactory.AmmoType.KineticPenetrator:
                 p.WeaponEffectKey = ObjectFactory.WeaponEffect.KineticImpactSparks;
+                p.ProximityProjectile = false;
                 break;
             case ObjectFactory.AmmoType.ShapedCharge:
                 p.WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
+                p.ProximityProjectile = false;
                 break;
             case ObjectFactory.AmmoType.ShrapnelRound:
                 p.WeaponEffectKey = ObjectFactory.WeaponEffect.FlakBurst;
+                p.ProximityProjectile = true;
                 break;
             default:
                 break;

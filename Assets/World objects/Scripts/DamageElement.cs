@@ -13,6 +13,7 @@ public struct Warhead
     public int HullDamage { get; set; }
     public int HeatGenerated { get; set; }
     public int SystemHitMultiplicity { get; set; }
+    public float BlastRadius { get; set; }
     public float WeaponEffectScale { get; set; }
 }
 

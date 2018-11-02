@@ -69,7 +69,14 @@ public class ShipFreeCreatePanel : MonoBehaviour
             GunTurret gt = t as GunTurret;
             if (gt != null)
             {
-                gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
+                if (gt.TurretSize == ObjectFactory.WeaponSize.Light && gt.TurretWeaponType == ObjectFactory.WeaponType.Autocannon)
+                {
+                    gt.AmmoType = ObjectFactory.AmmoType.ShrapnelRound;
+                }
+                else
+                {
+                    gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
+                }
                 t.InstalledTurretMod = TurretMod.Harpax;
             }
             s.PlaceTurret(hp, t);

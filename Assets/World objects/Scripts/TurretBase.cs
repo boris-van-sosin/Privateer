@@ -124,13 +124,13 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (_targetShip != null && Mode == TurretMode.Auto)
         {
-            if (_targetShip.ShipDisabled || _targetShip.ShipSurrendered || _targetShip.InBoarding || (transform.position - _targetShip.transform.position).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
+            if (!_targetShip.Targetable || (transform.position - _targetShip.EntityLocation).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
             {
                 _targetShip = null;
             }
             else
             {
-                Fire(_targetShip.transform.position);
+                Fire(_targetShip.EntityLocation);
             }
         }
     }
@@ -166,7 +166,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f)
             {
-                return false;
+                if (!(_targetShip is Torpedo)) //TODO: needs better solution
+                    return false;
             }
             Vector3 origin = Muzzles[_nextBarrel].position;
             origin.y = 0;
@@ -185,11 +186,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                     closestHit = i;
                 }
             }
-            if (closestHit >= 0 && (hits[closestHit].collider.gameObject == _targetShip.gameObject || hits[closestHit].collider.gameObject == _targetShip.ShieldCapsule.gameObject))
+            if (closestHit >= 0 && _targetShip == Ship.FromCollider(hits[closestHit].collider))
             {
                 return true;
             }
-            else
+            else if (!(_targetShip is Torpedo)) //TODO: needs better solution
             {
                 return false;
             }
@@ -323,7 +324,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             {
                 return 0;
             }
-            Vector3 vecToTargetShip = _targetShip.transform.position - transform.position;
+            Vector3 vecToTargetShip = _targetShip.EntityLocation - transform.position;
             vecToTargetShip.y = 0;
             return Quaternion.LookRotation(-vecToTargetShip).eulerAngles.y;
         }
@@ -402,7 +403,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                     }
                     if (_targetShip != null)
                     {
-                        ManualTarget(_targetShip.transform.position);
+                        ManualTarget(_targetShip.EntityLocation);
                     }
                     else
                     {
@@ -417,7 +418,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    protected abstract Ship AcquireTarget();
+    protected abstract ITargetableEntity AcquireTarget();
 
     public virtual bool IsTurretModCombatible(TurretMod m)
     {
@@ -482,7 +483,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     // Auto control
     public TurretMode Mode { get; set; }
 
-    private Ship _targetShip = null;
+    private ITargetableEntity _targetShip = null;
 
     public int MaxHitpoints;
     private int _currHitPoints;
