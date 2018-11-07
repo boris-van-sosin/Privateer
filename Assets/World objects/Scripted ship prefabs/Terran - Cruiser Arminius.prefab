@@ -2027,15 +2027,16 @@ MonoBehaviour:
   AftComponentSlots: 120000000000000000000000
   LeftComponentSlots: 0000000000000000
   RightComponentSlots: 0000000000000000
-  MaxHullHitPoints: 9500
-  DefaultArmorFront: 1200
-  DefaultArmorAft: 1100
-  DefaultArmorLeft: 1250
-  DefaultArmorRight: 1250
-  MinArmorFront: 155
-  MinArmorAft: 155
-  MinArmorLeft: 155
-  MinArmorRight: 155
+  MaxHullHitPoints: 1000
+  ArmorFront: 750
+  ArmorAft: 750
+  ArmorLeft: 750
+  ArmorRight: 725
+  ArmourMitigation: 0.65
+  DefaultMitigationArmourFront: 550
+  DefaultMitigationArmourAft: 550
+  DefaultMitigationArmourLeft: 550
+  DefaultMitigationArmourRight: 450
   OperationalCrew: 110
   MaxCrew: 140
   MaxSpecialCharacters: 3

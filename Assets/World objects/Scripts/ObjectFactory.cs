@@ -24,6 +24,10 @@ public static class ObjectFactory
         {
             LoadWeapons();
         }
+        if (_penetrationTable == null)
+        {
+            LoadPenetrationTable();
+        }
     }
 
     public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, Ship origShip)
@@ -277,6 +281,11 @@ public static class ObjectFactory
         return res;
     }
 
+    public static ArmourPenetrationTable GetArmourPenetrationTable()
+    {
+        return _penetrationTable;
+    }
+
     private static void LoadWarheads()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.txt"));
@@ -380,6 +389,32 @@ public static class ObjectFactory
         }
     }
 
+    private static void LoadPenetrationTable()
+    {
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "PenetrationChart.txt"));
+        List<string[]> cleanLines = new List<string[]>(lines.Length);
+        foreach (string l in lines)
+        {
+            string trimmed = l.Trim();
+            int commentIdx = trimmed.IndexOf('#');
+            string clean;
+            if (commentIdx >= 0)
+            {
+                clean = trimmed.Substring(0, commentIdx);
+            }
+            else
+            {
+                clean = trimmed;
+            }
+            string[] currArr = clean.Trim().Split(',').Select(x => x.Trim()).Where(y => y != string.Empty).ToArray();
+            if (currArr.Length > 0)
+            {
+                cleanLines.Add(currArr);
+            }
+        }
+        _penetrationTable = new ArmourPenetrationTable(cleanLines.ToArray());
+    }
+
     private static void LoadWeapons()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
@@ -455,6 +490,7 @@ public static class ObjectFactory
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry> _weapons_projectile = null;
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
     private static WeaponTorpedoDataEntry _weapons_torpedo = null;
+    private static ArmourPenetrationTable _penetrationTable = null;
 
     public class WarheadDataEntry3
     {

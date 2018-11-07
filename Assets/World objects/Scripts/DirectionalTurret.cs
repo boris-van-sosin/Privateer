@@ -11,7 +11,7 @@ public abstract class DirectionalTurret : TurretBase
 
     protected override void Update()
     {
-        if (CanRotate)
+        if (CanRotate && Mode != TurretMode.Off)
         {
             float maxRotation = RotationSpeed * Time.deltaTime;
             //Debug.Log(string.Format("Turret angle: global: {0} local: {1} target (global): {2}", CurrAngle, CurrLocalAngle, _globalTargetAngle));
@@ -146,7 +146,7 @@ public abstract class DirectionalTurret : TurretBase
             }
             if ((t = c.GetComponent<Torpedo>()) != null)
             {
-                //if (t.OriginShip != null && ContainingShip.Owner.IsEnemy(t.OriginShip.Owner))
+                if (t.OriginShip != null && ContainingShip.Owner.IsEnemy(t.OriginShip.Owner))
                 {
                     foundTarget = t;
                 }

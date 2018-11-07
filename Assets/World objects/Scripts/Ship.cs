@@ -120,38 +120,44 @@ public class Ship : MonoBehaviour, ITargetableEntity
 
     private void InitArmour()
     {
-        _maxArmour.Add(ShipSection.Fore, DefaultArmorFront);
-        _minArmour.Add(ShipSection.Fore, MinArmorFront);
-        _currArmour.Add(ShipSection.Fore, DefaultArmorFront);
+        _maxMitigationArmour.Add(ShipSection.Fore, DefaultMitigationArmourFront);
+        _currMitigationArmour.Add(ShipSection.Fore, DefaultMitigationArmourFront);
 
-        _maxArmour.Add(ShipSection.Aft, DefaultArmorAft);
-        _minArmour.Add(ShipSection.Aft, MinArmorAft);
-        _currArmour.Add(ShipSection.Aft, DefaultArmorAft);
+        _maxMitigationArmour.Add(ShipSection.Aft, DefaultMitigationArmourAft);
+        _currMitigationArmour.Add(ShipSection.Aft, DefaultMitigationArmourAft);
 
-        _maxArmour.Add(ShipSection.Left, DefaultArmorLeft);
-        _minArmour.Add(ShipSection.Left, MinArmorLeft);
-        _currArmour.Add(ShipSection.Left, DefaultArmorLeft);
+        _maxMitigationArmour.Add(ShipSection.Left, DefaultMitigationArmourLeft);
+        _currMitigationArmour.Add(ShipSection.Left, DefaultMitigationArmourLeft);
 
-        _maxArmour.Add(ShipSection.Right, DefaultArmorRight);
-        _minArmour.Add(ShipSection.Right, MinArmorRight);
-        _currArmour.Add(ShipSection.Right, DefaultArmorRight);
+        _maxMitigationArmour.Add(ShipSection.Right, DefaultMitigationArmourRight);
+        _currMitigationArmour.Add(ShipSection.Right, DefaultMitigationArmourRight);
+
+        _armour.Add(ShipSection.Fore, ArmorFront);
+        _armour.Add(ShipSection.Aft, ArmorAft);
+        _armour.Add(ShipSection.Left, ArmorLeft);
+        _armour.Add(ShipSection.Right, ArmorRight);
         foreach (ShipSection section in _componentSlots.Keys)
         {
             foreach (Tuple<ComponentSlotType, IShipComponent> comp in _componentSlots[section])
             {
-                if (!_maxArmour.ContainsKey(section))
+                if (!_maxMitigationArmour.ContainsKey(section))
                 {
-                    _maxArmour.Add(section, 0);
+                    _maxMitigationArmour.Add(section, 0);
                 }
-                if (!_currArmour.ContainsKey(section))
+                if (!_currMitigationArmour.ContainsKey(section))
                 {
-                    _currArmour.Add(section, _maxArmour[section]);
+                    _currMitigationArmour.Add(section, _maxMitigationArmour[section]);
                 }
+                if (!_armour.ContainsKey(section))
+                {
+                    _armour.Add(section, 0);
+                }
+
                 ExtraArmour a = comp.Item2 as ExtraArmour;
                 if (a != null)
                 {
-                    _maxArmour[section] += a.ArmourAmount;
-                    _currArmour[section] += a.ArmourAmount;
+                    _maxMitigationArmour[section] += a.ArmourAmount;
+                    _currMitigationArmour[section] += a.ArmourAmount;
                 }
             }
         }
@@ -848,9 +854,15 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
 
         // armour penetration
-        int armourAtLocation = _currArmour[sec];
+        int armourAtLocation = _armour[sec];
         if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
         {
+            float mitigationFactor = 1f;
+            if (_currMitigationArmour[sec] > 0)
+            {
+                _currMitigationArmour[sec] = System.Math.Max(0, _currMitigationArmour[sec] - w.ArmourDamage);
+                mitigationFactor = ArmourMitigation;
+            }
             // a random component at the section is damaged.
             List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlots[sec].Count);
             foreach (Tuple<ComponentSlotType, IShipComponent> c in _componentSlots[sec])
@@ -872,11 +884,10 @@ public class Ship : MonoBehaviour, ITargetableEntity
             if (damageableComps.Count > 0)
             {
                 IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
-                comp.ComponentHitPoints -= w.SystemDamage;
+                comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
             }
-            HullHitPoints = System.Math.Max(0, HullHitPoints - w.HullDamage);
+            HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
         }
-        _currArmour[sec] = System.Math.Max(_minArmour[sec], _currArmour[sec] - w.ArmourDamage);
         CheckCriticalDamage();
     }
 
@@ -1023,9 +1034,9 @@ public class Ship : MonoBehaviour, ITargetableEntity
     {
         get
         {
-            foreach (ShipSection sec in _currArmour.Keys)
+            foreach (ShipSection sec in _currMitigationArmour.Keys)
             {
-                if (_currArmour[sec] != _maxArmour[sec])
+                if (_currMitigationArmour[sec] != _maxMitigationArmour[sec])
                 {
                     return false;
                 }
@@ -1062,15 +1073,15 @@ public class Ship : MonoBehaviour, ITargetableEntity
             ShipSection minArmourSec = ShipSection.Fore;
             int minArmour = -1;
             bool needsRepair = false;
-            foreach (ShipSection sec in _currArmour.Keys)
+            foreach (ShipSection sec in _currMitigationArmour.Keys)
             {
-                if (_currArmour[sec] != _maxArmour[sec])
+                if (_currMitigationArmour[sec] != _maxMitigationArmour[sec])
                 {
                     needsRepair = true;
-                    if (minArmour < 0 || _currArmour[sec] < minArmour)
+                    if (minArmour < 0 || _currMitigationArmour[sec] < minArmour)
                     {
                         minArmourSec = sec;
-                        minArmour = _currArmour[sec];
+                        minArmour = _currMitigationArmour[sec];
                     }
                 }
             }
@@ -1078,14 +1089,14 @@ public class Ship : MonoBehaviour, ITargetableEntity
             {
                 return;
             }
-            if (_maxArmour[minArmourSec] - _currArmour[minArmourSec] <= repairPointsLeft)
+            if (_maxMitigationArmour[minArmourSec] - _currMitigationArmour[minArmourSec] <= repairPointsLeft)
             {
-                repairPointsLeft -= _maxArmour[minArmourSec] - _currArmour[minArmourSec];
-                _currArmour[minArmourSec] = _maxArmour[minArmourSec];
+                repairPointsLeft -= _maxMitigationArmour[minArmourSec] - _currMitigationArmour[minArmourSec];
+                _currMitigationArmour[minArmourSec] = _maxMitigationArmour[minArmourSec];
             }
             else
             {
-                _currArmour[minArmourSec] += repairPointsLeft;
+                _currMitigationArmour[minArmourSec] += repairPointsLeft;
                 repairPointsLeft = 0;
             }
         }
@@ -1368,17 +1379,18 @@ public class Ship : MonoBehaviour, ITargetableEntity
     public int MaxHullHitPoints;
     public int HullHitPoints { get; set; }
     private int _totalMaxShield;
-    public int DefaultArmorFront;
-    public int DefaultArmorAft;
-    public int DefaultArmorLeft;
-    public int DefaultArmorRight;
-    public int MinArmorFront;
-    public int MinArmorAft;
-    public int MinArmorLeft;
-    public int MinArmorRight;
-    private Dictionary<ShipSection, int> _maxArmour = new Dictionary<ShipSection, int>();
-    private Dictionary<ShipSection, int> _minArmour = new Dictionary<ShipSection, int>();
-    private Dictionary<ShipSection, int> _currArmour = new Dictionary<ShipSection, int>();
+    public int ArmorFront;
+    public int ArmorAft;
+    public int ArmorLeft;
+    public int ArmorRight;
+    public float ArmourMitigation;
+    public int DefaultMitigationArmourFront;
+    public int DefaultMitigationArmourAft;
+    public int DefaultMitigationArmourLeft;
+    public int DefaultMitigationArmourRight;
+    private Dictionary<ShipSection, int> _armour = new Dictionary<ShipSection, int>();
+    private Dictionary<ShipSection, int> _maxMitigationArmour = new Dictionary<ShipSection, int>();
+    private Dictionary<ShipSection, int> _currMitigationArmour = new Dictionary<ShipSection, int>();
     public bool ShipDisabled { get; private set; }
     public bool ShipImmobilized { get; private set; }
     public bool ShipSurrendered { get; private set; }
