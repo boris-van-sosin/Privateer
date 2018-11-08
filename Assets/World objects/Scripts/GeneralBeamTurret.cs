@@ -17,7 +17,7 @@ public abstract class GeneralBeamTurret : DirectionalTurret
         Vector3 boxCenter = _beamOrigin + 0.5f * MaxRange * _firingVector;
         Vector3 boxSize = new Vector3(0.01f, 0.3f, MaxRange);
         //ExtDebug.DrawBoxCastBox(boxCenter, boxSize / 2, _firingVector, Quaternion.LookRotation(_firingVector), MaxRange, Color.magenta, 1.0f);
-        RaycastHit[] hits = Physics.BoxCastAll(boxCenter, boxSize / 2, _firingVector, Quaternion.LookRotation(_firingVector), MaxRange);
+        RaycastHit[] hits = Physics.BoxCastAll(boxCenter, boxSize / 2, _firingVector, Quaternion.LookRotation(_firingVector), MaxRange, ObjectFactory.AllTargetableLayerMask);
         int closestHit = -1;
         Ship hitShip = null;
         for (int i = 0; i < hits.Length; ++i)

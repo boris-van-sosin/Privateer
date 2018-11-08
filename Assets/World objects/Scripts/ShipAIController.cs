@@ -29,11 +29,11 @@ public class ShipAIController : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 30);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.AllShipsNoStikeCraftLayerMask);
         Ship foundTarget = null;
         foreach (Collider c in colliders)
         {
-            Ship s = c.GetComponent<Ship>();
+            Ship s = Ship.FromCollider(c);
             if (s == null)
             {
                 continue;
@@ -162,7 +162,7 @@ public class ShipAIController : MonoBehaviour
         Vector3 rightVec = Quaternion.AngleAxis(90, Vector3.up) * directionNormalized;
         float projectFactor = _controlledShip.ShipLength * 2;
         Vector3 projectedPath = directionNormalized * projectFactor;
-        RaycastHit[] hits = Physics.CapsuleCastAll(transform.position, transform.position + projectedPath, _controlledShip.ShipWidth * 2.0f, directionNormalized, projectFactor);
+        RaycastHit[] hits = Physics.CapsuleCastAll(transform.position, transform.position + projectedPath, _controlledShip.ShipWidth * 2.0f, directionNormalized, projectFactor, ObjectFactory.AllTargetableLayerMask);
         bool obstruction = false;
         List<float> dotToCorners = new List<float>(4 * hits.Length);
         float dotMin = -1;

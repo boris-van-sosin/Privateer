@@ -9,10 +9,10 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     {
         _exhaustPatricleSystem = GetComponentInChildren<ParticleSystem>();
         _collider = GetComponent<Collider>();
-        _shipLayerMask = ~LayerMask.GetMask("Background");
         WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
         _targetReached = false;
         Targetable = true;
+        Origin = transform.position;
     }
 
     void Awake()
@@ -42,6 +42,10 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             if (_collider != null && !_collider.enabled && _distanceTraveled >= OriginShip.ShipWidth)
             {
                 _collider.enabled = true;
+                Vector3 vecToTarget = (Target - Origin);
+                vecToTarget.y = 0;
+                Target = transform.position + vecToTarget.normalized * Range * 1.1f;
+                Target.y = 0;
             }
         }
         else
@@ -96,7 +100,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             Vector3 dirFlat = new Vector3(transform.up.x, 0, transform.up.z);
             Ray r = new Ray(posFlat, dirFlat);
             RaycastHit hit;
-            if (Physics.Raycast(r, out hit, distanceToTravel, _shipLayerMask))
+            if (Physics.Raycast(r, out hit, distanceToTravel, ObjectFactory.AllTargetableLayerMask))
             {
                 GameObject hitobj = hit.collider.gameObject;
                 Ship shipHit;
@@ -156,7 +160,6 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     private Vector3 Origin;
     public Ship OriginShip;
     private bool _inBurnPhase = false;
-    private int _shipLayerMask;
     public Warhead ProjectileWarhead { get; set; }
     public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
     public Vector3 Target;// { get; set; }

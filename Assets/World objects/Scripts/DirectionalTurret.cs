@@ -127,7 +127,7 @@ public abstract class DirectionalTurret : TurretBase
 
     protected override ITargetableEntity AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.AllTargetableLayerMask);
         ITargetableEntity foundTarget = null;
         foreach (Collider c in colliders)
         {

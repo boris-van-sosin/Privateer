@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4081335534675466}
   - component: {fileID: 33612824500873350}
   - component: {fileID: 23262421414182384}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: instance_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4993883047940894}
   - component: {fileID: 33166255116109210}
   - component: {fileID: 23363702960538390}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: instance_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4090932439956738}
   - component: {fileID: 95742745234480402}
   - component: {fileID: 114071742926028826}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Torpedo Tube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4885437674158448}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Muzzle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4236802497548026}
   - component: {fileID: 33425029594182026}
   - component: {fileID: 23829195968789620}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: instance_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,3 +329,4 @@ MonoBehaviour:
   HeatToFire: 0
   MaxHitpoints: 0
   TorpedoesInSpread: 1
+  LoadedTorpedoType: 0

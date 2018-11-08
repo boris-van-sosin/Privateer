@@ -164,16 +164,16 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
         if (Mode == TurretMode.Auto)
         {
-            if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f)
+            if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f) //TODO: a different rule for torpedo tubes
             {
                 if (!(_targetShip is Torpedo)) //TODO: needs better solution
                     return false;
             }
-            Vector3 origin = Muzzles[_nextBarrel].position;
+            Vector3 origin = Muzzles[_nextBarrel].position; //TODO: a different ray computation for torpedo tubes
             origin.y = 0;
             Vector3 firingVector = Muzzles[_nextBarrel].up;
             firingVector.y = 0;
-            RaycastHit[] hits = Physics.RaycastAll(origin, firingVector, MaxRange);
+            RaycastHit[] hits = Physics.RaycastAll(origin, firingVector, MaxRange, ObjectFactory.AllTargetableLayerMask);
             int closestHit = -1;
             for (int i = 0; i < hits.Length; ++i)
             {

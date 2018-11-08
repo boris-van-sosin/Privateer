@@ -861,7 +861,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
             if (_currMitigationArmour[sec] > 0)
             {
                 _currMitigationArmour[sec] = System.Math.Max(0, _currMitigationArmour[sec] - w.ArmourDamage);
-                mitigationFactor = ArmourMitigation;
+                mitigationFactor = 1f - ArmourMitigation;
             }
             // a random component at the section is damaged.
             List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlots[sec].Count);

@@ -19,8 +19,12 @@ public class UserInput : MonoBehaviour
 
     void Awake()
     {
-        _backgroundLayerMask = LayerMask.GetMask("Background");
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Default"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Ships"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Shields"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Stike Craft"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Stike Torpedoes"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Weapons"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Effects"), true);
     }
 
     // Update is called once per frame
@@ -129,7 +133,6 @@ public class UserInput : MonoBehaviour
     private bool _grapplingMode = false; // temporary
     private StatusTopLevel _statusTopLevelDisplay = null;
     public Transform ShipStatusPanel;
-    private int _backgroundLayerMask = 0;
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;

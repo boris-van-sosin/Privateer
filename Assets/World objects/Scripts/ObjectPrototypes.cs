@@ -55,6 +55,7 @@ public class ObjectPrototypes : MonoBehaviour
         res.transform.rotation = q;
         res.OriginShip = origShip;
         res.Target = target;
+        res.Range = range;
         res.ColdLaunchVec = launchVector;
         return res;
     }
@@ -150,25 +151,10 @@ public class ObjectPrototypes : MonoBehaviour
         return _turretPrototypeDictionary.Keys.ToArray();
     }
 
-    public StatusTopLevel CreateStatusPanel(string prodKey)
+    public StatusTopLevel CreateStatusPanel()
     {
-        StatusTopLevel res;
-        if (_statusPanelsPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        foreach (StatusTopLevel s in StatusPanelPrototypes)
-        {
-            _statusPanelsPrototypeDictionary[s.ShipProductionKey] = s;
-        }
-        if (_statusPanelsPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        else
-        {
-            return null;
-        }
+        StatusTopLevel res = Instantiate(StatusPanelPrototype);
+        return res;
     }
 
     public StatusSubsystem CreateStatusSprite()
@@ -225,7 +211,7 @@ public class ObjectPrototypes : MonoBehaviour
     public ParticleSystem DamageElectricSparks;
     public Ship[] ShipPrototypes;
     public TurretBase[] TurretPrototypes;
-    public StatusTopLevel[] StatusPanelPrototypes;
+    public StatusTopLevel StatusPanelPrototype;
     public WeaponCtrlCfgLine WeaponCtrlCfgLinePrototype;
 
     public StatusSubsystem SubsystemStatusSprite;
@@ -235,9 +221,10 @@ public class ObjectPrototypes : MonoBehaviour
 
     public Canvas BoardingStatusCanvas;
 
+    public Camera ShipStatusPanelCamera;
+
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
-    private Dictionary<string, StatusTopLevel> _statusPanelsPrototypeDictionary = new Dictionary<string, StatusTopLevel>();
     private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
 }

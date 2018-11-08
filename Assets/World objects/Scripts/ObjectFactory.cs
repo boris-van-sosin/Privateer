@@ -254,15 +254,15 @@ public static class ObjectFactory
         return res;
     }
 
-    public static StatusTopLevel CreateStatusPanel(string prodKey)
+    public static StatusTopLevel CreateStatusPanel()
     {
-        StatusTopLevel res = _prototypes.CreateStatusPanel(prodKey);
+        StatusTopLevel res = _prototypes.CreateStatusPanel();
         return res;
     }
 
     public static StatusTopLevel CreateStatusPanel(Ship s, Transform containingPanel)
     {
-        StatusTopLevel res = CreateStatusPanel(s.ProductionKey);
+        StatusTopLevel res = CreateStatusPanel();
         RectTransform rt = res.GetComponent<RectTransform>();
         rt.SetParent(containingPanel);
         res.AttachShip(s);
@@ -285,6 +285,18 @@ public static class ObjectFactory
     {
         return _penetrationTable;
     }
+
+    public static Camera GetShipStatusPanelCamera()
+    {
+        return _prototypes.ShipStatusPanelCamera;
+    }
+
+    public static int AllTargetableLayerMask { get { return _allTargetableLayerMask; } }
+    public static int AllShipsLayerMask { get { return _allShipsLayerMask; } }
+    public static int AllStikeCraftLayerMask { get { return _allStrikeCraftLayerMask; } }
+    public static int AllShipsNoStikeCraftLayerMask { get { return _allShipsNoStikeCraftLayerMask; } }
+    public static int AllShipsNoShieldsLayerMask { get { return _allShipsNoShieldsLayerMask; } }
+    public static int AllShipsNoShieldsNoStikeCraftLayerMask { get { return _allShipsNoStrikeCraftNoShieldsLayerMask; } }
 
     private static void LoadWarheads()
     {
@@ -491,6 +503,12 @@ public static class ObjectFactory
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
     private static WeaponTorpedoDataEntry _weapons_torpedo = null;
     private static ArmourPenetrationTable _penetrationTable = null;
+    private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
+    private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
+    private static readonly int _allStrikeCraftLayerMask = LayerMask.GetMask("Strike Craft");
+    private static readonly int _allShipsNoStikeCraftLayerMask = LayerMask.GetMask("Ships", "Shields");
+    private static readonly int _allShipsNoShieldsLayerMask = LayerMask.GetMask("Ships", "Strike Craft");
+    private static readonly int _allShipsNoStrikeCraftNoShieldsLayerMask = LayerMask.GetMask("Ships");
 
     public class WarheadDataEntry3
     {

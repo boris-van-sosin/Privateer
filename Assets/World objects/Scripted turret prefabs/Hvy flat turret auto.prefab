@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4437702400224298}
   - component: {fileID: 33943930603020828}
   - component: {fileID: 23142895240697400}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Barrel1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4835876323378118}
   - component: {fileID: 198371807783832390}
   - component: {fileID: 199407037397352566}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: MuzzleFlashEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4461172453210592}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Muzzle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 4533103534858476}
   - component: {fileID: 198707020074767266}
   - component: {fileID: 199854007339053424}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: MuzzleFlashEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 4647751152944252}
   - component: {fileID: 33589928353694132}
   - component: {fileID: 23107247253791288}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sleeve2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4286541443001400}
   - component: {fileID: 33181768979147820}
   - component: {fileID: 23108767499988674}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sleeve1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4660178089696454}
   - component: {fileID: 114917505967805762}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Hvy flat turret auto
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 4168421172164678}
   - component: {fileID: 33883596330398830}
   - component: {fileID: 23677784236309918}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4260325242430050}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Muzzle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 4332406751602660}
   - component: {fileID: 33359930222973324}
   - component: {fileID: 23263319762539796}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Barrel2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,6 +546,7 @@ MonoBehaviour:
   EnergyToFire: 0
   HeatToFire: 0
   MaxHitpoints: 0
+  ProjectileScale: 0
   MuzzleVelocity: 0
   AmmoType: 0
 --- !u!198 &198371807783832390

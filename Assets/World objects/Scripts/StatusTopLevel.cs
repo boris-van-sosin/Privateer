@@ -23,21 +23,51 @@ public class StatusTopLevel : MonoBehaviour
         _attachedShip = s;
         if (_attachedShip != null)
         {
+            // Take a snapshot of the ship
+            UnityEngine.UI.Image ImgObj = transform.Find("Image").GetComponent<UnityEngine.UI.Image>();
+            int ImgH = 512, ImgW = 512;
+            float scaleFactor = 1.2f;
+            float requiredSize = scaleFactor * Mathf.Max(_attachedShip.ShipLength, _attachedShip.ShipWidth);
+            Vector3 shipAxis = _attachedShip.transform.up;
+            Vector3 downDir = Vector3.down;
+            Camera cam = ObjectFactory.GetShipStatusPanelCamera();
+            cam.transform.position = _attachedShip.transform.position;
+            float height = requiredSize * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            cam.transform.position += new Vector3(0, height, 0);
+            cam.transform.rotation = Quaternion.LookRotation(downDir, shipAxis);
+
+            Texture2D shipImg;
+            shipImg = new Texture2D(ImgW, ImgH);
+            RenderTexture rt = RenderTexture.GetTemporary(ImgW, ImgH);
+            cam.enabled = true;
+            cam.targetTexture = rt;
+            RenderTexture orig = RenderTexture.active;
+            RenderTexture.active = rt;
+            cam.Render();
+            shipImg.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
+            shipImg.Apply();
+
+            Sprite sp = Sprite.Create(shipImg, new Rect(0, 0, ImgW, ImgH), new Vector2(0, 0));
+            ImgObj.sprite = sp;
+
+            RectTransform panelRect = GetComponent<RectTransform>();
             foreach (TurretHardpoint hp in _attachedShip.WeaponHardpoints)
             {
+                Vector3 hpPos = cam.WorldToViewportPoint(hp.transform.position);
                 string hardointName = hp.name;
                 TurretBase currTurret = hp.GetComponentInChildren<TurretBase>();
                 if (currTurret != null)
                 {
-                    Transform hardpointDisplay = transform.Find(hardointName);
-                    if (hardpointDisplay != null)
-                    {
-                        StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(currTurret);
-                        compStatus.transform.SetParent(hardpointDisplay);
-                        compStatus.transform.localPosition = Vector2.zero;
-                    }
+                    StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(currTurret);
+                    compStatus.transform.SetParent(panelRect);
+                    compStatus.transform.localPosition = new Vector2(hpPos.x * panelRect.rect.width + panelRect.rect.xMin , hpPos.y * panelRect.rect.height + panelRect.rect.yMin);
                 }
             }
+
+            RenderTexture.active = orig;
+            RenderTexture.ReleaseTemporary(rt);
+            cam.enabled = false;
+
 
             foreach (IShipActiveComponent comp in _attachedShip.AllComponents.Where(x => x is IShipActiveComponent && !(x is TurretBase) && x.ComponentType != ComponentSlotType.Hidden).Select(y => y as IShipActiveComponent))
             {

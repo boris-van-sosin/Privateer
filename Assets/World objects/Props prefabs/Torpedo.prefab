@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4173780863440464}
   - component: {fileID: 198004110545270656}
   - component: {fileID: 199909923800488664}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Engine exhaust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4108298635693778}
   - component: {fileID: 198498849988845326}
   - component: {fileID: 199766222185699388}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: EngineExhaustCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4679505996751100}
   - component: {fileID: 198936656140555186}
   - component: {fileID: 199714425525481648}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: EngineExhaustFlare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 23394444810610666}
   - component: {fileID: 114015823544847988}
   - component: {fileID: 136511100542383514}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Torpedo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1973607575155966}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.042566}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 4173780863440464}

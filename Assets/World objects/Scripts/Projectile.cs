@@ -6,7 +6,6 @@ public class Projectile : MonoBehaviour
 {
     protected virtual void Awake()
     {
-        _shipLayerMask = ~LayerMask.GetMask("Background");
         _trail = GetComponent<TrailRenderer>();
     }
 
@@ -74,7 +73,7 @@ public class Projectile : MonoBehaviour
     {
         Ray r = new Ray(pos, dir);
         RaycastHit hit;
-        if (Physics.Raycast(r, out hit, distanceToTravel, _shipLayerMask))
+        if (Physics.Raycast(r, out hit, distanceToTravel, ObjectFactory.AllTargetableLayerMask))
         {
             GameObject hitobj = hit.collider.gameObject;
             Ship shipHit;
@@ -103,7 +102,7 @@ public class Projectile : MonoBehaviour
 
     bool CheckForProximityHit(Vector3 pos, float blastRadius)
     {
-        Collider[] objsHits = Physics.OverlapSphere(pos, blastRadius, _shipLayerMask);
+        Collider[] objsHits = Physics.OverlapSphere(pos, blastRadius, ObjectFactory.AllTargetableLayerMask);
         bool validHit = false;
         foreach (Collider c in objsHits)
         {
@@ -163,7 +162,6 @@ public class Projectile : MonoBehaviour
     private float _distanceTraveled = 0.0f;
     private Vector3 Origin;
     public Ship OriginShip;
-    private int _shipLayerMask;
     public Warhead ProjectileWarhead { get; set; }
     public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
     private TrailRenderer _trail;
