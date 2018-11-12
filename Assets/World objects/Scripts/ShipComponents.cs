@@ -56,7 +56,7 @@ public class TurretComponent : ITurret
 
     public float GetMaxRange { get { return _innerTurret.GetMaxRange; } }
 
-    public ComponentSlotType ComponentType { get { return _innerTurret.ComponentType; } }
+    public IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _innerTurret.AllowedSlotTypes; } }
 
     public string SpriteKey { get { return "Turret"; } }
 
@@ -65,6 +65,8 @@ public class TurretComponent : ITurret
 
 
     private TurretBase _innerTurret;
+
+    private readonly ComponentSlotType[] SolotTypes;
 
     public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
 }
@@ -82,7 +84,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
         ContainingShip.TryChangeEnergyAndHeat(PowerOutput, HeatOutput);
     }
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Power plant"; } }
 
@@ -109,7 +111,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
                     ComponentMaxHitPoints = 300,
                     ComponentHitPoints = 300,
                     Status = ComponentStatus.Undamaged,
-                    PowerOutput = 2,
+                    PowerOutput = 6,
                     HeatOutput = 1,
                     _containingShip = containingShip,
                     MinShipSize = grade,
@@ -121,7 +123,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
                     ComponentMaxHitPoints = 400,
                     ComponentHitPoints = 400,
                     Status = ComponentStatus.Undamaged,
-                    PowerOutput = 2,
+                    PowerOutput = 6,
                     HeatOutput = 1,
                     _containingShip = containingShip,
                     MinShipSize = grade,
@@ -133,7 +135,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
                     ComponentMaxHitPoints = 600,
                     ComponentHitPoints = 600,
                     Status = ComponentStatus.Undamaged,
-                    PowerOutput = 3,
+                    PowerOutput = 8,
                     HeatOutput = 1,
                     _containingShip = containingShip,
                     MinShipSize = grade,
@@ -145,7 +147,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
                     ComponentMaxHitPoints = 800,
                     ComponentHitPoints = 800,
                     Status = ComponentStatus.Undamaged,
-                    PowerOutput = 4,
+                    PowerOutput = 10,
                     HeatOutput = 2,
                     _containingShip = containingShip,
                     MinShipSize = grade,
@@ -157,7 +159,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
                     ComponentMaxHitPoints = 1100,
                     ComponentHitPoints = 1100,
                     Status = ComponentStatus.Undamaged,
-                    PowerOutput = 5,
+                    PowerOutput = 10,
                     HeatOutput = 3,
                     _containingShip = containingShip,
                     MinShipSize = grade,
@@ -167,6 +169,8 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
                 return null;
         }
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystemCenter };
 }
 
 public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
@@ -181,7 +185,7 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
         }
     }
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public static CapacitorBank DefaultComponent(Ship containingShip)
     {
@@ -193,6 +197,8 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
             MaxShipSize = ObjectFactory.ShipSize.CapitalShip
         };
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
 
 public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent, IShieldComponent
@@ -240,7 +246,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         {
             return;
         }
-        if (!ContainingShip.TryChangeEnergyAndHeat(PowerUsage, HeatGeneration))
+        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration))
         {
             CurrShieldPoints = 0;
             _isShieldActive = false;
@@ -248,14 +254,14 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         }
         if (_isShieldActive && CurrShieldPoints < MaxShieldPoints)
         {
-            if (ContainingShip.TryChangeEnergyAndHeat(PowerPerShieldRegeneration, HeatGenerationPerShieldRegeneration))
+            if (ContainingShip.TryChangeEnergyAndHeat(-PowerPerShieldRegeneration, HeatGenerationPerShieldRegeneration))
             {
                 CurrShieldPoints = System.Math.Min(MaxShieldPoints, CurrShieldPoints + MaxShieldPointRegeneration);
             }
         }
         if (!_isShieldActive)
         {
-            if (++_ticksSinceInactive >= RestartDelay && ContainingShip.TryChangeEnergyAndHeat(PowerToRestart, HeatToRestart))
+            if (++_ticksSinceInactive >= RestartDelay && ContainingShip.TryChangeEnergyAndHeat(-PowerToRestart, HeatToRestart))
             {
                 _isShieldActive = true;
             }
@@ -285,7 +291,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         }
     }
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Shield generator"; } }
 
@@ -338,6 +344,8 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         }
         return res;
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
 
 public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionComponent
@@ -365,7 +373,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
             return;
         }
 
-        if (!ContainingShip.TryChangeEnergyAndHeat(PowerUsage, 0))
+        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, 0))
         {
             return;
         }
@@ -395,7 +403,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         }
     }
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Damage control"; } }
 
@@ -410,7 +418,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
             ArmorMaxPointRegeneration = 1,
             SystemMaxHitPointRegeneration = 2,
             TimeOutOfCombatToRepair = 5.0f,
-            PowerUsage = 10,
+            PowerUsage = 5,
             _containingShip = containingShip
         };
     }
@@ -442,6 +450,8 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         }
         return res;
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
 
 public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
@@ -453,7 +463,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
         ContainingShip.TryChangeHeat(-CoolingRate);
     }
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public static HeatExchange DefaultComponent(Ship containingShip)
     {
@@ -465,12 +475,16 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
             MaxShipSize = ObjectFactory.ShipSize.CapitalShip
         };
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
 
 public class ExtraArmour : ShipComponentBase
 {
     public int ArmourAmount;
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem };
 }
 
 public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -525,7 +539,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public event ComponentToggledDelegate OnToggle;
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.Engine; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Engine"; } }
 
@@ -569,6 +583,8 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         }
         return res;
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.Engine };
 }
 
 public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -615,7 +631,7 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
 
     public event ComponentToggledDelegate OnToggle;
 
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.Hidden; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Electromagentic Clamps"; } }
 
@@ -631,6 +647,8 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
             _containingShip = containingShip
         };
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.Hidden };
 }
 
 public class CombatDetachment : ShipComponentBase
@@ -649,7 +667,7 @@ public class CombatDetachment : ShipComponentBase
             Forces.Add(c);
         }
     }
-    public override ComponentSlotType ComponentType { get { return ComponentSlotType.ShipSystem; } }
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public static CombatDetachment DefaultComponent(Ship s)
     {
@@ -689,4 +707,6 @@ public class CombatDetachment : ShipComponentBase
         res.MaxShipSize = ObjectFactory.ShipSize.CapitalShip;
         return res;
     }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }

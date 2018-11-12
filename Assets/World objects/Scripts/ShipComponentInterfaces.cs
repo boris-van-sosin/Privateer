@@ -5,7 +5,7 @@ using UnityEngine;
 public enum ComponentSlotType
 {
     // Generic:
-    ShipSystem,
+    ShipSystem, ShipSystemCenter,
     // Weapons:
     SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
     MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
@@ -29,7 +29,7 @@ public delegate void ComponentToggledDelegate(bool active);
 public interface IShipComponent
 {
     Ship ContainingShip { get; }
-    ComponentSlotType ComponentType { get; }
+    IEnumerable<ComponentSlotType> AllowedSlotTypes { get; }
     ObjectFactory.ShipSize MinShipSize { get; }
     ObjectFactory.ShipSize MaxShipSize { get; }
 }

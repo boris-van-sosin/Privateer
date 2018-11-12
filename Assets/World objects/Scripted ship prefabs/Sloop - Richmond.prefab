@@ -1030,7 +1030,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114294262926575966
@@ -1051,9 +1051,9 @@ MonoBehaviour:
   Thrust: 0.2
   Braking: 1.6
   TurnRate: 30
-  CenterComponentSlots: 00000000000000000000000000000000
+  CenterComponentSlots: 01000000010000000100000001000000
   ForeComponentSlots: 
-  AftComponentSlots: 12000000
+  AftComponentSlots: 13000000
   LeftComponentSlots: 00000000
   RightComponentSlots: 00000000
   MaxHullHitPoints: 3200
@@ -1085,7 +1085,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114700916377462940
@@ -1103,7 +1103,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 01000000
+  AllowedWeaponTypes: 02000000
   LocationOnShip: 0
   DefaultGroup: 1
 --- !u!114 &114819794789978142
@@ -1121,7 +1121,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114943407059376778
@@ -1139,7 +1139,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114955217068938378
@@ -1157,7 +1157,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114981488518187768
@@ -1175,7 +1175,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes: 03000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!136 &136512068017788332

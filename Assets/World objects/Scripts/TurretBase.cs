@@ -32,6 +32,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected virtual void Awake()
     {
         ComponentHitPoints = ComponentMaxHitPoints;
+        _allowedSlotTypes = new ComponentSlotType[] { TurretType };
     }
 
     private void ParseDeadZones()
@@ -590,8 +591,10 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     public string SpriteKey { get { return "Turret"; } }
 
-    public ComponentSlotType ComponentType { get { return TurretType; } }
+    public IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public ObjectFactory.ShipSize MinShipSize { get { return ObjectFactory.ShipSize.Sloop; } }
     public ObjectFactory.ShipSize MaxShipSize { get { return ObjectFactory.ShipSize.CapitalShip; } }
+
+    private ComponentSlotType[] _allowedSlotTypes;
 }

@@ -2226,7 +2226,7 @@ MonoBehaviour:
   MinRotation: 170
   MaxRotation: 330
   DeadZoneAngles: []
-  AllowedWeaponTypes: 0e000000
+  AllowedWeaponTypes: 0f000000
   LocationOnShip: 3
   DefaultGroup: 6
   LaunchVector: {x: -1, y: 0, z: 1}
@@ -2245,7 +2245,7 @@ MonoBehaviour:
   MinRotation: 60
   MaxRotation: 135
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114210030265515000
@@ -2263,7 +2263,7 @@ MonoBehaviour:
   MinRotation: 225
   MaxRotation: 300
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114211753354595078
@@ -2281,7 +2281,7 @@ MonoBehaviour:
   MinRotation: 30
   MaxRotation: 105
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114222184546153960
@@ -2299,7 +2299,7 @@ MonoBehaviour:
   MinRotation: 70
   MaxRotation: 180
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 0
   DefaultGroup: 5
 --- !u!114 &114248074947831548
@@ -2320,9 +2320,9 @@ MonoBehaviour:
   Thrust: 0.16
   Braking: 1.6
   TurnRate: 25
-  CenterComponentSlots: 000000000000000000000000000000000000000000000000
+  CenterComponentSlots: 010000000100000001000000010000000100000001000000
   ForeComponentSlots: 0000000000000000
-  AftComponentSlots: 120000000000000000000000
+  AftComponentSlots: 130000000000000000000000
   LeftComponentSlots: 0000000000000000
   RightComponentSlots: 0000000000000000
   MaxHullHitPoints: 10000
@@ -2354,7 +2354,7 @@ MonoBehaviour:
   MinRotation: 35
   MaxRotation: 145
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114544746592369112
@@ -2372,7 +2372,7 @@ MonoBehaviour:
   MinRotation: 215
   MaxRotation: 325
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114556497461399258
@@ -2390,7 +2390,7 @@ MonoBehaviour:
   MinRotation: 35
   MaxRotation: 145
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 2
   DefaultGroup: 3
 --- !u!114 &114570753392451364
@@ -2408,7 +2408,7 @@ MonoBehaviour:
   MinRotation: 75
   MaxRotation: 130
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 0
   DefaultGroup: 5
 --- !u!114 &114604808340979820
@@ -2426,7 +2426,7 @@ MonoBehaviour:
   MinRotation: 240
   MaxRotation: 315
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114610393291505360
@@ -2444,7 +2444,7 @@ MonoBehaviour:
   MinRotation: 80
   MaxRotation: 280
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 0
   DefaultGroup: 1
 --- !u!114 &114624774157050164
@@ -2462,7 +2462,7 @@ MonoBehaviour:
   MinRotation: 265
   MaxRotation: 360
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 1
   DefaultGroup: 4
 --- !u!114 &114679538106510902
@@ -2480,7 +2480,7 @@ MonoBehaviour:
   MinRotation: 30
   MaxRotation: 190
   DeadZoneAngles: []
-  AllowedWeaponTypes: 0e000000
+  AllowedWeaponTypes: 0f000000
   LocationOnShip: 2
   DefaultGroup: 6
   LaunchVector: {x: 1, y: 0, z: 1}
@@ -2499,7 +2499,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 95
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 1
   DefaultGroup: 5
 --- !u!114 &114798191002063842
@@ -2517,7 +2517,7 @@ MonoBehaviour:
   MinRotation: 180
   MaxRotation: 290
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 0
   DefaultGroup: 4
 --- !u!114 &114848577499491288
@@ -2535,7 +2535,7 @@ MonoBehaviour:
   MinRotation: 230
   MaxRotation: 285
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 0
   DefaultGroup: 4
 --- !u!114 &114864308031683114
@@ -2553,7 +2553,7 @@ MonoBehaviour:
   MinRotation: 215
   MaxRotation: 325
   DeadZoneAngles: []
-  AllowedWeaponTypes: 08000000
+  AllowedWeaponTypes: 09000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114899854191395712
@@ -2571,7 +2571,7 @@ MonoBehaviour:
   MinRotation: 45
   MaxRotation: 110
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 1
   DefaultGroup: 5
 --- !u!114 &114922566021382350
@@ -2589,7 +2589,7 @@ MonoBehaviour:
   MinRotation: 250
   MaxRotation: 315
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 1
   DefaultGroup: 4
 --- !u!136 &136483318769056806

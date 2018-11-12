@@ -30,11 +30,12 @@ public class ShipFreeCreatePanel : MonoBehaviour
         Ship s = ObjectFactory.CreateShip(shipKey);
 
         s.PlaceComponent(Ship.ShipSection.Left, DamageControlNode.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s.ShipSize, s));
+        s.PlaceComponent(Ship.ShipSection.Right, DamageControlNode.DefaultComponent(s.ShipSize, s));
+        s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s.ShipSize, s));
+        s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s.ShipSize, s));
         if (s.ShipSize == ObjectFactory.ShipSize.Cruiser || s.ShipSize == ObjectFactory.ShipSize.Destroyer)
         {
@@ -42,12 +43,12 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
         else if (s.ShipSize == ObjectFactory.ShipSize.CapitalShip)
         {
+            s.PlaceComponent(Ship.ShipSection.Left, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Right, HeatExchange.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Left, PowerPlant.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Right, PowerPlant.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Fore, ShieldGenerator.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {

@@ -33,6 +33,10 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             if (_distanceTraveled >= ColdLaunchDist)
             {
                 _inBurnPhase = true;
+                Vector3 vecToTarget = (Target - Origin);
+                vecToTarget.y = 0;
+                Target = transform.position + vecToTarget.normalized * Range * 1.1f;
+                Target.y = 0;
                 _distanceTraveled = 0;
                 if (_exhaustPatricleSystem)
                 {
@@ -42,10 +46,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             if (_collider != null && !_collider.enabled && _distanceTraveled >= OriginShip.ShipWidth)
             {
                 _collider.enabled = true;
-                Vector3 vecToTarget = (Target - Origin);
-                vecToTarget.y = 0;
-                Target = transform.position + vecToTarget.normalized * Range * 1.1f;
-                Target.y = 0;
+
             }
         }
         else

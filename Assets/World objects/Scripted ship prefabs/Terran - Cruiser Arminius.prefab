@@ -1855,7 +1855,7 @@ MonoBehaviour:
   - 0,25
   - 335,360
   - 125,235
-  AllowedWeaponTypes: 0d000000
+  AllowedWeaponTypes: 0e000000
   LocationOnShip: 1
   DefaultGroup: 1
 --- !u!114 &114123554629334618
@@ -1873,7 +1873,7 @@ MonoBehaviour:
   MinRotation: 350
   MaxRotation: 170
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 2
   DefaultGroup: 2
 --- !u!114 &114155003074333588
@@ -1891,7 +1891,7 @@ MonoBehaviour:
   MinRotation: 30
   MaxRotation: 190
   DeadZoneAngles: []
-  AllowedWeaponTypes: 0e000000
+  AllowedWeaponTypes: 0f000000
   LocationOnShip: 2
   DefaultGroup: 3
   LaunchVector: {x: 0, y: 0, z: 1}
@@ -1910,7 +1910,7 @@ MonoBehaviour:
   MinRotation: 177
   MaxRotation: 320
   DeadZoneAngles: []
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes: 04000000
   LocationOnShip: 0
   DefaultGroup: 2
 --- !u!114 &114278264312242262
@@ -1928,7 +1928,7 @@ MonoBehaviour:
   MinRotation: 170
   MaxRotation: 330
   DeadZoneAngles: []
-  AllowedWeaponTypes: 0e000000
+  AllowedWeaponTypes: 0f000000
   LocationOnShip: 3
   DefaultGroup: 3
   LaunchVector: {x: 0, y: 0, z: 1}
@@ -1947,7 +1947,7 @@ MonoBehaviour:
   MinRotation: 250
   MaxRotation: 110
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 1
   DefaultGroup: 2
 --- !u!114 &114662893981186380
@@ -1965,7 +1965,7 @@ MonoBehaviour:
   MinRotation: 55
   MaxRotation: 305
   DeadZoneAngles: []
-  AllowedWeaponTypes: 0d000000
+  AllowedWeaponTypes: 0e000000
   LocationOnShip: 0
   DefaultGroup: 1
 --- !u!114 &114696051359940728
@@ -1983,7 +1983,7 @@ MonoBehaviour:
   MinRotation: 170
   MaxRotation: 10
   DeadZoneAngles: []
-  AllowedWeaponTypes: 05000000
+  AllowedWeaponTypes: 06000000
   LocationOnShip: 3
   DefaultGroup: 2
 --- !u!114 &114924585089423456
@@ -2001,7 +2001,7 @@ MonoBehaviour:
   MinRotation: 40
   MaxRotation: 183
   DeadZoneAngles: []
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes: 04000000
   LocationOnShip: 0
   DefaultGroup: 2
 --- !u!114 &114932092806717634
@@ -2022,9 +2022,9 @@ MonoBehaviour:
   Thrust: 0.158
   Braking: 1.55
   TurnRate: 25
-  CenterComponentSlots: 000000000000000000000000000000000000000000000000
+  CenterComponentSlots: 010000000100000001000000010000000100000001000000
   ForeComponentSlots: 0000000000000000
-  AftComponentSlots: 120000000000000000000000
+  AftComponentSlots: 130000000000000000000000
   LeftComponentSlots: 0000000000000000
   RightComponentSlots: 0000000000000000
   MaxHullHitPoints: 10000

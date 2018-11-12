@@ -50,6 +50,10 @@ public class Ship : MonoBehaviour, ITargetableEntity
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
         List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
         _minEnergyPerShot = -1;
+        foreach (List<Tuple<ComponentSlotType, IShipComponent>> l in _turretSlotsOccupied.Values)
+        {
+            l.Clear();
+        }
         foreach (TurretHardpoint hp in hardpoints)
         {
             TurretBase turret = hp.GetComponentInChildren<TurretBase>();
@@ -64,7 +68,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
                     _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, turret.EnergyToFire);
                 }
                 turrets.Add(turret);
-                _componentSlots[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(turret.TurretType, turret));
+                _turretSlotsOccupied[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(turret.TurretType, turret));
             }
         }
         _turrets = turrets.ToArray();
@@ -78,12 +82,17 @@ public class Ship : MonoBehaviour, ITargetableEntity
         _componentsSlotTypes.Add(ShipSection.Left, LeftComponentSlots);
         _componentsSlotTypes.Add(ShipSection.Right, RightComponentSlots);
 
-        _componentSlots.Add(ShipSection.Center, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _componentSlots.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _componentSlots.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _componentSlots.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _componentSlots.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _componentSlots.Add(ShipSection.Hidden, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        foreach (ShipSection sec in _componentsSlotTypes.Keys)
+        {
+            _componentSlotsOccupied.Add(sec, new Tuple<ComponentSlotType, IShipComponent>[_componentsSlotTypes[sec].Length]);
+        }
+        
+        _componentSlotsOccupied.Add(ShipSection.Hidden, new Tuple<ComponentSlotType, IShipComponent>[1]);
+
+        _turretSlotsOccupied.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
     }
 
     private void InitCrew()
@@ -105,7 +114,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
     {
         _electromagneticClamps = ElectromagneticClamps.DefaultComponent(this);
         _electromagneticClamps.OnToggle += ElectromagneticClampsToggled;
-        _componentSlots[ShipSection.Hidden].Add(Tuple<ComponentSlotType, IShipComponent>.Create(ComponentSlotType.Hidden, _electromagneticClamps));
+        _componentSlotsOccupied[ShipSection.Hidden][0] = Tuple<ComponentSlotType, IShipComponent>.Create(ComponentSlotType.Hidden, _electromagneticClamps);
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
@@ -136,9 +145,9 @@ public class Ship : MonoBehaviour, ITargetableEntity
         _armour.Add(ShipSection.Aft, ArmorAft);
         _armour.Add(ShipSection.Left, ArmorLeft);
         _armour.Add(ShipSection.Right, ArmorRight);
-        foreach (ShipSection section in _componentSlots.Keys)
+        foreach (ShipSection section in _componentSlotsOccupied.Keys)
         {
-            foreach (Tuple<ComponentSlotType, IShipComponent> comp in _componentSlots[section])
+            foreach (IShipComponent comp in AllComponentsInSection(section, false))
             {
                 if (!_maxMitigationArmour.ContainsKey(section))
                 {
@@ -153,7 +162,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
                     _armour.Add(section, 0);
                 }
 
-                ExtraArmour a = comp.Item2 as ExtraArmour;
+                ExtraArmour a = comp as ExtraArmour;
                 if (a != null)
                 {
                     _maxMitigationArmour[section] += a.ArmourAmount;
@@ -244,13 +253,21 @@ public class Ship : MonoBehaviour, ITargetableEntity
                 t
             };
         }
-        _componentSlots[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(t.TurretType, t));
+        _turretSlotsOccupied[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(t.TurretType, t));
         return true;
     }
 
     public bool PlaceComponent(ShipSection sec, IShipComponent comp)
     {
-        if (comp.ComponentType != ComponentSlotType.ShipSystem && comp.ComponentType != ComponentSlotType.BoardingForce && comp.ComponentType != ComponentSlotType.Engine)
+        if (sec == ShipSection.Hidden)
+        {
+            return false;
+        }
+        // Only ship systems and engines are placed using this function
+        if (comp.AllowedSlotTypes.All(x => x != ComponentSlotType.ShipSystem &&
+                                      x != ComponentSlotType.ShipSystemCenter &&
+                                      x != ComponentSlotType.Engine &&
+                                      x != ComponentSlotType.BoardingForce))
         {
             return false;
         }
@@ -258,25 +275,21 @@ public class Ship : MonoBehaviour, ITargetableEntity
         {
             return false;
         }
-        int availableSlots = 0;
-        foreach (ComponentSlotType s in _componentsSlotTypes[sec])
+
+        int availableSlotIdx = -1;
+        for (int i = 0; i < _componentsSlotTypes[sec].Length; ++i)
         {
-            if (s == comp.ComponentType)
+            if (_componentSlotsOccupied[sec][i] == null && comp.AllowedSlotTypes.Contains(_componentsSlotTypes[sec][i]))
             {
-                ++availableSlots;
+                availableSlotIdx = i;
+                break;
             }
         }
-        foreach (Tuple<ComponentSlotType, IShipComponent> c  in _componentSlots[sec])
+        if (availableSlotIdx >= 0)
         {
-            if (c.Item1 == comp.ComponentType)
-            {
-                --availableSlots;
-            }
-        }
-        if (availableSlots > 0)
-        {
-            _componentSlots[sec].Add(Tuple<ComponentSlotType, IShipComponent>.Create(comp.ComponentType, comp));
-            if (comp.ComponentType == ComponentSlotType.Engine)
+            ComponentSlotType occupiedSlot = _componentsSlotTypes[sec].Intersect(comp.AllowedSlotTypes).First();
+            _componentSlotsOccupied[sec][availableSlotIdx] = Tuple<ComponentSlotType, IShipComponent>.Create(occupiedSlot, comp);
+            if (comp.AllowedSlotTypes.Contains(ComponentSlotType.Engine))
             {
                 _engine = comp as ShipEngine;
                 _engine.OnToggle += SetEngineParticleSystems;
@@ -287,6 +300,38 @@ public class Ship : MonoBehaviour, ITargetableEntity
         {
             return false;
         }
+
+        /*
+        int availableSlots = 0;
+        foreach (ComponentSlotType s in _componentsSlotTypes[sec])
+        {
+            if (comp.AllowedSlotTypes.Contains(s))
+            {
+                ++availableSlots;
+            }
+        }
+        foreach (Tuple<ComponentSlotType, IShipComponent> c  in _componentSlotsOccupied[sec])
+        {
+            if (comp.AllowedSlotTypes.Contains(c.Item1))
+            {
+                --availableSlots;
+            }
+        }
+        if (availableSlots > 0)
+        {
+            ComponentSlotType occupiedSlot = _componentsSlotTypes[sec].Intersect(comp.AllowedSlotTypes).First();
+            _componentSlotsOccupied[sec].Add(Tuple<ComponentSlotType, IShipComponent>.Create(occupiedSlot, comp));
+            if (comp.AllowedSlotTypes.Contains(ComponentSlotType.Engine))
+            {
+                _engine = comp as ShipEngine;
+                _engine.OnToggle += SetEngineParticleSystems;
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }*/
     }
 
     private void InitEngines()
@@ -864,18 +909,18 @@ public class Ship : MonoBehaviour, ITargetableEntity
                 mitigationFactor = 1f - ArmourMitigation;
             }
             // a random component at the section is damaged.
-            List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlots[sec].Count);
-            foreach (Tuple<ComponentSlotType, IShipComponent> c in _componentSlots[sec])
+            List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlotsOccupied[sec].Length + _turretSlotsOccupied[sec].Count);
+            foreach (IShipComponent c in AllComponentsInSection(sec, true))
             {
-                IShipActiveComponent c2 = c.Item2 as IShipActiveComponent;
+                IShipActiveComponent c2 = c as IShipActiveComponent;
                 if (c2 != null && c2.Status != ComponentStatus.Destroyed)
                 {
                     damageableComps.Add(c2);
                 }
             }
-            foreach (Tuple<ComponentSlotType, IShipComponent> c in _componentSlots[ShipSection.Center])
+            foreach (IShipComponent c in AllComponentsInSection(ShipSection.Center, true))
             {
-                IShipActiveComponent c2 = c.Item2 as IShipActiveComponent;
+                IShipActiveComponent c2 = c as IShipActiveComponent;
                 if (c2 != null && c2.Status != ComponentStatus.Destroyed)
                 {
                     damageableComps.Add(c2);
@@ -1320,17 +1365,55 @@ public class Ship : MonoBehaviour, ITargetableEntity
     public ComponentSlotType[] LeftComponentSlots;
     public ComponentSlotType[] RightComponentSlots;
     private Dictionary<ShipSection, ComponentSlotType[]> _componentsSlotTypes = new Dictionary<ShipSection, ComponentSlotType[]>();
-    private Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>> _componentSlots = new Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>>();
+    private Dictionary<ShipSection, Tuple<ComponentSlotType, IShipComponent>[]> _componentSlotsOccupied = new Dictionary<ShipSection, Tuple<ComponentSlotType, IShipComponent>[]>();
+    private Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>> _turretSlotsOccupied = new Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>>();
+
+    private IEnumerable<IShipComponent> AllComponentsInSection(ShipSection sec, bool includeTurrets)
+    {
+        if (_componentSlotsOccupied.ContainsKey(sec))
+        {
+            foreach (Tuple<ComponentSlotType, IShipComponent> comp in _componentSlotsOccupied[sec])
+            {
+                if (comp != null)
+                {
+                    yield return comp.Item2;
+                }
+            }
+        }
+        if (includeTurrets && _turretSlotsOccupied.ContainsKey(sec))
+        {
+            foreach (Tuple<ComponentSlotType, IShipComponent> comp in _turretSlotsOccupied[sec])
+            {
+                if (comp != null)
+                {
+                    yield return comp.Item2;
+                }
+            }
+        }
+    }
 
     public IEnumerable<IShipComponent> AllComponents
     {
         get
         {
-            foreach (List<Tuple<ComponentSlotType, IShipComponent>> l in _componentSlots.Values)
+            foreach (IEnumerable<Tuple<ComponentSlotType, IShipComponent>> l in _componentSlotsOccupied.Values)
             {
                 foreach (Tuple<ComponentSlotType, IShipComponent> comp in l)
                 {
-                    yield return comp.Item2;
+                    if (comp != null)
+                    {
+                        yield return comp.Item2;
+                    }
+                }
+            }
+            foreach (IEnumerable<Tuple<ComponentSlotType, IShipComponent>> l in _turretSlotsOccupied.Values)
+            {
+                foreach (Tuple<ComponentSlotType, IShipComponent> comp in l)
+                {
+                    if (comp != null)
+                    {
+                        yield return comp.Item2;
+                    }
                 }
             }
         }
