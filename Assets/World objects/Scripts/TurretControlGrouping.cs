@@ -43,7 +43,7 @@ public class TurretControlGrouping
         return res;
     }
 
-    public static TurretControlGrouping AllAuto(Ship s)
+    public static TurretControlGrouping AllAuto(ShipBase s)
     {
         TurretControlGrouping res = new TurretControlGrouping()
         {

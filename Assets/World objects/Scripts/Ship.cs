@@ -1,51 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using System.Linq;
 
-public class Ship : MonoBehaviour, ITargetableEntity
+public class Ship : ShipBase
 {
-    void Awake()
+    protected override void Awake()
     {
-        HullHitPoints = MaxHullHitPoints;
+        base.Awake();
         Energy = 0;
         Heat = 0;
         MaxHeat = 100;
-        ComputeLength();
         InitComponentSlots();
         InitCrew();
         InitDamageEffects();
-        WeaponGroups = null;
-        TowingByHarpax = null;
-        TowedByHarpax = null;
-        GrapplingMode = false;
-        _rigidBody = GetComponent<Rigidbody>();
     }
 
-    // Use this for initialization
-    void Start ()
-    {
-    }
-
-    public void Activate()
+    public override void Activate()
     {
         InitElectromagneticClamps();
         InitComponents();
         InitArmour();
-        InitShield();
-        FindTurrets();
         InitEngines();
-        _manualTurrets = new HashSet<ITurret>(_turrets);
         StartCoroutine(ContinuousComponents());
         ShipDisabled = false;
         ShipImmobilized = false;
         ShipSurrendered = false;
         InBoarding = false;
         LastInCombat = Time.time;
+        base.Activate();
+        _manualTurrets = new HashSet<ITurret>(_turrets);
     }
 
-    private void FindTurrets()
+    protected override void FindTurrets()
     {
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
         List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
@@ -172,28 +159,6 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    private void ComputeLength()
-    {
-        Mesh m = GetComponent<MeshFilter>().mesh;
-        ShipUnscaledLength = m.bounds.size.y;
-        ShipUnscaledWidth = m.bounds.size.x;
-        ShipLength = ShipUnscaledLength * transform.lossyScale.y;
-        ShipWidth = ShipUnscaledWidth * transform.lossyScale.x;
-    }
-
-    private void InitShield()
-    {
-        Transform t = transform.Find("Shield");
-        if (t != null)
-        {
-            _shieldCapsule = t.gameObject;
-            if (ShipTotalShields > 0 && _shieldCapsule)
-            {
-                _shieldCapsule.SetActive(true);
-            }
-        }
-    }
-
     private void InitElectromagneticClamps()
     {
         Transform t = transform.Find("MagneticField");
@@ -203,34 +168,14 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    public IEnumerable<TurretHardpoint> WeaponHardpoints
+    public override bool PlaceTurret(TurretHardpoint hp, TurretBase t)
     {
-        get
+        bool baseSuccedded = base.PlaceTurret(hp, t);
+        if (!baseSuccedded)
         {
-            TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
-            foreach (TurretHardpoint hp in hardpoints)
-            {
-                yield return hp;
-            }
+            return false;
         }
-    }
 
-    public bool PlaceTurret(TurretHardpoint hp, TurretBase t)
-    {
-        if (hp == null || t == null || !hp.AllowedWeaponTypes.Contains(t.TurretType))
-        {
-            return false;
-        }
-        TurretBase existingTurret = hp.GetComponentInChildren<TurretBase>();
-        if (existingTurret != null)
-        {
-            return false;
-        }
-        Quaternion q = Quaternion.LookRotation(-hp.transform.up, hp.transform.forward);
-        t.transform.rotation = q;
-        t.transform.parent = hp.transform;
-        t.transform.localScale = Vector3.one;
-        t.transform.localPosition = Vector3.zero;
         if (_minEnergyPerShot < 0)
         {
             _minEnergyPerShot = t.EnergyToFire;
@@ -238,20 +183,6 @@ public class Ship : MonoBehaviour, ITargetableEntity
         else
         {
             _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, t.EnergyToFire);
-        }
-        if (_turrets != null)
-        {
-            ITurret[] newTurretArr = new ITurret[_turrets.Length + 1];
-            _turrets.CopyTo(newTurretArr, 0);
-            newTurretArr[newTurretArr.Length - 1] = t;
-            _turrets = newTurretArr;
-        }
-        else
-        {
-            _turrets = new ITurret[]
-            {
-                t
-            };
         }
         _turretSlotsOccupied[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(t.TurretType, t));
         return true;
@@ -405,16 +336,16 @@ public class Ship : MonoBehaviour, ITargetableEntity
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         if (!_inCollision)
         {
             float directionMult = 0.0f;
-            if (MovementDirection == ShipDirection.Forward)
+            if (_movementDirection == ShipDirection.Forward)
             {
                 directionMult = 1.0f;
             }
-            else if (MovementDirection == ShipDirection.Reverse)
+            else if (_movementDirection == ShipDirection.Reverse)
             {
                 directionMult = -1.0f;
             }
@@ -435,7 +366,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
                 }
                 _hasPrevForceTow = true;
             }
-            else if (MovementDirection == ShipDirection.Stopped)
+            else if (_movementDirection == ShipDirection.Stopped)
             {
                 _rigidBody.angularVelocity = Vector3.zero;
                 _rigidBody.velocity = Vector3.zero;
@@ -511,35 +442,17 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    public void ManualTarget(Vector3 target)
+    public override void MoveForeward()
     {
-        if (WeaponGroups == null)
+        if (_movementDirection == ShipDirection.Stopped)
         {
-            foreach (ITurret t in _manualTurrets)
-            {
-                t.ManualTarget(target);
-            }
+            _movementDirection = ShipDirection.Forward;
         }
-        else
-        {
-            foreach (ITurret t in WeaponGroups.ManualTurrets)
-            {
-                t.ManualTarget(target);
-            }
-        }
-    }
-
-    public void MoveForeward()
-    {
-        if (MovementDirection == ShipDirection.Stopped)
-        {
-            MovementDirection = ShipDirection.Forward;
-        }
-        if (MovementDirection == ShipDirection.Forward)
+        if (_movementDirection == ShipDirection.Forward)
         {
             ApplyThrust();
         }
-        else if (MovementDirection == ShipDirection.Reverse)
+        else if (_movementDirection == ShipDirection.Reverse)
         {
             ApplyBraking();
         }
@@ -575,55 +488,29 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    private void ApplyThrust(float factor, float targetSpeedFactor)
+    public override void MoveBackward()
     {
-        if (_engine != null)
+        if (_movementDirection == ShipDirection.Stopped)
         {
-            _engine.ComponentActive = true;
-            if (!_engine.ThrustWorks || !_engine.ComponentIsWorking)
-            {
-                return;
-            }
+            _movementDirection = ShipDirection.Reverse;
         }
-        float targetSpeed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
-        if (targetSpeed < _speed)
-        {
-            return;
-        }
-        float newSpeed = _speed + Thrust * Mathf.Clamp01(factor) * Time.deltaTime;
-        if (newSpeed > MaxSpeed * Mathf.Clamp01(targetSpeedFactor))
-        {
-            _speed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
-        }
-        else
-        {
-            _speed = newSpeed;
-        }
-    }
-
-    public void MoveBackward()
-    {
-        if (MovementDirection == ShipDirection.Stopped)
-        {
-            MovementDirection = ShipDirection.Reverse;
-        }
-        if (MovementDirection == ShipDirection.Forward)
+        if (_movementDirection == ShipDirection.Forward)
         {
             ApplyBraking();
         }
-        else if (MovementDirection == ShipDirection.Reverse)
+        else if (_movementDirection == ShipDirection.Reverse)
         {
             ApplyThrust();
         }
     }
 
-    public void ApplyBraking()
+    public override void ApplyBraking()
     {
         float newSpeed = _speed - Braking * Time.deltaTime;
         if (newSpeed < 0)
         {
             _speed = 0;
-            MovementDirection = ShipDirection.Stopped;
+            _movementDirection = ShipDirection.Stopped;
         }
         else
         {
@@ -644,7 +531,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
             _speed = MaxSpeed * targetSpeed;
             if (_speed <= 0)
             {
-                MovementDirection = ShipDirection.Stopped;
+                _movementDirection = ShipDirection.Stopped;
                 _speed = 0;
             }
         }
@@ -654,7 +541,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    public void ApplyTurning(bool left)
+    public override void ApplyTurning(bool left)
     {
         if (_inCollision)
         {
@@ -710,137 +597,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
         ApplyTurning(Vector3.Cross(transform.up, _autoHeadingVector).y < 0);
     }
 
-    public bool MovingForward { get { return MovementDirection == ShipDirection.Forward; } }
-
-    public void FireManual(Vector3 target)
-    {
-        if (!GrapplingMode)
-        {
-            FireWeaponManual(target);
-        }
-        else
-        {
-            FireHarpaxManual(target);
-        }
-    }
-
-    public void FireWeaponManual(Vector3 target)
-    {
-        StringBuilder sb = new StringBuilder();
-        if (WeaponGroups == null)
-        {
-            foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
-            {
-                t.Fire(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
-            }
-        }
-        else
-        {
-            foreach (ITurret t in WeaponGroups.ManualTurrets)
-            {
-                t.Fire(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
-            }
-        }
-        //Debug.Log(sb.ToString());
-    }
-
-    public void FireHarpaxManual(Vector3 target)
-    {
-        StringBuilder sb = new StringBuilder();
-        if (WeaponGroups == null)
-        {
-            foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
-            {
-                t.FireGrapplingTool(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
-            }
-        }
-        else
-        {
-            foreach (ITurret t in WeaponGroups.ManualTurrets)
-            {
-                t.FireGrapplingTool(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
-            }
-        }
-        //Debug.Log(sb.ToString());
-    }
-
-    public void DisconnectHarpaxTowing()
-    {
-        CableBehavior cable;
-        if ((cable = TowingByHarpax) != null)
-        {
-            cable.DisconnectAndDestroy();
-        }
-    }
-    private void DisconnectHarpaxTowed()
-    {
-        CableBehavior cable;
-        if ((cable = TowedByHarpax) != null)
-        {
-            cable.DisconnectAndDestroy();
-        }
-    }
-
-    public CableBehavior TowingByHarpax
-    {
-        get
-        {
-            if (_towing)
-            {
-                return _connectedHarpax;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        set
-        {
-            if (value != null)
-            {
-                _towing = true;
-                _connectedHarpax = value;
-            }
-            else
-            {
-                _connectedHarpax = null;
-                _hasPrevForceTow = false;
-            }
-        }
-    }
-    public CableBehavior TowedByHarpax
-    {
-        get
-        {
-            if (!_towing)
-            {
-                return _connectedHarpax;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        set
-        {
-            if (value != null)
-            {
-                _towing = false;
-                _connectedHarpax = value;
-                _towedTime = Time.time;
-            }
-            else
-            {
-                _connectedHarpax = null;
-                _hasPrevForceTow = false;
-            }
-        }
-    }
-
+    public bool MovingForward { get { return _movementDirection == ShipDirection.Forward; } }
 
     public Vector3 ActualVelocity { get; private set; }
 
@@ -957,7 +714,7 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    public int ShipTotalShields
+    public override int ShipTotalShields
     {
         get
         {
@@ -967,22 +724,6 @@ public class Ship : MonoBehaviour, ITargetableEntity
                 totalShields += shield.CurrShieldPoints;
             }
             return totalShields;
-        }
-    }
-
-    public int ShipTotalMaxShields
-    {
-        get
-        {
-            return _totalMaxShield;
-        }
-    }
-
-    public IEnumerable<ITurret> Turrets
-    {
-        get
-        {
-            return _turrets;
         }
     }
 
@@ -1308,15 +1049,6 @@ public class Ship : MonoBehaviour, ITargetableEntity
         }
     }
 
-    public void SetTurretConfig(TurretControlGrouping cfg)
-    {
-        WeaponGroups = cfg;
-    }
-    public void SetTurretConfigAllAuto()
-    {
-        WeaponGroups = TurretControlGrouping.AllAuto(this);
-    }
-
     public static Ship FromCollider(Collider c)
     {
         Ship s;
@@ -1327,31 +1059,18 @@ public class Ship : MonoBehaviour, ITargetableEntity
         return null;
     }
 
-    // TargetableEntity properties:
-    public Vector3 EntityLocation { get { return transform.position; } }
-    public bool Targetable { get { return !ShipDisabled; } }
+    public override bool Targetable { get { return !ShipDisabled; } }
 
     // Fields
     private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };
 
-    public string ProductionKey;
     public ObjectFactory.ShipSize ShipSize;
 
-    public float MaxSpeed;
-    public float Mass;
-    public float Thrust;
-    public float Braking;
-    public float TurnRate;
-    private float _speed;
     private bool _autoHeading = false;
     private Vector3 _autoHeadingVector;
-    private ShipDirection MovementDirection = ShipDirection.Stopped;
-    private Rigidbody _rigidBody;
+    private ShipDirection _movementDirection = ShipDirection.Stopped;
 
-    private ITurret[] _turrets;
-    private IEnumerable<ITurret> _manualTurrets;
-    public TurretControlGrouping WeaponGroups { get; private set; }
     private int _minEnergyPerShot;
 
     public int Energy { get; private set; }
@@ -1451,17 +1170,10 @@ public class Ship : MonoBehaviour, ITargetableEntity
     private CombatDetachment[] _combatDetachments;
     private bool _useShields = true;
     private ShipEngine _engine;
-    public float ShipLength { get; private set; }
-    public float ShipWidth { get; private set; }
-    public float ShipUnscaledLength { get; private set; }
-    public float ShipUnscaledWidth { get; private set; }
 
     private ElectromagneticClamps _electromagneticClamps;
     private ParticleSystem _electromagneticClampsEffect;
 
-    public int MaxHullHitPoints;
-    public int HullHitPoints { get; set; }
-    private int _totalMaxShield;
     public int ArmorFront;
     public int ArmorAft;
     public int ArmorLeft;
@@ -1492,21 +1204,9 @@ public class Ship : MonoBehaviour, ITargetableEntity
     private Quaternion _prevRot;
     private bool _inCollision = false;
 
-    public bool GrapplingMode { get; set; }
-    private CableBehavior _connectedHarpax = null;
-    private bool _towing = false;
-    private Vector3 _prevForceTow;
-    private bool _hasPrevForceTow = false;
-    private float _towedTime;
-
     public float LastInCombat { get; private set; }
-
-    private GameObject _shieldCapsule;
-    public GameObject ShieldCapsule { get { return _shieldCapsule; } }
 
     private ParticleSystem _engineDamageSmoke;
 
     private ParticleSystem[] _engineExhaustsOn, _engineExhaustsIdle;
-
-    public Faction Owner;
 }

@@ -720,9 +720,9 @@ GameObject:
   - component: {fileID: 4521007460419132}
   - component: {fileID: 33872601350542730}
   - component: {fileID: 23390033979065382}
-  - component: {fileID: 54562583178880500}
   - component: {fileID: 114248074947831548}
   - component: {fileID: 64586145895784424}
+  - component: {fileID: 54562583178880500}
   m_Layer: 9
   m_Name: Terran - cuiser Aurora med
   m_TagString: Untagged
@@ -2189,7 +2189,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1686290255015638}
   serializedVersion: 2
-  m_Mass: 11
+  m_Mass: 140
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -2314,18 +2314,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ProductionKey: Aurora med
-  ShipSize: 3
+  MaxHullHitPoints: 10000
   MaxSpeed: 1.6
-  Mass: 11
+  Mass: 140
   Thrust: 0.16
   Braking: 1.6
   TurnRate: 25
+  Owner: {fileID: 0}
+  ShipSize: 3
   CenterComponentSlots: 010000000100000001000000010000000100000001000000
   ForeComponentSlots: 0000000000000000
   AftComponentSlots: 130000000000000000000000
   LeftComponentSlots: 0000000000000000
   RightComponentSlots: 0000000000000000
-  MaxHullHitPoints: 10000
   ArmorFront: 725
   ArmorAft: 700
   ArmorLeft: 735
@@ -2338,7 +2339,6 @@ MonoBehaviour:
   OperationalCrew: 110
   MaxCrew: 140
   MaxSpecialCharacters: 3
-  Owner: {fileID: 0}
 --- !u!114 &114516483274588990
 MonoBehaviour:
   m_ObjectHideFlags: 1
