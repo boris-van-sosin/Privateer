@@ -20,9 +20,173 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
     {
         FindTurrets();
         InitShield();
+        ShipDisabled = false;
+        ShipImmobilized = false;
     }
 
-    protected abstract void Update();
+    protected virtual void Update()
+    {
+        ApplyMovement();
+    }
+
+    protected virtual void ApplyMovement()
+    {
+        ApplyUpdateAccelration();
+        ApplyUpdateTurning();
+
+        float directionMult = 0.0f;
+        if (_movementDirection == ShipDirection.Forward)
+        {
+            directionMult = 1.0f;
+        }
+        else if (_movementDirection == ShipDirection.Reverse)
+        {
+            directionMult = -1.0f;
+        }
+
+        _prevPos = transform.position;
+        _prevRot = transform.rotation;
+        Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+        Vector3 rbVelocity = _rigidBody.velocity;
+        if (TowedByHarpax != null)
+        {
+            _prevForceTow = (targetVelocity - rbVelocity) * _rigidBody.mass;
+            if (!_hasPrevForceTow)
+            {
+                _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass, ForceMode.Impulse);
+            }
+            else
+            {
+                _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass - _prevForceTow, ForceMode.Impulse);
+            }
+            _hasPrevForceTow = true;
+        }
+        else if (_movementDirection == ShipDirection.Stopped)
+        {
+            _rigidBody.angularVelocity = Vector3.zero;
+            _rigidBody.velocity = Vector3.zero;
+        }
+        else
+        {
+            _rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
+        }
+        if (_autoHeading && !ShipImmobilized && !ShipDisabled)
+        {
+            RotateToHeading();
+        }
+
+        // Breaking free from a Harpax
+        if (!ShipImmobilized && !ShipDisabled && TowedByHarpax != null)
+        {
+            if (Time.time - _towedTime > 5.0f)
+            {
+                DisconnectHarpaxTowed();
+            }
+        }
+        else if (TowedByHarpax)
+        {
+            _towedTime = Time.time;
+        }
+    }
+
+    private void RotateToHeading()
+    {
+        if (Mathf.Abs(Vector3.Cross(transform.up, _autoHeadingVector).y) < 0.1f)
+        {
+            _autoHeading = false;
+            return;
+        }
+
+        ApplyTurning(Vector3.Cross(transform.up, _autoHeadingVector).y < 0);
+    }
+
+    private void ApplyUpdateAccelration()
+    {
+        if (_nextAccelerate)
+        {
+            _nextAccelerate = _nextBrake = false;
+
+            if (!CanDoAcceleration())
+                return;
+
+            float newSpeed = _speed + Thrust * _thrustCoefficient * Time.deltaTime;
+            if (newSpeed > MaxSpeed)
+            {
+                _speed = MaxSpeed;
+            }
+            else
+            {
+                _speed = newSpeed;
+            }
+        }
+        else if (_nextBrake)
+        {
+            _nextAccelerate = _nextBrake = false;
+
+            if (!CanDoBraking())
+                return;
+
+            float targetSpeed = MaxSpeed * Mathf.Clamp01(_brakingTargetSpeedFactor);
+            float newSpeed = _speed - Braking * Mathf.Clamp01(_brakingFactor) * Time.deltaTime;
+            if (targetSpeed > _speed)
+            {
+                return;
+            }
+            if (newSpeed < targetSpeed)
+            {
+                _speed = MaxSpeed * targetSpeed;
+                if (_speed <= 0)
+                {
+                    _movementDirection = ShipDirection.Stopped;
+                    _speed = 0;
+                }
+            }
+            else
+            {
+                _speed = newSpeed;
+            }
+        }
+    }
+
+    private void ApplyUpdateTurning()
+    {
+        if (!(_nextTurnLeft || _nextTurnRight))
+        {
+            return;
+        }
+        bool thisLeft = _nextTurnLeft;
+        _nextTurnLeft = _nextTurnRight = false;
+        if (!CanDoTurning())
+            return;
+
+        float turnFactor = 1.0f;
+        if (thisLeft)
+        {
+            turnFactor = -1.0f;
+        }
+        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * _turnCoefficient * Time.deltaTime, transform.forward);
+        transform.rotation = deltaRot * transform.rotation;
+    }
+
+    protected virtual bool CanDoAcceleration()
+    {
+        return true;
+    }
+
+    protected virtual bool CanDoBraking()
+    {
+        return true;
+    }
+
+    protected virtual bool CanDoTurning()
+    {
+        return true;
+    }
+
+    public Vector3 ActualVelocity { get; protected set; }
+
+    public bool ShipDisabled { get; protected set; }
+    public bool ShipImmobilized { get; protected set; }
 
     private void ComputeLength()
     {
@@ -187,13 +351,63 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         //Debug.Log(sb.ToString());
     }
 
-    public abstract void MoveForeward();
+    public virtual void MoveForeward()
+    {
+        if (_movementDirection == ShipDirection.Stopped)
+        {
+            _movementDirection = ShipDirection.Forward;
+        }
+        if (_movementDirection == ShipDirection.Forward)
+        {
+            ApplyThrust();
+        }
+        else if (_movementDirection == ShipDirection.Reverse)
+        {
+            ApplyBraking();
+        }
+    }
 
-    public abstract void MoveBackward();
+    public virtual void MoveBackward()
+    {
+        if (_movementDirection == ShipDirection.Stopped)
+        {
+            _movementDirection = ShipDirection.Reverse;
+        }
+        if (_movementDirection == ShipDirection.Forward)
+        {
+            ApplyBraking();
+        }
+        else if (_movementDirection == ShipDirection.Reverse)
+        {
+            ApplyThrust();
+        }
+    }
 
-    public abstract void ApplyBraking();
+    protected virtual void ApplyThrust()
+    {
+        _nextAccelerate = true;
+        _nextBrake = false;
+    }
 
-    public abstract void ApplyTurning(bool left);
+    public virtual void ApplyBraking()
+    {
+        _nextAccelerate = false;
+        _nextBrake = true;
+        _brakingTargetSpeedFactor = 0.0f;
+        _brakingFactor = 1.0f;
+    }
+
+    protected virtual void ApplyBrakingCoefficients(float factor, float targetSpeedFactor)
+    {
+        _brakingFactor = factor;
+        _brakingTargetSpeedFactor = targetSpeedFactor;
+    }
+
+    public virtual void ApplyTurning(bool left)
+    {
+        _nextTurnLeft = left;
+        _nextTurnRight = !left;
+    }
 
     private void InitShield()
     {
@@ -215,7 +429,6 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
             return 0;
         }
     }
-
 
     public int ShipTotalMaxShields
     {
@@ -298,6 +511,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
     }
 
+    protected enum ShipDirection { Stopped, Forward, Reverse };
 
     // TargetableEntity properties:
     public Vector3 EntityLocation { get { return transform.position; } }
@@ -342,6 +556,21 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
     public float Braking;
     public float TurnRate;
     protected float _speed;
+
+    // Movement fields
+    protected bool _autoHeading = false;
+    protected Vector3 _autoHeadingVector;
+    protected ShipDirection _movementDirection = ShipDirection.Stopped;
+    protected Vector3 _prevPos;
+    protected Quaternion _prevRot;
+    private bool _nextAccelerate;
+    private bool _nextBrake;
+    private bool _nextTurnLeft;
+    private bool _nextTurnRight;
+    protected float _thrustCoefficient;
+    protected float _brakingFactor;
+    protected float _brakingTargetSpeedFactor;
+    protected float _turnCoefficient;
 
     public Faction Owner;
 }

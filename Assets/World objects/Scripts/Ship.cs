@@ -23,8 +23,6 @@ public class Ship : ShipBase
         InitArmour();
         InitEngines();
         StartCoroutine(ContinuousComponents());
-        ShipDisabled = false;
-        ShipImmobilized = false;
         ShipSurrendered = false;
         InBoarding = false;
         LastInCombat = Time.time;
@@ -340,60 +338,7 @@ public class Ship : ShipBase
     {
         if (!_inCollision)
         {
-            float directionMult = 0.0f;
-            if (_movementDirection == ShipDirection.Forward)
-            {
-                directionMult = 1.0f;
-            }
-            else if (_movementDirection == ShipDirection.Reverse)
-            {
-                directionMult = -1.0f;
-            }
-            _prevPos = transform.position;
-            _prevRot = transform.rotation;
-            Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
-            Vector3 rbVelocity = _rigidBody.velocity;
-            if (TowedByHarpax != null)
-            {
-                _prevForceTow = (targetVelocity - rbVelocity) * _rigidBody.mass;
-                if (!_hasPrevForceTow)
-                {
-                    _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass, ForceMode.Impulse);
-                }
-                else
-                {
-                    _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass - _prevForceTow, ForceMode.Impulse);
-                }
-                _hasPrevForceTow = true;
-            }
-            else if (_movementDirection == ShipDirection.Stopped)
-            {
-                _rigidBody.angularVelocity = Vector3.zero;
-                _rigidBody.velocity = Vector3.zero;
-            }
-            else
-            {
-                _rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
-            }
-            //if (Follow) Debug.Log(string.Format("Velocity vector: {0}", ActualVelocity));
-            //if (rigidBody.velocity.sqrMagnitude >= 0) Debug.Log(string.Format("RigidBofy Velocity vector: {0}", rigidBody.velocity));
-            if (_autoHeading && !ShipImmobilized && !ShipDisabled)
-            {
-                RotateToHeading();
-            }
-
-            // Breaking free from a Harpax
-            if (!ShipImmobilized && !ShipDisabled && TowedByHarpax != null)
-            {
-                if (Time.time - _towedTime > 5.0f)
-                {
-                    DisconnectHarpaxTowed();
-                }
-            }
-            else if (TowedByHarpax)
-            {
-                _towedTime = Time.time;
-            }
+            ApplyMovement();
         }
 	}
 
@@ -442,103 +387,27 @@ public class Ship : ShipBase
         }
     }
 
-    public override void MoveForeward()
-    {
-        if (_movementDirection == ShipDirection.Stopped)
-        {
-            _movementDirection = ShipDirection.Forward;
-        }
-        if (_movementDirection == ShipDirection.Forward)
-        {
-            ApplyThrust();
-        }
-        else if (_movementDirection == ShipDirection.Reverse)
-        {
-            ApplyBraking();
-        }
-    }
-
-    private void ApplyThrust()
+    protected override void ApplyThrust()
     {
         if (_engine != null)
         {
             _engine.ComponentActive = true;
-            if (!_engine.ThrustWorks || !_engine.ComponentIsWorking)
-            {
-                return;
-            }
         }
-        float thrustCoefficient = 1.0f;
+        _thrustCoefficient = 1.0f;
         if (_engine.Status == ComponentStatus.LightlyDamaged)
         {
-            thrustCoefficient = 0.9f;
+            _thrustCoefficient = 0.9f;
         }
         else if (_engine.Status == ComponentStatus.HeavilyDamaged)
         {
-            thrustCoefficient = 0.75f;
+            _thrustCoefficient = 0.75f;
         }
-        float newSpeed = _speed + Thrust * thrustCoefficient * Time.deltaTime;
-        if (newSpeed > MaxSpeed)
-        {
-            _speed = MaxSpeed;
-        }
-        else
-        {
-            _speed = newSpeed;
-        }
+        base.ApplyThrust();
     }
 
-    public override void MoveBackward()
+    protected override bool CanDoAcceleration()
     {
-        if (_movementDirection == ShipDirection.Stopped)
-        {
-            _movementDirection = ShipDirection.Reverse;
-        }
-        if (_movementDirection == ShipDirection.Forward)
-        {
-            ApplyBraking();
-        }
-        else if (_movementDirection == ShipDirection.Reverse)
-        {
-            ApplyThrust();
-        }
-    }
-
-    public override void ApplyBraking()
-    {
-        float newSpeed = _speed - Braking * Time.deltaTime;
-        if (newSpeed < 0)
-        {
-            _speed = 0;
-            _movementDirection = ShipDirection.Stopped;
-        }
-        else
-        {
-            _speed = newSpeed;
-        }
-    }
-
-    private void ApplyBraking(float factor, float targetSpeedFactor)
-    {
-        float targetSpeed = MaxSpeed * Mathf.Clamp01(targetSpeedFactor);
-        float newSpeed = _speed - Braking * Mathf.Clamp01(factor) * Time.deltaTime;
-        if (targetSpeed > _speed)
-        {
-            return;
-        }
-        if (newSpeed < targetSpeed)
-        {
-            _speed = MaxSpeed * targetSpeed;
-            if (_speed <= 0)
-            {
-                _movementDirection = ShipDirection.Stopped;
-                _speed = 0;
-            }
-        }
-        else
-        {
-            _speed = newSpeed;
-        }
+        return _engine.ThrustWorks && _engine.ComponentIsWorking;
     }
 
     public override void ApplyTurning(bool left)
@@ -555,23 +424,23 @@ public class Ship : ShipBase
                 return;
             }
         }
-        float turnFactor = 1.0f;
-        if (left)
-        {
-            turnFactor = -1.0f;
-        }
-        float turnCoefficient = 1.0f;
+        _turnCoefficient = 1.0f;
         if (_engine.Status == ComponentStatus.LightlyDamaged)
         {
-            turnCoefficient = 0.9f;
+            _turnCoefficient = 0.9f;
         }
         else if (_engine.Status == ComponentStatus.HeavilyDamaged)
         {
-            turnCoefficient = 0.75f;
+            _turnCoefficient = 0.75f;
         }
-        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * turnCoefficient * Time.deltaTime, transform.forward);
-        transform.rotation = deltaRot * transform.rotation;
-        ApplyBraking(0.5f, 0.5f);
+        ApplyBraking();
+        ApplyBrakingCoefficients(0.5f, 0.5f);
+        base.ApplyTurning(left);
+    }
+
+    protected override bool CanDoTurning()
+    {
+        return _engine.ThrustWorks && _engine.ComponentIsWorking;
     }
 
     public void SetRequiredHeading(Vector3 targetPoint)
@@ -586,20 +455,7 @@ public class Ship : ShipBase
         _autoHeading = true;
     }
 
-    private void RotateToHeading()
-    {
-        if (Mathf.Abs(Vector3.Cross(transform.up, _autoHeadingVector).y) < 0.1f)
-        {
-            _autoHeading = false;
-            return;
-        }
-
-        ApplyTurning(Vector3.Cross(transform.up, _autoHeadingVector).y < 0);
-    }
-
     public bool MovingForward { get { return _movementDirection == ShipDirection.Forward; } }
-
-    public Vector3 ActualVelocity { get; private set; }
 
     public bool TryChangeEnergy(int delta)
     {
@@ -1062,14 +918,9 @@ public class Ship : ShipBase
     public override bool Targetable { get { return !ShipDisabled; } }
 
     // Fields
-    private enum ShipDirection { Stopped, Forward, Reverse };
     public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };
 
     public ObjectFactory.ShipSize ShipSize;
-
-    private bool _autoHeading = false;
-    private Vector3 _autoHeadingVector;
-    private ShipDirection _movementDirection = ShipDirection.Stopped;
 
     private int _minEnergyPerShot;
 
@@ -1186,8 +1037,6 @@ public class Ship : ShipBase
     private Dictionary<ShipSection, int> _armour = new Dictionary<ShipSection, int>();
     private Dictionary<ShipSection, int> _maxMitigationArmour = new Dictionary<ShipSection, int>();
     private Dictionary<ShipSection, int> _currMitigationArmour = new Dictionary<ShipSection, int>();
-    public bool ShipDisabled { get; private set; }
-    public bool ShipImmobilized { get; private set; }
     public bool ShipSurrendered { get; private set; }
     public bool InBoarding { get; private set; }
 
@@ -1200,8 +1049,6 @@ public class Ship : ShipBase
     private List<SpecialCharacter> _specialCharacters;
     public ShipCharacter Captain { get; set; }
 
-    private Vector3 _prevPos;
-    private Quaternion _prevRot;
     private bool _inCollision = false;
 
     public float LastInCombat { get; private set; }
