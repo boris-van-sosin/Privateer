@@ -285,16 +285,63 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         get
         {
-            return AngleToShipHeading(FilterRotation(transform.rotation.eulerAngles));
+            return GlobalDirToShipHeading(-transform.forward);
         }
     }
 
-    protected float AngleToShipHeading(float globalAngle)
+    /*protected float AngleToShipHeading(float globalAngle)
     {
         return AngleToShipHeading(globalAngle, false);
+    }*/
+
+    protected Vector3 DirectionToLocal(Vector3 dir)
+    {
+        return DirectionToLocal(dir, false);
     }
 
-    protected float AngleToShipHeading(float globalAngle, bool inverse)
+    protected Vector3 DirectionToLocal(Vector3 dir, bool clean)
+    {
+        return _containingShip.transform.InverseTransformDirection(dir.x,
+                                                                   clean ? 0 : dir.y,
+                                                                   dir.z);
+    }
+
+    protected Vector3 DirectionToGlobal(Vector3 dir)
+    {
+        return DirectionToGlobal(dir, false);
+    }
+
+    protected Vector3 DirectionToGlobal(Vector3 dir, bool clean)
+    {
+        Vector3 res = _containingShip.transform.TransformDirection(dir);
+        if (clean)
+        {
+            res.y = 0;
+        }
+        return res;
+    }
+
+    protected float LocalDirToShipHeading(Vector3 dir)
+    {
+        Vector3 localDir = DirectionToLocal(dir);
+        Vector3 flatDir = Vector3.ProjectOnPlane(localDir, Vector3.forward);
+        return Vector3.SignedAngle(Vector3.up, flatDir, Vector3.forward) + 180;
+    }
+
+    protected float GlobalDirToShipHeading(Vector3 dir)
+    {
+        Vector3 flatDir = Vector3.ProjectOnPlane(dir, _containingShip.transform.forward);
+        return Vector3.SignedAngle(_containingShip.transform.up, flatDir, _containingShip.transform.forward) + 180;
+    }
+
+    /*protected float AngleToGlobal(float angle)
+    {
+        Quaternion rot = Quaternion.AngleAxis(angle, _containingShip.transform.forward);
+        Quaternion worldDir = Quaternion.LookRotation(Vector3.right);
+        return Quaternion.Angle(rot, worldDir);
+    }*/
+
+    /*protected float AngleToShipHeading(float globalAngle, bool inverse)
     {
         Vector3 forwardClean = Vector3.forward;
         forwardClean.y = 0;
@@ -315,7 +362,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             finalAngle += 360;
         }
         return finalAngle;
-    }
+    }*/
 
     private float AngleToTargetShip
     {

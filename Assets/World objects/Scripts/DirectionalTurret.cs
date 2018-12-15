@@ -14,28 +14,8 @@ public abstract class DirectionalTurret : TurretBase
         if (CanRotate && Mode != TurretMode.Off)
         {
             float maxRotation = RotationSpeed * Time.deltaTime;
-            //Debug.Log(string.Format("Turret angle: global: {0} local: {1} target (global): {2}", CurrAngle, CurrLocalAngle, _globalTargetAngle));
-            if (Mathf.Abs(_globalTargetAngle - CurrAngle) < maxRotation)
-            {
-                switch (TurretAxis)
-                {
-                    case RotationAxis.XAxis:
-                        transform.rotation = Quaternion.Euler(_globalTargetAngle, transform.rotation.eulerAngles.y, transform.rotation.z);
-                        break;
-                    case RotationAxis.YAxis:
-                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, _globalTargetAngle, transform.rotation.z);
-                        break;
-                    case RotationAxis.ZAxis:
-                        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.y, _globalTargetAngle);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                transform.rotation = transform.rotation * Quaternion.AngleAxis(maxRotation * _rotationDir, TurretAxisVector);
-            }
+            float angleToRotate = Mathf.Abs(Mathf.MoveTowardsAngle(0, _targetAngle - CurrLocalAngle, maxRotation));
+            transform.localRotation = transform.localRotation * Quaternion.AngleAxis(angleToRotate * _rotationDir, TurretAxisVector);
         }
         base.Update();
     }
@@ -49,14 +29,13 @@ public abstract class DirectionalTurret : TurretBase
 
         _vectorToTarget = target - transform.position;
         Vector3 flatVec = new Vector3(_vectorToTarget.x, 0, _vectorToTarget.z);
-        float angleToTarget = Quaternion.LookRotation(-flatVec).eulerAngles.y;
-        float relativeAngle = AngleToShipHeading(angleToTarget);
+        float relativeAngle = GlobalDirToShipHeading(flatVec);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
         _isLegalAngle = false;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
         foreach (Tuple<float, float> r in _rotationAllowedRanges)
         {
-            if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
+            if (r.Item1 <= relativeAngle && relativeAngle <= r.Item2)
             {
                 _isLegalAngle = true;
                 _targetAngle = relativeAngle;
@@ -81,20 +60,20 @@ public abstract class DirectionalTurret : TurretBase
         {
             _targetAngle = closestLegalAngle;
         }
-        _globalTargetAngle = AngleToShipHeading(_targetAngle, true);
 
         float currLocal = CurrLocalAngle;
         if (_minRotation < _maxRotation)
         {
             if (_minRotation == 0.0f && _maxRotation == 360.0f)
             {
-                if (Mathf.Abs(_globalTargetAngle - CurrAngle) <= 180.0f)
+                //Debug.Log(string.Format("Target angle: {0} Current Angle {1}", _targetAngle, currLocal));
+                if (Mathf.Abs(_targetAngle - currLocal) <= 180.0f)
                 {
-                    _rotationDir = Mathf.Sign(_globalTargetAngle - CurrAngle);
+                    _rotationDir = Mathf.Sign(_targetAngle - currLocal);
                 }
                 else
                 {
-                    _rotationDir = -Mathf.Sign(_globalTargetAngle - CurrAngle);
+                    _rotationDir = -Mathf.Sign(_targetAngle - currLocal);
                 }
             }
             else
@@ -155,6 +134,5 @@ public abstract class DirectionalTurret : TurretBase
         return foundTarget;
     }
 
-    protected float _globalTargetAngle;
     private float _rotationDir;
 }

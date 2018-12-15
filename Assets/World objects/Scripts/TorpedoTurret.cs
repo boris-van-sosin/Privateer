@@ -54,8 +54,7 @@ public class TorpedoTurret : TurretBase
         {
             return;
         }
-        float angleToTarget = Quaternion.LookRotation(-flatVec).eulerAngles.y;
-        float relativeAngle = AngleToShipHeading(angleToTarget);
+        float relativeAngle = GlobalDirToShipHeading(flatVec);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
         _isLegalAngle = false;
         foreach (Tuple<float, float> r in _rotationAllowedRanges)
