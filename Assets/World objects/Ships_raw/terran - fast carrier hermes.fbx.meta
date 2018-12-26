@@ -3,34 +3,34 @@ guid: 5cf896d01496e294fb594082003c12bb
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: instance_14.003
-    100002: instance_14.004
-    100004: instance_14.005
-    100006: instance_14.006
-    100008: instance_17.009
+    100000: HermesElevatorAB
+    100002: HermesElevatorAT
+    100004: HermesElevatorFB
+    100006: HermesElevatorFT
+    100008: HermesHull
     100010: //RootNode
-    400000: instance_14.003
-    400002: instance_14.004
-    400004: instance_14.005
-    400006: instance_14.006
-    400008: instance_17.009
+    400000: HermesElevatorAB
+    400002: HermesElevatorAT
+    400004: HermesElevatorFB
+    400006: HermesElevatorFT
+    400008: HermesHull
     400010: //RootNode
-    2100000: material
-    2300000: instance_14.003
-    2300002: instance_14.004
-    2300004: instance_14.005
-    2300006: instance_14.006
-    2300008: instance_17.009
-    3300000: instance_14.003
-    3300002: instance_14.004
-    3300004: instance_14.005
-    3300006: instance_14.006
-    3300008: instance_17.009
-    4300000: instance_14.006
-    4300002: instance_14.005
-    4300004: instance_14.004
-    4300006: instance_14.003
-    4300008: instance_17.009
+    2100000: material.002
+    2300000: HermesElevatorAB
+    2300002: HermesElevatorAT
+    2300004: HermesElevatorFB
+    2300006: HermesElevatorFT
+    2300008: HermesHull
+    3300000: HermesElevatorAB
+    3300002: HermesElevatorAT
+    3300004: HermesElevatorFB
+    3300006: HermesElevatorFT
+    3300008: HermesHull
+    4300000: HermesElevatorFB
+    4300002: HermesElevatorFT
+    4300004: HermesElevatorAB
+    4300006: HermesElevatorAT
+    4300008: HermesHull
   externalObjects: {}
   materials:
     importMaterials: 1
