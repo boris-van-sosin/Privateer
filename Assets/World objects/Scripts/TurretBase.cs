@@ -15,6 +15,10 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             _minRotation = parentHardpoint.MinRotation;
             _maxRotation = parentHardpoint.MaxRotation;
             _deadZoneAngleStrings = parentHardpoint.DeadZoneAngles.ToArray();
+            if (parentHardpoint.transform.lossyScale.x < 0)
+            {
+                _flippedX = true;
+            }
         }
         else
         {
@@ -644,4 +648,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public ObjectFactory.ShipSize MaxShipSize { get { return ObjectFactory.ShipSize.CapitalShip; } }
 
     private ComponentSlotType[] _allowedSlotTypes;
+
+    protected bool _flippedX = false;
 }

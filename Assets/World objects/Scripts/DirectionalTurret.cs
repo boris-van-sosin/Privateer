@@ -97,6 +97,10 @@ public abstract class DirectionalTurret : TurretBase
                 _rotationDir = Mathf.Sign(-_targetAngle + currLocal);
             }
         }
+        if (_flippedX)
+        {
+            _rotationDir = -_rotationDir;
+        }
     }
 
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
