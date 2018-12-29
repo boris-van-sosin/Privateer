@@ -3,6 +3,7 @@ using System.Text;
 using UnityEngine;
 using System.Linq;
 
+[RequireComponent(typeof(Rigidbody))]
 public abstract class ShipBase : MonoBehaviour, ITargetableEntity
 {
     protected virtual void Awake()
@@ -511,11 +512,31 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
     }
 
+    // Finding this entity:
+    public static ShipBase FromCollider(Collider c)
+    {
+        ShipBase s;
+        if ((s = c.GetComponent<ShipBase>()) != null || (s = c.GetComponentInParent<ShipBase>()) != null)
+        {
+            return s;
+        }
+        return null;
+    }
+
+    // Getting hit:
+    public abstract void TakeHit(Warhead w, Vector3 location);
+
     protected enum ShipDirection { Stopped, Forward, Reverse };
 
     // TargetableEntity properties:
     public Vector3 EntityLocation { get { return transform.position; } }
-    public virtual bool Targetable { get { return true; } }
+    public virtual bool Targetable
+    {
+        get
+        {
+            return this != null;
+        }
+    }
 
     public string ProductionKey;
 

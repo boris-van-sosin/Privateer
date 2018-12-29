@@ -18,7 +18,7 @@ public class HarpaxBehavior : Projectile
         _cableRenderer.SetPosition(1, transform.position);
     }
 
-    protected override void DoHit(RaycastHit hit, Ship shipHit)
+    protected override void DoHit(RaycastHit hit, ShipBase shipHit)
     {
         if (shipHit.ShipTotalShields > 0)
         {

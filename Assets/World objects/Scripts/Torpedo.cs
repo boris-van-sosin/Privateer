@@ -46,7 +46,6 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             if (_collider != null && !_collider.enabled && _distanceTraveled >= OriginShip.ShipWidth)
             {
                 _collider.enabled = true;
-
             }
         }
         else
@@ -104,10 +103,10 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             if (Physics.Raycast(r, out hit, distanceToTravel, ObjectFactory.AllTargetableLayerMask))
             {
                 GameObject hitobj = hit.collider.gameObject;
-                Ship shipHit;
+                ShipBase shipHit;
                 if (hitobj.GetComponent<Projectile>() == null && hitobj.GetComponent<Torpedo>() == null)
                 {
-                    shipHit = Ship.FromCollider(hit.collider);
+                    shipHit = ShipBase.FromCollider(hit.collider);
                     if (shipHit == null || shipHit == OriginShip)
                     {
                         return;
@@ -126,7 +125,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         }
     }
 
-    private void DoHit(RaycastHit hit, Ship shipHit)
+    private void DoHit(RaycastHit hit, ShipBase shipHit)
     {
         shipHit.TakeHit(ProjectileWarhead, hit.point);
         ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);

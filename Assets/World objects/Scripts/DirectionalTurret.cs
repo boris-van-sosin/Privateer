@@ -114,9 +114,9 @@ public abstract class DirectionalTurret : TurretBase
         ITargetableEntity foundTarget = null;
         foreach (Collider c in colliders)
         {
-            Ship s;
+            ShipBase s;
             Torpedo t;
-            if ((s = Ship.FromCollider(c)) != null)
+            if ((s = ShipBase.FromCollider(c)) != null)
             {
                 if (s.ShipDisabled)
                 {

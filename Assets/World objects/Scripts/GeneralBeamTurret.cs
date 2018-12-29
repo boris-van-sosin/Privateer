@@ -19,14 +19,14 @@ public abstract class GeneralBeamTurret : DirectionalTurret
         //ExtDebug.DrawBoxCastBox(boxCenter, boxSize / 2, _firingVector, Quaternion.LookRotation(_firingVector), MaxRange, Color.magenta, 1.0f);
         RaycastHit[] hits = Physics.BoxCastAll(boxCenter, boxSize / 2, _firingVector, Quaternion.LookRotation(_firingVector), MaxRange, ObjectFactory.AllTargetableLayerMask);
         int closestHit = -1;
-        Ship hitShip = null;
+        ShipBase hitShip = null;
         for (int i = 0; i < hits.Length; ++i)
         {
             if (hits[i].collider.gameObject == ContainingShip.gameObject.gameObject || hits[i].collider.gameObject == ContainingShip.ShieldCapsule.gameObject)
             {
                 continue;
             }
-            Ship currHitShip = Ship.FromCollider(hits[i].collider);
+            ShipBase currHitShip = ShipBase.FromCollider(hits[i].collider);
             if (currHitShip != null && (closestHit < 0 || hits[i].distance < hits[closestHit].distance))
             {
                 hitShip = currHitShip;

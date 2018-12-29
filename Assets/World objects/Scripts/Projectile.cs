@@ -36,7 +36,7 @@ public class Projectile : MonoBehaviour
         }
 	}
 
-    protected virtual void DoHit(RaycastHit hit, Ship shipHit)
+    protected virtual void DoHit(RaycastHit hit, ShipBase shipHit)
     {
         shipHit.TakeHit(ProjectileWarhead, hit.point);
         ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
@@ -76,10 +76,10 @@ public class Projectile : MonoBehaviour
         if (Physics.Raycast(r, out hit, distanceToTravel, ObjectFactory.AllTargetableLayerMask))
         {
             GameObject hitobj = hit.collider.gameObject;
-            Ship shipHit;
+            ShipBase shipHit;
             if (hitobj.GetComponent<Projectile>() == null)
             {
-                shipHit = Ship.FromCollider(hit.collider);
+                shipHit = ShipBase.FromCollider(hit.collider);
                 if (shipHit != null && shipHit != OriginShip)
                 {
                     DoHit(hit, shipHit);
@@ -106,9 +106,9 @@ public class Projectile : MonoBehaviour
         bool validHit = false;
         foreach (Collider c in objsHits)
         {
-            Ship s;
+            ShipBase s;
             Torpedo t;
-            if ((s = Ship.FromCollider(c)) != null)
+            if ((s = ShipBase.FromCollider(c)) != null)
             {
                 Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", s, pos, blastRadius));
                 if (s != OriginShip)

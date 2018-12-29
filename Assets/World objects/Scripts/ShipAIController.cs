@@ -29,11 +29,11 @@ public class ShipAIController : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.AllShipsNoStikeCraftLayerMask);
-        Ship foundTarget = null;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.AllShipsLayerMask);
+        ShipBase foundTarget = null;
         foreach (Collider c in colliders)
         {
-            Ship s = Ship.FromCollider(c);
+            ShipBase s = ShipBase.FromCollider(c);
             if (s == null)
             {
                 continue;
@@ -50,7 +50,10 @@ public class ShipAIController : MonoBehaviour
 
         if (foundTarget != null)
         {
-            _targetShip = foundTarget;
+            if (foundTarget is Ship)
+            {
+                _targetShip = (Ship)foundTarget;
+            }
             foreach (ITurret t in _controlledShip.Turrets)
             {
                 t.SetTurretBehavior(TurretBase.TurretMode.Auto);

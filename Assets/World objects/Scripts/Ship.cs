@@ -492,7 +492,7 @@ public class Ship : ShipBase
         return false;
     }
 
-    public void TakeHit(Warhead w, Vector3 location)
+    public override void TakeHit(Warhead w, Vector3 location)
     {
         ShipSection sec = GetHitSection(location);
         Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
@@ -903,16 +903,6 @@ public class Ship : ShipBase
         {
             AddCrew(c);
         }
-    }
-
-    public static Ship FromCollider(Collider c)
-    {
-        Ship s;
-        if ((s = c.GetComponent<Ship>()) != null || (s = c.GetComponentInParent<Ship>()) != null)
-        {
-            return s;
-        }
-        return null;
     }
 
     public override bool Targetable { get { return !ShipDisabled; } }

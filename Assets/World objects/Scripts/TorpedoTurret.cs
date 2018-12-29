@@ -104,7 +104,7 @@ public class TorpedoTurret : TurretBase
         ITargetableEntity foundTarget = null;
         foreach (Collider c in colliders)
         {
-            Ship s = Ship.FromCollider(c);
+            Ship s = ShipBase.FromCollider(c) as Ship;
             if (s == null)
             {
                 continue;
