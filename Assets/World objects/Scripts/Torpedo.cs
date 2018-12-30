@@ -158,7 +158,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     //private Vector3 _lastVecToTarget;
     private bool _targetReached;
     private Vector3 Origin;
-    public Ship OriginShip;
+    public ShipBase OriginShip;
     private bool _inBurnPhase = false;
     public Warhead ProjectileWarhead { get; set; }
     public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }

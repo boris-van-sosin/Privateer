@@ -22,7 +22,7 @@ public class TurretComponent : ITurret
 
     public ComponentStatus Status { get { return _innerTurret.Status; } }
 
-    public Ship ContainingShip { get { return _innerTurret.ContainingShip; } }
+    public ShipBase ContainingShip { get { return _innerTurret.ContainingShip; } }
 
     public void Fire(Vector3 target)
     {
@@ -460,7 +460,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
 
     public void PeriodicAction()
     {
-        ContainingShip.TryChangeHeat(-CoolingRate);
+        _containingShip.TryChangeHeat(-CoolingRate);
     }
 
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }

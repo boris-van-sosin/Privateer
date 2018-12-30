@@ -161,7 +161,7 @@ public class Projectile : MonoBehaviour
     public float Range;
     private float _distanceTraveled = 0.0f;
     private Vector3 Origin;
-    public Ship OriginShip;
+    public ShipBase OriginShip;
     public Warhead ProjectileWarhead { get; set; }
     public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
     private TrailRenderer _trail;

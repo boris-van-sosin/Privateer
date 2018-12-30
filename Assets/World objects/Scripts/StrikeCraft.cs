@@ -4,6 +4,19 @@ using UnityEngine;
 
 public class StrikeCraft : ShipBase
 {
+    public override void Activate()
+    {
+        base.Activate();
+        foreach (TurretHardpoint hp in WeaponHardpoints)
+        {
+            TurretBase t = hp.GetComponentInChildren<TurretBase>();
+            if (t != null)
+            {
+                t.SetTurretBehavior(TurretBase.TurretMode.Auto);
+            }
+        }
+    }
+
     protected override void ApplyThrust()
     {
         _thrustCoefficient = 1.0f;

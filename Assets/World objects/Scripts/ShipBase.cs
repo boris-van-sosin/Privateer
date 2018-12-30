@@ -538,6 +538,10 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
     }
 
+    // Things not in use, but needed in other classes:
+    public virtual bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat) { return true; }
+    public virtual void NotifyInComabt() { }
+
     public string ProductionKey;
 
     // Hull hit points:

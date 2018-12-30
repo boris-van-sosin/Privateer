@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class ShipComponentBase : IShipComponent
 {
-    public Ship ContainingShip { get { return _containingShip; } }
+    public ShipBase ContainingShip { get { return _containingShip; } }
 
     public abstract IEnumerable<ComponentSlotType> AllowedSlotTypes { get; }
 

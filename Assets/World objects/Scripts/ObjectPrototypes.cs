@@ -10,7 +10,7 @@ public class ObjectPrototypes : MonoBehaviour
         ObjectFactory.SetPrototypes(this);
     }
 
-    public Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    public Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
     {
         Projectile res = Instantiate(ProjectileTemplate);
         Quaternion q = Quaternion.FromToRotation(res.transform.up, firingVector);
@@ -21,7 +21,7 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
-    public Projectile CreatePlasmaProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    public Projectile CreatePlasmaProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
     {
         Projectile res = Instantiate(PlasmaProjectileTemplate);
         Quaternion q = Quaternion.FromToRotation(res.transform.up, firingVector);
@@ -32,7 +32,7 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
-    public HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    public HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
     {
         HarpaxBehavior res = Instantiate(HarpaxTemplate);
         Quaternion q = Quaternion.FromToRotation(res.transform.up, firingVector);
@@ -48,7 +48,7 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate<CableBehavior>(HarpaxCableTemplate);
     }
 
-    public Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Ship origShip)
+    public Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, ShipBase origShip)
     {
         Torpedo res = Instantiate(TorpedoTemplate);
         Quaternion q = Quaternion.FromToRotation(res.transform.up, launchOrientation);

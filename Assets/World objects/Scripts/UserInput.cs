@@ -28,12 +28,19 @@ public class UserInput : MonoBehaviour
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Effects"), true);
     }
 
+    private bool _tmpActivated = false;
+
     // Update is called once per frame
     void Update()
     {
         //
         if (_tmp != null)
         {
+            if (!_tmpActivated)
+            {
+                _tmp.Activate();
+                _tmpActivated = true;
+            }
             if (Input.GetKey(_keyMapping[UserOperation.Forward]))
             {
                 _tmp.MoveForeward();

@@ -30,7 +30,7 @@ public static class ObjectFactory
         }
     }
 
-    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, Ship origShip)
+    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
     {
         if (_prototypes != null)
         {
@@ -45,7 +45,7 @@ public static class ObjectFactory
         }
     }
 
-    public static Projectile CreatePlasmaProjectile(Vector3 firingVector, float velocity, float range, Warhead w, Ship origShip)
+    public static Projectile CreatePlasmaProjectile(Vector3 firingVector, float velocity, float range, Warhead w, ShipBase origShip)
     {
         if (_prototypes != null)
         {
@@ -59,7 +59,7 @@ public static class ObjectFactory
         }
     }
 
-    public static HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, Ship origShip)
+    public static HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
     {
         if (_prototypes != null)
         {
@@ -86,7 +86,7 @@ public static class ObjectFactory
         return res;
     }
 
-    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, Ship origShip)
+    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, ShipBase origShip)
     {
         if (_prototypes != null)
         {

@@ -11,6 +11,7 @@ public enum ComponentSlotType
     MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
     LargeBarbette, LargeTurret,
     TorpedoTube, SpecialWeapon,
+    FighterCannon, FighterAutogun, BomberAutogun,
     // Boarding tool
     BoardingTool,
     // Boarding / anti-boarding forces
@@ -28,7 +29,7 @@ public delegate void ComponentToggledDelegate(bool active);
 
 public interface IShipComponent
 {
-    Ship ContainingShip { get; }
+    ShipBase ContainingShip { get; }
     IEnumerable<ComponentSlotType> AllowedSlotTypes { get; }
     ObjectFactory.ShipSize MinShipSize { get; }
     ObjectFactory.ShipSize MaxShipSize { get; }

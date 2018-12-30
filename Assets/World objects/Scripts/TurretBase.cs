@@ -108,13 +108,13 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private static Ship FindContainingShip(Transform t)
+    private static ShipBase FindContainingShip(Transform t)
     {
         if (t == null)
         {
             return null;
         }
-        Ship s = t.GetComponent<Ship>();
+        ShipBase s = t.GetComponent<ShipBase>();
         if (s != null)
         {
             return s;
@@ -182,7 +182,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             int closestHit = -1;
             for (int i = 0; i < hits.Length; ++i)
             {
-                if (hits[i].collider.gameObject == ContainingShip.gameObject || hits[i].collider.gameObject == ContainingShip.ShieldCapsule.gameObject)
+                if (hits[i].collider.gameObject == ContainingShip.gameObject ||
+                    (ContainingShip.ShieldCapsule != null && hits[i].collider.gameObject == ContainingShip.ShieldCapsule.gameObject))
                 {
                     continue;
                 }
@@ -541,10 +542,10 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     private int _currHitPoints;
     private ComponentStatus _status;
 
-    public Ship ContainingShip { get { return _containingShip; } }
+    public ShipBase ContainingShip { get { return _containingShip; } }
 
     // The ship containing the turret:
-    protected Ship _containingShip;
+    protected ShipBase _containingShip;
 
     public enum TurretMode { Off, Manual, Auto };
     public enum RotationAxis { XAxis, YAxis, ZAxis };

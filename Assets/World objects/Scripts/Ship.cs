@@ -479,7 +479,7 @@ public class Ship : ShipBase
         return false;
     }
 
-    public bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat)
+    public override bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat)
     {
         int newEnergy = Energy + deltaEnergy;
         int newHeat = Heat + deltaHeat;
@@ -744,7 +744,7 @@ public class Ship : ShipBase
         }
     }
 
-    public void NotifyInComabt()
+    public override void NotifyInComabt()
     {
         LastInCombat = Time.time;
     }
