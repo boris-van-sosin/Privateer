@@ -47,10 +47,14 @@
 3,Heavy,Howitzer,ShapedCharge     ,2000,700,320,680,280,0,1,0,0.5
 3,Heavy,Howitzer,ShrapnelRound    ,2400,180,120,700,120,0,1,0.458333333,0.55
 ,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,
-2,Heavy,Lance       ,210,800,50,165,41,12,1,0,,
-2,Heavy,Laser       ,560,450,25,150,38,14,1,0,,
-2,Heavy,PlasmaCannon,370,240,35,160,36,16,1,1.5,,
+#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size
+2,Heavy,Lance       ,210,800,50,165,41,12,1,0
+2,Heavy,Laser       ,560,450,25,150,38,14,1,0
+2,Heavy,PlasmaCannon,370,240,35,160,36,16,1,1.5
+,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Weapon effect size
+3,StrikeCraft,FighterCannon,KineticPenetrator,30,175,9,24,6,0,1,0,0.3
+3,StrikeCraft,FighterAutoannon,KineticPenetrator,0,0,0,0,0,0,0,0,0.2
 ,,,,,,,,,,,,
 #,Torpedo Type,Spread Size,Range,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Projectile Size
 4,LongRange,4,26,250,350,160,680,210,0,2,0.45,10

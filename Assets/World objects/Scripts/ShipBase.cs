@@ -71,7 +71,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         {
             _rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
         }
-        if (_autoHeading && !ShipImmobilized && !ShipDisabled)
+        if (_autoHeading && ShipControllable)
         {
             RotateToHeading();
         }
@@ -188,6 +188,8 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
 
     public bool ShipDisabled { get; protected set; }
     public bool ShipImmobilized { get; protected set; }
+    public virtual bool ShipControllable { get { return ShipActiveInCombat && !(ShipImmobilized); } }
+    public virtual bool ShipActiveInCombat { get { return (!ShipDisabled) && HullHitPoints > 0; } }
 
     private void ComputeLength()
     {

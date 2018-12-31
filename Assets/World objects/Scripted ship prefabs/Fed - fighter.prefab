@@ -39,6 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4412031498959922}
+  - component: {fileID: 114738507333309364}
   m_Layer: 0
   m_Name: Guns
   m_TagString: Untagged
@@ -193,6 +194,24 @@ MonoBehaviour:
   Braking: 3
   TurnRate: 30
   Owner: {fileID: 0}
+--- !u!114 &114738507333309364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1521517036799494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c75bc17daa537442b4989fb2a8bb9af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DisplayString: Figher Autocannons
+  MinRotation: 0
+  MaxRotation: 0
+  DeadZoneAngles: []
+  AllowedWeaponTypes: 12000000
+  LocationOnShip: 0
+  DefaultGroup: 0
 --- !u!114 &114741398975757762
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,6 +227,6 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
-  AllowedWeaponTypes: 00000000
+  AllowedWeaponTypes: 11000000
   LocationOnShip: 0
   DefaultGroup: 0

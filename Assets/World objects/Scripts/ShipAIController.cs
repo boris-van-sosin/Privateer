@@ -5,18 +5,17 @@ using System.Linq;
 
 public class ShipAIController : MonoBehaviour
 {
-
 	// Use this for initialization
 	void Start ()
     {
-        _controlledShip = GetComponent<Ship>();
+        _controlledShip = GetComponent<ShipBase>();
         StartCoroutine(AcquireTargetPulse());
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        if (_controlledShip.ShipDisabled || _controlledShip.HullHitPoints <= 0 || _controlledShip.ShipSurrendered)
+        if (!_controlledShip.ShipControllable)
         {
             return;
         }
@@ -38,7 +37,7 @@ public class ShipAIController : MonoBehaviour
             {
                 continue;
             }
-            else if (s.ShipDisabled)
+            else if (!s.ShipActiveInCombat)
             {
                 continue;
             }
@@ -70,47 +69,60 @@ public class ShipAIController : MonoBehaviour
 
     private void CheckTarget()
     {
-        if (_targetShip != null && (_targetShip.ShipDisabled || (_targetShip.transform.position - transform.position).sqrMagnitude > 50 * 50))
+        if (_targetShip != null && (_targetShip.ShipActiveInCombat || (_targetShip.transform.position - transform.position).sqrMagnitude > 50 * 50))
         {
             _targetShip = null;
         }
     }
 
-    private Vector3 AttackPosition(Ship enemyShip)
+    protected virtual Vector3 AttackPosition(Ship enemyShip)
     {
         float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
         Vector3 Front = enemyShip.transform.up.normalized;
         //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
         //Vector3 Right = -Left;
         //Vector3 Rear = -Front;
-        int numAngles = 12;
-        int numDistances = 3;
-        List<Vector3> positions = new List<Vector3>(numAngles * numDistances);
-        for (int i = 0; i < numAngles; ++i)
+        int k = 0;
+        for (int i = 0; i < _numAttackAngles; ++i)
         {
-            Vector3 dir = Quaternion.AngleAxis((float)i / numAngles * 360, Vector3.up) * Front;
-            for (int j = 0; j < numDistances; ++j)
+            Vector3 dir = Quaternion.AngleAxis((float)i / _numAttackAngles * 360, Vector3.up) * Front;
+            float currWeight;
+            if (Vector3.Angle(dir, Front) < 45f)
             {
-                float dist = minRange * 0.95f * (j + 1) / numDistances;
-                positions.Add(dir * dist);
+                currWeight = minRange * minRange * 2;
+            }
+            else if (Vector3.Angle(dir, Front) > 135f)
+            {
+                currWeight = minRange * minRange * 4;
+            }
+            else
+            {
+                currWeight = minRange * minRange;
+            }
+            for (int j = 0; j < _numAttackDistances; ++j)
+            {
+                float dist = minRange * _rangeCoefficient * (j + 1) / _numAttackDistances;
+                _attackPositions[k] = enemyShip.transform.position + dir * dist;
+                _attackPositionWeights[k] = currWeight;
+                ++k;
             }
         }
 
         int minPos = 0;
-        float minDist = (positions[minPos] - transform.position).sqrMagnitude;
-        for (int i = 1; i < positions.Count; ++i)
+        float minScore = (_attackPositions[minPos] - transform.position).sqrMagnitude - _attackPositionWeights[minPos];
+        for (int i = 1; i < _attackPositions.Length; ++i)
         {
-            float currDist = (positions[i] - transform.position).sqrMagnitude;
-            if (currDist < minDist)
+            float currScore = (_attackPositions[i] - transform.position).sqrMagnitude - _attackPositionWeights[i];
+            if (currScore < minScore)
             {
                 minPos = i;
-                minDist = currDist;
+                minScore = currScore;
             }
         }
-        return enemyShip.transform.position + positions[minPos];
+        return _attackPositions[minPos];
     }
 
-    private void AdvanceToTarget()
+    protected virtual void AdvanceToTarget()
     {
         Vector3 vecToTarget = _navTarget - transform.position;
         Vector3 heading = transform.up;
@@ -163,9 +175,9 @@ public class ShipAIController : MonoBehaviour
     {
         Vector3 directionNormalized = direction.normalized;
         Vector3 rightVec = Quaternion.AngleAxis(90, Vector3.up) * directionNormalized;
-        float projectFactor = _controlledShip.ShipLength * 2;
+        float projectFactor = _controlledShip.ShipLength * 4;
         Vector3 projectedPath = directionNormalized * projectFactor;
-        RaycastHit[] hits = Physics.CapsuleCastAll(transform.position, transform.position + projectedPath, _controlledShip.ShipWidth * 2.0f, directionNormalized, projectFactor, ObjectFactory.AllTargetableLayerMask);
+        RaycastHit[] hits = Physics.SphereCastAll(transform.position, _controlledShip.ShipWidth * 3.0f, directionNormalized, projectFactor, ObjectFactory.AllTargetableLayerMask);
         bool obstruction = false;
         List<float> dotToCorners = new List<float>(4 * hits.Length);
         float dotMin = -1;
@@ -241,7 +253,7 @@ public class ShipAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (!_controlledShip.ShipDisabled && !_controlledShip.ShipSurrendered)
+            if (_controlledShip.ShipControllable)
             {
                 if (_targetShip == null)
                 {
@@ -261,7 +273,7 @@ public class ShipAIController : MonoBehaviour
                     }
                 }
             }
-            else if (_controlledShip.HullHitPoints == 0 || _controlledShip.ShipSurrendered)
+            else if (!_controlledShip.ShipActiveInCombat)
             {
                 yield break;
             }
@@ -269,12 +281,18 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
-    private Ship _controlledShip;
+    protected ShipBase _controlledShip;
 
-    private Ship _targetShip = null;
-    private Vector3 _navTarget;
+    protected static readonly int _numAttackAngles = 12;
+    protected static readonly int _numAttackDistances = 3;
+    protected Vector3[] _attackPositions = new Vector3[_numAttackAngles * _numAttackDistances];
+    protected float[] _attackPositionWeights = new float[_numAttackAngles * _numAttackDistances];
+
+    protected Ship _targetShip = null;
+    protected Vector3 _navTarget;
     private Vector3 _targetHeading;
     private static readonly float _angleEps = 0.1f;
     private static readonly float _distEps = 0.01f;
-    private bool _doNavigate = false;
+    private static readonly float _rangeCoefficient = 0.95f;
+    protected bool _doNavigate = false;
 }

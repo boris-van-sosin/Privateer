@@ -445,7 +445,7 @@ public class Ship : ShipBase
 
     public void SetRequiredHeading(Vector3 targetPoint)
     {
-        if (ShipImmobilized || ShipDisabled)
+        if (!ShipControllable)
         {
             return;
         }
@@ -905,7 +905,7 @@ public class Ship : ShipBase
         }
     }
 
-    public override bool Targetable { get { return !ShipDisabled; } }
+    public override bool Targetable { get { return ShipActiveInCombat; } }
 
     // Fields
     public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };
@@ -1004,6 +1004,9 @@ public class Ship : ShipBase
             }
         }
     }
+
+    public override bool ShipControllable { get { return base.ShipControllable && (!ShipSurrendered); } }
+    public override bool ShipActiveInCombat { get { return base.ShipActiveInCombat && (!ShipSurrendered); } }
 
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;

@@ -118,7 +118,7 @@ public abstract class DirectionalTurret : TurretBase
             Torpedo t;
             if ((s = ShipBase.FromCollider(c)) != null)
             {
-                if (s.ShipDisabled)
+                if (!s.ShipActiveInCombat)
                 {
                     continue;
                 }

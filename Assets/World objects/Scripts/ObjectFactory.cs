@@ -488,8 +488,8 @@ public static class ObjectFactory
     }
 
     public enum TurretMountType { Fixed, Broadside, Barbette, Turret, TorpedoTube }
-    public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon, TorpedoTube }
-    public enum WeaponSize { Light, Medium, Heavy, TorpedoTube }
+    public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon, TorpedoTube, FighterCannon, FighterAutoannon }
+    public enum WeaponSize { Light, Medium, Heavy, TorpedoTube, StrikeCraft }
     public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
     public enum TorpedoType { LongRange, Heavy, Tracking }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }

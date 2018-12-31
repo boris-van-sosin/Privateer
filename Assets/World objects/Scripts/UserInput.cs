@@ -15,7 +15,7 @@ public class UserInput : MonoBehaviour
         //_userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
         //
         _cameraOffsetFactor = 1.0f;
-        _tmp = GameObject.Find("fed - fighter").GetComponent<StrikeCraft>();
+        _tmp = GameObject.Find("Fed - fighter").GetComponent<StrikeCraft>();
     }
 
     void Awake()

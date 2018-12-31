@@ -109,7 +109,7 @@ public class TorpedoTurret : TurretBase
             {
                 continue;
             }
-            else if (s.ShipDisabled)
+            else if (!s.ShipActiveInCombat)
             {
                 continue;
             }
