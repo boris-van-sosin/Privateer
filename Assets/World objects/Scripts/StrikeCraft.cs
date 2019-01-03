@@ -38,10 +38,28 @@ public class StrikeCraft : ShipBase
 
     public override void TakeHit(Warhead w, Vector3 location)
     {
-        ParticleSystem ps = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.SmallExplosion, transform.position);
-        ps.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        ps.Play();
-        Destroy(ps.gameObject, 1.0f);
-        Destroy(this.gameObject);
+        if (w.HullDamage == 0) // Ugly hack. Fix later.
+        {
+            --_strikeCraftHitPoints;
+        }
+        else
+        {
+            HullHitPoints -= w.HullDamage;
+        }
+        if (_strikeCraftHitPoints <= 0)
+        {
+            --HullHitPoints;
+            _strikeCraftHitPoints = 5;
+        }
+        if (HullHitPoints <= 0)
+        {
+            ParticleSystem ps = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.SmallExplosion, transform.position);
+            ps.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            ps.Play();
+            Destroy(ps.gameObject, 1.0f);
+            Destroy(this.gameObject);
+        }
     }
+
+    private int _strikeCraftHitPoints = 5;
 }

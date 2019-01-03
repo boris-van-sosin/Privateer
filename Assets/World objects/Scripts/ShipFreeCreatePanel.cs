@@ -5,11 +5,11 @@ using System.Linq;
 
 public class ShipFreeCreatePanel : MonoBehaviour
 {
-
 	// Use this for initialization
 	void Start ()
     {
         ShipDropdown.AddOptions(ObjectFactory.GetAllShipTypes().ToList());
+        ShipDropdown.AddOptions(ObjectFactory.GetAllStrikeCraftTypes().ToList());
         ShipDropdown.onValueChanged.AddListener(ShipSelectChanged);
         _weaponsCfgPanel = FindObjectOfType<WeaponControlGroupCfgPanel>();
         _cfgPanelVisible = false;
@@ -27,6 +27,18 @@ public class ShipFreeCreatePanel : MonoBehaviour
         string shipKey = ShipDropdown.options[ShipDropdown.value].text;
         bool friendly = SideDropdown.value == 0;
         bool userShip = UserToggle.isOn;
+        if (ObjectFactory.GetAllShipTypes().Contains(shipKey))
+        {
+            CreateShipInner(shipKey, friendly, userShip);
+        }
+        else if (ObjectFactory.GetAllStrikeCraftTypes().Contains(shipKey))
+        {
+            CreateStrikeCraftWingInner(shipKey, friendly);
+        }
+    }
+
+    private void CreateShipInner(string shipKey, bool friendly, bool userShip)
+    {
         Ship s = ObjectFactory.CreateShip(shipKey);
 
         s.PlaceComponent(Ship.ShipSection.Left, DamageControlNode.DefaultComponent(s.ShipSize, s));
@@ -100,7 +112,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             s.SetTurretConfigAllAuto();
         }
-        
+
         s.Activate();
 
         Faction[] factions = FindObjectsOfType<Faction>();
@@ -133,6 +145,23 @@ public class ShipFreeCreatePanel : MonoBehaviour
         _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
     }
 
+    private void CreateStrikeCraftWingInner(string shipKey, bool friendly)
+    {
+        StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(shipKey);
+        Faction[] factions = FindObjectsOfType<Faction>();
+        Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
+        if (friendly)
+        {
+            s.Owner = faction1;
+        }
+        else
+        {
+            s.Owner = faction2;
+            s.transform.Translate(30, 0, 0);
+        }
+        s.Activate();
+    }
+
     private void TestWeapons()
     {
         ComponentSlotType[] slotTypes = new ComponentSlotType[] { ComponentSlotType.SmallBarbetteDual, ComponentSlotType.MediumBarbette, ComponentSlotType.LargeBarbette };
@@ -160,8 +189,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             string shipKey = ShipDropdown.options[i].text;
             Ship s = ObjectFactory.GetShipTemplate(shipKey);
-            _weaponsCfgPanel.Clear();
-            _weaponsCfgPanel.SetShipTemplate(s);
+            if (s != null)
+            {
+                _weaponsCfgPanel.Clear();
+                _weaponsCfgPanel.SetShipTemplate(s);
+            }
         }
     }
 

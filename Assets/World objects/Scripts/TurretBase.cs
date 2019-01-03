@@ -196,7 +196,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             {
                 return true;
             }
-            else if (!(_targetShip is Torpedo)) //TODO: needs better solution
+            else if (!(_targetShip is Torpedo) && !(_targetShip is StrikeCraft)) //TODO: needs better solution
             {
                 return false;
             }
@@ -450,7 +450,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                 case TurretMode.Manual:
                     yield break;
                 case TurretMode.Auto:
-                    if (_targetShip == null)
+                    if (_targetShip == null || !_targetShip.Targetable)
                     {
                         _targetShip = AcquireTarget();
                     }

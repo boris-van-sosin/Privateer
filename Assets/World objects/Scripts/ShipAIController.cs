@@ -49,9 +49,9 @@ public class ShipAIController : MonoBehaviour
 
         if (foundTarget != null)
         {
-            if (foundTarget is Ship)
+            if (TargetToFollow(foundTarget))
             {
-                _targetShip = (Ship)foundTarget;
+                _targetShip = foundTarget;
             }
             foreach (ITurret t in _controlledShip.Turrets)
             {
@@ -75,7 +75,12 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
-    protected virtual Vector3 AttackPosition(Ship enemyShip)
+    protected virtual bool TargetToFollow(ShipBase s)
+    {
+        return s is Ship;
+    }
+
+    protected virtual Vector3 AttackPosition(ShipBase enemyShip)
     {
         float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
         Vector3 Front = enemyShip.transform.up.normalized;
@@ -288,7 +293,7 @@ public class ShipAIController : MonoBehaviour
     protected Vector3[] _attackPositions = new Vector3[_numAttackAngles * _numAttackDistances];
     protected float[] _attackPositionWeights = new float[_numAttackAngles * _numAttackDistances];
 
-    protected Ship _targetShip = null;
+    protected ShipBase _targetShip = null;
     protected Vector3 _navTarget;
     private Vector3 _targetHeading;
     private static readonly float _angleEps = 0.1f;

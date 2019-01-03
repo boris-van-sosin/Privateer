@@ -2564,6 +2564,8 @@ MonoBehaviour:
   - {fileID: 114248074947831548, guid: da22b26bf4e774b459b0267183a20e4e, type: 2}
   - {fileID: 114932092806717634, guid: 979aa53004b071949b979e9701ef4052, type: 2}
   - {fileID: 114298267387497442, guid: 0f51071563df82746bb0d023195a867f, type: 2}
+  StrikeCraftPrototypes:
+  - {fileID: 114275050688803318, guid: 68ee3588e1f7eea43b7bccae32b105b2, type: 2}
   TurretPrototypes:
   - {fileID: 114088224525879660, guid: 26f3785b44fd76f4cab8d1fd708aad08, type: 2}
   - {fileID: 114336544468533872, guid: 4c3312bc6f5c96c41b671a1336bedaca, type: 2}
@@ -2633,6 +2635,7 @@ MonoBehaviour:
   - {fileID: 114896360864804128, guid: 266b0ac5633b6ee4084dca965f366b86, type: 2}
   - {fileID: 114071742926028826, guid: 168a20a7e442d784db06192c86836d6b, type: 2}
   - {fileID: 114985430129715974, guid: 2283caa0c8064df40b398b409b913e8c, type: 2}
+  - {fileID: 114965264039824604, guid: 5658713b448e79344abdb1f4dea7ece5, type: 2}
   StatusPanelPrototype: {fileID: 114422423568609670, guid: d7c4ee0ec74e1884784dc0eae076eb44,
     type: 2}
   WeaponCtrlCfgLinePrototype: {fileID: 114809578661190334, guid: 234f89d7609c6ac47a7448da4c991b57,
@@ -2645,7 +2648,6 @@ MonoBehaviour:
   - Shield generator
   - Power plant
   - Damage control
-  - Sachsen
   Sprites:
   - {fileID: 21300000, guid: 463fd345a3df81b459d4421fe7e69bd6, type: 3}
   - {fileID: 21300000, guid: 55ede17e1473e9e498d530a497a0a654, type: 3}
@@ -2875,6 +2877,15 @@ Prefab:
       propertyPath: Owner
       value: 
       objectReference: {fileID: 1817640917}
+    - target: {fileID: 114275050688803318, guid: 68ee3588e1f7eea43b7bccae32b105b2,
+        type: 2}
+      propertyPath: ProductionKey
+      value: Fed Fighter
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080825588676972, guid: 68ee3588e1f7eea43b7bccae32b105b2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68ee3588e1f7eea43b7bccae32b105b2, type: 2}
   m_IsPrefabAsset: 0

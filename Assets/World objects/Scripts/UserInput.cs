@@ -15,7 +15,6 @@ public class UserInput : MonoBehaviour
         //_userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
         //
         _cameraOffsetFactor = 1.0f;
-        _tmp = GameObject.Find("Fed - fighter").GetComponent<StrikeCraft>();
     }
 
     void Awake()
@@ -28,49 +27,9 @@ public class UserInput : MonoBehaviour
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Effects"), true);
     }
 
-    private bool _tmpActivated = false;
-
     // Update is called once per frame
     void Update()
     {
-        //
-        if (_tmp != null)
-        {
-            if (!_tmpActivated)
-            {
-                _tmp.Activate();
-                _tmpActivated = true;
-            }
-            if (Input.GetKey(_keyMapping[UserOperation.Forward]))
-            {
-                _tmp.MoveForeward();
-            }
-            else if (Input.GetKey(_keyMapping[UserOperation.Backward]))
-            {
-                _tmp.MoveBackward();
-            }
-            if (Input.GetKey(_keyMapping[UserOperation.Left]))
-            {
-                _tmp.ApplyTurning(true);
-            }
-            else if (Input.GetKey(_keyMapping[UserOperation.Right]))
-            {
-                _tmp.ApplyTurning(false);
-            }
-            else if (Input.GetKey(_keyMapping[UserOperation.Break]))
-            {
-                _tmp.ApplyBraking();
-            }
-
-            float scroll2;
-            if ((scroll2 = Input.GetAxis("Mouse ScrollWheel")) != 0.0f)
-            {
-                _cameraOffsetFactor += (-scroll2 * 0.1f);
-            }
-            _userCamera.transform.position = _tmp.transform.position + (_cameraOffsetFactor * _cameraOffset);
-            return;
-        }
-        //
         if (ControlledShip == null)
         {
             return;
@@ -168,8 +127,6 @@ public class UserInput : MonoBehaviour
 
         _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
     }
-
-    private ShipBase _tmp;
 
     public Ship ControlledShip; // temporary
     private bool _autoTarget = false; // temporary

@@ -241,6 +241,73 @@ public static class ObjectFactory
         return t;
     }
 
+    public static TurretBase CreateStrikeCraftTurret(ComponentSlotType turretType, WeaponType weaponType)
+    {
+        string prodKey = turretType.ToString() + weaponType.ToString();
+        TurretBase t = _prototypes.CreateTurret(prodKey);
+        switch (weaponType)
+        {
+            case WeaponType.FighterCannon:
+            case WeaponType.FighterAutoannon:
+                {
+                    WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
+                    GunTurret gt = t as GunTurret;
+                    gt.ProjectileScale = wpd.ProjectileScale;
+                    gt.MaxRange = wpd.MaxRange;
+                    gt.MuzzleVelocity = wpd.MuzzleVelocity;
+                    gt.FiringInterval = wpd.FiringInterval;
+                }
+                break;
+            case WeaponType.TorpedoTube:
+                {
+                    WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
+                    TorpedoTurret tt = t as TorpedoTurret;
+                    tt.FiringInterval = tordpedoData.FiringInterval;
+                }
+                break;
+            default:
+                break;
+        }
+        t.EnergyToFire = 0;
+        t.HeatToFire = 0;
+        return t;
+    }
+
+    public static string[] GetAllStrikeCraftTypes()
+    {
+        return _prototypes.GetAllStrikeCraftTypes();
+    }
+
+    public static StrikeCraft CreateStrikeCraft(string prodKey)
+    {
+        return _prototypes.CreateStrikeCraft(prodKey);
+    }
+
+    public static StrikeCraft CreateStrikeCraftAndFitOut(string prodKey)
+    {
+        StrikeCraft s = CreateStrikeCraft(prodKey);
+        TurretHardpoint[] allHardpoints = s.GetComponentsInChildren<TurretHardpoint>();
+        foreach (TurretHardpoint hp in allHardpoints)
+        {
+            if (hp.AllowedWeaponTypes.Length == 0)
+            {
+                continue;
+            }
+            if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.FighterCannon))
+            {
+                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.FighterCannon, WeaponType.FighterCannon);
+                s.PlaceTurret(hp, t);
+            }
+            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.FighterAutogun))
+            {
+                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.FighterAutogun, WeaponType.FighterAutoannon);
+                s.PlaceTurret(hp, t);
+            }
+        }
+        s.gameObject.AddComponent<StrikeCraftAIController>();
+        return s;
+    }
+
     public static Sprite GetSprite(string key)
     {
         return _prototypes.GetSprite(key);
@@ -382,6 +449,9 @@ public static class ObjectFactory
             case ComponentSlotType.LargeBarbette:
             case ComponentSlotType.LargeTurret:
                 return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Heavy, w);
+            case ComponentSlotType.FighterCannon:
+            case ComponentSlotType.FighterAutogun:
+                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.StrikeCraft, w);
             default:
                 return null;
         }
