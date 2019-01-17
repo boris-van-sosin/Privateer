@@ -304,32 +304,62 @@ public class Ship : ShipBase
         {
             _engineExhaustsIdle = new ParticleSystem[0];
         }
+
+        t = transform.Find("Engine exhaust brake");
+        if (t != null)
+        {
+            List<ParticleSystem> tmpPS = new List<ParticleSystem>(t.childCount);
+            for (int i = 0; i < t.childCount; ++i)
+            {
+                ParticleSystem p = t.GetChild(i).GetComponent<ParticleSystem>();
+                if (p != null && p.gameObject.activeInHierarchy)
+                {
+                    p.Stop();
+                    tmpPS.Add(p);
+                }
+            }
+            _engineExhaustsBrake = tmpPS.ToArray();
+        }
+        else
+        {
+            _engineExhaustsBrake = new ParticleSystem[0];
+        }
     }
 
     private void SetEngineParticleSystems(bool On)
     {
-        if (On)
+        if (On && (_acceleratingForward || _brakingForward))
         {
             foreach (ParticleSystem p in _engineExhaustsOn)
             {
                 p.Play();
             }
-            foreach (ParticleSystem p in _engineExhaustsIdle)
+            foreach (ParticleSystem p in _engineExhaustsIdle.Concat(_engineExhaustsBrake))
+            {
+                p.Stop();
+            }
+        }
+        else if (On && (_acceleratingBackwards || _brakingBackwards))
+        {
+            foreach (ParticleSystem p in _engineExhaustsBrake.Concat(_engineExhaustsIdle))
+            {
+                p.Play();
+            }
+            foreach (ParticleSystem p in _engineExhaustsOn)
             {
                 p.Stop();
             }
         }
         else
         {
-            foreach (ParticleSystem p in _engineExhaustsOn)
-            {
-                p.Stop();
-            }
             foreach (ParticleSystem p in _engineExhaustsIdle)
             {
                 p.Play();
             }
-
+            foreach (ParticleSystem p in _engineExhaustsOn.Concat(_engineExhaustsBrake))
+            {
+                p.Stop();
+            }
         }
     }
 
@@ -387,6 +417,33 @@ public class Ship : ShipBase
         }
     }
 
+    public override void MoveForeward()
+    {
+        base.MoveForeward();
+
+        _acceleratingForward = MovingForward;
+        _brakingForward = !_acceleratingForward;
+        _acceleratingBackwards = _brakingBackwards = false;
+    }
+
+    public override void MoveBackward()
+    {
+        base.MoveBackward();
+
+        _brakingBackwards = MovingForward;
+        _acceleratingBackwards = !_brakingBackwards;
+        _acceleratingForward = _brakingForward = false;
+    }
+
+    public override void ApplyBraking()
+    {
+        base.ApplyBraking();
+
+        _brakingBackwards = MovingForward;
+        _brakingForward = MovingBackwards;
+        _acceleratingForward = _acceleratingBackwards = false;
+    }
+
     protected override void ApplyThrust()
     {
         if (_engine != null)
@@ -404,6 +461,16 @@ public class Ship : ShipBase
         }
         base.ApplyThrust();
     }
+
+    protected override void ApplyBrakingInner()
+    {
+        if (_engine != null)
+        {
+            _engine.SetBraking();
+        }
+        base.ApplyBrakingInner();
+    }
+
 
     protected override bool CanDoAcceleration()
     {
@@ -433,7 +500,7 @@ public class Ship : ShipBase
         {
             _turnCoefficient = 0.75f;
         }
-        ApplyBraking();
+        ApplyBrakingInner();
         ApplyBrakingCoefficients(0.5f, 0.5f);
         base.ApplyTurning(left);
     }
@@ -454,8 +521,6 @@ public class Ship : ShipBase
         _autoHeadingVector.Normalize();
         _autoHeading = true;
     }
-
-    public bool MovingForward { get { return _movementDirection == ShipDirection.Forward; } }
 
     public bool TryChangeEnergy(int delta)
     {
@@ -1048,5 +1113,9 @@ public class Ship : ShipBase
 
     private ParticleSystem _engineDamageSmoke;
 
-    private ParticleSystem[] _engineExhaustsOn, _engineExhaustsIdle;
+    private ParticleSystem[] _engineExhaustsOn, _engineExhaustsIdle, _engineExhaustsBrake;
+    private bool _acceleratingForward = false;
+    private bool _acceleratingBackwards = false;
+    private bool _brakingForward = false;
+    private bool _brakingBackwards = false;
 }

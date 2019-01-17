@@ -32,7 +32,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
 
     protected virtual void ApplyMovement()
     {
-        ApplyUpdateAccelration();
+        ApplyUpdateAcceleration();
         ApplyUpdateTurning();
 
         float directionMult = 0.0f;
@@ -101,7 +101,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         ApplyTurning(Vector3.Cross(transform.up, _autoHeadingVector).y < 0);
     }
 
-    private void ApplyUpdateAccelration()
+    private void ApplyUpdateAcceleration()
     {
         if (_nextAccelerate)
         {
@@ -366,7 +366,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
         else if (_movementDirection == ShipDirection.Reverse)
         {
-            ApplyBraking();
+            ApplyBrakingInner();
         }
     }
 
@@ -378,7 +378,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
         if (_movementDirection == ShipDirection.Forward)
         {
-            ApplyBraking();
+            ApplyBrakingInner();
         }
         else if (_movementDirection == ShipDirection.Reverse)
         {
@@ -393,6 +393,11 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
     }
 
     public virtual void ApplyBraking()
+    {
+        ApplyBrakingInner();
+    }
+
+    protected virtual void ApplyBrakingInner()
     {
         _nextAccelerate = false;
         _nextBrake = true;
@@ -411,6 +416,9 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         _nextTurnLeft = left;
         _nextTurnRight = !left;
     }
+
+    public bool MovingForward { get { return _movementDirection == ShipDirection.Forward; } }
+    public bool MovingBackwards { get { return _movementDirection == ShipDirection.Reverse; } }
 
     private void InitShield()
     {

@@ -509,6 +509,11 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public bool ThrustWorks { get; private set; }
 
+    public void SetBraking()
+    {
+        _nextBrake = true;
+    }
+
     public void PeriodicAction()
     {
         if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerThrust, HeatPerThrust))
@@ -518,6 +523,14 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
                 OnToggle(true);
             }
             ThrustWorks = true;
+            _nextDeactivate = true;
+        }
+        else if (_nextBrake)
+        {
+            if (OnToggle != null)
+            {
+                OnToggle(true);
+            }
             _nextDeactivate = true;
         }
         else
@@ -530,12 +543,13 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         }
         if (_nextDeactivate)
         {
-            _active = false;
+            _active = _nextBrake = false;
             _nextDeactivate = false;
         }
     }
 
     private bool _nextDeactivate = false;
+    private bool _nextBrake = false;
 
     public event ComponentToggledDelegate OnToggle;
 
