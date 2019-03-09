@@ -38,7 +38,7 @@ public class StrikeCraftAIController : ShipAIController
         }
         else
         {
-            _controlledShip.MoveForeward();
+            _controlledShip.TargetSpeed = _controlledShip.MaxSpeed;
         }
     }
 

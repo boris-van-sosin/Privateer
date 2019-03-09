@@ -608,6 +608,20 @@ public class Ship : ShipBase
             {
                 IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
                 comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
+                // Experimental:
+                if (comp.ComponentHitPoints <= 0)
+                {
+                    LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
+                    if (casualtiesQueue.Count > 0)
+                    {
+                        int NumCasualties = Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
+                        foreach (ShipCharacter character in casualtiesQueue.Take(NumCasualties))
+                        {
+                            character.Status = ShipCharacter.CharacterStaus.Incapacitated;
+                        }
+                    }
+                }
+                //
             }
             HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
         }
@@ -876,6 +890,11 @@ public class Ship : ShipBase
     private void OnTriggerEnter(Collider other)
     {
         //Debug.LogWarning(string.Format("Trigger enter: {0}, {1}", this, other.gameObject));
+        HandleShipCollision(other);
+    }
+
+    private void HandleShipCollision(Collider other)
+    {
         Ship otherShip = other.GetComponent<Ship>();
         if (otherShip != null)
         {
@@ -913,6 +932,11 @@ public class Ship : ShipBase
     private void OnTriggerExit(Collider other)
     {
         //Debug.LogWarning(string.Format("Trigger exit: {0}, {1}", this, other.gameObject));
+        HandleShipCollisionExit(other);
+    }
+
+    private void HandleShipCollisionExit(Collider other)
+    {
         Ship otherShip = other.GetComponent<Ship>();
         if (otherShip != null)
         {
@@ -922,12 +946,14 @@ public class Ship : ShipBase
 
     void OnCollisionEnter()
     {
-        Debug.LogWarning(string.Format("Collision: {0}", this));
+        Debug.LogWarning(string.Format("Collision {0}", this));
+        //HandleShipCollision(c.collider);
     }
 
-    private void OnCollisionExit()
+    private void OnCollisionExit(Collision c)
     {
         Debug.LogWarning(string.Format("Collision exit: {0},", this));
+        //HandleShipCollisionExit(c.collider);
     }
 
     private void ResolveCollision(Ship otherShip, float massSum)

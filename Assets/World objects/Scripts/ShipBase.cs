@@ -15,6 +15,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         TowedByHarpax = null;
         GrapplingMode = false;
         _rigidBody = GetComponent<Rigidbody>();
+        UseTargetSpeed = false;
     }
 
     public virtual void Activate()
@@ -48,6 +49,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         _prevPos = transform.position;
         _prevRot = transform.rotation;
         Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+        Debug.Log(string.Format("Speed: {0}", _speed));
         Vector3 rbVelocity = _rigidBody.velocity;
         if (TowedByHarpax != null)
         {
@@ -110,15 +112,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
             if (!CanDoAcceleration())
                 return;
 
-            float newSpeed = _speed + Thrust * _thrustCoefficient * Time.deltaTime;
-            if (newSpeed > MaxSpeed)
-            {
-                _speed = MaxSpeed;
-            }
-            else
-            {
-                _speed = newSpeed;
-            }
+            _speed = Mathf.Min(_speed + Thrust * _thrustCoefficient * Time.deltaTime, MaxSpeed);
         }
         else if (_nextBrake)
         {
@@ -133,18 +127,52 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
             {
                 return;
             }
-            if (newSpeed < targetSpeed)
+            if (newSpeed > targetSpeed)
             {
-                _speed = MaxSpeed * targetSpeed;
-                if (_speed <= 0)
+                _speed = newSpeed;
+            }
+            if (newSpeed <= 0)
+            {
+                _movementDirection = ShipDirection.Stopped;
+                _speed = 0;
+            }
+        }
+        else if (UseTargetSpeed)
+        {
+            _nextAccelerate = _nextBrake = false;
+            float actualTargetSpeed = Mathf.Clamp(TargetSpeed, 0, MaxSpeed);
+            if (_speed < actualTargetSpeed)
+            {
+                if (!CanDoAcceleration())
+                    return;
+
+                _speed = Mathf.Min(_speed + Thrust * _thrustCoefficient * Time.deltaTime, actualTargetSpeed);
+            }
+            else if (_speed > actualTargetSpeed)
+            {
+                if (!CanDoBraking())
+                    return;
+
+                float targetSpeedBraking = Mathf.Min(actualTargetSpeed, MaxSpeed * Mathf.Clamp01(_brakingTargetSpeedFactor));
+                float newSpeed = _speed - Braking * Mathf.Clamp01(_brakingFactor) * Time.deltaTime;
+                if (targetSpeedBraking > _speed)
+                {
+                    return;
+                }
+                if (newSpeed > targetSpeedBraking)
+                {
+                    _speed = newSpeed;
+                }
+                if (newSpeed < actualTargetSpeed)
+                {
+                    _speed = newSpeed = actualTargetSpeed;
+                }
+                if (newSpeed <= 0)
                 {
                     _movementDirection = ShipDirection.Stopped;
                     _speed = 0;
                 }
-            }
-            else
-            {
-                _speed = newSpeed;
+
             }
         }
     }
@@ -417,6 +445,26 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         _nextTurnRight = !left;
     }
 
+    public bool UseTargetSpeed
+    {
+        get { return _useTargetSpeed; }
+        set { _useTargetSpeed = value; }
+    }
+    public float TargetSpeed
+    {
+        get
+        {
+            return _targetSpeed;
+        }
+        set
+        {
+            _targetSpeed = value;
+            UseTargetSpeed = true;
+            _thrustCoefficient = 1.0f;
+            _movementDirection = ShipDirection.Forward;
+        }
+    }
+
     public bool MovingForward { get { return _movementDirection == ShipDirection.Forward; } }
     public bool MovingBackwards { get { return _movementDirection == ShipDirection.Reverse; } }
 
@@ -606,6 +654,8 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
     protected float _brakingFactor;
     protected float _brakingTargetSpeedFactor;
     protected float _turnCoefficient;
+    private bool _useTargetSpeed;
+    private float _targetSpeed;
 
     public Faction Owner;
 }
