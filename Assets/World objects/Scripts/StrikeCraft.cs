@@ -61,5 +61,34 @@ public class StrikeCraft : ShipBase
         }
     }
 
+    public StrikeCraftFormation ContainingFormation { get; private set; }
+
+    public void AddToFormation(StrikeCraftFormation f)
+    {
+        if (ContainingFormation != null)
+        {
+            RemoveFromFormation();
+        }
+        ContainingFormation = f;
+        ContainingFormation.AddStrikeCraft(this);
+    }
+
+    public void RemoveFromFormation()
+    {
+        if (ContainingFormation == null)
+        {
+            return;
+        }
+        ContainingFormation.RemoveStrikeCraft(this);
+    }
+
+    public Vector3 PositionInFormation
+    {
+        get
+        {
+            return ContainingFormation.GetPosition(this);
+        }
+    }
+
     private int _strikeCraftHitPoints = 5;
 }

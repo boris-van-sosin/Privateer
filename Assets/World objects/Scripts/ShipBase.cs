@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class ShipBase : MonoBehaviour, ITargetableEntity
+public abstract class ShipBase : MovementBase, ITargetableEntity
 {
     protected virtual void Awake()
     {
@@ -31,7 +31,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         ApplyMovement();
     }
 
-    protected virtual void ApplyMovement()
+    protected override void ApplyMovement()
     {
         ApplyUpdateAcceleration();
         ApplyUpdateTurning();
@@ -49,7 +49,6 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         _prevPos = transform.position;
         _prevRot = transform.rotation;
         Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
-        Debug.Log(string.Format("Speed: {0}", _speed));
         Vector3 rbVelocity = _rigidBody.velocity;
         if (TowedByHarpax != null)
         {
@@ -103,7 +102,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         ApplyTurning(Vector3.Cross(transform.up, _autoHeadingVector).y < 0);
     }
 
-    private void ApplyUpdateAcceleration()
+    protected override void ApplyUpdateAcceleration()
     {
         if (_nextAccelerate)
         {
@@ -177,7 +176,7 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
     }
 
-    private void ApplyUpdateTurning()
+    protected override void ApplyUpdateTurning()
     {
         if (!(_nextTurnLeft || _nextTurnRight))
         {
@@ -211,8 +210,6 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
     {
         return true;
     }
-
-    public Vector3 ActualVelocity { get; protected set; }
 
     public bool ShipDisabled { get; protected set; }
     public bool ShipImmobilized { get; protected set; }
@@ -414,21 +411,9 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         }
     }
 
-    protected virtual void ApplyThrust()
+    protected override void ApplyBrakingInner()
     {
-        _nextAccelerate = true;
-        _nextBrake = false;
-    }
-
-    public virtual void ApplyBraking()
-    {
-        ApplyBrakingInner();
-    }
-
-    protected virtual void ApplyBrakingInner()
-    {
-        _nextAccelerate = false;
-        _nextBrake = true;
+        base.ApplyBrakingInner();
         _brakingTargetSpeedFactor = 0.0f;
         _brakingFactor = 1.0f;
     }
@@ -439,29 +424,12 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
         _brakingTargetSpeedFactor = targetSpeedFactor;
     }
 
-    public virtual void ApplyTurning(bool left)
+    public override float TargetSpeed
     {
-        _nextTurnLeft = left;
-        _nextTurnRight = !left;
-    }
-
-    public bool UseTargetSpeed
-    {
-        get { return _useTargetSpeed; }
-        set { _useTargetSpeed = value; }
-    }
-    public float TargetSpeed
-    {
-        get
-        {
-            return _targetSpeed;
-        }
         set
         {
-            _targetSpeed = value;
-            UseTargetSpeed = true;
+            base.TargetSpeed = value;
             _thrustCoefficient = 1.0f;
-            _movementDirection = ShipDirection.Forward;
         }
     }
 
@@ -584,8 +552,6 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
     // Getting hit:
     public abstract void TakeHit(Warhead w, Vector3 location);
 
-    protected enum ShipDirection { Stopped, Forward, Reverse };
-
     // TargetableEntity properties:
     public Vector3 EntityLocation { get { return transform.position; } }
     public virtual bool Targetable
@@ -632,30 +598,13 @@ public abstract class ShipBase : MonoBehaviour, ITargetableEntity
 
     protected Rigidbody _rigidBody;
 
-    // Movement stats
-    public float MaxSpeed;
-    public float Mass;
-    public float Thrust;
-    public float Braking;
-    public float TurnRate;
-    protected float _speed;
-
     // Movement fields
     protected bool _autoHeading = false;
     protected Vector3 _autoHeadingVector;
-    protected ShipDirection _movementDirection = ShipDirection.Stopped;
-    protected Vector3 _prevPos;
-    protected Quaternion _prevRot;
-    private bool _nextAccelerate;
-    private bool _nextBrake;
-    private bool _nextTurnLeft;
-    private bool _nextTurnRight;
     protected float _thrustCoefficient;
     protected float _brakingFactor;
     protected float _brakingTargetSpeedFactor;
     protected float _turnCoefficient;
-    private bool _useTargetSpeed;
-    private float _targetSpeed;
 
     public Faction Owner;
 }

@@ -1109,6 +1109,8 @@ public class Ship : ShipBase
     private ElectromagneticClamps _electromagneticClamps;
     private ParticleSystem _electromagneticClampsEffect;
 
+    public float Mass;
+
     public int ArmorFront;
     public int ArmorAft;
     public int ArmorLeft;
