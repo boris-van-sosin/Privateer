@@ -4,6 +4,11 @@ using UnityEngine;
 
 public abstract class MovementBase : MonoBehaviour
 {
+    protected virtual void Update()
+    {
+        ApplyMovement();
+    }
+
     protected virtual void ApplyMovement()
     {
         ApplyUpdateAcceleration();

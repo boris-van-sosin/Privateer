@@ -9,6 +9,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     {
         _controlledFormation = GetComponent<StrikeCraftFormation>();
         StartCoroutine(AcquireTargetPulse());
+        _currState = FormationState.Idle;
     }
 
     // Update is called once per frame
@@ -50,6 +51,10 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         else
         {
+            if (_currState == FormationState.InCombat)
+            {
+                _currState = FormationState.Idle;
+            }
         }
     }
 
@@ -63,7 +68,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     protected virtual bool TargetToFollow(ShipBase s)
     {
-        return s is Ship;
+        return s is ShipBase;
     }
 
     protected virtual Vector3 AttackPosition(ShipBase enemyShip)
@@ -97,7 +102,11 @@ public class StrikeCraftFormationAIController : MonoBehaviour
             //Debug.Log("Strike craft going straight");
         }
 
-        if (vecToTarget.sqrMagnitude <= (_distEps * _distEps))
+        if (_targetShip != null && vecToTarget.sqrMagnitude <= (_attackDist * _attackDist))
+        {
+            _currState = FormationState.InCombat;
+        }
+        else if (vecToTarget.sqrMagnitude <= (_distEps * _distEps))
         {
             _controlledFormation.ApplyBraking();
             if (_controlledFormation.ActualVelocity.sqrMagnitude < (_distEps * _distEps) && atRequiredHeaing)
@@ -107,7 +116,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         else
         {
-            _controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed;
+            SetSpeed();
         }
     }
 
@@ -221,6 +230,41 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
     }
 
+    private void SetSpeed()
+    {
+        if (_controlledFormation.AllInFormation())
+        {
+            _controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed;
+            foreach (StrikeCraft s in _controlledFormation.AllStrikeCraft())
+            {
+                s.TargetSpeed = _controlledFormation.MaxSpeed;
+            }
+        }
+        else
+        {
+            _controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient;
+            foreach (ValueTuple<StrikeCraft, bool> s in _controlledFormation.InFormationStatus())
+            {
+                if (s.Item2)
+                {
+                    s.Item1.TargetSpeed = _controlledFormation.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient;
+                }
+                else
+                {
+                    s.Item1.TargetSpeed = _controlledFormation.MaxSpeed;
+                }
+            }
+
+        }
+    }
+
+    private enum FormationState { Idle, Launching, Landing, Defending, Moving, InCombat };
+
+    public bool DoMaintainFormation()
+    {
+        return _currState != FormationState.InCombat;
+    }
+
     protected StrikeCraftFormation _controlledFormation;
 
     protected ShipBase _targetShip = null;
@@ -230,4 +274,5 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     private static readonly float _distEps = 0.01f;
     private static readonly float _attackDist = 2.0f;
     protected bool _doNavigate = false;
+    private FormationState _currState;
 }

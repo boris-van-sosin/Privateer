@@ -308,6 +308,13 @@ public static class ObjectFactory
         return s;
     }
 
+    public static StrikeCraftFormation CreateStrikeCraftFormation(string prodKey)
+    {
+        StrikeCraftFormation res = _prototypes.CreateStrikeCraftFormation(prodKey);
+        res.gameObject.AddComponent<StrikeCraftFormationAIController>();
+        return res;
+    }
+
     public static Sprite GetSprite(string key)
     {
         return _prototypes.GetSprite(key);

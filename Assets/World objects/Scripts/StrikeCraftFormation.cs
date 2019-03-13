@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StrikeCraftFormation : MovementBase
@@ -45,13 +46,28 @@ public class StrikeCraftFormation : MovementBase
         else
         {
             res = _craft.IndexOf(s);
-            if (res > 0)
+            if (res >= 0)
             {
                 _positionsCache[s] = res;
                 return Positions[res].position;
             }
         }
         throw new System.Exception("Strike craft not in formation");
+    }
+
+    public bool AllInFormation()
+    {
+        return _craft.All(s => (GetPosition(s) - s.transform.position).sqrMagnitude <= _distThresh * _distThresh);
+    }
+
+    public IEnumerable<ValueTuple<StrikeCraft, bool>> InFormationStatus()
+    {
+        return _craft.Select(s => ValueTuple<StrikeCraft, bool>.Create(s, (GetPosition(s) - s.transform.position).sqrMagnitude <= _distThresh * _distThresh));
+    }
+
+    public IEnumerable<StrikeCraft> AllStrikeCraft()
+    {
+        return _craft;
     }
 
     void OnDrawGizmos()
@@ -80,7 +96,7 @@ public class StrikeCraftFormation : MovementBase
     }
     public float Diameter { get; private set; }
 
-    public IEnumerable<Tuple<StrikeCraft, StrikeCraftAIController>> FighterAIs
+    public IEnumerable<Tuple<StrikeCraft, StrikeCraftAIController>> StrikeCraftAIs
     {
         get
         {
@@ -93,6 +109,9 @@ public class StrikeCraftFormation : MovementBase
     private Dictionary<StrikeCraft, int> _positionsCache = new Dictionary<StrikeCraft, int>();
     private Dictionary<StrikeCraft, Tuple<StrikeCraft, StrikeCraftAIController>> _AICache = new Dictionary<StrikeCraft, Tuple<StrikeCraft, StrikeCraftAIController>>();
 
+    public string ProductionKey;
     public Faction Owner;
     public Transform[] Positions;
+    public float MaintainFormationSpeedCoefficient;
+    private static readonly float _distThresh = 0.1f;
 }

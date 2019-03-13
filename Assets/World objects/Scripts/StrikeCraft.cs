@@ -90,5 +90,10 @@ public class StrikeCraft : ShipBase
         }
     }
 
+    void OnDestroy()
+    {
+        RemoveFromFormation();
+    }
+
     private int _strikeCraftHitPoints = 5;
 }

@@ -4,6 +4,14 @@ using System.Linq;
 
 public class StrikeCraftAIController : ShipAIController
 {
+    protected override void Start()
+    {
+        base.Start();
+        _controlledCraft = _controlledShip.GetComponent<StrikeCraft>();
+        _formation = _controlledCraft.ContainingFormation;
+        _formationAI = _formation.GetComponent<StrikeCraftFormationAIController>();
+    }
+
     protected override void AdvanceToTarget()
     {
         Vector3 vecToTarget = _navTarget - transform.position;
@@ -102,7 +110,29 @@ public class StrikeCraftAIController : ShipAIController
         return true;
     }
 
+    protected override Vector3 NavigationDest(ShipBase targetShip)
+    {
+        if (_formationAI.DoMaintainFormation())
+        {
+            return _formation.GetPosition(_controlledCraft);
+        }
+        else
+        {
+            return AttackPosition(_targetShip);
+        }
+    }
+
+    protected override void NavigateWithoutTarget()
+    {
+        if (_formationAI.DoMaintainFormation())
+        {
+            NavigateTo(_formation.GetPosition(_controlledCraft));
+        }
+    }
+
     private static readonly float _strikeCraftAngleEps = 5f;
     private static readonly float _strikeCraftDistEps = 0.01f;
-
+    private StrikeCraft _controlledCraft;
+    private StrikeCraftFormation _formation;
+    private StrikeCraftFormationAIController _formationAI;
 }

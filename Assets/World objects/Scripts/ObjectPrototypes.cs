@@ -184,6 +184,39 @@ public class ObjectPrototypes : MonoBehaviour
         return _strikeCraftPrototypeDictionary.Keys.ToArray();
     }
 
+    public StrikeCraftFormation CreateStrikeCraftFormation(string prodKey)
+    {
+        StrikeCraftFormation res;
+        if (_strikeCraftFormationPrototypeDictionary.TryGetValue(prodKey, out res))
+        {
+            return Instantiate(res);
+        }
+        foreach (StrikeCraftFormation s in StrikeCraftFormationPrototypes)
+        {
+            _strikeCraftFormationPrototypeDictionary[s.ProductionKey] = s;
+        }
+        if (_strikeCraftFormationPrototypeDictionary.TryGetValue(prodKey, out res))
+        {
+            return Instantiate(res);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public string[] GetAllStrikeCraftFormationTypes()
+    {
+        if (_strikeCraftFormationPrototypeDictionary.Count == 0)
+        {
+            foreach (StrikeCraftFormation s in StrikeCraftFormationPrototypes)
+            {
+                _strikeCraftFormationPrototypeDictionary[s.ProductionKey] = s;
+            }
+        }
+        return _strikeCraftFormationPrototypeDictionary.Keys.ToArray();
+    }
+
     public StatusTopLevel CreateStatusPanel()
     {
         StatusTopLevel res = Instantiate(StatusPanelPrototype);
@@ -244,6 +277,7 @@ public class ObjectPrototypes : MonoBehaviour
     public ParticleSystem DamageElectricSparks;
     public Ship[] ShipPrototypes;
     public StrikeCraft[] StrikeCraftPrototypes;
+    public StrikeCraftFormation[] StrikeCraftFormationPrototypes;
     public TurretBase[] TurretPrototypes;
     public StatusTopLevel StatusPanelPrototype;
     public WeaponCtrlCfgLine WeaponCtrlCfgLinePrototype;
@@ -259,6 +293,7 @@ public class ObjectPrototypes : MonoBehaviour
 
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, StrikeCraft> _strikeCraftPrototypeDictionary = new Dictionary<string, StrikeCraft>();
+    private Dictionary<string, StrikeCraftFormation> _strikeCraftFormationPrototypeDictionary = new Dictionary<string, StrikeCraftFormation>();
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
     private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();

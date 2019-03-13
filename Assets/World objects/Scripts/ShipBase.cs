@@ -26,11 +26,6 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         ShipImmobilized = false;
     }
 
-    protected virtual void Update()
-    {
-        ApplyMovement();
-    }
-
     protected override void ApplyMovement()
     {
         ApplyUpdateAcceleration();

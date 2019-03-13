@@ -147,19 +147,28 @@ public class ShipFreeCreatePanel : MonoBehaviour
 
     private void CreateStrikeCraftWingInner(string shipKey, bool friendly)
     {
-        StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(shipKey);
+        StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
         Faction[] factions = FindObjectsOfType<Faction>();
         Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
         if (friendly)
         {
-            s.Owner = faction1;
+            formation.Owner = faction1;
         }
         else
         {
-            s.Owner = faction2;
-            s.transform.Translate(30, 0, 0);
+            formation.Owner = faction2;
+            formation.transform.Translate(30, 0, 0);
         }
-        s.Activate();
+        foreach (Transform tr in formation.Positions)
+        {
+            StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(shipKey);
+            s.Owner = formation.Owner;
+            s.transform.position = tr.position;
+            s.AddToFormation(formation);
+            s.Activate();
+            formation.MaxSpeed = s.MaxSpeed * 1.05f;
+            formation.TurnRate = s.TurnRate * 0.5f;
+        }
     }
 
     private void TestWeapons()

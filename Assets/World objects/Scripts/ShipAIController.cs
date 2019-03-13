@@ -6,7 +6,7 @@ using System.Linq;
 public class ShipAIController : MonoBehaviour
 {
 	// Use this for initialization
-	void Start ()
+	protected virtual void Start ()
     {
         _controlledShip = GetComponent<ShipBase>();
         StartCoroutine(AcquireTargetPulse());
@@ -169,7 +169,7 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
-    private void NavigateTo(Vector3 target)
+    protected void NavigateTo(Vector3 target)
     {
         _navTarget = target;
         Debug.DrawLine(transform.position, _navTarget, Color.red, 0.5f);
@@ -266,7 +266,7 @@ public class ShipAIController : MonoBehaviour
                 }
                 if (_targetShip != null)
                 {
-                    Vector3 attackPos = AttackPosition(_targetShip);
+                    Vector3 attackPos = NavigationDest(_targetShip);
                     Vector3? bypassVec = BypassObstacle(attackPos);
                     if (bypassVec == null)
                     {
@@ -277,6 +277,10 @@ public class ShipAIController : MonoBehaviour
                         NavigateTo(bypassVec.Value);
                     }
                 }
+                else
+                {
+                    NavigateWithoutTarget();
+                }
             }
             else if (!_controlledShip.ShipActiveInCombat)
             {
@@ -284,6 +288,15 @@ public class ShipAIController : MonoBehaviour
             }
             yield return new WaitForSeconds(0.25f);
         }
+    }
+
+    protected virtual Vector3 NavigationDest(ShipBase targetShip)
+    {
+        return AttackPosition(_targetShip);
+    }
+
+    protected virtual void NavigateWithoutTarget()
+    {
     }
 
     protected ShipBase _controlledShip;
