@@ -237,7 +237,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
             _controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed;
             foreach (StrikeCraft s in _controlledFormation.AllStrikeCraft())
             {
-                s.TargetSpeed = _controlledFormation.MaxSpeed;
+                s.TargetSpeed = s.MaxSpeed;
             }
         }
         else
@@ -247,11 +247,15 @@ public class StrikeCraftFormationAIController : MonoBehaviour
             {
                 if (s.Item2)
                 {
-                    s.Item1.TargetSpeed = _controlledFormation.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient;
+                    s.Item1.TargetSpeed = s.Item1.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient;
+                }
+                else if (s.Item1.AheadOfPositionInFormation())
+                {
+                    s.Item1.TargetSpeed = s.Item1.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient * _controlledFormation.MaintainFormationSpeedCoefficient;
                 }
                 else
                 {
-                    s.Item1.TargetSpeed = _controlledFormation.MaxSpeed;
+                    s.Item1.TargetSpeed = s.Item1.MaxSpeed;
                 }
             }
 

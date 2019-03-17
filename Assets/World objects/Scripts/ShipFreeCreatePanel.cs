@@ -166,7 +166,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.transform.position = tr.position;
             s.AddToFormation(formation);
             s.Activate();
-            formation.MaxSpeed = s.MaxSpeed * 1.05f;
+            formation.MaxSpeed = s.MaxSpeed * 1.1f;
             formation.TurnRate = s.TurnRate * 0.5f;
         }
     }

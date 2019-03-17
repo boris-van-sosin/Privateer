@@ -57,12 +57,12 @@ public class StrikeCraftFormation : MovementBase
 
     public bool AllInFormation()
     {
-        return _craft.All(s => (GetPosition(s) - s.transform.position).sqrMagnitude <= _distThresh * _distThresh);
+        return _craft.All(s => s.InPositionInFormation());
     }
 
     public IEnumerable<ValueTuple<StrikeCraft, bool>> InFormationStatus()
     {
-        return _craft.Select(s => ValueTuple<StrikeCraft, bool>.Create(s, (GetPosition(s) - s.transform.position).sqrMagnitude <= _distThresh * _distThresh));
+        return _craft.Select(s => ValueTuple<StrikeCraft, bool>.Create(s, s.InPositionInFormation()));
     }
 
     public IEnumerable<StrikeCraft> AllStrikeCraft()
@@ -76,7 +76,14 @@ public class StrikeCraftFormation : MovementBase
         foreach (StrikeCraft s in _craft)
         {
             Gizmos.color = colors[i];
-            Gizmos.DrawWireSphere(GetPosition(s), 0.1f);
+            if (s.InPositionInFormation())
+            {
+                Gizmos.DrawWireSphere(GetPosition(s), 0.025f);
+            }
+            else
+            {
+                Gizmos.DrawWireSphere(GetPosition(s), 0.1f);
+            }
             i = (i + 1) % colors.Length;
         }
     }
@@ -113,5 +120,5 @@ public class StrikeCraftFormation : MovementBase
     public Faction Owner;
     public Transform[] Positions;
     public float MaintainFormationSpeedCoefficient;
-    private static readonly float _distThresh = 0.1f;
+    public static readonly float DistThreshold = 0.2f;
 }

@@ -114,7 +114,14 @@ public class StrikeCraftAIController : ShipAIController
     {
         if (_formationAI.DoMaintainFormation())
         {
-            return _formation.GetPosition(_controlledCraft);
+            if (_controlledCraft.AheadOfPositionInFormation())
+            {
+                return _formation.GetPosition(_controlledCraft) + _formation.transform.up * 2f;
+            }
+            else
+            {
+                return _formation.GetPosition(_controlledCraft) - _formation.transform.up * 0.1f;
+            }
         }
         else
         {
@@ -126,7 +133,14 @@ public class StrikeCraftAIController : ShipAIController
     {
         if (_formationAI.DoMaintainFormation())
         {
-            NavigateTo(_formation.GetPosition(_controlledCraft));
+            if (_controlledCraft.AheadOfPositionInFormation())
+            {
+                NavigateTo(_formation.GetPosition(_controlledCraft) + _formation.transform.up * 2f);
+            }
+            else
+            {
+                NavigateTo(_formation.GetPosition(_controlledCraft) - _formation.transform.up * 0.1f);
+            }
         }
     }
 

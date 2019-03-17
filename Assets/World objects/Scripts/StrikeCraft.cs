@@ -90,6 +90,24 @@ public class StrikeCraft : ShipBase
         }
     }
 
+    public bool InPositionInFormation()
+    {
+        return ContainingFormation != null &&
+            (ContainingFormation.GetPosition(this) - transform.position).sqrMagnitude <= (StrikeCraftFormation.DistThreshold * StrikeCraftFormation.DistThreshold);
+    }
+
+    public bool AheadOfPositionInFormation()
+    {
+        if (ContainingFormation == null)
+        {
+            return false;
+        }
+        Vector3 offset = transform.position - ContainingFormation.GetPosition(this);
+        return
+            Vector3.Dot(offset, transform.up) > 0 &&
+            Vector3.Angle(offset, transform.up) < 30;
+    }
+
     void OnDestroy()
     {
         RemoveFromFormation();
