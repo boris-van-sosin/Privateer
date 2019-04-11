@@ -10,7 +10,7 @@ public class BspEditor : Editor
     [DrawGizmo(GizmoType.Selected | GizmoType.NonSelected)]
     static void DrawGizmosSelected(BspPath path, GizmoType g)
     {
-        if (path.Points.Any(x => x == null))
+        if (path.Points == null || path.Points.Any(x => x == null))
         {
             return;
         }
@@ -105,10 +105,6 @@ public class BspEditor : Editor
             {
                 upCurve = null;
             }
-            IEnumerable<Vector3> pts = Enumerable.Range(0, numSamples + 1).Select(i => pathCurve.Eval(Mathf.Clamp01(((float)i) / numSamples)));
-
-            IEnumerable<Vector3> forwardDirs = Enumerable.Range(0, numSamples + 1).Select(i => forwardCurve.Eval(Mathf.Clamp01(((float)i) / numSamples))); ;
-
             evalPts = Enumerable.Range(0, numSamples + 1).Select(i => Mathf.Clamp01(((float)i) / numSamples)).Select(
                 t => Tuple<float, Vector3, Vector3>.Create(t, pathCurve.Eval(t), forwardCurve.Eval(t).normalized)).Select(
                         pf => Tuple<Vector3,Vector3,Vector3>.Create(pf.Item2, pf.Item3, Vector3.ProjectOnPlane((!path.UseUpOrientaion) ? path.transform.up : upCurve.Eval(pf.Item1), pf.Item3).normalized));
