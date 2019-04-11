@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class BSplineCurve<T>
 {
-    public BSplineCurve(IEnumerable<T> CtlPoints, IEnumerable<float> KV, Func<T, T, T> add, Func<T, float, T> multScalar)
+    public BSplineCurve(IEnumerable<T> CtlPoints, IEnumerable<float> KV, Func<T, T, float, T> lerpFunc)
     {
         _ctlMesh = CtlPoints.ToArray();
         _kv = KV.ToArray();
@@ -18,18 +18,18 @@ public class BSplineCurve<T>
         {
             throw new Exception("Attempted to create B-spline in which order is greater than length");
         }
-        _add = add;
-        _multScalar = multScalar;
+        _lerpFunc = lerpFunc;
+        _tmpEvalArray = new T[Order];
     }
 
-    public static BSplineCurve<T> UniformOpen(IEnumerable<T> CtlPoints, int order, Func<T, T, T> add, Func<T, float, T> multScalar)
+    public static BSplineCurve<T> UniformOpen(IEnumerable<T> CtlPoints, int order, Func<T, T, float, T> lerpFunc)
     {
         int length = CtlPoints.Count();
         if (length < order)
         {
             throw new Exception("Attempted to create B-spline in which order is greater than length");
         }
-        return new BSplineCurve<T>(CtlPoints, CreateOpenKV(order, length), add, multScalar);
+        return new BSplineCurve<T>(CtlPoints, CreateOpenKV(order, length), lerpFunc);
     }
 
     private static float[] CreateOpenKV(int order, int ctlMeshLen)
@@ -58,21 +58,20 @@ public class BSplineCurve<T>
 
     public T Eval(float x)
     {
-        T[] d = new T[Order];
         int k = FindKnotInterval(x);
         for (int i = 0; i < Order; ++i)
         {
-            d[i] = _ctlMesh[i + k - (Order - 1)];
+            _tmpEvalArray[i] = _ctlMesh[i + k - (Order - 1)];
         }
         for (int r = 1; r < Order; ++r)
         {
             for (int j = Order - 1; j >= r; --j)
             {
                 float alpha = (x - _kv[j + k - (Order - 1)]) / (_kv[j + 1 + k - r] - _kv[j + k - (Order - 1)]);
-                d[j] = _add(_multScalar(d[j - 1], 1 - alpha), _multScalar(d[j], alpha));
+                _tmpEvalArray[j] = _lerpFunc(_tmpEvalArray[j - 1], _tmpEvalArray[j], alpha); //was: _add(_multScalar(d[j - 1], 1 - alpha), _multScalar(d[j], alpha));
             }
         }
-        return d[Order - 1];
+        return _tmpEvalArray[Order - 1];
     }
 
     private int FindKnotInterval(float x)
@@ -91,9 +90,23 @@ public class BSplineCurve<T>
         throw new Exception("parameter outside domain of B-spline");
     }
 
+    private IEnumerable<T> DeriveCtlMesh(Func<T, float, T, float, T> blendFunc)
+    {
+        for (int i = 0; i < _ctlMesh.Length - 1; ++i)
+        {
+            float coeff = (Order - 1) / (_kv[i + Order] - _kv[i + 1]);
+            yield return blendFunc(_ctlMesh[i + 1], coeff, _ctlMesh[i], -coeff);
+        }
+    }
+
+    public BSplineCurve<T> Derivative(Func<T, float, T, float, T> blendFunc)
+    {
+        return new BSplineCurve<T>(DeriveCtlMesh(blendFunc), _kv.Skip(1).Take(_kv.Length - 2), _lerpFunc);
+    }
+
     public readonly int Order;
     private readonly T[] _ctlMesh;
     private readonly float[] _kv;
-    private readonly Func<T, T, T> _add;
-    private readonly Func<T, float, T> _multScalar;
+    private readonly Func<T, T, float, T> _lerpFunc;
+    private readonly T[] _tmpEvalArray;
 }
