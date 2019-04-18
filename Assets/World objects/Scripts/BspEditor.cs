@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 [CustomEditor(typeof(BspPath))]
 public class BspEditor : Editor
@@ -19,9 +20,10 @@ public class BspEditor : Editor
             Gizmos.DrawSphere(tr.position, 0.02f);
         }
         int numSamples = 100;
+        BspPathLight lt = path.ExractLightweightPath();
         if (path.UseForwardOrientaion || path.UseUpOrientaion)
         {
-            IEnumerable<Tuple<Vector3, Vector3, Vector3>> evalPts = SampleCurveWithOrientation(path, numSamples);
+            IEnumerable<Tuple<Vector3, Vector3, Vector3>> evalPts = SampleCurveWithOrientation(lt, numSamples);
 
             IEnumerator<Tuple<Vector3, Vector3, Vector3>> ptsIter = evalPts.GetEnumerator();
             ptsIter.MoveNext();
@@ -44,7 +46,7 @@ public class BspEditor : Editor
         }
         else
         {
-            IEnumerable<Vector3> evalPts = SampleCurve(path, numSamples);
+            IEnumerable<Vector3> evalPts = SampleCurve(lt, numSamples);
 
             IEnumerator<Vector3> ptsIter = evalPts.GetEnumerator();
             ptsIter.MoveNext();
@@ -61,54 +63,13 @@ public class BspEditor : Editor
         }
     }
 
-    private static IEnumerable<Vector3> SampleCurve(BspPath path, int numSamples)
+    private static IEnumerable<Vector3> SampleCurve(BspPathLight path, int numSamples)
     {
-        IEnumerable<Vector3> evalPts;
-        if (path.Initialized)
-        {
-            evalPts = Enumerable.Range(0, numSamples + 1).Select(i => path.EvalPoint(Mathf.Clamp01(((float)i) / numSamples)));
-        }
-        else
-        {
-            IEnumerable<Vector3> pathPoints = path.Points.Select(t => t.position);
-            BSplineCurve<Vector3> pathCurve = BSplineCurve<Vector3>.UniformOpen(pathPoints, 3, Vector3.Lerp);
-            evalPts = Enumerable.Range(0, numSamples + 1).Select(i => pathCurve.Eval(Mathf.Clamp01(((float)i) / numSamples)));
-        }
-        return evalPts;
+        return Enumerable.Range(0, numSamples + 1).Select(i => path.EvalPoint(Mathf.Clamp01(((float)i) / numSamples)));
     }
 
-    private static IEnumerable<Tuple<Vector3, Vector3, Vector3>> SampleCurveWithOrientation(BspPath path, int numSamples)
+    private static IEnumerable<Tuple<Vector3, Vector3, Vector3>> SampleCurveWithOrientation(BspPathLight path, int numSamples)
     {
-        IEnumerable<Tuple<Vector3, Vector3, Vector3>> evalPts;
-        if (path.Initialized)
-        {
-            evalPts = Enumerable.Range(0, numSamples + 1).Select(i => path.EvalPointAndOrientation(Mathf.Clamp01(((float)i) / numSamples)));
-        }
-        else
-        {
-            IEnumerable<Vector3> pathPoints = path.Points.Select(t => t.position);
-            BSplineCurve<Vector3> pathCurve = BSplineCurve<Vector3>.UniformOpen(pathPoints, 3, Vector3.Lerp);
-            BSplineCurve<Vector3> forwardCurve, upCurve;
-            if (path.UseForwardOrientaion)
-            {
-                forwardCurve = BSplineCurve<Vector3>.UniformOpen(path.Points.Select(t => t.forward), 3, Vector3.Slerp);
-            }
-            else
-            {
-                forwardCurve = pathCurve.Derivative((v1, a, v2, b) => v1 * a + v2 * b);
-            }
-            if (path.UseUpOrientaion)
-            {
-                upCurve = BSplineCurve<Vector3>.UniformOpen(path.Points.Select(t => t.up), 3, Vector3.Slerp);
-            }
-            else
-            {
-                upCurve = null;
-            }
-            evalPts = Enumerable.Range(0, numSamples + 1).Select(i => Mathf.Clamp01(((float)i) / numSamples)).Select(
-                t => Tuple<float, Vector3, Vector3>.Create(t, pathCurve.Eval(t), forwardCurve.Eval(t).normalized)).Select(
-                        pf => Tuple<Vector3,Vector3,Vector3>.Create(pf.Item2, pf.Item3, Vector3.ProjectOnPlane((!path.UseUpOrientaion) ? path.transform.up : upCurve.Eval(pf.Item1), pf.Item3).normalized));
-        }
-        return evalPts;
+        return Enumerable.Range(0, numSamples + 1).Select(i => path.EvalPointAndOrientation(Mathf.Clamp01(((float)i) / numSamples)));
     }
 }

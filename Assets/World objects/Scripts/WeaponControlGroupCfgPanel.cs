@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,7 +72,7 @@ public class WeaponControlGroupCfgPanel : MonoBehaviour
                     }
                 }
             }
-            res.WeaponGroups[i + 1] = Tuple<IEnumerable<string>, bool>.Create(hardpointsInGroup, footerCfg.WeaponGroupCheckboxes[i]);
+            res.WeaponGroups[i + 1] = new Tuple<IEnumerable<string>, bool>(hardpointsInGroup, footerCfg.WeaponGroupCheckboxes[i]);
         }
 
         return res;

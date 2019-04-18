@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class TorpedoTurret : TurretBase
 {
@@ -135,7 +136,7 @@ public class TorpedoTurret : TurretBase
         yield return new WaitUntil(() => TorpedoDoorsOpen);
         for (int i = 0; i < TorpedoesInSpread; ++i)
         {
-            Vector3 actualLaunchVector = (LaunchVector + (Random.onUnitSphere * 0.001f)).normalized;
+            Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
             Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, MaxRange, w, ContainingShip);
             t.transform.position = Muzzles[_nextBarrel].position;

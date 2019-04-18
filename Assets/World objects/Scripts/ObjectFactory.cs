@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Text;
+using System;
 
 public static class ObjectFactory
 {
@@ -128,12 +129,12 @@ public static class ObjectFactory
 
     public static Warhead CreateWarhead(WeaponType w, WeaponSize sz, AmmoType a)
     {
-        return _gunWarheads[Tuple<WeaponType, WeaponSize, AmmoType>.Create(w, sz, a)];
+        return _gunWarheads[new Tuple<WeaponType, WeaponSize, AmmoType>(w, sz, a)];
     }
 
     public static Warhead CreateWarhead(WeaponType w, WeaponSize sz)
     {
-        return _otherWarheads[Tuple<WeaponType, WeaponSize>.Create(w, sz)];
+        return _otherWarheads[new Tuple<WeaponType, WeaponSize>(w, sz)];
     }
 
     public static Warhead CreateWarhead(TorpedoType tt)
@@ -144,7 +145,7 @@ public static class ObjectFactory
     public static Tuple<int, float> TorpedoLaunchDataFromTorpedoType(TorpedoType tt)
     {
         WarheadDataEntry4 tropData = _torpedoWarheads[tt];
-        return Tuple<int, float>.Create(tropData.SpeardSize, tropData.MaxRange);
+        return new Tuple<int, float>(tropData.SpeardSize, tropData.MaxRange);
     }
 
     public static string[] GetAllShipTypes()
@@ -404,33 +405,33 @@ public static class ObjectFactory
         switch (t)
         {
             case ComponentSlotType.SmallFixed:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Fixed);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Fixed);
             case ComponentSlotType.SmallBroadside:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Broadside);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Broadside);
             case ComponentSlotType.SmallBarbette:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Barbette);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Barbette);
             case ComponentSlotType.SmallTurret:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Turret);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Turret);
             case ComponentSlotType.SmallBarbetteDual:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Barbette);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Barbette);
             case ComponentSlotType.SmallTurretDual:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Light, TurretMountType.Turret);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Turret);
             case ComponentSlotType.MediumBroadside:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Barbette);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
             case ComponentSlotType.MediumBarbette:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Barbette);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
             case ComponentSlotType.MediumTurret:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Turret);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Turret);
             case ComponentSlotType.MediumBarbetteDualSmall:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Barbette);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
             case ComponentSlotType.MediumTurretDualSmall:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Medium, TurretMountType.Turret);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Turret);
             case ComponentSlotType.LargeBarbette:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Heavy, TurretMountType.Barbette);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Heavy, TurretMountType.Barbette);
             case ComponentSlotType.LargeTurret:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.Heavy, TurretMountType.Turret);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.Heavy, TurretMountType.Turret);
             case ComponentSlotType.TorpedoTube:
-                return Tuple<WeaponSize, TurretMountType>.Create(WeaponSize.TorpedoTube, TurretMountType.TorpedoTube);
+                return new Tuple<WeaponSize, TurretMountType>(WeaponSize.TorpedoTube, TurretMountType.TorpedoTube);
             default:
                 return null;
         }
@@ -448,17 +449,17 @@ public static class ObjectFactory
             case ComponentSlotType.SmallTurretDual:
             case ComponentSlotType.MediumBarbetteDualSmall:
             case ComponentSlotType.MediumTurretDualSmall:
-                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Light, w);
+                return new Tuple<WeaponSize, WeaponType>(WeaponSize.Light, w);
             case ComponentSlotType.MediumBroadside:
             case ComponentSlotType.MediumBarbette:
             case ComponentSlotType.MediumTurret:
-                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Medium, w);
+                return new Tuple<WeaponSize, WeaponType>(WeaponSize.Medium, w);
             case ComponentSlotType.LargeBarbette:
             case ComponentSlotType.LargeTurret:
-                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.Heavy, w);
+                return new Tuple<WeaponSize, WeaponType>(WeaponSize.Heavy, w);
             case ComponentSlotType.FighterCannon:
             case ComponentSlotType.FighterAutogun:
-                return Tuple<WeaponSize, WeaponType>.Create(WeaponSize.StrikeCraft, w);
+                return new Tuple<WeaponSize, WeaponType>(WeaponSize.StrikeCraft, w);
             default:
                 return null;
         }
@@ -473,7 +474,7 @@ public static class ObjectFactory
             if (l.Trim().StartsWith("WeaponMount"))
             {
                 TurretMountDataEntry tm = TurretMountDataEntry.FromString(l);
-                _weaponMounts.Add(Tuple<WeaponSize, TurretMountType>.Create(tm.MountSize, tm.Mount), tm);
+                _weaponMounts.Add(new Tuple<WeaponSize, TurretMountType>(tm.MountSize, tm.Mount), tm);
             }
         }
     }
@@ -514,12 +515,12 @@ public static class ObjectFactory
             if (l.Trim().StartsWith("ProjectileWeapon"))
             {
                 WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
-                _weapons_projectile.Add(Tuple<WeaponSize, WeaponType>.Create(w.MountSize, w.Weapon), w);
+                _weapons_projectile.Add(new Tuple<WeaponSize, WeaponType>(w.MountSize, w.Weapon), w);
             }
             else if (l.Trim().StartsWith("BeamWeapon"))
             {
                 WeaponBeamDataEntry w = WeaponBeamDataEntry.FromString(l);
-                _weapons_beam.Add(Tuple<WeaponSize, WeaponType>.Create(w.MountSize, w.Weapon), w);
+                _weapons_beam.Add(new Tuple<WeaponSize, WeaponType>(w.MountSize, w.Weapon), w);
             }
             else if (l.Trim().StartsWith("TorpedoWeapon"))
             {

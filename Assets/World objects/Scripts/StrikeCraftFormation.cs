@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -16,7 +17,7 @@ public class StrikeCraftFormation : MovementBase
             return false;
         }
         _craft.Add(s);
-        _AICache.Add(s, Tuple<StrikeCraft, StrikeCraftAIController>.Create(s, s.GetComponent<StrikeCraftAIController>()));
+        _AICache.Add(s, new Tuple<StrikeCraft, StrikeCraftAIController>(s, s.GetComponent<StrikeCraftAIController>()));
         return true;
     }
 
@@ -62,7 +63,7 @@ public class StrikeCraftFormation : MovementBase
 
     public IEnumerable<ValueTuple<StrikeCraft, bool>> InFormationStatus()
     {
-        return _craft.Select(s => ValueTuple<StrikeCraft, bool>.Create(s, s.InPositionInFormation()));
+        return _craft.Select(s => new ValueTuple<StrikeCraft, bool>(s, s.InPositionInFormation()));
     }
 
     public IEnumerable<StrikeCraft> AllStrikeCraft()

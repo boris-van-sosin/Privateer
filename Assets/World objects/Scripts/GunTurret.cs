@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class GunTurret : DirectionalTurret
 {
@@ -65,7 +66,7 @@ public class GunTurret : DirectionalTurret
         int numBarrels = FindBarrels(transform).Count();
         float fireRate = numBarrels / FiringInterval;
         Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
-        return ValueTuple<float, float, float>.Create(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);
+        return new ValueTuple<float, float, float>(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);
     }
 
     public float ProjectileScale;

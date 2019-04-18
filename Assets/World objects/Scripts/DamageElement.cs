@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 [System.Serializable]
 public struct Warhead
@@ -64,7 +65,7 @@ public static class Combat
         float penetrateChance = penetrationTable.PenetrationProbability(armourRating, armourPenetration);
         //float armourDifference = armourPenetration - armourRating;
         //float penetrateChance = _minArmourPenetration + (_maxArmourPenetration - _minArmourPenetration) / (1 + Mathf.Exp(-_armourPenetrationSteepness * armourDifference));
-        float penetrateRoll = Random.value;
+        float penetrateRoll = UnityEngine.Random.value;
         Debug.Log(string.Format("Hit on armour. Armour rating: {0}. Armour penetration: {1}. Chance to penetrate: {2}. Roll: {3}.", armourRating, armourPenetration, penetrateChance, penetrateRoll));
         return penetrateRoll < penetrateChance;
     }
@@ -93,7 +94,7 @@ public static class Combat
             panel.Item2.UpdateBoarding(side1Q.Count, side2Q.Count);
             if (side2Q.Count > 0 && side2Q.Count < initialDefenderForce / _defenderSurrenderRatio)
             {
-                if (Random.value < _surrenderChance)
+                if (UnityEngine.Random.value < _surrenderChance)
                 {
                     // defending ship surrenders
                     foreach (ShipCharacter c in side2Q)
@@ -106,7 +107,7 @@ public static class Combat
             }
             if (side1Q.Count > 0 && side1Q.Count < initialAttackerForce / _attackerSurrenderRatio)
             {
-                if (Random.value < _surrenderChance)
+                if (UnityEngine.Random.value < _surrenderChance)
                 {
                     // attacking ship surrenders
                     break;
@@ -116,7 +117,7 @@ public static class Combat
         }
         attacker.ResolveBoardingAction(defender, side1Q.Count == 0);
         defender.ResolveBoardingAction(attacker, side2Q.Count == 0);
-        Object.Destroy(panel.Item1.gameObject);
+        UnityEngine.Object.Destroy(panel.Item1.gameObject);
         yield return null;
     }
 
@@ -145,7 +146,7 @@ public static class Combat
                 {
                     break;
                 }
-                if (Random.value < _combatDeathChance)
+                if (UnityEngine.Random.value < _combatDeathChance)
                 {
                     side2.Last.Value.Status = ShipCharacter.CharacterStaus.Dead;
                 }
@@ -164,7 +165,7 @@ public static class Combat
                 {
                     break;
                 }
-                if (Random.value < _combatDeathChance)
+                if (UnityEngine.Random.value < _combatDeathChance)
                 {
                     side1.Last.Value.Status = ShipCharacter.CharacterStaus.Dead;
                 }
@@ -180,7 +181,7 @@ public static class Combat
     private static bool CombatResult(int side1Strength, int side2Strength)
     {
         int combinedStrength = side1Strength + side2Strength;
-        int combatResult = Random.Range(0, combinedStrength);
+        int combatResult = UnityEngine.Random.Range(0, combinedStrength);
         return combatResult < side1Strength;
     }
 

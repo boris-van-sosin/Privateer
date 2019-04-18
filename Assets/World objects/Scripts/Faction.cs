@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -83,11 +84,11 @@ public class Faction : MonoBehaviour
         {
             if (f._factionIdx < _factionIdx)
             {
-                _factionRelations.Add(Tuple<Faction, Faction>.Create(f, this), FactionRelationType.Enemy); // should be neutral
+                _factionRelations.Add(new Tuple<Faction, Faction>(f, this), FactionRelationType.Enemy); // should be neutral
             }
             else
             {
-                _factionRelations.Add(Tuple<Faction, Faction>.Create(this, f), FactionRelationType.Enemy); // should be neutral
+                _factionRelations.Add(new Tuple<Faction, Faction>(this, f), FactionRelationType.Enemy); // should be neutral
             }
         }
         _allFactions.Add(this);

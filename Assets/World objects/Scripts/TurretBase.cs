@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public abstract class TurretBase : MonoBehaviour, ITurret
 {
@@ -47,22 +48,22 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             for (int i = 0; i < _deadZoneAngleStrings.Length; ++i)
             {
                 string[] nums = _deadZoneAngleStrings[i].Split(',');
-                _deadZoneAngleRanges[i] = Tuple<float, float>.Create(float.Parse(nums[0]), float.Parse(nums[1]));
+                _deadZoneAngleRanges[i] = new Tuple<float, float>(float.Parse(nums[0]), float.Parse(nums[1]));
             }
         }
         if (_minRotation < _maxRotation)
         {
             _rotationAllowedRanges = new Tuple<float, float>[1]
             {
-                Tuple<float, float>.Create(_minRotation, _maxRotation),
+                new Tuple<float, float>(_minRotation, _maxRotation),
             };
         }
         else if (_maxRotation < _minRotation)
         {
             _rotationAllowedRanges = new Tuple<float, float>[2]
 {
-                Tuple<float, float>.Create(_minRotation, 360),
-                Tuple<float, float>.Create(0, _maxRotation)
+                new Tuple<float, float>(_minRotation, 360),
+                new Tuple<float, float>(0, _maxRotation)
             };
         }
         else
@@ -93,7 +94,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             string suffix = root.name.Substring(BarrelString.Length);
             Transform muzzle = root.Find(MuzzleString + suffix);
-            yield return Tuple<Transform, Transform>.Create(root, muzzle);
+            yield return new Tuple<Transform, Transform>(root, muzzle);
         }
         else
         {

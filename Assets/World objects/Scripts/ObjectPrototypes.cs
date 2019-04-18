@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class ObjectPrototypes : MonoBehaviour
 {
@@ -256,7 +257,7 @@ public class ObjectPrototypes : MonoBehaviour
     public Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         Canvas boardibfCanvas = Instantiate(BoardingStatusCanvas);
-        return Tuple<Canvas, BoardingProgressPanel>.Create(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
+        return new Tuple<Canvas, BoardingProgressPanel>(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
     }
 
     public WeaponCtrlCfgLine CreateWeaponCtrlCfgLine()

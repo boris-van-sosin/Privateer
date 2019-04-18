@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -172,11 +173,11 @@ public class UserInput : MonoBehaviour
 
     private readonly Tuple<UserOperation, int>[] _controlGroupKeys = new Tuple<UserOperation, int>[]
     {
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup1, 1),
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup2, 2),
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup3, 3),
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup4, 4),
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup5, 5),
-        Tuple<UserOperation, int>.Create(UserOperation.ControlGroup6, 6)
+        new Tuple<UserOperation, int>(UserOperation.ControlGroup1, 1),
+        new Tuple<UserOperation, int>(UserOperation.ControlGroup2, 2),
+        new Tuple<UserOperation, int>(UserOperation.ControlGroup3, 3),
+        new Tuple<UserOperation, int>(UserOperation.ControlGroup4, 4),
+        new Tuple<UserOperation, int>(UserOperation.ControlGroup5, 5),
+        new Tuple<UserOperation, int>(UserOperation.ControlGroup6, 6)
     };
 }

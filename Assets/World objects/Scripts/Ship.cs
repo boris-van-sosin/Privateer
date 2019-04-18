@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class Ship : ShipBase
 {
@@ -53,7 +54,7 @@ public class Ship : ShipBase
                     _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, turret.EnergyToFire);
                 }
                 turrets.Add(turret);
-                _turretSlotsOccupied[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(turret.TurretType, turret));
+                _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<ComponentSlotType, IShipComponent>(turret.TurretType, turret));
             }
         }
         _turrets = turrets.ToArray();
@@ -99,7 +100,7 @@ public class Ship : ShipBase
     {
         _electromagneticClamps = ElectromagneticClamps.DefaultComponent(this);
         _electromagneticClamps.OnToggle += ElectromagneticClampsToggled;
-        _componentSlotsOccupied[ShipSection.Hidden][0] = Tuple<ComponentSlotType, IShipComponent>.Create(ComponentSlotType.Hidden, _electromagneticClamps);
+        _componentSlotsOccupied[ShipSection.Hidden][0] = new Tuple<ComponentSlotType, IShipComponent>(ComponentSlotType.Hidden, _electromagneticClamps);
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
@@ -182,7 +183,7 @@ public class Ship : ShipBase
         {
             _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, t.EnergyToFire);
         }
-        _turretSlotsOccupied[hp.LocationOnShip].Add(Tuple<ComponentSlotType, IShipComponent>.Create(t.TurretType, t));
+        _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<ComponentSlotType, IShipComponent>(t.TurretType, t));
         return true;
     }
 
@@ -217,7 +218,7 @@ public class Ship : ShipBase
         if (availableSlotIdx >= 0)
         {
             ComponentSlotType occupiedSlot = _componentsSlotTypes[sec].Intersect(comp.AllowedSlotTypes).First();
-            _componentSlotsOccupied[sec][availableSlotIdx] = Tuple<ComponentSlotType, IShipComponent>.Create(occupiedSlot, comp);
+            _componentSlotsOccupied[sec][availableSlotIdx] = new Tuple<ComponentSlotType, IShipComponent>(occupiedSlot, comp);
             if (comp.AllowedSlotTypes.Contains(ComponentSlotType.Engine))
             {
                 _engine = comp as ShipEngine;
@@ -614,7 +615,7 @@ public class Ship : ShipBase
                     LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
                     if (casualtiesQueue.Count > 0)
                     {
-                        int NumCasualties = Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
+                        int NumCasualties = UnityEngine.Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
                         foreach (ShipCharacter character in casualtiesQueue.Take(NumCasualties))
                         {
                             character.Status = ShipCharacter.CharacterStaus.Incapacitated;
