@@ -52,6 +52,43 @@ public class BspPathLight
         }
     }
 
+    public BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
+        : this(points, order, useForwardOrientation, true, Vector3.zero, transforms)
+    {
+    }
+
+    public BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, Vector3 defaultUp, IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
+        : this(points, order, useForwardOrientation, false, defaultUp, transforms)
+    {
+    }
+
+    private BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, bool useUpOrientation, Vector3 defaultUp, IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
+    {
+        _defaultUp = defaultUp;
+        _useForwardOrientaion = useForwardOrientation;
+        _useUpOrientaion = useUpOrientation;
+        IEnumerable<Vector3> pathPoints = points.Zip(transforms, (p, t) => t.Item1(p.position));
+        _pathCurve = BSplineCurve<Vector3>.UniformOpen(pathPoints, order, Vector3.Lerp);
+        _velocityCurve = _pathCurve.Derivative((v1, a, v2, b) => v1 * a + v2 * b);
+        if (_useForwardOrientaion)
+        {
+            _forwardCurve = BSplineCurve<Vector3>.UniformOpen(points.Zip(transforms, (p, t) => t.Item2(p.forward)), order, Vector3.Slerp);
+        }
+        else
+        {
+            _forwardCurve = null;
+        }
+        if (_useUpOrientaion)
+        {
+            _upCurve = BSplineCurve<Vector3>.UniformOpen(points.Zip(transforms, (p, t) => t.Item2(p.up)), order, Vector3.Slerp);
+        }
+        else
+        {
+            _upCurve = null;
+        }
+    }
+
+
     public Vector3 EvalPoint(float t)
     {
         return _pathCurve.Eval(t);

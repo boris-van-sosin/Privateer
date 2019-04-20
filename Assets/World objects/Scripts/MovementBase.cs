@@ -6,7 +6,29 @@ public abstract class MovementBase : MonoBehaviour
 {
     protected virtual void Update()
     {
-        ApplyMovement();
+        if (_currManeuver != null)
+        {
+            _currManeuver.Advance(Time.deltaTime);
+            if (_currManeuver.Finished)
+            {
+                _currManeuver = null;
+            }
+        }
+        else
+        {
+            ApplyMovement();
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_currManeuver != null)
+        {
+            foreach (System.Tuple<Vector3, Vector3> sample in _currManeuver.DebugCurve())
+            {
+                Gizmos.DrawLine(sample.Item1, sample.Item2);
+            }
+        }
     }
 
     protected virtual void ApplyMovement()
@@ -132,6 +154,12 @@ public abstract class MovementBase : MonoBehaviour
         transform.rotation = deltaRot * transform.rotation;
     }
 
+    public void StartManeuver(Maneuver m)
+    {
+        _currManeuver = m;
+        _currManeuver.Start(this);
+    }
+
     public bool UseTargetSpeed { get; set; }
     public virtual float TargetSpeed
     {
@@ -166,4 +194,6 @@ public abstract class MovementBase : MonoBehaviour
     protected bool _nextBrake;
     protected bool _nextTurnLeft;
     protected bool _nextTurnRight;
+
+    private Maneuver _currManeuver;
 }

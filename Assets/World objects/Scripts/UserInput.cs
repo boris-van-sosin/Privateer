@@ -111,6 +111,14 @@ public class UserInput : MonoBehaviour
                 ControlledShip.DisconnectHarpaxTowing();
             }
         }
+        else if (Input.GetKeyDown(_keyMapping[UserOperation.StrikeCraftLaunch]))
+        {
+            CarrierBehavior c;
+            if ((c = ControlledShip.GetComponent<CarrierBehavior>()) != null)
+            {
+                c.LaunchDbg();
+            }
+        }
         foreach (Tuple<UserOperation, int> cg in _controlGroupKeys)
         {
             if (Input.GetKeyDown(_keyMapping[cg.Item1]))
@@ -140,7 +148,7 @@ public class UserInput : MonoBehaviour
 
     public enum UserOperation
     {
-        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, GrapplingTool,
+        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, GrapplingTool, StrikeCraftLaunch,
         ControlGroup1,
         ControlGroup2,
         ControlGroup3,
@@ -163,6 +171,7 @@ public class UserInput : MonoBehaviour
         { UserOperation.MagneticClamps, KeyCode.F },
         { UserOperation.Shields, KeyCode.G },
         { UserOperation.GrapplingTool, KeyCode.H },
+        { UserOperation.StrikeCraftLaunch, KeyCode.L },
         { UserOperation.ControlGroup1, KeyCode.Alpha1 },
         { UserOperation.ControlGroup2, KeyCode.Alpha2 },
         { UserOperation.ControlGroup3, KeyCode.Alpha3 },

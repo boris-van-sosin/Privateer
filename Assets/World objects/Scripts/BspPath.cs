@@ -31,6 +31,18 @@ public class BspPath : MonoBehaviour
         }
     }
 
+    public BspPathLight ExractLightweightPath(IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> tr)
+    {
+        if (UseUpOrientaion)
+        {
+            return new BspPathLight(Points, 3, UseForwardOrientaion, tr);
+        }
+        else
+        {
+            return new BspPathLight(Points, 3, UseForwardOrientaion, transform.up, tr);
+        }
+    }
+
     public BspPathLight ExractLightweightPath()
     {
         if (UseUpOrientaion)
@@ -73,4 +85,5 @@ public class BspPath : MonoBehaviour
     public Transform[] Points;
     public bool UseForwardOrientaion;
     public bool UseUpOrientaion;
+    public string Key;
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 [RequireComponent(typeof(ShipBase))]
 public class CarrierBehavior : MonoBehaviour
@@ -9,11 +10,15 @@ public class CarrierBehavior : MonoBehaviour
     private void Start()
     {
         _ship = GetComponent<ShipBase>();
+        _inLaunch = false;
     }
 
     public void LaunchDbg()
     {
-        StartCoroutine(LaunchSequence("Fed Fighter"));
+        if (!_inLaunch)
+        {
+            StartCoroutine(LaunchSequence("Fed Fighter"));
+        }
     }
 
     private IEnumerator LaunchSequence(string strikeCraftKey)
@@ -23,6 +28,7 @@ public class CarrierBehavior : MonoBehaviour
             yield break;
         }
 
+        _inLaunch = true;
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
 
         formation.Owner = _ship.Owner;
@@ -37,6 +43,7 @@ public class CarrierBehavior : MonoBehaviour
             s.transform.rotation = _ship.transform.rotation;
             s.AddToFormation(formation);
             s.Activate();
+            s.StartManeuver(CreateLaunchManeuver(LaunchTransform[i]));
             formation.MaxSpeed = s.MaxSpeed * 1.1f;
             formation.TurnRate = s.TurnRate * 0.5f;
             ++i;
@@ -47,10 +54,49 @@ public class CarrierBehavior : MonoBehaviour
             }
         }
         yield return null;
+        _inLaunch = false;
     }
+
+    private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr)
+    {
+        int numPathPts = rawPath.Points.Length;
+        Matrix4x4 ptTransform = Matrix4x4.TRS(currLaunchTr.position, currLaunchTr.rotation, Vector3.one);
+        //Matrix4x4 dirTransform = Matrix4x4.TRS(Vector3.zero, currLaunchTr.rotation, Vector3.one);
+        for (int i = 0; i < numPathPts; i++)
+        {
+            if (i < numPathPts - 2)
+            {
+                yield return
+                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => ptTransform.MultiplyPoint3x4(p),
+                        v => ptTransform.MultiplyVector(v));
+            }
+            else
+            {
+                yield return
+                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => ClearY(ptTransform.MultiplyPoint3x4(p)),
+                        v => ptTransform.MultiplyVector(v));
+            }
+        }
+    }
+
+    private Maneuver CreateLaunchManeuver(Transform currLaunchTr)
+    {
+        BspPath launchPath = ObjectFactory.GetPath("Strike craft carrier launch 1");
+        Maneuver.BsplinePathSegmnet seg = new Maneuver.BsplinePathSegmnet()
+        {
+            AccelerationBehavior = new Maneuver.SelfAccelerate() { Accelerate = true },
+            Path = launchPath.ExractLightweightPath(PathFixes(launchPath, currLaunchTr))
+        };
+        return new Maneuver(seg);
+    }
+
+    private Vector3 ClearY(Vector3 a) => new Vector3(a.x, 0, a.z);
 
     public Transform[] LaunchTransform;
     public Transform[] RecoveryTransform;
 
     private ShipBase _ship;
+    private bool _inLaunch;
 }

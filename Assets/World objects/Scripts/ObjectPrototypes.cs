@@ -254,6 +254,29 @@ public class ObjectPrototypes : MonoBehaviour
         }
     }
 
+    public BspPath GetPath(string key)
+    {
+        if (!_paths.TryGetValue(key, out BspPath res))
+        {
+            for (int i = 0; i < Paths.Length; i++)
+            {
+                _paths[Paths[i].Key] = Paths[i];
+            }
+            if (_paths.TryGetValue(key, out res))
+            {
+                return res;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return res;
+        }
+    }
+
     public Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         Canvas boardibfCanvas = Instantiate(BoardingStatusCanvas);
@@ -282,6 +305,7 @@ public class ObjectPrototypes : MonoBehaviour
     public TurretBase[] TurretPrototypes;
     public StatusTopLevel StatusPanelPrototype;
     public WeaponCtrlCfgLine WeaponCtrlCfgLinePrototype;
+    public BspPath[] Paths;
 
     public StatusSubsystem SubsystemStatusSprite;
 
@@ -298,4 +322,5 @@ public class ObjectPrototypes : MonoBehaviour
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
     private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
+    private Dictionary<string, BspPath> _paths = new Dictionary<string, BspPath>();
 }

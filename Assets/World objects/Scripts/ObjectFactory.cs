@@ -366,6 +366,11 @@ public static class ObjectFactory
         return _prototypes.ShipStatusPanelCamera;
     }
 
+    public static BspPath GetPath(string key)
+    {
+        return _prototypes.GetPath(key);
+    }
+
     public static int AllTargetableLayerMask { get { return _allTargetableLayerMask; } }
     public static int AllShipsLayerMask { get { return _allShipsLayerMask; } }
     public static int AllStikeCraftLayerMask { get { return _allStrikeCraftLayerMask; } }
