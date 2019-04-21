@@ -206,6 +206,30 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         return true;
     }
 
+    public override void StartManeuver(Maneuver m)
+    {
+        _rigidBody.velocity = Vector3.zero;
+        base.StartManeuver(m);
+        m.OnManeuverFinish += delegate (Maneuver mm)
+        {
+            _rigidBody.velocity = mm.Velocity * 2f;
+            float dirDot = Vector3.Dot(mm.Velocity, transform.up);
+            if (dirDot > 0)
+            {
+                _movementDirection = ShipDirection.Forward;
+            }
+            else if (dirDot < 0)
+            {
+                _movementDirection = ShipDirection.Reverse;
+            }
+            else
+            {
+                _movementDirection = ShipDirection.Stopped;
+            }
+            _speed = mm.Velocity.magnitude;
+        };
+    }
+
     public bool ShipDisabled { get; protected set; }
     public bool ShipImmobilized { get; protected set; }
     public virtual bool ShipControllable { get { return ShipActiveInCombat && !(ShipImmobilized); } }

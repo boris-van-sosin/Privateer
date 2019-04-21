@@ -154,7 +154,7 @@ public abstract class MovementBase : MonoBehaviour
         transform.rotation = deltaRot * transform.rotation;
     }
 
-    public void StartManeuver(Maneuver m)
+    public virtual void StartManeuver(Maneuver m)
     {
         _currManeuver = m;
         _currManeuver.Start(this);

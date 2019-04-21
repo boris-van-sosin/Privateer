@@ -20,8 +20,6 @@ public class Maneuver
         _ship = s;
         _currSeg = 0;
         StartSegment();
-        _shipRB = _ship.GetComponent<Rigidbody>();
-        _shipRB.AddForce(-_shipRB.velocity, ForceMode.VelocityChange);
     }
 
     public IEnumerable<Tuple<Vector3, Vector3>> DebugCurve()
@@ -96,7 +94,11 @@ public class Maneuver
     private void Finish()
     {
         Finished = true;
-        _shipRB.AddForce(_currVelocity, ForceMode.VelocityChange);
+        if (OnManeuverFinish != null)
+        {
+            OnManeuverFinish(this);
+            OnManeuverFinish = null;
+        }
     }
 
     public void Advance(float timeInterval)
@@ -130,7 +132,7 @@ public class Maneuver
                 }
             }
             _ship.transform.position += velocity * timeInterval;
-            _currVelocity = velocity;
+            Velocity = velocity;
             if (conditionSeg.Condition(_ship))
             {
                 _toNextSeg = true;
@@ -138,7 +140,8 @@ public class Maneuver
         }
         else if (activeSeg is BsplinePathSegmnet pathSeg)
         {
-            float paramSpeed = pathSeg.Path.EvalPointAndVelocity(_t).Item2.magnitude;
+            Tuple<Vector3, Vector3> pathVelocity = pathSeg.Path.EvalPointAndVelocity(_t);
+            float paramSpeed = pathVelocity.Item2.magnitude;
             float currSpeed = velocity.magnitude;
             float targetSpeed = currSpeed;
             Vector3 newVelocity = velocity;
@@ -163,10 +166,34 @@ public class Maneuver
                 targetSpeed = Mathf.Lerp(_segStartSpeed, targetSpeed, _t);
             }
 
-            _t = Mathf.Min(_t + (targetSpeed / paramSpeed), 1f);
-            Tuple<Vector3, Vector3, Vector3> nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
+            Tuple<Vector3, Vector3, Vector3> nextPos;
+            float nextT = _t + (targetSpeed / paramSpeed);
+            float tOvershoot = nextT - 1f;
+            if (tOvershoot > 0f)
+            {
+                tOvershoot = nextT - 1f;
+                _t = 1f;
+                nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
+                nextPos = new Tuple<Vector3, Vector3, Vector3>(
+                    nextPos.Item1 + pathVelocity.Item2 * tOvershoot,
+                    nextPos.Item2,
+                    nextPos.Item3);
+            }
+            else
+            {
+                _t = nextT;
+                nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
+            }
+
             _ship.transform.SetPositionAndRotation(nextPos.Item1, Quaternion.LookRotation(nextPos.Item3, nextPos.Item2));
-            _currVelocity = nextPos.Item2 * targetSpeed;
+            if (tOvershoot > 0)
+            {
+                Velocity = nextPos.Item2 * (targetSpeed + tOvershoot / paramSpeed);
+            }
+            else
+            {
+                Velocity = nextPos.Item2 * targetSpeed;
+            }
             if (Mathf.Approximately(_t, 1f))
             {
                 _toNextSeg = true;
@@ -184,12 +211,16 @@ public class Maneuver
 
     public bool Finished { get; private set; }
 
+    public Vector3 Velocity { get; private set; }
+
+    public delegate void ManeuverFinishedDlg(Maneuver m);
+
+    public event ManeuverFinishedDlg OnManeuverFinish;
+
     private MovementBase _ship;
-    private Rigidbody _shipRB;
     private int _currSeg;
     private float _t;
     private Vector3 _segStartVelocity;
-    private Vector3 _currVelocity;
     private float _segStartSpeed;
     private bool _toNextSeg;
 }
