@@ -190,6 +190,7 @@ public static class ObjectFactory
                     gt.MaxRange = wpd.MaxRange;
                     gt.MuzzleVelocity = wpd.MuzzleVelocity;
                     gt.FiringInterval = wpd.FiringInterval;
+                    gt.Inaccuracy = wpd.MaxSpread;
                     gt.EnergyToFire = wpd.EnergyToFire;
                     gt.HeatToFire = wpd.HeatToFire;
                 }
@@ -201,6 +202,7 @@ public static class ObjectFactory
                     bt.MaxRange = wbd.MaxRange;
                     bt.FiringInterval = wbd.FiringInterval;
                     bt.BeamDuration = wbd.BeamDuration;
+                    bt.Inaccuracy = 0f;
                     bt.EnergyToFire = wbd.EnergyToFire;
                     bt.HeatToFire = wbd.HeatToFire;
                 }
@@ -212,6 +214,7 @@ public static class ObjectFactory
                     cbt.MaxRange = wbd.MaxRange;
                     cbt.FiringInterval = wbd.FiringInterval;
                     cbt.BeamDuration = wbd.BeamDuration;
+                    cbt.Inaccuracy = 0f;
                     cbt.EnergyToFire = wbd.EnergyToFire;
                     cbt.HeatToFire = wbd.HeatToFire;
                 }
@@ -223,6 +226,7 @@ public static class ObjectFactory
                     st.MaxRange = wpd.MaxRange;
                     st.MuzzleVelocity = wpd.MuzzleVelocity;
                     st.FiringInterval = wpd.FiringInterval;
+                    st.Inaccuracy = wpd.MaxSpread;
                     st.EnergyToFire = wpd.EnergyToFire;
                     st.HeatToFire = wpd.HeatToFire;
                 }
@@ -801,6 +805,7 @@ public static class ObjectFactory
         public float MaxRange;
         public float MuzzleVelocity;
         public float FiringInterval;
+        public float MaxSpread;
         public float ProjectileScale;
         public int EnergyToFire;
         public int HeatToFire;
@@ -818,6 +823,7 @@ public static class ObjectFactory
                     MaxRange = float.Parse(elements[i++].Trim()),
                     MuzzleVelocity = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
+                    MaxSpread = float.Parse(elements[i++].Trim()),
                     ProjectileScale = float.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Torpedo : MonoBehaviour, ITargetableEntity
 {
@@ -8,11 +9,20 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
 	void Start ()
     {
         _exhaustPatricleSystem = GetComponentInChildren<ParticleSystem>();
+        _trail = GetComponent<TrailRenderer>();
         _collider = GetComponent<Collider>();
         WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
         _targetReached = false;
         Targetable = true;
         Origin = transform.position;
+        _actualTurnRate = 0f;
+        if (_trail)
+        {
+            _trail.enabled = false;
+        }
+        TargetShip = null;
+        StartCoroutine(TargetAcquirePulse());
+        StartCoroutine(TargetAdjustPulse());
     }
 
     void Awake()
@@ -42,6 +52,11 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                 {
                     _exhaustPatricleSystem.Play();
                 }
+                if (_trail)
+                {
+                    _trail.enabled = true;
+                }
+
             }
             if (_collider != null && !_collider.enabled && _distanceTraveled >= OriginShip.ShipWidth)
             {
@@ -50,6 +65,10 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         }
         else
         {
+            if (_actualTurnRate < TurnRate)
+            {
+                _actualTurnRate = Mathf.Min(_actualTurnRate + TurnRateIncrease * Time.deltaTime, TurnRate);
+            }
             Vector3 vecToTarget = (Target - transform.position);
             if (transform.position.y > _altEpsilon || transform.position.y < -_altEpsilon)
             {
@@ -69,23 +88,10 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                 Vector3 rotAxis;
                 float rotAngle;
                 rotToTarget.ToAngleAxis(out rotAngle, out rotAxis);
-                Quaternion actualRot = Quaternion.AngleAxis(Mathf.Min(rotAngle, Time.deltaTime * TurnRate), rotAxis);
+                Quaternion actualRot = Quaternion.AngleAxis(Mathf.Min(rotAngle, Time.deltaTime * _actualTurnRate), rotAxis);
                 //Debug.Log(string.Format("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles));
                 transform.rotation = actualRot * transform.rotation;
             }
-
-            /*if (transform.position.y > _altEpsilon)
-            {
-                Quaternion rotDown = Quaternion.AngleAxis(-TurnRate, transform.right);
-                float factor = Mathf.Exp(-transform.position.y);
-                //rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
-            }
-            else if (transform.position.y < - _altEpsilon)
-            {
-                Quaternion rotDown = Quaternion.AngleAxis(TurnRate, transform.right);
-                float factor = Mathf.Exp(transform.position.y);
-                //rotToTarget = Quaternion.Lerp(rotDown, rotToTarget, factor);
-            }*/
 
             // Accelerate:
             if (Speed < MaxSpeed)
@@ -142,6 +148,54 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         Targetable = false;
     }
 
+    private IEnumerator TargetAcquirePulse()
+    {
+        bool first = true;
+        while (TargetShip == null)
+        {
+            Collider[] targets =
+                Physics.OverlapSphere(
+                    (first && IsTracking) ? Target : transform.position,
+                    TargetAcquisitionRadius,
+                    ObjectFactory.AllShipsNoStikeCraftLayerMask);
+            if (targets != null)
+            {
+                foreach (Collider c in targets)
+                {
+                    ShipBase currS = ShipBase.FromCollider(targets.First());
+                    if (OriginShip.Owner.IsEnemy(currS.Owner))
+                    {
+                        TargetShip = currS;
+                        Target = TargetShip.transform.position;
+                        break;
+                    }
+                }
+            }
+            first = false;
+            yield return new WaitForSeconds(1f);
+        }
+        yield return null;
+    }
+
+    private IEnumerator TargetAdjustPulse()
+    {
+        while (true)
+        {
+            if (TargetShip != null)
+            {
+                Target = TargetShip.transform.position;
+            }
+            if (IsTracking)
+            {
+                yield return new WaitForSeconds(1f);
+            }
+            else
+            {
+                yield return new WaitForSeconds(10f);
+            }
+        }
+    }
+
     // TargetableEntity properties:
     public Vector3 EntityLocation { get { return transform.position; } }
     public bool Targetable { get; private set; }
@@ -150,6 +204,8 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     public float MaxSpeed;
     public float ColdPhaseSpeed;
     public float TurnRate;
+    public float TurnRateIncrease;
+    private float _actualTurnRate;
     public float Range;
     public float StepSize;
     public float ColdLaunchDist;
@@ -162,10 +218,14 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     private bool _inBurnPhase = false;
     public Warhead ProjectileWarhead { get; set; }
     public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
-    public Vector3 Target;// { get; set; }
+    public Vector3 Target;
+    public float TargetAcquisitionRadius;
+    public ShipBase TargetShip { get; set; }
+    public bool IsTracking { get; set; }
     public Vector3 ColdLaunchVec { get; set; }
     public float Speed { get; set; }
 
     private ParticleSystem _exhaustPatricleSystem;
+    private TrailRenderer _trail;
     private Collider _collider;
 }

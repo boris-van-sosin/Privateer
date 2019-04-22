@@ -106,7 +106,17 @@ public abstract class DirectionalTurret : TurretBase
 
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
     {
-        return vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        Vector3 preciseVec = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        if (Inaccuracy <= 0f)
+        {
+            return preciseVec;
+        }
+        else
+        {
+            float currInaccuracy = UnityEngine.Random.Range(-Inaccuracy, Inaccuracy);
+            Quaternion q = Quaternion.AngleAxis(currInaccuracy, _containingShip.transform.forward);
+            return q * preciseVec;
+        }
     }
 
     protected override ITargetableEntity AcquireTarget()
@@ -139,5 +149,13 @@ public abstract class DirectionalTurret : TurretBase
         return foundTarget;
     }
 
+    public float Inaccuracy
+    {
+        get => _inaccuracy;
+        set => _inaccuracy = Mathf.Clamp(value, 0f, 45f);
+    }
+
+
+    private float _inaccuracy;
     private float _rotationDir;
 }

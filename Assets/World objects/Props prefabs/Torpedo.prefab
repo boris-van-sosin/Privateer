@@ -14237,11 +14237,13 @@ MonoBehaviour:
   MaxSpeed: 2.5
   ColdPhaseSpeed: 1.5
   TurnRate: 50
+  TurnRateIncrease: 25
   Range: 80
   StepSize: 5
   ColdLaunchDist: 1.5
   OriginShip: {fileID: 0}
   Target: {x: 0, y: 0, z: 0}
+  TargetAcquisitionRadius: 1
 --- !u!136 &136511100542383514
 CapsuleCollider:
   m_ObjectHideFlags: 0
