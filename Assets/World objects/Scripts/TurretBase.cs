@@ -20,6 +20,14 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             {
                 _flippedX = true;
             }
+            if (_maxRotation > _minRotation)
+            {
+                _rotationSpan = _maxRotation - _minRotation;
+            }
+            else
+            {
+                _rotationSpan = 360 - _maxRotation + _minRotation;
+            }
         }
         else
         {
@@ -170,7 +178,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
         if (Mode == TurretMode.Auto)
         {
-            if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > 2.0f) //TODO: a different rule for torpedo tubes
+            if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > MaxAngleToTarget) //TODO: a different rule for torpedo tubes
             {
                 if (!(_targetShip is Torpedo)) //TODO: needs better solution
                     return false;
@@ -498,7 +506,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected bool _initialized = false; // ugly hack
 
     // Rotation behavior variables:
-    protected float _minRotation, _maxRotation;
+    protected float _minRotation, _maxRotation, _rotationSpan;
     protected Tuple<float, float>[] _rotationAllowedRanges;
     private bool _fixed = false;
     public float RotationSpeed;
@@ -639,6 +647,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             _status = value;
         }
     }
+
+    protected virtual float MaxAngleToTarget => 2.0f;
 
     public float GetMaxRange { get { return MaxRange; } }
 
