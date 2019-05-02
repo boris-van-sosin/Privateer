@@ -61,6 +61,24 @@ public class StatusTopLevel : MonoBehaviour
                     StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(currTurret);
                     compStatus.transform.SetParent(panelRect);
                     compStatus.transform.localPosition = new Vector2(hpPos.x * panelRect.rect.width + panelRect.rect.xMin , hpPos.y * panelRect.rect.height + panelRect.rect.yMin);
+                    switch (currTurret.TurretSize)
+                    {
+                        case ObjectFactory.WeaponSize.Light:
+                            break;
+                        case ObjectFactory.WeaponSize.Medium:
+                            compStatus.transform.localScale = compStatus.transform.localScale * 1.25f;
+                            break;
+                        case ObjectFactory.WeaponSize.Heavy:
+                            compStatus.transform.localScale = compStatus.transform.localScale * 1.5f;
+                            break;
+                        case ObjectFactory.WeaponSize.TorpedoTube:
+                            compStatus.transform.localScale = compStatus.transform.localScale * 1.5f;
+                            break;
+                        case ObjectFactory.WeaponSize.StrikeCraft:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 

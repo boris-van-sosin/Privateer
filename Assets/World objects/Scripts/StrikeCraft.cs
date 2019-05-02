@@ -61,6 +61,14 @@ public class StrikeCraft : ShipBase
         }
     }
 
+    public override TargetableEntityInfo TargetableBy
+    {
+        get
+        {
+            return TargetableEntityInfo.Flak;
+        }
+    }
+
     public StrikeCraftFormation ContainingFormation { get; private set; }
 
     public void AddToFormation(StrikeCraftFormation f)

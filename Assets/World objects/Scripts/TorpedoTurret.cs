@@ -70,6 +70,11 @@ public class TorpedoTurret : TurretBase
         //Debug.DrawLine(transform.position + (LaunchVector*0.01f), transform.position + (LaunchVector * 0.01f) - (transform.forward * 0.1f), Color.cyan, Time.deltaTime);
     }
 
+    protected override bool IsAimedAtTarget()
+    {
+        return _isLegalAngle;
+    }
+
     protected override void FireInner(Vector3 firingVector)
     {
         _torpedoTarget = Muzzles[_nextBarrel].position + firingVector;
@@ -146,6 +151,8 @@ public class TorpedoTurret : TurretBase
         }
         yield return null;
     }
+
+    public override string SpriteKey { get { return "Torpedo tube"; } }
 
     private float MinTargetAngle { get { return _minRotation; } }
     private float MaxTargetAngle { get { return _maxRotation; } }

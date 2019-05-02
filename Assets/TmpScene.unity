@@ -952,7 +952,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.00004
+      value: 99.99999
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -2662,6 +2662,7 @@ MonoBehaviour:
   - {fileID: 114298267387497442, guid: 0f51071563df82746bb0d023195a867f, type: 3}
   StrikeCraftPrototypes:
   - {fileID: 114275050688803318, guid: 68ee3588e1f7eea43b7bccae32b105b2, type: 3}
+  - {fileID: 4852472298515156180, guid: ed759e12a878bc34e8d9d0f13dde2ff6, type: 3}
   StrikeCraftFormationPrototypes:
   - {fileID: 1647051583425452302, guid: 7ef6728918f07f149b59a0b301b7f597, type: 3}
   TurretPrototypes:
@@ -2734,6 +2735,7 @@ MonoBehaviour:
   - {fileID: 114071742926028826, guid: 168a20a7e442d784db06192c86836d6b, type: 3}
   - {fileID: 114985430129715974, guid: 2283caa0c8064df40b398b409b913e8c, type: 3}
   - {fileID: 114965264039824604, guid: 5658713b448e79344abdb1f4dea7ece5, type: 3}
+  - {fileID: 3299613814892315986, guid: b5949d1fa676c7f4e92ba333f4a2851f, type: 3}
   StatusPanelPrototype: {fileID: 114422423568609670, guid: d7c4ee0ec74e1884784dc0eae076eb44,
     type: 3}
   WeaponCtrlCfgLinePrototype: {fileID: 114809578661190334, guid: 234f89d7609c6ac47a7448da4c991b57,
@@ -2748,13 +2750,14 @@ MonoBehaviour:
   - Shield generator
   - Power plant
   - Damage control
+  - Torpedo tube
   Sprites:
   - {fileID: 21300000, guid: 463fd345a3df81b459d4421fe7e69bd6, type: 3}
   - {fileID: 21300000, guid: 55ede17e1473e9e498d530a497a0a654, type: 3}
   - {fileID: 21300000, guid: d649645e38ab68741a3cdd2e7a1a565c, type: 3}
   - {fileID: 21300000, guid: ada6652268623aa45afd08547e45161e, type: 3}
   - {fileID: 21300000, guid: f9db9d8ec1911c748962fa498b4a5c7f, type: 3}
-  - {fileID: 21300000, guid: ae8287df7bb9cc543994df20914ce3cf, type: 3}
+  - {fileID: 21300000, guid: 0db51c84f8b0c5f439741c80a6877f0a, type: 3}
   BoardingStatusCanvas: {fileID: 223708177522948386, guid: d7732c5d13a81d441b7d04c25a00644b,
     type: 3}
   ShipStatusPanelCamera: {fileID: 1958525745}

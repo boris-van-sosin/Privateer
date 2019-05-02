@@ -308,6 +308,11 @@ public static class ObjectFactory
                 TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.FighterAutogun, WeaponType.FighterAutoannon);
                 s.PlaceTurret(hp, t);
             }
+            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.BomberAutogun))
+            {
+                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.BomberAutogun, WeaponType.FighterAutoannon);
+                s.PlaceTurret(hp, t);
+            }
         }
         s.gameObject.AddComponent<StrikeCraftAIController>();
         return s;
@@ -468,6 +473,7 @@ public static class ObjectFactory
                 return new Tuple<WeaponSize, WeaponType>(WeaponSize.Heavy, w);
             case ComponentSlotType.FighterCannon:
             case ComponentSlotType.FighterAutogun:
+            case ComponentSlotType.BomberAutogun:
                 return new Tuple<WeaponSize, WeaponType>(WeaponSize.StrikeCraft, w);
             default:
                 return null;

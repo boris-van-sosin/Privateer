@@ -178,9 +178,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
         if (Mode == TurretMode.Auto)
         {
-            if (CanRotate && Mathf.Abs(AngleToTargetShip - CurrAngle) > MaxAngleToTarget) //TODO: a different rule for torpedo tubes
+            if (CanRotate && !IsAimedAtTarget())
             {
-                if (!(_targetShip is Torpedo)) //TODO: needs better solution
+                if (!TargetableEntityUtils.IsTargetable(_targetShip.TargetableBy, TargetableEntityInfo.AntiTorpedo))
                     return false;
             }
             Vector3 origin = Muzzles[_nextBarrel].position; //TODO: a different ray computation for torpedo tubes
@@ -201,11 +201,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                     closestHit = i;
                 }
             }
-            if (closestHit >= 0 && _targetShip == Ship.FromCollider(hits[closestHit].collider))
+            if (closestHit >= 0 && _targetShip.Equals(ShipBase.FromCollider(hits[closestHit].collider)))
             {
                 return true;
             }
-            else if (!(_targetShip is Torpedo) && !(_targetShip is StrikeCraft)) //TODO: needs better solution
+            else if (!TargetableEntityUtils.IsTargetable(_targetShip.TargetableBy, TargetableEntityInfo.Flak))
             {
                 return false;
             }
@@ -253,6 +253,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
         }
+    }
+
+    protected virtual bool IsAimedAtTarget()
+    {
+        return Mathf.Abs(AngleToTargetShip - CurrAngle) <= MaxAngleToTarget;
     }
 
     public bool HasGrapplingTool()
@@ -652,7 +657,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     public float GetMaxRange { get { return MaxRange; } }
 
-    public string SpriteKey { get { return "Turret"; } }
+    public virtual string SpriteKey { get { return "Turret"; } }
 
     public IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 

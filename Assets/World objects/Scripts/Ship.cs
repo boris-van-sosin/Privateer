@@ -998,6 +998,13 @@ public class Ship : ShipBase
     }
 
     public override bool Targetable { get { return ShipActiveInCombat; } }
+    public override TargetableEntityInfo TargetableBy
+    {
+        get
+        {
+            return TargetableEntityInfo.AntiShip | TargetableEntityInfo.Torpedo;
+        }
+    }
 
     // Fields
     public enum ShipSection { Fore, Aft, Left, Right, Center, Hidden };

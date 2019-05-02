@@ -61,6 +61,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.PlaceComponent(Ship.ShipSection.Fore, ShieldGenerator.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Fore, CapacitorBank.DefaultComponent(s));
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
@@ -76,7 +77,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             }
             else
             {
-                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);
+                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.HVGun);
             }
             //TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
             GunTurret gt = t as GunTurret;
@@ -88,7 +89,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 }
                 else
                 {
-                    gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
+                    gt.AmmoType = ObjectFactory.AmmoType.KineticPenetrator;
                 }
                 t.InstalledTurretMod = TurretMod.Harpax;
             }
