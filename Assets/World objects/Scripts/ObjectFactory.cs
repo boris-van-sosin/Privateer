@@ -266,7 +266,7 @@ public static class ObjectFactory
             case WeaponType.TorpedoTube:
                 {
                     WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
-                    TorpedoTurret tt = t as TorpedoTurret;
+                    BomberTorpedoLauncher tt = t as BomberTorpedoLauncher;
                     tt.FiringInterval = tordpedoData.FiringInterval;
                 }
                 break;
@@ -311,6 +311,11 @@ public static class ObjectFactory
             else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.BomberAutogun))
             {
                 TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.BomberAutogun, WeaponType.FighterAutoannon);
+                s.PlaceTurret(hp, t);
+            }
+            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.BomberTorpedoTube))
+            {
+                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.BomberTorpedoTube, WeaponType.TorpedoTube);
                 s.PlaceTurret(hp, t);
             }
         }

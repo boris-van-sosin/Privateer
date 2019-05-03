@@ -22,7 +22,7 @@ public class TorpedoTurret : TurretBase
         _torpedoTubeDoorsAnim = GetComponent<Animator>();
         Tuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
-        TorpedoesInSpread = launchData.Item1;
+        _torpedoesInSpread = launchData.Item1;
     }
 
     protected override void SetDefaultAngle()
@@ -139,7 +139,7 @@ public class TorpedoTurret : TurretBase
     private IEnumerator LaunchSpread()
     {
         yield return new WaitUntil(() => TorpedoDoorsOpen);
-        for (int i = 0; i < TorpedoesInSpread; ++i)
+        for (int i = 0; i < _torpedoesInSpread; ++i)
         {
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
             Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
@@ -160,7 +160,7 @@ public class TorpedoTurret : TurretBase
 
     protected override float MaxAngleToTarget => _rotationSpan;
 
-    public int TorpedoesInSpread;
+    private int _torpedoesInSpread;
     public ObjectFactory.TorpedoType LoadedTorpedoType;
     private Vector3 _launchDirection;
     private Vector3 LaunchVector { get { return transform.TransformDirection(_launchDirection); } }

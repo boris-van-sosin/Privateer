@@ -110,7 +110,7 @@ public class Projectile : MonoBehaviour
             Torpedo t;
             if ((s = ShipBase.FromCollider(c)) != null)
             {
-                Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", s, pos, blastRadius));
+                //Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", s, pos, blastRadius));
                 if (s != OriginShip)
                 {
                     Vector3 hitLocation = c.ClosestPoint(pos);
@@ -120,7 +120,7 @@ public class Projectile : MonoBehaviour
             }
             else if ((t = c.GetComponent<Torpedo>())!=null)
             {
-                Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", t, pos, blastRadius));
+                //Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", t, pos, blastRadius));
                 validHit = true;
                 Destroy(t.gameObject); //TODO: replace with damage calculation
             }

@@ -11,7 +11,7 @@ public enum ComponentSlotType
     MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
     LargeBarbette, LargeTurret,
     TorpedoTube, SpecialWeapon,
-    FighterCannon, FighterAutogun, BomberAutogun,
+    FighterCannon, FighterAutogun, BomberAutogun, BomberTorpedoTube,
     // Boarding tool
     BoardingTool,
     // Boarding / anti-boarding forces

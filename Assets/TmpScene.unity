@@ -952,7 +952,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 99.99999
+      value: 100.00033
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -2736,6 +2736,7 @@ MonoBehaviour:
   - {fileID: 114985430129715974, guid: 2283caa0c8064df40b398b409b913e8c, type: 3}
   - {fileID: 114965264039824604, guid: 5658713b448e79344abdb1f4dea7ece5, type: 3}
   - {fileID: 3299613814892315986, guid: b5949d1fa676c7f4e92ba333f4a2851f, type: 3}
+  - {fileID: 226919434485579225, guid: a527491392f561147ae212bf4501bdd2, type: 3}
   StatusPanelPrototype: {fileID: 114422423568609670, guid: d7c4ee0ec74e1884784dc0eae076eb44,
     type: 3}
   WeaponCtrlCfgLinePrototype: {fileID: 114809578661190334, guid: 234f89d7609c6ac47a7448da4c991b57,

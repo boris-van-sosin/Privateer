@@ -561,7 +561,7 @@ public class Ship : ShipBase
     public override void TakeHit(Warhead w, Vector3 location)
     {
         ShipSection sec = GetHitSection(location);
-        Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
+        //Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
         LastInCombat = Time.time;
         // if shields are present, take shield damage
         if (!Combat.DamageShields(w.ShieldDamage, _shieldComponents))

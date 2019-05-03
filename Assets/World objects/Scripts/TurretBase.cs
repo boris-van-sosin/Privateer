@@ -6,7 +6,6 @@ using System;
 
 public abstract class TurretBase : MonoBehaviour, ITurret
 {
-
     // Use this for initialization
     protected virtual void Start()
     {
@@ -35,9 +34,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             _maxRotation = 0.0f;
             _deadZoneAngleStrings = null;
         }
+        _containingShip = FindContainingShip(transform.parent);
         ParseDeadZones();
         ParseMuzzles();
-        _containingShip = FindContainingShip(transform.parent);
         SetDefaultAngle();
         _initialized = true;
     }
