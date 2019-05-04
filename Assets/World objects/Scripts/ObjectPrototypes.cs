@@ -224,6 +224,12 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
+    public StatusProgressBar CreateProgressBarSprite()
+    {
+        StatusProgressBar res = Instantiate(SubsystemProgressRingTurretPrototype);
+        return res;
+    }
+
     public StatusSubsystem CreateStatusSprite()
     {
         StatusSubsystem res = Instantiate(SubsystemStatusSprite);
@@ -308,6 +314,7 @@ public class ObjectPrototypes : MonoBehaviour
     public BspPath[] Paths;
 
     public StatusSubsystem SubsystemStatusSprite;
+    public StatusProgressBar SubsystemProgressRingTurretPrototype;
 
     public string[] SpriteKeys;
     public Sprite[] Sprites;

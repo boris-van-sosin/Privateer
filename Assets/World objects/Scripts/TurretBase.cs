@@ -37,7 +37,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         _containingShip = FindContainingShip(transform.parent);
         ParseDeadZones();
         ParseMuzzles();
+        AlternatingFire = DefaultAlternatingFire;
         SetDefaultAngle();
+        LastFire = 0f;
         _initialized = true;
     }
 
@@ -85,7 +87,14 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         List<Tuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
         Barrels = new Transform[barrelsFound.Count];
         Muzzles = new Transform[barrelsFound.Count];
-        _actualFiringInterval = FiringInterval / Barrels.Length;
+        if (AlternatingFire)
+        {
+            ActualFiringInterval = FiringInterval / Barrels.Length;
+        }
+        else
+        {
+            ActualFiringInterval = FiringInterval;
+        }
         MuzzleFx = new ParticleSystem[barrelsFound.Count];
         for (int i = 0; i < barrelsFound.Count; ++i)
         {
@@ -154,6 +163,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (!ReadyToFire())
         {
+            //Debug.Log(string.Format("{0} on {1} not ready to fire", this, _containingShip));
             return false;
         }
         if (_status == ComponentStatus.KnockedOut || _status == ComponentStatus.Destroyed)
@@ -215,7 +225,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected virtual bool ReadyToFire()
     {
         float currTime = Time.time;
-        return currTime - _lastFire > _actualFiringInterval;
+        return currTime - LastFire > ActualFiringInterval;
     }
 
     protected abstract void FireInner(Vector3 firingVector);
@@ -233,24 +243,56 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
-        Vector3 vecToTarget = target - Muzzles[_nextBarrel].position;
-        if (!MuzzleOppositeDirCheck(Muzzles[_nextBarrel], vecToTarget))
+        if (AlternatingFire)
         {
-            return;
+            bool fired = FireFromBarrel(target, _nextBarrel);
+            if (fired)
+            {
+                LastFire = Time.time;
+                _containingShip.NotifyInComabt();
+                if (Muzzles.Length > 1)
+                {
+                    _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
+                }
+            }
+        }
+        else
+        {
+            StartCoroutine(FireFull(target));
+        }
+    }
+
+    protected bool FireFromBarrel(Vector3 target, int barrelIdx)
+    {
+        Vector3 vecToTarget = target - Muzzles[barrelIdx].position;
+        if (!MuzzleOppositeDirCheck(Muzzles[barrelIdx], vecToTarget))
+        {
+            return false;
         }
         Vector3 firingVector = GetFiringVector(vecToTarget);
         if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
         {
-            return;
+            //Debug.Log(string.Format("{0} on {1} not enough heat or energy to fire", this, _containingShip));
+            return false;
         }
-        _lastFire = Time.time;
 
         FireInner(firingVector);
-        _containingShip.NotifyInComabt();
+        return true;
+    }
 
-        if (Muzzles.Length > 1)
+    protected IEnumerator FireFull(Vector3 target)
+    {
+        bool firedAny = false;
+        for (int i = 0; i < Muzzles.Length; ++i)
         {
-            _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
+            bool fired = FireFromBarrel(target, i);
+            if (fired && !firedAny)
+            {
+                firedAny = true;
+                LastFire = Time.time;
+                _containingShip.NotifyInComabt();
+            }
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
@@ -287,7 +329,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
-        _lastFire = Time.time;
+        LastFire = Time.time;
         FireGrapplingToolInner(firingVector);
         _containingShip.NotifyInComabt();
 
@@ -507,6 +549,23 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     }
     protected TurretMod _turretMod;
 
+    public bool AlternatingFire
+    {
+        get { return _alnternatingFire; }
+        set
+        {
+            _alnternatingFire = value;
+            if (_alnternatingFire)
+            {
+                ActualFiringInterval = FiringInterval / Muzzles.Length;
+            }
+            else
+            {
+                ActualFiringInterval = FiringInterval;
+            }
+        }
+    }
+    public bool DefaultAlternatingFire;
     protected bool _initialized = false; // ugly hack
 
     // Rotation behavior variables:
@@ -529,12 +588,13 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected Transform[] Muzzles;
     protected ParticleSystem[] MuzzleFx;
     protected int _nextBarrel = 0;
+    protected bool _alnternatingFire;
 
     // Weapon data:
     public ComponentSlotType TurretType;
     public float MaxRange;
     public float FiringInterval;
-    protected float _actualFiringInterval;
+    public float ActualFiringInterval { get; protected set; }
     public ObjectFactory.WeaponSize TurretSize;
     public ObjectFactory.WeaponType TurretWeaponType;
 
@@ -542,7 +602,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public int IsJammed { get; private set; }
 
     // Fire delay
-    protected float _lastFire = 0.0f;
+    public float LastFire { get; protected set; }
     public int EnergyToFire;
     public int HeatToFire;
 
@@ -603,7 +663,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             else if (_currHitPoints <= ComponentMaxHitPoints / 4)
             {
                 Status = ComponentStatus.HeavilyDamaged;
-                Debug.Log(string.Format("{0} is heavily damaged. Time: {1}", this, Time.time));
+                Debug.Log(string.Format("{0} on {1} is heavily damaged. Time: {2}", this, _containingShip, Time.time));
             }
             else if (_currHitPoints <= ComponentMaxHitPoints / 2)
             {

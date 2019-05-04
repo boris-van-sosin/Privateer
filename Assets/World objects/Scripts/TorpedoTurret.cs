@@ -33,7 +33,7 @@ public class TorpedoTurret : TurretBase
     protected override void ParseMuzzles()
     {
         Muzzles = new Transform[] { FindTorpedoBarrel() };
-        _actualFiringInterval = FiringInterval;
+        ActualFiringInterval = FiringInterval;
         MuzzleFx = null;
     }
 

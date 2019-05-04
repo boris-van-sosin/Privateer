@@ -193,6 +193,7 @@ public static class ObjectFactory
                     gt.Inaccuracy = wpd.MaxSpread;
                     gt.EnergyToFire = wpd.EnergyToFire;
                     gt.HeatToFire = wpd.HeatToFire;
+                    gt.DefaultAlternatingFire = (weaponType == WeaponType.Autocannon);
                 }
                 break;
             case WeaponType.Lance:
@@ -261,6 +262,7 @@ public static class ObjectFactory
                     gt.MaxRange = wpd.MaxRange;
                     gt.MuzzleVelocity = wpd.MuzzleVelocity;
                     gt.FiringInterval = wpd.FiringInterval;
+                    gt.DefaultAlternatingFire = (weaponType == WeaponType.FighterAutoannon);
                 }
                 break;
             case WeaponType.TorpedoTube:
@@ -340,6 +342,13 @@ public static class ObjectFactory
         StatusSubsystem res = _prototypes.CreateStatusSprite();
         res.SetImage(_prototypes.GetSprite(comp.SpriteKey));
         res.AttachComponent(comp);
+        return res;
+    }
+
+    public static StatusProgressBar CreateSubsytemProgressRing(TurretBase t)
+    {
+        StatusProgressBar res = _prototypes.CreateProgressBarSprite();
+        res.AttachFunction(() => (Time.time - t.LastFire) / t.ActualFiringInterval);
         return res;
     }
 

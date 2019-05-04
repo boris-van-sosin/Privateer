@@ -29,7 +29,7 @@ public class BomberTorpedoLauncher : TurretBase
     protected override void ParseMuzzles()
     {
         Muzzles = FindDummyTorpedoes(_dummyTorpedoRoot).ToArray();
-        _actualFiringInterval = 0;
+        ActualFiringInterval = 0;
         MuzzleFx = null;
     }
 

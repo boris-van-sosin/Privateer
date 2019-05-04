@@ -61,6 +61,9 @@ public class StatusTopLevel : MonoBehaviour
                     StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(currTurret);
                     compStatus.transform.SetParent(panelRect);
                     compStatus.transform.localPosition = new Vector2(hpPos.x * panelRect.rect.width + panelRect.rect.xMin , hpPos.y * panelRect.rect.height + panelRect.rect.yMin);
+                    StatusProgressBar compProgressRing = ObjectFactory.CreateSubsytemProgressRing(currTurret);
+                    compProgressRing.transform.SetParent(panelRect);
+                    compProgressRing.transform.localPosition = new Vector2(hpPos.x * panelRect.rect.width + panelRect.rect.xMin, hpPos.y * panelRect.rect.height + panelRect.rect.yMin);
                     switch (currTurret.TurretSize)
                     {
                         case ObjectFactory.WeaponSize.Light:
@@ -79,6 +82,8 @@ public class StatusTopLevel : MonoBehaviour
                         default:
                             break;
                     }
+                    compProgressRing.transform.localScale = compStatus.transform.localScale;
+                    _turretProgressBars.Add(currTurret, compProgressRing);
                 }
             }
 
@@ -103,7 +108,33 @@ public class StatusTopLevel : MonoBehaviour
 
     public void DetachShip()
     {
+        _turretProgressBars.Clear();
+    }
 
+    public void ForceUpdateTurretModes()
+    {
+        if (_attachedShip == null)
+        {
+            return;
+        }
+
+        foreach (KeyValuePair<TurretBase, StatusProgressBar> t in _turretProgressBars)
+        {
+            switch (t.Key.Mode)
+            {
+                case TurretBase.TurretMode.Off:
+                    t.Value.SetColor(_offTurretColor);
+                    break;
+                case TurretBase.TurretMode.Manual:
+                    t.Value.SetColor(_manualTurretColor);
+                    break;
+                case TurretBase.TurretMode.Auto:
+                    t.Value.SetColor(_autoTurretColor);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     void Update()
@@ -121,9 +152,13 @@ public class StatusTopLevel : MonoBehaviour
     public Ship AttachedShip { get { return _attachedShip; } }
 
     private Ship _attachedShip = null;
+    private Dictionary<TurretBase, StatusProgressBar> _turretProgressBars = new Dictionary<TurretBase, StatusProgressBar>();
     private GradientBar _healthBar;
     private GradientBar _shieldBar;
     private GradientBar _energyBar;
     private GradientBar _heatBar;
     private RectTransform _compsPanel;
+    private static readonly Color _autoTurretColor = new Color(83f / 255f, 198f / 255f, 255f / 255f);
+    private static readonly Color _manualTurretColor = new Color(0f / 255f, 0f / 255f, 120f / 255f);
+    private static readonly Color _offTurretColor = Color.black;
 }

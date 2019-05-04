@@ -131,6 +131,7 @@ public class UserInput : MonoBehaviour
                 {
                     ControlledShip.WeaponGroups.SetGroupToMode(cg.Item2, TurretBase.TurretMode.Manual);
                 }
+                _statusTopLevelDisplay.ForceUpdateTurretModes();
             }
         }
 

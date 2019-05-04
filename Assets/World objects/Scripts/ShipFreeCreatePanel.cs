@@ -52,6 +52,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         if (s.ShipSize == ObjectFactory.ShipSize.Cruiser || s.ShipSize == ObjectFactory.ShipSize.Destroyer)
         {
             s.PlaceComponent(Ship.ShipSection.Fore, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
         }
         else if (s.ShipSize == ObjectFactory.ShipSize.CapitalShip)
         {
@@ -62,6 +63,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Fore, CapacitorBank.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
