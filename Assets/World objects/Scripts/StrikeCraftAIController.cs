@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class StrikeCraftAIController : ShipAIController
 {
@@ -12,9 +13,45 @@ public class StrikeCraftAIController : ShipAIController
         _formationAI = _formation.GetComponent<StrikeCraftFormationAIController>();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        if (!_controlledShip.ShipControllable)
+        {
+            return;
+        }
+        if (CurrActivity == ShipActivity.StartingRecovering)
+        {
+            Vector3 vecToRecovery = _recoveryTarget.Item1.position - transform.position;
+            Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
+            if (vecToRecovery.sqrMagnitude <= 4f)
+            {
+                Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform.position.y);
+                m.OnManeuverFinish += delegate (Maneuver mm)
+                {
+                    StartCoroutine(BeginRecoveryFinalPhase(mm));
+                };
+                _controlledCraft.StartManeuver(m);
+                CurrActivity = ShipActivity.Recovering;
+            }
+        }
+    }
+
+    private System.Collections.IEnumerator BeginRecoveryFinalPhase(Maneuver mm)
+    {
+        yield return new WaitForEndOfFrame();
+        _controlledCraft.BeginRecoveryFinalPhase(_recoveryTarget.Item2);
+        yield return null;
+    }
+
     protected override void AdvanceToTarget()
     {
-        Vector3 vecToTarget = _navTarget - transform.position;
+        Vector3 vecToTarget;
+        if (!GetCurrMovementTarget(out vecToTarget))
+        {
+            return;
+        }
+
         Vector3 heading = transform.up;
         Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
         Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
@@ -144,9 +181,83 @@ public class StrikeCraftAIController : ShipAIController
         }
     }
 
+    public void OrderStartNavigatenToHost()
+    {
+        CurrActivity = ShipActivity.NavigatingToRecovery;
+    }
+
+    public void OrderReturnToHost(Tuple<Transform, Transform> recoveryPositions)
+    {
+        if (CurrActivity == ShipActivity.StartingRecovering || CurrActivity == ShipActivity.Recovering)
+        {
+            return;
+        }
+        CurrActivity = ShipActivity.StartingRecovering;
+        _recoveryTarget = recoveryPositions;
+        Vector3 vecToRecovery = recoveryPositions.Item1.position - transform.position;
+        float m = vecToRecovery.magnitude;
+        if (m < 2f)
+        {
+            bool isFacingHost = Vector3.Dot(vecToRecovery, transform.up) >= 0f;
+            if (!isFacingHost)
+            {
+                Vector3 dirToRecovery = vecToRecovery / m;
+                Vector3 halfTurn = Quaternion.AngleAxis(90, Vector3.up) * dirToRecovery;
+                float radius = 1f;
+                NavigateTo(transform.position + radius * halfTurn);
+            }
+        }
+        else
+        {
+            Vector3 dirToRecovery = vecToRecovery / m;
+            SetFollowTarget(recoveryPositions.Item1, 2f);
+        }
+    }
+
+    private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, float targetHeight)
+    {
+        int numPathPts = rawPath.Points.Length;
+        Matrix4x4 ptTransform = Matrix4x4.TRS(currLaunchTr.position, currLaunchTr.rotation, Vector3.one);
+        //Matrix4x4 dirTransform = Matrix4x4.TRS(Vector3.zero, currLaunchTr.rotation, Vector3.one);
+        for (int i = 0; i < numPathPts; i++)
+        {
+            if (i < numPathPts - 2)
+            {
+                yield return
+                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => ptTransform.MultiplyPoint3x4(p),
+                        v => ptTransform.MultiplyVector(v));
+            }
+            else
+            {
+                yield return
+                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => ForceY(ptTransform.MultiplyPoint3x4(p), targetHeight),
+                        v => ptTransform.MultiplyVector(v));
+            }
+        }
+    }
+
+    private Maneuver CreateClimbForRecoveryManeuver(Transform currTr, float targetHeight)
+    {
+        BspPath launchPath = ObjectFactory.GetPath("Strike craft carrier climb");
+        Maneuver.BsplinePathSegmnet seg = new Maneuver.BsplinePathSegmnet()
+        {
+            AccelerationBehavior = null,
+            Path = launchPath.ExractLightweightPath(PathFixes(launchPath, currTr, targetHeight))
+        };
+        return new Maneuver(seg);
+    }
+
+    private Vector3 ForceY(Vector3 v, float y)
+    {
+        return new Vector3(v.x, y, v.z);
+    }
+
     private static readonly float _strikeCraftAngleEps = 5f;
     private static readonly float _strikeCraftDistEps = 0.01f;
     private StrikeCraft _controlledCraft;
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;
+    private Tuple<Transform, Transform> _recoveryTarget;
 }

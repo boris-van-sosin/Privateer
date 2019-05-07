@@ -112,6 +112,8 @@ public class StrikeCraftFormation : MovementBase
         }
     }
 
+    public CarrierBehavior HostCarrier { get; set; }
+
     private static readonly Color[] colors = new Color[] { Color.red, Color.blue, Color.green, Color.magenta };
     private List<StrikeCraft> _craft = new List<StrikeCraft>();
     private Dictionary<StrikeCraft, int> _positionsCache = new Dictionary<StrikeCraft, int>();

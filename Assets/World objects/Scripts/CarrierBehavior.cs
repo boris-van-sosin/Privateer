@@ -17,7 +17,7 @@ public class CarrierBehavior : MonoBehaviour
     {
         if (!_inLaunch)
         {
-            StartCoroutine(LaunchSequence("Fed Fighter"));
+            StartCoroutine(LaunchSequence("Fed Torpedo Bomber"));
         }
     }
 
@@ -32,6 +32,7 @@ public class CarrierBehavior : MonoBehaviour
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
 
         formation.Owner = _ship.Owner;
+        formation.HostCarrier = this;
         int i = 0;
         formation.transform.position = LaunchTransform[0].position;
         formation.transform.rotation = _ship.transform.rotation;
@@ -94,8 +95,14 @@ public class CarrierBehavior : MonoBehaviour
 
     private Vector3 ClearY(Vector3 a) => new Vector3(a.x, 0, a.z);
 
+    public Tuple<Transform, Transform> GetRecoveryTransforms()
+    {
+        return new Tuple<Transform, Transform>(RecoveryStartTransform.First(), RecoveryEndTransform.First());
+    }
+
     public Transform[] LaunchTransform;
-    public Transform[] RecoveryTransform;
+    public Transform[] RecoveryStartTransform;
+    public Transform[] RecoveryEndTransform;
 
     private ShipBase _ship;
     private bool _inLaunch;

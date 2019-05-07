@@ -528,6 +528,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected abstract ITargetableEntity AcquireTarget();
 
+    public virtual bool IsOutOfAmmo => false;
+
     public virtual bool IsTurretModCombatible(TurretMod m)
     {
         return m == TurretMod.None;

@@ -10,19 +10,19 @@ public class TurretComponent : ITurret
         _innerTurret = t;
     }
 
-    public float CurrAngle { get { return _innerTurret.CurrAngle; } }
+    public float CurrAngle => _innerTurret.CurrAngle;
 
-    public float CurrLocalAngle { get { return _innerTurret.CurrAngle; } }
+    public float CurrLocalAngle => _innerTurret.CurrAngle;
 
-    public int ComponentMaxHitPoints { get { return _innerTurret.ComponentMaxHitPoints; } }
-    
+    public int ComponentMaxHitPoints => _innerTurret.ComponentMaxHitPoints;
+
     public int ComponentHitPoints { get { return _innerTurret.ComponentHitPoints; } set { _innerTurret.ComponentHitPoints = value; if (OnHitpointsChanged != null) { OnHitpointsChanged(); } } }
 
-    public bool ComponentIsWorking { get { return _innerTurret.ComponentIsWorking; } }
+    public bool ComponentIsWorking => _innerTurret.ComponentIsWorking;
 
-    public ComponentStatus Status { get { return _innerTurret.Status; } }
+    public ComponentStatus Status => _innerTurret.Status;
 
-    public ShipBase ContainingShip { get { return _innerTurret.ContainingShip; } }
+    public ShipBase ContainingShip => _innerTurret.ContainingShip;
 
     public void Fire(Vector3 target)
     {
@@ -39,30 +39,22 @@ public class TurretComponent : ITurret
         _innerTurret.SetTurretBehavior(newMode);
     }
 
-    public TurretBase.TurretMode GetTurretBehavior()
-    {
-        return _innerTurret.GetTurretBehavior();
-    }
+    public TurretBase.TurretMode GetTurretBehavior() => _innerTurret.GetTurretBehavior();
 
-    public bool HasGrapplingTool()
-    {
-        return _innerTurret.HasGrapplingTool();
-    }
+    public bool HasGrapplingTool() => _innerTurret.HasGrapplingTool();
 
-    public void FireGrapplingTool(Vector3 target)
-    {
-        _innerTurret.FireGrapplingTool(target);
-    }
+    public void FireGrapplingTool(Vector3 target) => _innerTurret.FireGrapplingTool(target);
 
-    public float GetMaxRange { get { return _innerTurret.GetMaxRange; } }
+    public float GetMaxRange => _innerTurret.GetMaxRange;
 
-    public IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _innerTurret.AllowedSlotTypes; } }
+    public IEnumerable<ComponentSlotType> AllowedSlotTypes => _innerTurret.AllowedSlotTypes;
 
-    public string SpriteKey { get { return "Turret"; } }
+    public string SpriteKey => "Turret";
 
-    public ObjectFactory.ShipSize MinShipSize { get { return _innerTurret.MinShipSize; } }
-    public ObjectFactory.ShipSize MaxShipSize { get { return _innerTurret.MaxShipSize; } }
+    public ObjectFactory.ShipSize MinShipSize => _innerTurret.MinShipSize;
+    public ObjectFactory.ShipSize MaxShipSize => _innerTurret.MaxShipSize;
 
+    public bool IsOutOfAmmo => _innerTurret.IsOutOfAmmo;
 
     private TurretBase _innerTurret;
 

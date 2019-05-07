@@ -119,6 +119,14 @@ public class UserInput : MonoBehaviour
                 c.LaunchDbg();
             }
         }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            StrikeCraftFormationAIController sc = FindObjectOfType<StrikeCraftFormationAIController>();
+            if (sc != null)
+            {
+                sc.OrderReturnToHost();
+            }
+        }
         foreach (Tuple<UserOperation, int> cg in _controlGroupKeys)
         {
             if (Input.GetKeyDown(_keyMapping[cg.Item1]))

@@ -56,6 +56,7 @@ public interface ITurret : IShipActiveComponent
     float CurrAngle { get; }
     float CurrLocalAngle { get; }
     float GetMaxRange { get; }
+    bool IsOutOfAmmo { get; }
 }
 
 public interface IPeriodicActionComponent : IShipComponent

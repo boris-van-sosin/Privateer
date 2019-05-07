@@ -19,6 +19,7 @@ public class Maneuver
     {
         _ship = s;
         _currSeg = 0;
+        Velocity = _ship.ActualVelocity;
         StartSegment();
     }
 
@@ -104,7 +105,6 @@ public class Maneuver
     public void Advance(float timeInterval)
     {
         Transform tr = _ship.transform;
-        Vector3 velocity = _ship.ActualVelocity;
         if (_toNextSeg)
         {
             StartSegment();
@@ -113,7 +113,7 @@ public class Maneuver
 
         if (activeSeg is ConditionPathSegment conditionSeg)
         {
-            Vector3 newVelocity = velocity;
+            Vector3 newVelocity = Velocity;
             if (conditionSeg.AccelerationBehavior != null)
             {
                 if (conditionSeg.AccelerationBehavior.Accelerate)
@@ -131,8 +131,8 @@ public class Maneuver
                     newVelocity = _ship.transform.up * _ship.MaxSpeed;
                 }
             }
-            _ship.transform.position += velocity * timeInterval;
-            Velocity = velocity;
+            _ship.transform.position += newVelocity * timeInterval;
+            Velocity = newVelocity;
             if (conditionSeg.Condition(_ship))
             {
                 _toNextSeg = true;
@@ -142,9 +142,8 @@ public class Maneuver
         {
             Tuple<Vector3, Vector3> pathVelocity = pathSeg.Path.EvalPointAndVelocity(_t);
             float paramSpeed = pathVelocity.Item2.magnitude;
-            float currSpeed = velocity.magnitude;
+            float currSpeed = Velocity.magnitude;
             float targetSpeed = currSpeed;
-            Vector3 newVelocity = velocity;
             if (pathSeg.AccelerationBehavior == null)
             {
             }
@@ -167,7 +166,7 @@ public class Maneuver
             }
 
             Tuple<Vector3, Vector3, Vector3> nextPos;
-            float nextT = _t + (targetSpeed / paramSpeed);
+            float nextT = _t + (targetSpeed * timeInterval / paramSpeed);
             float tOvershoot = nextT - 1f;
             if (tOvershoot > 0f)
             {
@@ -184,7 +183,12 @@ public class Maneuver
                 _t = nextT;
                 nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
             }
-
+            //
+            {
+                Vector3 traveled = nextPos.Item1 - _ship.transform.position;
+                Debug.Log(string.Format("Traveled: {0}. Dist: {1}. Actual speed: {2}. Required speed: {3}", traveled, traveled.magnitude, traveled.magnitude * timeInterval, targetSpeed));
+            }
+            //
             _ship.transform.SetPositionAndRotation(nextPos.Item1, Quaternion.LookRotation(nextPos.Item3, nextPos.Item2));
             if (tOvershoot > 0)
             {

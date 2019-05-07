@@ -882,7 +882,7 @@ PrefabInstance:
     - target: {fileID: 224050326978433768, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 224050326978433768, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -952,7 +952,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.000114
+      value: 100.00013
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -2743,6 +2743,7 @@ MonoBehaviour:
     type: 3}
   Paths:
   - {fileID: 6206267094183888967, guid: 32195c929a81c174fb9483caab7d23dc, type: 3}
+  - {fileID: 3024457926964725936, guid: 1e0f728eb874ffa49a46261572121296, type: 3}
   SubsystemStatusSprite: {fileID: 114477059441499122, guid: b23ee16432792744cae347f9720852c8,
     type: 3}
   SubsystemProgressRingTurretPrototype: {fileID: 2912574821959226850, guid: 09fe0bfde93b3ec4f8c7efff89f7d8b2,

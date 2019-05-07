@@ -9,18 +9,19 @@ public class ShipAIController : MonoBehaviour
 	protected virtual void Start ()
     {
         _controlledShip = GetComponent<ShipBase>();
+        CurrActivity = ShipActivity.ControllingPosition;
         StartCoroutine(AcquireTargetPulse());
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	protected virtual void Update ()
     {
         if (!_controlledShip.ShipControllable)
         {
             return;
         }
 
-        if (_doNavigate)
+        if (_doNavigate || _doFollow)
         {
             AdvanceToTarget();
         }
@@ -129,7 +130,12 @@ public class ShipAIController : MonoBehaviour
 
     protected virtual void AdvanceToTarget()
     {
-        Vector3 vecToTarget = _navTarget - transform.position;
+        Vector3 vecToTarget;
+        if (!GetCurrMovementTarget(out vecToTarget))
+        {
+            return;
+        }
+
         Vector3 heading = transform.up;
         Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
         Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
@@ -169,11 +175,51 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
+    protected bool GetCurrMovementTarget(out Vector3 vecToTarget)
+    {
+        if (_doNavigate)
+        {
+            vecToTarget = _navTarget - transform.position;
+            return true;
+        }
+        else if (_doFollow)
+        {
+            vecToTarget = _followTarget.transform.position - transform.position;
+            Vector3 dirToTarget = vecToTarget.normalized;
+            vecToTarget -= dirToTarget * _followDist;
+            return true;
+        }
+        else
+        {
+            vecToTarget = Vector3.zero;
+            return false;
+        }
+    }
+
     protected void NavigateTo(Vector3 target)
     {
+        NavigateTo(target, null);
+    }
+
+    protected void NavigateTo(Vector3 target, OrderCompleteDlg onCompleteNavigation)
+    {
+        _doFollow = false;
+
         _navTarget = target;
         Debug.DrawLine(transform.position, _navTarget, Color.red, 0.5f);
         _doNavigate = true;
+        _orderCallback = onCompleteNavigation;
+    }
+
+    protected void SetFollowTarget(Transform followTarget, float dist)
+    {
+        // Cancel navigate order, if there is one:
+        _doNavigate = false;
+        _orderCallback = null;
+
+        _followTarget = followTarget;
+        _followDist = dist;
+        _doFollow = true;
     }
 
     private Vector3? BypassObstacle(Vector3 direction)
@@ -258,7 +304,7 @@ public class ShipAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (_controlledShip.ShipControllable)
+            if (_controlledShip.ShipControllable && DoSeekTargets)
             {
                 if (_targetShip == null)
                 {
@@ -266,6 +312,11 @@ public class ShipAIController : MonoBehaviour
                 }
                 if (_targetShip != null)
                 {
+                    if (_targetShip.ShipDisabled)
+                    {
+                        _targetShip = null;
+                        continue;
+                    }
                     Vector3 attackPos = NavigationDest(_targetShip);
                     Vector3? bypassVec = BypassObstacle(attackPos);
                     if (bypassVec == null)
@@ -299,6 +350,31 @@ public class ShipAIController : MonoBehaviour
     {
     }
 
+    public bool DoSeekTargets
+    {
+        get
+        {
+            switch (CurrActivity)
+            {
+                case ShipActivity.Idle:
+                case ShipActivity.ControllingPosition:
+                case ShipActivity.Defending:
+                    return true;
+                case ShipActivity.Attacking:
+                case ShipActivity.Following:
+                case ShipActivity.Launching:
+                case ShipActivity.NavigatingToRecovery:
+                case ShipActivity.StartingRecovering:
+                    return false;
+                default:
+                    break;
+            }
+            return true;
+        }
+    }
+
+    public delegate void OrderCompleteDlg();
+
     protected ShipBase _controlledShip;
 
     protected static readonly int _numAttackAngles = 12;
@@ -309,8 +385,27 @@ public class ShipAIController : MonoBehaviour
     protected ShipBase _targetShip = null;
     protected Vector3 _navTarget;
     private Vector3 _targetHeading;
+    protected Transform _followTarget = null;
+    protected float _followDist;
+    protected OrderCompleteDlg _orderCallback = null;
     private static readonly float _angleEps = 0.1f;
     private static readonly float _distEps = 0.01f;
     private static readonly float _rangeCoefficient = 0.95f;
     protected bool _doNavigate = false;
+    protected bool _doFollow = false;
+
+    public enum ShipActivity
+    {
+        Idle,
+        ControllingPosition,
+        Attacking,
+        Following,
+        Defending,
+        Launching,
+        NavigatingToRecovery,
+        StartingRecovering,
+        Recovering
+    }
+
+    public ShipActivity CurrActivity { get; protected set; }
 }

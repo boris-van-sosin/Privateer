@@ -208,11 +208,11 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     public override void StartManeuver(Maneuver m)
     {
+        _rigidBody.isKinematic = true;
         _rigidBody.velocity = Vector3.zero;
         base.StartManeuver(m);
         m.OnManeuverFinish += delegate (Maneuver mm)
         {
-            _rigidBody.velocity = mm.Velocity * 2f;
             float dirDot = Vector3.Dot(mm.Velocity, transform.up);
             if (dirDot > 0)
             {
@@ -227,6 +227,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
                 _movementDirection = ShipDirection.Stopped;
             }
             _speed = mm.Velocity.magnitude;
+            _rigidBody.isKinematic = false;
+            _rigidBody.AddForce(mm.Velocity - _rigidBody.velocity, ForceMode.VelocityChange);
         };
     }
 

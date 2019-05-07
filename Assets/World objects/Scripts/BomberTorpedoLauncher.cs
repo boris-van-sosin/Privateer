@@ -164,6 +164,8 @@ public class BomberTorpedoLauncher : TurretBase
 
     public int TorpedoesLoaded { get; private set; }
 
+    public override bool IsOutOfAmmo => TorpedoesLoaded <= 0;
+
     private Vector3 _launchDirection;
     public ObjectFactory.TorpedoType LoadedTorpedoType;
     public string DummyTorpedoString;

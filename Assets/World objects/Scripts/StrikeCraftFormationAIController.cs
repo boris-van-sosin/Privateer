@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class StrikeCraftFormationAIController : MonoBehaviour
 {
@@ -16,7 +17,19 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_doNavigate)
+        if (_currState == FormationState.Recovering)
+        {
+            _doNavigate = false;
+            foreach (StrikeCraft craft in _controlledFormation.AllStrikeCraft())
+            {
+                StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
+                if (ctl != null)
+                {
+                    ctl.OrderReturnToHost(_controlledFormation.HostCarrier.GetRecoveryTransforms());
+                }
+            }
+        }
+        if (_doNavigate || _doFollow)
         {
             AdvanceToTarget();
         }
@@ -81,7 +94,22 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     protected virtual void AdvanceToTarget()
     {
-        Vector3 vecToTarget = _navTarget - transform.position;
+        Vector3 vecToTarget;
+        if (_doNavigate)
+        {
+            vecToTarget = _navTarget - transform.position;
+        }
+        else if (_doFollow)
+        {
+            vecToTarget = _followTarget.transform.position - transform.position;
+            Vector3 dirToTarget = vecToTarget.normalized;
+            vecToTarget -= dirToTarget * _followDist;
+        }
+        else
+        {
+            return;
+        }
+
         Vector3 heading = transform.up;
         Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
         Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
@@ -112,7 +140,11 @@ public class StrikeCraftFormationAIController : MonoBehaviour
             _controlledFormation.ApplyBraking();
             if (_controlledFormation.ActualVelocity.sqrMagnitude < (_distEps * _distEps) && atRequiredHeaing)
             {
-                _doNavigate = false;
+                if (_doNavigate)
+                {
+                    _doNavigate = false;
+                    _orderCallback?.Invoke();
+                }
             }
         }
         else
@@ -123,9 +155,27 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     private void NavigateTo(Vector3 target)
     {
+        NavigateTo(target, null);
+    }
+
+    private void NavigateTo(Vector3 target, ShipAIController.OrderCompleteDlg onCompleteNavigation)
+    {
+        _followTarget = null;
+        _doFollow = false;
+
         _navTarget = target;
         Debug.DrawLine(transform.position, _navTarget, Color.red, 0.5f);
         _doNavigate = true;
+        _orderCallback = onCompleteNavigation;
+    }
+
+    private void SetFollowTarget(Transform followTarget, float dist)
+    {
+        _doNavigate = false;
+
+        _followTarget = followTarget;
+        _followDist = dist;
+        _doFollow = true;
     }
 
     private Vector3? BypassObstacle(Vector3 direction)
@@ -210,12 +260,26 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
+            if (_controlledFormation.AllStrikeCraft().All(s => s.IsOutOfAmmo()))
+            {
+                CarrierBehavior c = _controlledFormation.HostCarrier;
+                if (c != null)
+                {
+                    OrderReturnToHost(c.transform);
+                    yield break;
+                }
+            }
             if (_targetShip == null)
             {
                 AcquireTarget();
             }
             if (_targetShip != null)
             {
+                if (_targetShip.ShipDisabled)
+                {
+                    _targetShip = null;
+                    continue;
+                }
                 Vector3 attackPos = AttackPosition(_targetShip);
                 Vector3? bypassVec = BypassObstacle(attackPos);
                 if (bypassVec == null)
@@ -263,11 +327,50 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
     }
 
-    private enum FormationState { Idle, Launching, Landing, Defending, Moving, InCombat };
+    private enum FormationState { Idle, Launching, Recovering, Defending, Moving, InCombat };
 
     public bool DoMaintainFormation()
     {
         return _currState != FormationState.InCombat;
+    }
+
+    public void OrderReturnToHost()
+    {
+        CarrierBehavior c = _controlledFormation.HostCarrier;
+        if (c != null)
+        {
+            OrderReturnToHost(c.transform);
+        }
+    }
+
+    public void OrderReturnToHost(Transform recoveryPosition)
+    {
+        _currState = FormationState.Recovering;
+        foreach (StrikeCraft craft in _controlledFormation.AllStrikeCraft())
+        {
+            StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
+            if (ctl != null)
+            {
+                ctl.OrderStartNavigatenToHost();
+            }
+        }
+        Vector3 vecToRecovery = recoveryPosition.position - transform.position;
+        float m = vecToRecovery.magnitude;
+        if (m < _recoveryTargetDist)
+        {
+            bool isFacingHost = Vector3.Dot(vecToRecovery, transform.up) >= 0f;
+            if (!isFacingHost)
+            {
+                Vector3 dirToRecovery = vecToRecovery / m;
+                Vector3 halfTurn = Quaternion.AngleAxis(90, Vector3.up) * dirToRecovery;
+                float radius = 1f;
+                NavigateTo(transform.position + radius * halfTurn);
+            }
+        }
+        else
+        {
+            SetFollowTarget(recoveryPosition, _recoveryTargetDist);
+        }
     }
 
     protected StrikeCraftFormation _controlledFormation;
@@ -275,9 +378,14 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     protected ShipBase _targetShip = null;
     protected Vector3 _navTarget;
     private Vector3 _targetHeading;
+    protected Transform _followTarget = null;
+    protected float _followDist;
+    protected ShipAIController.OrderCompleteDlg _orderCallback = null;
     private static readonly float _angleEps = 0.1f;
     private static readonly float _distEps = 0.01f;
     private static readonly float _attackDist = 2.0f;
     protected bool _doNavigate = false;
+    protected bool _doFollow = false;
+    private static readonly float _recoveryTargetDist = 2.5f;
     private FormationState _currState;
 }
