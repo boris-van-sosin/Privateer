@@ -146,9 +146,9 @@ public class TorpedoTurret : TurretBase
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, MaxRange, w, ContainingShip);
             t.IsTracking = (LoadedTorpedoType == ObjectFactory.TorpedoType.Tracking);
             t.transform.position = Muzzles[_nextBarrel].position;
-            _torpedoTubeDoorsAnim.SetBool("DoorsOpen", false);
             yield return new WaitForSeconds(0.1f);
         }
+        _torpedoTubeDoorsAnim.SetBool("DoorsOpen", false);
         yield return null;
     }
 
