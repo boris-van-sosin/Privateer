@@ -183,12 +183,6 @@ public class Maneuver
                 _t = nextT;
                 nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
             }
-            //
-            {
-                Vector3 traveled = nextPos.Item1 - _ship.transform.position;
-                Debug.Log(string.Format("Traveled: {0}. Dist: {1}. Actual speed: {2}. Required speed: {3}", traveled, traveled.magnitude, traveled.magnitude * timeInterval, targetSpeed));
-            }
-            //
             _ship.transform.SetPositionAndRotation(nextPos.Item1, Quaternion.LookRotation(nextPos.Item3, nextPos.Item2));
             if (tOvershoot > 0)
             {

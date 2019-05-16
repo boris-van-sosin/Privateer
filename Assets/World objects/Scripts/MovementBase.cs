@@ -176,6 +176,7 @@ public abstract class MovementBase : MonoBehaviour
     }
 
     public Vector3 ActualVelocity { get; protected set; }
+    public float CurrSpeed { get { return _speed; } }
 
     protected enum ShipDirection { Stopped, Forward, Reverse };
 

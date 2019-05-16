@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24afe3ff2ad7314a8593f5e3facc6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 1.85
+  MaxSpeed: 2
   Thrust: 2.8
   Braking: 2.8
   TurnRate: 25
@@ -408,6 +408,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4848000343445680011}
     m_Modifications:
+    - target: {fileID: 100000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
+      propertyPath: m_Name
+      value: DummyTorpedo
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -463,10 +467,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
-      propertyPath: m_Name
-      value: DummyTorpedo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
@@ -483,6 +483,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4847955528090461093}
     m_Modifications:
+    - target: {fileID: 100000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
+      propertyPath: m_Name
+      value: DummyTorpedo
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -538,10 +542,6 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}
-      propertyPath: m_Name
-      value: DummyTorpedo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d3058bd5c366ea4a8fb3d1bc4e22aa9, type: 3}

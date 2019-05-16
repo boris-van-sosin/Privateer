@@ -16,6 +16,7 @@ public class StrikeCraft : ShipBase
                 t.SetTurretBehavior(TurretBase.TurretMode.Auto);
             }
         }
+        _recoverySpeed = MaxSpeed * 1f;
     }
 
     protected override void Update()
@@ -26,13 +27,27 @@ public class StrikeCraft : ShipBase
         }
         else
         {
-            if (Mathf.Approximately((transform.position - _recoveryFinalPhaseTarget.position).magnitude, 0f))
+            float recAdvance = Time.deltaTime * _recoverySpeed;
+            if ((transform.position - _recoveryFinalPhaseTarget.position).sqrMagnitude < recAdvance * recAdvance)
             {
                 Destroy(gameObject);
             }
+            else if (!_inRecoveryFinalPhaseDescent)
+            {
+                Vector3 recTargetFlat = new Vector3(_recoveryFinalPhaseTarget.position.x, transform.position.y, _recoveryFinalPhaseTarget.position.z);
+                if ((transform.position - recTargetFlat).sqrMagnitude < recAdvance * recAdvance)
+                {
+                    _inRecoveryFinalPhaseDescent = true;
+                }
+                transform.position = Vector3.MoveTowards(transform.position, recTargetFlat, recAdvance);
+                Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
+                transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
+            }
             else
             {
-                transform.position = Vector3.MoveTowards(transform.position, _recoveryFinalPhaseTarget.position, Time.deltaTime * _recoverySpeed);
+                transform.position = Vector3.MoveTowards(transform.position, _recoveryFinalPhaseTarget.position, recAdvance);
+                Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
+                transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
             }
         }
     }
@@ -156,6 +171,7 @@ public class StrikeCraft : ShipBase
 
     private int _strikeCraftHitPoints = 5;
     private bool _inRecoveryFinalPhase = false;
+    private bool _inRecoveryFinalPhaseDescent = false;
     private Transform _recoveryFinalPhaseTarget;
-    private float _recoverySpeed = 1f;
+    private float _recoverySpeed;
 }

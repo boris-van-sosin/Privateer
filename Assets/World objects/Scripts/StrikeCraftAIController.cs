@@ -24,9 +24,9 @@ public class StrikeCraftAIController : ShipAIController
         {
             Vector3 vecToRecovery = _recoveryTarget.Item1.position - transform.position;
             Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
-            if (vecToRecovery.sqrMagnitude <= 4f)
+            if (vecToRecovery.sqrMagnitude <= _startRecoveryDist * _startRecoveryDist)
             {
-                Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform.position.y);
+                Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform, _recoveryTarget.Item3);
                 m.OnManeuverFinish += delegate (Maneuver mm)
                 {
                     StartCoroutine(BeginRecoveryFinalPhase(mm));
@@ -186,7 +186,7 @@ public class StrikeCraftAIController : ShipAIController
         CurrActivity = ShipActivity.NavigatingToRecovery;
     }
 
-    public void OrderReturnToHost(Tuple<Transform, Transform> recoveryPositions)
+    public void OrderReturnToHost(Tuple<Transform, Transform, Vector3> recoveryPositions)
     {
         if (CurrActivity == ShipActivity.StartingRecovering || CurrActivity == ShipActivity.Recovering)
         {
@@ -196,8 +196,9 @@ public class StrikeCraftAIController : ShipAIController
         _recoveryTarget = recoveryPositions;
         Vector3 vecToRecovery = recoveryPositions.Item1.position - transform.position;
         float m = vecToRecovery.magnitude;
-        if (m < 2f)
+        if (m < _startRecoveryDist)
         {
+            Debug.Log("Too close for recovery?");
             bool isFacingHost = Vector3.Dot(vecToRecovery, transform.up) >= 0f;
             if (!isFacingHost)
             {
@@ -210,14 +211,16 @@ public class StrikeCraftAIController : ShipAIController
         else
         {
             Vector3 dirToRecovery = vecToRecovery / m;
-            SetFollowTarget(recoveryPositions.Item1, 2f);
+            SetFollowTarget(recoveryPositions.Item1, _startRecoveryDist);
         }
     }
 
-    private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, float targetHeight)
+    private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
     {
         int numPathPts = rawPath.Points.Length;
         Matrix4x4 ptTransform = Matrix4x4.TRS(currLaunchTr.position, currLaunchTr.rotation, Vector3.one);
+
+        float maneuverTime = (carrierRecoveryHint.position - transform.position).magnitude / _controlledCraft.CurrSpeed;
         //Matrix4x4 dirTransform = Matrix4x4.TRS(Vector3.zero, currLaunchTr.rotation, Vector3.one);
         for (int i = 0; i < numPathPts; i++)
         {
@@ -228,23 +231,30 @@ public class StrikeCraftAIController : ShipAIController
                         p => ptTransform.MultiplyPoint3x4(p),
                         v => ptTransform.MultiplyVector(v));
             }
-            else
+            else if (i == numPathPts - 2)
             {
                 yield return
                     new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
-                        p => ForceY(ptTransform.MultiplyPoint3x4(p), targetHeight),
-                        v => ptTransform.MultiplyVector(v));
+                        p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity) - (2.5f * carrierRecoveryHint.up),
+                        v => carrierRecoveryHint.up);
+            }
+            else if (i == numPathPts - 1)
+            {
+                yield return
+                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity),
+                        v => carrierRecoveryHint.up);
             }
         }
     }
 
-    private Maneuver CreateClimbForRecoveryManeuver(Transform currTr, float targetHeight)
+    private Maneuver CreateClimbForRecoveryManeuver(Transform currTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
     {
         BspPath launchPath = ObjectFactory.GetPath("Strike craft carrier climb");
         Maneuver.BsplinePathSegmnet seg = new Maneuver.BsplinePathSegmnet()
         {
             AccelerationBehavior = null,
-            Path = launchPath.ExractLightweightPath(PathFixes(launchPath, currTr, targetHeight))
+            Path = launchPath.ExractLightweightPath(PathFixes(launchPath, currTr, carrierRecoveryHint, carrierVelocity))
         };
         return new Maneuver(seg);
     }
@@ -259,5 +269,6 @@ public class StrikeCraftAIController : ShipAIController
     private StrikeCraft _controlledCraft;
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;
-    private Tuple<Transform, Transform> _recoveryTarget;
+    private Tuple<Transform, Transform, Vector3> _recoveryTarget;
+    private static readonly float _startRecoveryDist = 5f;
 }

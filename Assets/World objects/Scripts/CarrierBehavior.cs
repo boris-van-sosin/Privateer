@@ -10,6 +10,7 @@ public class CarrierBehavior : MonoBehaviour
     private void Start()
     {
         _ship = GetComponent<ShipBase>();
+        _carrierAnim = LaunchTransform.Select(t => t.parent.GetComponent<CarrierHangerGenericAnim>()).ToArray();
         _inLaunch = false;
     }
 
@@ -38,6 +39,10 @@ public class CarrierBehavior : MonoBehaviour
         formation.transform.rotation = _ship.transform.rotation;
         foreach (Transform tr in formation.Positions)
         {
+            //
+            _carrierAnim[i].Open();
+            yield return new WaitUntil(() => _carrierAnim[i].HangerState == CarrierHangerGenericAnim.State.Open);
+            //
             StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(strikeCraftKey);
             s.Owner = formation.Owner;
             s.transform.position = LaunchTransform[i].position;
@@ -47,6 +52,10 @@ public class CarrierBehavior : MonoBehaviour
             s.StartManeuver(CreateLaunchManeuver(LaunchTransform[i]));
             formation.MaxSpeed = s.MaxSpeed * 1.1f;
             formation.TurnRate = s.TurnRate * 0.5f;
+            //
+            _carrierAnim[i].Close();
+            yield return new WaitUntil(() => _carrierAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed);
+            //
             ++i;
             if (i >= LaunchTransform.Length)
             {
@@ -95,9 +104,9 @@ public class CarrierBehavior : MonoBehaviour
 
     private Vector3 ClearY(Vector3 a) => new Vector3(a.x, 0, a.z);
 
-    public Tuple<Transform, Transform> GetRecoveryTransforms()
+    public Tuple<Transform, Transform, Vector3> GetRecoveryTransforms()
     {
-        return new Tuple<Transform, Transform>(RecoveryStartTransform.First(), RecoveryEndTransform.First());
+        return new Tuple<Transform, Transform, Vector3>(RecoveryStartTransform.First(), RecoveryEndTransform.First(), _ship.ActualVelocity);
     }
 
     public Transform[] LaunchTransform;
@@ -106,4 +115,5 @@ public class CarrierBehavior : MonoBehaviour
 
     private ShipBase _ship;
     private bool _inLaunch;
+    private CarrierHangerGenericAnim[] _carrierAnim;
 }

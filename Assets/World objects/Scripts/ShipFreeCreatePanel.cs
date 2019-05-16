@@ -79,7 +79,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             }
             else
             {
-                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.HVGun);
+                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);
             }
             //TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
             GunTurret gt = t as GunTurret;
@@ -91,7 +91,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 }
                 else
                 {
-                    gt.AmmoType = ObjectFactory.AmmoType.KineticPenetrator;
+                    gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
                 }
                 t.InstalledTurretMod = TurretMod.Harpax;
             }
