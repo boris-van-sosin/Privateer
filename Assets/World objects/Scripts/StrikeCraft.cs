@@ -17,15 +17,12 @@ public class StrikeCraft : ShipBase
             }
         }
         _recoverySpeed = MaxSpeed * 1f;
+        _trail = GetComponent<TrailRenderer>();
     }
 
     protected override void Update()
     {
-        if (!_inRecoveryFinalPhase)
-        {
-            base.Update();
-        }
-        else
+        if (_inRecoveryFinalPhase)
         {
             float recAdvance = Time.deltaTime * _recoverySpeed;
             if ((transform.position - _recoveryFinalPhaseTarget.position).sqrMagnitude < recAdvance * recAdvance)
@@ -49,6 +46,16 @@ public class StrikeCraft : ShipBase
                 Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
                 transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
             }
+        }
+        else if (_attachedToHangerElevator)
+        {
+            Vector3 pos = _hangerElevator.TransformPoint(_hangerElevatorLocalOffset);
+            transform.position = pos;
+            transform.rotation = _hangerElevator.rotation;
+        }
+        else
+        {
+            base.Update();
         }
     }
 
@@ -169,9 +176,34 @@ public class StrikeCraft : ShipBase
         _rigidBody.velocity = Vector3.zero;
     }
 
+    public void AttachToHangerElevator(Transform elevator, Vector3 localOffset)
+    {
+        _hangerElevator = elevator;
+        _hangerElevatorLocalOffset = localOffset;
+        _attachedToHangerElevator = true;
+        if (_trail != null)
+        {
+            _trail.enabled = false;
+        }
+    }
+
+    public void DetachHangerElevator()
+    {
+        _hangerElevator = null;
+        _attachedToHangerElevator = false;
+        if (_trail != null)
+        {
+            _trail.enabled = true;
+        }
+    }
+
     private int _strikeCraftHitPoints = 5;
     private bool _inRecoveryFinalPhase = false;
     private bool _inRecoveryFinalPhaseDescent = false;
+    private bool _attachedToHangerElevator = false;
+    private Transform _hangerElevator;
+    private Vector3 _hangerElevatorLocalOffset;
     private Transform _recoveryFinalPhaseTarget;
     private float _recoverySpeed;
+    private TrailRenderer _trail;
 }

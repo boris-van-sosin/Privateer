@@ -33179,12 +33179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb3740f9be386d6498ef9709b3752803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LaunchTransform:
-  - {fileID: 2820062715521001887}
-  RecoveryStartTransform:
-  - {fileID: 8382665050126644956}
-  RecoveryEndTransform:
-  - {fileID: 431348968851814488}
+  CarrierHangerAnim:
+  - {fileID: 6120698921638371866}
 --- !u!1 &1119492004314662
 GameObject:
   m_ObjectHideFlags: 0

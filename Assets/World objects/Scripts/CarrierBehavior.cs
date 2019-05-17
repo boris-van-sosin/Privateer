@@ -10,7 +10,10 @@ public class CarrierBehavior : MonoBehaviour
     private void Start()
     {
         _ship = GetComponent<ShipBase>();
-        _carrierAnim = LaunchTransform.Select(t => t.parent.GetComponent<CarrierHangerGenericAnim>()).ToArray();
+        _launchTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierLaunchTr")).ToArray();
+        _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
+        _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
+        _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
         _inLaunch = false;
     }
 
@@ -24,7 +27,7 @@ public class CarrierBehavior : MonoBehaviour
 
     private IEnumerator LaunchSequence(string strikeCraftKey)
     {
-        if (LaunchTransform.Length == 0)
+        if (CarrierHangerAnim.Length == 0)
         {
             yield break;
         }
@@ -32,37 +35,52 @@ public class CarrierBehavior : MonoBehaviour
         _inLaunch = true;
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
 
+        StrikeCraft[] currLaunchingStrikeCraft = new StrikeCraft[CarrierHangerAnim.Length];
+
         formation.Owner = _ship.Owner;
         formation.HostCarrier = this;
         int i = 0;
-        formation.transform.position = LaunchTransform[0].position;
+        formation.transform.position = _launchTransform[0].position;
         formation.transform.rotation = _ship.transform.rotation;
-        foreach (Transform tr in formation.Positions)
+
+        int numLaunched = 0;
+        while (numLaunched < formation.Positions.Length)
         {
-            //
-            _carrierAnim[i].Open();
-            yield return new WaitUntil(() => _carrierAnim[i].HangerState == CarrierHangerGenericAnim.State.Open);
-            //
-            StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(strikeCraftKey);
-            s.Owner = formation.Owner;
-            s.transform.position = LaunchTransform[i].position;
-            s.transform.rotation = _ship.transform.rotation;
-            s.AddToFormation(formation);
-            s.Activate();
-            s.StartManeuver(CreateLaunchManeuver(LaunchTransform[i]));
-            formation.MaxSpeed = s.MaxSpeed * 1.1f;
-            formation.TurnRate = s.TurnRate * 0.5f;
-            //
-            _carrierAnim[i].Close();
-            yield return new WaitUntil(() => _carrierAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed);
-            //
+            if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed)
+            {
+                StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(strikeCraftKey);
+                s.Owner = formation.Owner;
+                s.transform.position = _elevatorBed[i].position;
+                s.transform.rotation = _elevatorBed[i].rotation;
+                s.AddToFormation(formation);
+                s.Activate();
+                s.AttachToHangerElevator(_elevatorBed[i], Vector3.zero);
+                formation.MaxSpeed = s.MaxSpeed * 1.1f;
+                formation.TurnRate = s.TurnRate * 0.5f;
+                currLaunchingStrikeCraft[i] = s;
+                CarrierHangerAnim[i].Open();
+            }
+            else if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Open)
+            {
+                currLaunchingStrikeCraft[i].DetachHangerElevator();
+                currLaunchingStrikeCraft[i].StartManeuver(CreateLaunchManeuver(_launchTransform[i]));
+                ++numLaunched;
+                yield return new WaitForSeconds(0.5f);
+                CarrierHangerAnim[i].Close();
+            }
+
             ++i;
-            if (i >= LaunchTransform.Length)
+            if (i >= _launchTransform.Length)
             {
                 i = 0;
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(0.5f);
+            }
+            else
+            {
+                yield return new WaitForEndOfFrame();
             }
         }
+
         yield return null;
         _inLaunch = false;
     }
@@ -106,14 +124,15 @@ public class CarrierBehavior : MonoBehaviour
 
     public Tuple<Transform, Transform, Vector3> GetRecoveryTransforms()
     {
-        return new Tuple<Transform, Transform, Vector3>(RecoveryStartTransform.First(), RecoveryEndTransform.First(), _ship.ActualVelocity);
+        return new Tuple<Transform, Transform, Vector3>(_recoveryStartTransform.First(), _recoveryEndTransform.First(), _ship.ActualVelocity);
     }
 
-    public Transform[] LaunchTransform;
-    public Transform[] RecoveryStartTransform;
-    public Transform[] RecoveryEndTransform;
+    private Transform[] _launchTransform;
+    private Transform[] _recoveryStartTransform;
+    private Transform[] _recoveryEndTransform;
+    private Transform[] _elevatorBed;
 
     private ShipBase _ship;
     private bool _inLaunch;
-    private CarrierHangerGenericAnim[] _carrierAnim;
+    public CarrierHangerGenericAnim[] CarrierHangerAnim;
 }
