@@ -89,7 +89,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     {
         Vector3 vecToTarget = transform.position - enemyShip.transform.position;
         Vector3 unitVecToTarget = vecToTarget.normalized;
-        return enemyShip.transform.position - unitVecToTarget * _attackDist;
+        return enemyShip.transform.position - unitVecToTarget * GlobalDistances.StrikeCraftAIAttackDist;
     }
 
     protected virtual void AdvanceToTarget()
@@ -131,14 +131,14 @@ public class StrikeCraftFormationAIController : MonoBehaviour
             //Debug.Log("Strike craft going straight");
         }
 
-        if (_targetShip != null && vecToTarget.sqrMagnitude <= (_attackDist * _attackDist))
+        if (_targetShip != null && vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIAttackDist * GlobalDistances.StrikeCraftAIAttackDist))
         {
             _currState = FormationState.InCombat;
         }
-        else if (vecToTarget.sqrMagnitude <= (_distEps * _distEps))
+        else if (vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
         {
             _controlledFormation.ApplyBraking();
-            if (_controlledFormation.ActualVelocity.sqrMagnitude < (_distEps * _distEps) && atRequiredHeaing)
+            if (_controlledFormation.ActualVelocity.sqrMagnitude < (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps) && atRequiredHeaing)
             {
                 if (_doNavigate)
                 {
@@ -356,7 +356,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         Vector3 vecToRecovery = recoveryPosition.position - transform.position;
         float m = vecToRecovery.magnitude;
-        if (m < _recoveryTargetDist)
+        if (m < GlobalDistances.StrikeCraftAIFormationRecoveryTargetDist)
         {
             bool isFacingHost = Vector3.Dot(vecToRecovery, transform.up) >= 0f;
             if (!isFacingHost)
@@ -369,7 +369,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         else
         {
-            SetFollowTarget(recoveryPosition, _recoveryTargetDist);
+            SetFollowTarget(recoveryPosition, GlobalDistances.StrikeCraftAIFormationRecoveryTargetDist);
         }
     }
 
@@ -381,11 +381,8 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     protected Transform _followTarget = null;
     protected float _followDist;
     protected ShipAIController.OrderCompleteDlg _orderCallback = null;
-    private static readonly float _angleEps = 0.1f;
-    private static readonly float _distEps = 0.01f;
-    private static readonly float _attackDist = 2.0f;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
-    private static readonly float _recoveryTargetDist = 2.5f;
     private FormationState _currState;
+    private static readonly float _angleEps = 0.1f;
 }

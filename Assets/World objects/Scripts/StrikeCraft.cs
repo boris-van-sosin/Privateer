@@ -89,7 +89,7 @@ public class StrikeCraft : ShipBase
         if (HullHitPoints <= 0)
         {
             ParticleSystem ps = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.SmallExplosion, transform.position);
-            ps.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+            ps.transform.localScale = GlobalDistances.ShipExplosionSizeStrikeCraft;
             ps.Play();
             Destroy(ps.gameObject, 1.0f);
             Destroy(this.gameObject);
@@ -141,7 +141,7 @@ public class StrikeCraft : ShipBase
     public bool InPositionInFormation()
     {
         return ContainingFormation != null &&
-            (ContainingFormation.GetPosition(this) - transform.position).sqrMagnitude <= (StrikeCraftFormation.DistThreshold * StrikeCraftFormation.DistThreshold);
+            (ContainingFormation.GetPosition(this) - transform.position).sqrMagnitude <= (GlobalDistances.StrikeCraftAIFormationPositionTolerance * GlobalDistances.StrikeCraftAIFormationPositionTolerance);
     }
 
     public bool AheadOfPositionInFormation()

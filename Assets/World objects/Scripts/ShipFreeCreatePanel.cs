@@ -76,6 +76,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.TorpedoTube))
             {
                 t = ObjectFactory.CreateTurret(ComponentSlotType.TorpedoTube, ObjectFactory.WeaponType.TorpedoTube);
+                (t as TorpedoTurret).LoadedTorpedoType = ObjectFactory.TorpedoType.Tracking;
             }
             else
             {

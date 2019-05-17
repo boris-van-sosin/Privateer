@@ -123,5 +123,4 @@ public class StrikeCraftFormation : MovementBase
     public Faction Owner;
     public Transform[] Positions;
     public float MaintainFormationSpeedCoefficient;
-    public static readonly float DistThreshold = 0.2f;
 }

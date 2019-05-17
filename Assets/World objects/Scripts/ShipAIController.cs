@@ -154,10 +154,10 @@ public class ShipAIController : MonoBehaviour
             atRequiredHeaing = true;
         }
 
-        if (vecToTarget.sqrMagnitude <= (_distEps * _distEps))
+        if (vecToTarget.sqrMagnitude <= (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
         {
             _controlledShip.ApplyBraking();
-            if (_controlledShip.ActualVelocity.sqrMagnitude < (_distEps * _distEps) && atRequiredHeaing)
+            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps) && atRequiredHeaing)
             {
                 _doNavigate = false;
             }
@@ -389,7 +389,6 @@ public class ShipAIController : MonoBehaviour
     protected float _followDist;
     protected OrderCompleteDlg _orderCallback = null;
     private static readonly float _angleEps = 0.1f;
-    private static readonly float _distEps = 0.01f;
     private static readonly float _rangeCoefficient = 0.95f;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;

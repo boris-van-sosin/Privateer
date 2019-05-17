@@ -70,7 +70,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                 _actualTurnRate = Mathf.Min(_actualTurnRate + TurnRateIncrease * Time.deltaTime, TurnRate);
             }
             Vector3 vecToTarget = (Target - transform.position);
-            if (transform.position.y > _altEpsilon || transform.position.y < -_altEpsilon)
+            if (transform.position.y > GlobalDistances.TorpedoAltEpsilon || transform.position.y < -GlobalDistances.TorpedoAltEpsilon)
             {
                 vecToTarget = vecToTarget.normalized * StepSize;
                 Debug.DrawLine(transform.position, Target, Color.red, Time.deltaTime);
@@ -216,7 +216,6 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     public float Range;
     public float StepSize;
     public float ColdLaunchDist;
-    private readonly float _altEpsilon = 1e-3f;
     private float _distanceTraveled = 0.0f;
     //private Vector3 _lastVecToTarget;
     private bool _targetReached;

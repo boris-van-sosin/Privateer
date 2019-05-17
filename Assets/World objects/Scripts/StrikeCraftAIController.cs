@@ -24,7 +24,7 @@ public class StrikeCraftAIController : ShipAIController
         {
             Vector3 vecToRecovery = _recoveryTarget.Item1.position - transform.position;
             Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
-            if (vecToRecovery.sqrMagnitude <= _startRecoveryDist * _startRecoveryDist)
+            if (vecToRecovery.sqrMagnitude <= GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAIRecoveryDist)
             {
                 Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform, _recoveryTarget.Item3);
                 m.OnManeuverFinish += delegate (Maneuver mm)
@@ -73,10 +73,10 @@ public class StrikeCraftAIController : ShipAIController
             //Debug.Log("Strike craft going straight");
         }
 
-        if (vecToTarget.sqrMagnitude <= (_strikeCraftDistEps * _strikeCraftDistEps))
+        if (vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
         {
             _controlledShip.ApplyBraking();
-            if (_controlledShip.ActualVelocity.sqrMagnitude < (_strikeCraftDistEps * _strikeCraftDistEps) && atRequiredHeaing)
+            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps) && atRequiredHeaing)
             {
                 _doNavigate = false;
             }
@@ -153,11 +153,11 @@ public class StrikeCraftAIController : ShipAIController
         {
             if (_controlledCraft.AheadOfPositionInFormation())
             {
-                return _formation.GetPosition(_controlledCraft) + _formation.transform.up * 2f;
+                return _formation.GetPosition(_controlledCraft) + _formation.transform.up * GlobalDistances.StrikeCraftAIAheadOfFormationNavDist;
             }
             else
             {
-                return _formation.GetPosition(_controlledCraft) - _formation.transform.up * 0.1f;
+                return _formation.GetPosition(_controlledCraft) - _formation.transform.up * GlobalDistances.StrikeCraftAIBehindFormationNavDist;
             }
         }
         else
@@ -172,11 +172,11 @@ public class StrikeCraftAIController : ShipAIController
         {
             if (_controlledCraft.AheadOfPositionInFormation())
             {
-                NavigateTo(_formation.GetPosition(_controlledCraft) + _formation.transform.up * 2f);
+                NavigateTo(_formation.GetPosition(_controlledCraft) + _formation.transform.up * GlobalDistances.StrikeCraftAIAheadOfFormationNavDist);
             }
             else
             {
-                NavigateTo(_formation.GetPosition(_controlledCraft) - _formation.transform.up * 0.1f);
+                NavigateTo(_formation.GetPosition(_controlledCraft) - _formation.transform.up * GlobalDistances.StrikeCraftAIBehindFormationNavDist);
             }
         }
     }
@@ -196,22 +196,21 @@ public class StrikeCraftAIController : ShipAIController
         _recoveryTarget = recoveryPositions;
         Vector3 vecToRecovery = recoveryPositions.Item1.position - transform.position;
         float m = vecToRecovery.magnitude;
-        if (m < _startRecoveryDist)
+        if (m < GlobalDistances.StrikeCraftAIRecoveryDist)
         {
             Debug.Log("Too close for recovery?");
-            bool isFacingHost = Vector3.Dot(vecToRecovery, transform.up) >= 0f;
-            if (!isFacingHost)
+            Maneuver ma = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform, _recoveryTarget.Item3);
+            ma.OnManeuverFinish += delegate (Maneuver ma2)
             {
-                Vector3 dirToRecovery = vecToRecovery / m;
-                Vector3 halfTurn = Quaternion.AngleAxis(90, Vector3.up) * dirToRecovery;
-                float radius = 1f;
-                NavigateTo(transform.position + radius * halfTurn);
-            }
+                StartCoroutine(BeginRecoveryFinalPhase(ma2));
+            };
+            _controlledCraft.StartManeuver(ma);
+            CurrActivity = ShipActivity.Recovering;
         }
         else
         {
             Vector3 dirToRecovery = vecToRecovery / m;
-            SetFollowTarget(recoveryPositions.Item1, _startRecoveryDist);
+            SetFollowTarget(recoveryPositions.Item1, GlobalDistances.StrikeCraftAIRecoveryDist * 0.95f);
         }
     }
 
@@ -235,7 +234,7 @@ public class StrikeCraftAIController : ShipAIController
             {
                 yield return
                     new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
-                        p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity) - (2.5f * carrierRecoveryHint.up),
+                        p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity) - (GlobalDistances.StrikeCraftAIRecoveryPathFixSize * carrierRecoveryHint.up),
                         v => carrierRecoveryHint.up);
             }
             else if (i == numPathPts - 1)
@@ -265,10 +264,8 @@ public class StrikeCraftAIController : ShipAIController
     }
 
     private static readonly float _strikeCraftAngleEps = 5f;
-    private static readonly float _strikeCraftDistEps = 0.01f;
     private StrikeCraft _controlledCraft;
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;
     private Tuple<Transform, Transform, Vector3> _recoveryTarget;
-    private static readonly float _startRecoveryDist = 5f;
 }

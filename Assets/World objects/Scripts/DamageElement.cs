@@ -73,7 +73,7 @@ public static class Combat
     public static IEnumerator BoardingCombat(Ship attacker, Ship defender)
     {
         Tuple<Canvas, BoardingProgressPanel> panel = ObjectFactory.CreateBoardingProgressPanel();
-        panel.Item1.transform.position = (defender.transform.position + attacker.transform.position) / 2 + new Vector3(0, 0.1f, 1.0f);
+        panel.Item1.transform.position = (defender.transform.position + attacker.transform.position) / 2 + GlobalDistances.BoardingPanelOffset;
         panel.Item2.StartBreaching(attacker, defender);
         LinkedList<ShipCharacter> side1Q = new LinkedList<ShipCharacter>(attacker.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
         yield return new WaitForEndOfFrame();

@@ -91,9 +91,24 @@ public static class ObjectFactory
     {
         if (_prototypes != null)
         {
-            Torpedo p = _prototypes.CreateTorpedo(launchVector, launchOrientation, target, range, origShip);
-            p.ProjectileWarhead = w;
-            return p;
+            Torpedo t = _prototypes.CreateTorpedo(launchVector, launchOrientation, target, range, origShip);
+            t.ProjectileWarhead = w;
+            return t;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, TorpedoType tt, ShipBase origShip)
+    {
+        if (_prototypes != null)
+        {
+            WarheadDataEntry4 torpData = _torpedoWarheads[tt];
+            Torpedo t = CreateTorpedo(launchVector, launchOrientation, target, torpData.MaxRange, CreateWarhead(tt), origShip);
+            t.transform.localScale = Vector3.one * torpData.ProjectileScale;
+            return t;
         }
         else
         {

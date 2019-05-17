@@ -142,8 +142,7 @@ public class TorpedoTurret : TurretBase
         for (int i = 0; i < _torpedoesInSpread; ++i)
         {
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
-            Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
-            Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, MaxRange, w, ContainingShip);
+            Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, LoadedTorpedoType, ContainingShip);
             t.IsTracking = (LoadedTorpedoType == ObjectFactory.TorpedoType.Tracking);
             t.transform.position = Muzzles[_nextBarrel].position;
             yield return new WaitForSeconds(0.1f);

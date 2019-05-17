@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 1080825588676972}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 4023200070324288}
   - {fileID: 4412031498959922}
@@ -95,9 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24afe3ff2ad7314a8593f5e3facc6c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 2.5
-  Thrust: 3
-  Braking: 3
+  MaxSpeed: 1.25
+  Thrust: 1.5
+  Braking: 1.5
   TurnRate: 40
   ProductionKey: Fed Fighter
   MaxHullHitPoints: 3

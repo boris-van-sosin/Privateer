@@ -47259,7 +47259,7 @@ Transform:
   m_GameObject: {fileID: 1516312774358914}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children:
   - {fileID: 4641932529757012}
   - {fileID: 4892974722498568}
@@ -47333,9 +47333,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbe28cf94e9332b45acc258c7c677c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 1.8
-  Thrust: 0.2
-  Braking: 1.6
+  MaxSpeed: 0.9
+  Thrust: 0.1
+  Braking: 0.8
   TurnRate: 30
   ProductionKey: Richmond
   MaxHullHitPoints: 2200

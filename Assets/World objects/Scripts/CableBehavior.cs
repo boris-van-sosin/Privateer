@@ -20,8 +20,6 @@ public class CableBehavior : MonoBehaviour
     public float MaxRopeLength;
     //Mass of what the rope is carrying
     private float loadMass = 0f;
-    //How fast we can add more/less rope
-    private float winchSpeed = 2f;
 
     //The joint we use to approximate the rope
     private SpringJoint springJoint;
@@ -133,13 +131,13 @@ public class CableBehavior : MonoBehaviour
         //More rope
         if (Input.GetKey(KeyCode.O) && ropeLength < MaxRopeLength)
         {
-            ropeLength += winchSpeed * Time.deltaTime;
+            ropeLength += GlobalDistances.HarpaxCableWinchSpeed * Time.deltaTime;
 
             hasChangedRope = true;
         }
         else if (Input.GetKey(KeyCode.I) && ropeLength > MinRopeLength)
         {
-            ropeLength -= winchSpeed * Time.deltaTime;
+            ropeLength -= GlobalDistances.HarpaxCableWinchSpeed * Time.deltaTime;
 
             hasChangedRope = true;
         }

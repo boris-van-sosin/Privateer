@@ -676,19 +676,19 @@ public class Ship : ShipBase
             switch (ShipSize)
             {
                 case ObjectFactory.ShipSize.Sloop:
-                    explosion.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeSloop;
                     break;
                 case ObjectFactory.ShipSize.Frigate:
-                    explosion.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeSFrigate;
                     break;
                 case ObjectFactory.ShipSize.Destroyer:
-                    explosion.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeDestroyer;
                     break;
                 case ObjectFactory.ShipSize.Cruiser:
-                    explosion.transform.localScale = new Vector3(1.7f, 1.7f, 1.7f);
+                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeCruiser;
                     break;
                 case ObjectFactory.ShipSize.CapitalShip:
-                    explosion.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeCapitalShip;
                     break;
                 default:
                     break;
