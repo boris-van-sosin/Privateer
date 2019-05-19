@@ -735,6 +735,7 @@ public class Ship : ShipBase
         if (!_engine.ComponentIsWorking)
         {
             ShipImmobilized = true;
+            _speed = Mathf.Min(_speed, MaxSpeed / 2f);
             _engineDamageSmoke.Play();
             foreach (ParticleSystem p in _engineExhaustsOn.Union(_engineExhaustsIdle))
             {

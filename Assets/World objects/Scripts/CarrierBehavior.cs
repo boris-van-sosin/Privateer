@@ -63,7 +63,17 @@ public class CarrierBehavior : MonoBehaviour
             else if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Open)
             {
                 currLaunchingStrikeCraft[i].DetachHangerElevator();
-                currLaunchingStrikeCraft[i].StartManeuver(CreateLaunchManeuver(_launchTransform[i]));
+                Maneuver m = CreateLaunchManeuver(_launchTransform[i]);
+                if (numLaunched == 0)
+                {
+                    m.OnManeuverFinish += delegate (Maneuver m1)
+                    {
+                        formation.transform.position = formation.AllStrikeCraft().First().transform.position;
+                        formation.transform.rotation = formation.AllStrikeCraft().First().transform.rotation;
+                        formation.GetComponent<StrikeCraftFormationAIController>().OrderEscort(_ship);
+                    };
+                }
+                currLaunchingStrikeCraft[i].StartManeuver(m);
                 ++numLaunched;
                 yield return new WaitForSeconds(0.5f);
                 CarrierHangerAnim[i].Close();
@@ -81,8 +91,8 @@ public class CarrierBehavior : MonoBehaviour
             }
         }
 
-        yield return null;
         _inLaunch = false;
+        yield return null;
     }
 
     private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr)

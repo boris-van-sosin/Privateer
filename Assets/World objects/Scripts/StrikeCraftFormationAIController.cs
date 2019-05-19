@@ -37,7 +37,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.AllShipsLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, GlobalDistances.StrikeCraftAIFormationAggroDist, ObjectFactory.AllShipsLayerMask);
         ShipBase foundTarget = null;
         foreach (Collider c in colliders)
         {
@@ -74,7 +74,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     private void CheckTarget()
     {
-        if (_targetShip != null && (_targetShip.ShipActiveInCombat || (_targetShip.transform.position - transform.position).sqrMagnitude > 50 * 50))
+        if (_targetShip != null && (_targetShip.ShipActiveInCombat || (_targetShip.transform.position - transform.position).sqrMagnitude > (GlobalDistances.StrikeCraftAIFormationAggroDist * GlobalDistances.StrikeCraftAIFormationAggroDist)))
         {
             _targetShip = null;
         }
@@ -371,6 +371,11 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         {
             SetFollowTarget(recoveryPosition, GlobalDistances.StrikeCraftAIFormationRecoveryTargetDist);
         }
+    }
+
+    public void OrderEscort(ShipBase s)
+    {
+        SetFollowTarget(s.transform, GlobalDistances.StrikeCraftAIFormationEscortDist);
     }
 
     protected StrikeCraftFormation _controlledFormation;
