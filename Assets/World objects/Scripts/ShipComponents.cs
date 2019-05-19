@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/*
 public class TurretComponent : ITurret
 {
     public TurretComponent(TurretBase t)
@@ -61,7 +62,7 @@ public class TurretComponent : ITurret
     private readonly ComponentSlotType[] SolotTypes;
 
     public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
-}
+}*/
 
 public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
 {

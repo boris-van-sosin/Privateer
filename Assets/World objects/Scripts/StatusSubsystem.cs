@@ -13,11 +13,12 @@ public class StatusSubsystem : MonoBehaviour
     {
         _attachedComponent = comp;
         _attachedComponent.OnHitpointsChanged += UpdateHitPointsDisplay;
+        UpdateHitPointsDisplay();
     }
 
     public void SetImage(Sprite s)
     {
-        _image.sprite = s;
+        _image.overrideSprite = s;
     }
 
     void OnDestroy()
