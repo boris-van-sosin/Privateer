@@ -30,6 +30,7 @@ public class StrikeCraftFormation : MovementBase
             _positionsCache.Clear();
             if (_craft.Count == 0)
             {
+                HostCarrier.DeactivateFormation(this);
                 Destroy(gameObject);
             }
             return true;

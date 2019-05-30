@@ -14,12 +14,14 @@ public class CarrierBehavior : MonoBehaviour
         _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
         _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
         _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
+        _formations = new List<Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>>(MaxFormations);
         _inLaunch = false;
+        _inRecovery = false;
     }
 
     public void LaunchDbg()
     {
-        if (!_inLaunch)
+        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
         {
             StartCoroutine(LaunchSequence("Fed Torpedo Bomber"));
         }
@@ -34,6 +36,7 @@ public class CarrierBehavior : MonoBehaviour
 
         _inLaunch = true;
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
+        _formations.Add(new Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
 
         StrikeCraft[] currLaunchingStrikeCraft = new StrikeCraft[CarrierHangerAnim.Length];
 
@@ -54,7 +57,7 @@ public class CarrierBehavior : MonoBehaviour
                 s.transform.rotation = _elevatorBed[i].rotation;
                 s.AddToFormation(formation);
                 s.Activate();
-                s.AttachToHangerElevator(_elevatorBed[i], Vector3.zero);
+                s.AttachToHangerElevator(_elevatorBed[i]);
                 formation.MaxSpeed = s.MaxSpeed * 1.1f;
                 formation.TurnRate = s.TurnRate * 0.5f;
                 currLaunchingStrikeCraft[i] = s;
@@ -95,6 +98,54 @@ public class CarrierBehavior : MonoBehaviour
         yield return null;
     }
 
+    public void DeactivateFormation(StrikeCraftFormation f)
+    {
+        int i = _formations.FindIndex(t => t.Item1 == f);
+        if (i >= 0)
+        {
+            if (_currRecovering == f)
+            {
+                _currRecovering = null;
+                _inRecovery = false;
+            }
+            _formations.RemoveAt(i);
+        }
+    }
+
+    public bool RecoveryTryStart(StrikeCraftFormation f)
+    {
+        if (_inLaunch && _inRecovery)
+        {
+            return false;
+        }
+
+        _currRecovering = f;
+
+        _inRecovery = true;
+        return true;
+    }
+
+    public bool RecoveryTryStartSingle(StrikeCraft s, int hangerIdx, GenericEmptyDelegate onReadyToLand)
+    {
+        if (CarrierHangerAnim[hangerIdx].HangerState == CarrierHangerGenericAnim.State.Closed)
+        {
+            CarrierHangerAnim[hangerIdx].Open(onReadyToLand);
+            return true;
+        }
+        return false;
+    }
+
+    public bool RecoveryTryLand(StrikeCraft s, int hangerIdx, GenericEmptyDelegate onFinishLanding)
+    {
+        if (CarrierHangerAnim[hangerIdx].HangerState == CarrierHangerGenericAnim.State.Open)
+        {
+            s.AttachToHangerElevator(_elevatorBed[hangerIdx]);
+            CarrierHangerAnim[hangerIdx].Close(onFinishLanding);
+            return true;
+        }
+        return false;
+    }
+
     private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr)
     {
         int numPathPts = rawPath.Points.Length;
@@ -132,10 +183,25 @@ public class CarrierBehavior : MonoBehaviour
 
     private Vector3 ClearY(Vector3 a) => new Vector3(a.x, 0, a.z);
 
-    public Tuple<Transform, Transform, Vector3> GetRecoveryTransforms()
+    public struct RecoveryTransforms
     {
-        return new Tuple<Transform, Transform, Vector3>(_recoveryStartTransform.First(), _recoveryEndTransform.First(), _ship.ActualVelocity);
+        public Transform RecoveryStart;
+        public Transform RecoveryEnd;
+        public int Idx;
     }
+
+    public RecoveryTransforms GetRecoveryTransforms()
+    {
+        _lastRecoveryHanger = (_lastRecoveryHanger + 1) % CarrierHangerAnim.Length;
+        return new RecoveryTransforms()
+        {
+            RecoveryStart = _recoveryStartTransform[0],
+            RecoveryEnd = _recoveryEndTransform[0],
+            Idx = 0
+        };
+    }
+
+    public Vector3 Velocity => _ship.ActualVelocity;
 
     private Transform[] _launchTransform;
     private Transform[] _recoveryStartTransform;
@@ -144,5 +210,12 @@ public class CarrierBehavior : MonoBehaviour
 
     private ShipBase _ship;
     private bool _inLaunch;
+    private bool _inRecovery;
+    private StrikeCraftFormation _currRecovering = null;
+    private int _lastRecoveryHanger = 0;
+
+    private List<Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
+
     public CarrierHangerGenericAnim[] CarrierHangerAnim;
+    public int MaxFormations;
 }

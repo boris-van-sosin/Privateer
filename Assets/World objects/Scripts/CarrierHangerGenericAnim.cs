@@ -21,25 +21,35 @@ public class CarrierHangerGenericAnim : MonoBehaviour
 
     public void Open()
     {
+        Open(null);
+    }
+
+    public void Open(GenericEmptyDelegate onFinish)
+    {
         if (HangerState != State.Closed)
         {
             return;
         }
 
-        StartCoroutine(AnimateOpen());
+        StartCoroutine(AnimateOpen(onFinish));
     }
 
-    public void Close()
+    public void Close(GenericEmptyDelegate onFinish)
     {
         if (HangerState != State.Open)
         {
             return;
         }
 
-        StartCoroutine(AnimateClose());
+        StartCoroutine(AnimateClose(onFinish));
     }
 
-    private IEnumerator AnimateOpen()
+    public void Close()
+    {
+        Close(null);
+    }
+
+    private IEnumerator AnimateOpen(GenericEmptyDelegate onFinish)
     {
         int phase = 1;
         float timeStarted = Time.time;
@@ -79,10 +89,11 @@ public class CarrierHangerGenericAnim : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         HangerState = State.Open;
+        onFinish?.Invoke();
         yield return null;
     }
 
-    private IEnumerator AnimateClose()
+    private IEnumerator AnimateClose(GenericEmptyDelegate onFinish)
     {
         int phase = _phases.Length - 2;
         float timeStarted = Time.time;
@@ -122,6 +133,7 @@ public class CarrierHangerGenericAnim : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         HangerState = State.Closed;
+        onFinish?.Invoke();
         yield return null;
     }
 

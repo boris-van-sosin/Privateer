@@ -364,7 +364,7 @@ public class ShipAIController : MonoBehaviour
                 case ShipActivity.Following:
                 case ShipActivity.Launching:
                 case ShipActivity.NavigatingToRecovery:
-                case ShipActivity.StartingRecovering:
+                case ShipActivity.StartingRecovery:
                     return false;
                 default:
                     break;
@@ -402,7 +402,7 @@ public class ShipAIController : MonoBehaviour
         Defending,
         Launching,
         NavigatingToRecovery,
-        StartingRecovering,
+        StartingRecovery,
         Recovering
     }
 

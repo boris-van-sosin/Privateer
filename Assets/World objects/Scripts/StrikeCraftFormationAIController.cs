@@ -17,9 +17,11 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_currState == FormationState.Recovering)
+        if (_currState == FormationState.ReturningToHost)
         {
+            _currState = FormationState.Recovering;
             _doNavigate = false;
+            _controlledFormation.HostCarrier.RecoveryTryStart(_controlledFormation);
             foreach (StrikeCraft craft in _controlledFormation.AllStrikeCraft())
             {
                 StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
@@ -327,7 +329,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
     }
 
-    private enum FormationState { Idle, Launching, Recovering, Defending, Moving, InCombat };
+    private enum FormationState { Idle, Launching, ReturningToHost, Recovering, Defending, Moving, InCombat };
 
     public bool DoMaintainFormation()
     {
@@ -345,7 +347,8 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     public void OrderReturnToHost(Transform recoveryPosition)
     {
-        _currState = FormationState.Recovering;
+        //
+        _currState = FormationState.ReturningToHost;
         foreach (StrikeCraft craft in _controlledFormation.AllStrikeCraft())
         {
             StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
@@ -354,6 +357,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
                 ctl.OrderStartNavigatenToHost();
             }
         }
+        //
         Vector3 vecToRecovery = recoveryPosition.position - transform.position;
         float m = vecToRecovery.magnitude;
         if (m < GlobalDistances.StrikeCraftAIFormationRecoveryTargetDist)

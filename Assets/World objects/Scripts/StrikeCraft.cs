@@ -24,34 +24,13 @@ public class StrikeCraft : ShipBase
     {
         if (_inRecoveryFinalPhase)
         {
-            float recAdvance = Time.deltaTime * _recoverySpeed;
-            if ((transform.position - _recoveryFinalPhaseTarget.position).sqrMagnitude < recAdvance * recAdvance)
-            {
-                Destroy(gameObject);
-            }
-            else if (!_inRecoveryFinalPhaseDescent)
-            {
-                Vector3 recTargetFlat = new Vector3(_recoveryFinalPhaseTarget.position.x, transform.position.y, _recoveryFinalPhaseTarget.position.z);
-                if ((transform.position - recTargetFlat).sqrMagnitude < recAdvance * recAdvance)
-                {
-                    _inRecoveryFinalPhaseDescent = true;
-                }
-                transform.position = Vector3.MoveTowards(transform.position, recTargetFlat, recAdvance);
-                Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
-                transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
-            }
-            else
-            {
-                transform.position = Vector3.MoveTowards(transform.position, _recoveryFinalPhaseTarget.position, recAdvance);
-                Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
-                transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
-            }
+            RecoveryUpdate();
         }
         else if (_attachedToHangerElevator)
         {
             Vector3 pos = _hangerElevator.TransformPoint(_hangerElevatorLocalOffset);
             transform.position = pos;
-            transform.rotation = _hangerElevator.rotation;
+            transform.rotation = _hangerElevatorRotationOffset * _hangerElevator.rotation;
         }
         else
         {
@@ -168,18 +147,73 @@ public class StrikeCraft : ShipBase
         RemoveFromFormation();
     }
 
-    public void BeginRecoveryFinalPhase(Transform target)
+    public void BeginRecoveryFinalPhase(Transform target, int idx)
     {
         _inRecoveryFinalPhase = true;
         _recoveryFinalPhaseTarget = target;
+        _recoveryFinalPhaseIdx = idx;
         _rigidBody.isKinematic = true;
         _rigidBody.velocity = Vector3.zero;
     }
 
-    public void AttachToHangerElevator(Transform elevator, Vector3 localOffset)
+    private void RecoveryUpdate()
+    {
+        if (_inRecoveryInsideElevator)
+        {
+            Vector3 pos = _hangerElevator.TransformPoint(_hangerElevatorLocalOffset);
+            transform.position = pos;
+            transform.rotation = _hangerElevatorRotationOffset * _hangerElevator.rotation;
+            return;
+        }
+        float recAdvance = Time.deltaTime * _recoverySpeed;
+        if (_inRecoveryHangerOpen && _inRecoveryPositionForDescent && !_inRecoveryFinalPhaseDescent)
+        {
+            _inRecoveryFinalPhaseDescent = true;
+        }
+        if (!_inRecoveryFinalPhaseDescent)
+        {
+            Vector3 recTargetFlat = new Vector3(_recoveryFinalPhaseTarget.position.x, transform.position.y, _recoveryFinalPhaseTarget.position.z);
+            if ((transform.position - recTargetFlat).sqrMagnitude < recAdvance * recAdvance)
+            {
+                _inRecoveryPositionForDescent = true;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, recTargetFlat, recAdvance);
+            Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
+            transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
+        }
+        else
+        {
+            if ((transform.position - _recoveryFinalPhaseTarget.position).sqrMagnitude < recAdvance * recAdvance)
+            {
+                if (ContainingFormation.HostCarrier.RecoveryTryLand(this, _recoveryFinalPhaseIdx, FinishRecovery))
+                {
+                    _inRecoveryInsideElevator = true;
+                }
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, _recoveryFinalPhaseTarget.position, recAdvance);
+                Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
+                transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
+            }
+        }
+    }
+
+    public void OnRecoveryHangerOpen()
+    {
+        _inRecoveryHangerOpen = true;
+    }
+
+    private void FinishRecovery()
+    {
+        Destroy(gameObject);
+    }
+
+    public void AttachToHangerElevator(Transform elevator)
     {
         _hangerElevator = elevator;
-        _hangerElevatorLocalOffset = localOffset;
+        _hangerElevatorLocalOffset = elevator.InverseTransformPoint(transform.position);
+        _hangerElevatorRotationOffset = transform.rotation * Quaternion.Inverse(elevator.rotation);
         _attachedToHangerElevator = true;
         if (_trail != null)
         {
@@ -198,12 +232,19 @@ public class StrikeCraft : ShipBase
     }
 
     private int _strikeCraftHitPoints = 5;
+
     private bool _inRecoveryFinalPhase = false;
+    private bool _inRecoveryPositionForDescent = false;
+    private bool _inRecoveryHangerOpen = false;
     private bool _inRecoveryFinalPhaseDescent = false;
+    private bool _inRecoveryInsideElevator = false;
     private bool _attachedToHangerElevator = false;
+
     private Transform _hangerElevator;
     private Vector3 _hangerElevatorLocalOffset;
+    private Quaternion _hangerElevatorRotationOffset;
     private Transform _recoveryFinalPhaseTarget;
+    private int _recoveryFinalPhaseIdx;
     private float _recoverySpeed;
     private TrailRenderer _trail;
 }

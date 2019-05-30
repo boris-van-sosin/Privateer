@@ -20,19 +20,13 @@ public class StrikeCraftAIController : ShipAIController
         {
             return;
         }
-        if (CurrActivity == ShipActivity.StartingRecovering)
+        if (CurrActivity == ShipActivity.StartingRecovery)
         {
-            Vector3 vecToRecovery = _recoveryTarget.Item1.position - transform.position;
+            Vector3 vecToRecovery = _recoveryTarget.RecoveryStart.position - transform.position;
             Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
             if (vecToRecovery.sqrMagnitude <= GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAIRecoveryDist)
             {
-                Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform, _recoveryTarget.Item3);
-                m.OnManeuverFinish += delegate (Maneuver mm)
-                {
-                    StartCoroutine(BeginRecoveryFinalPhase(mm));
-                };
-                _controlledCraft.StartManeuver(m);
-                CurrActivity = ShipActivity.Recovering;
+                RecoveryStartClimb();
             }
         }
     }
@@ -40,7 +34,7 @@ public class StrikeCraftAIController : ShipAIController
     private System.Collections.IEnumerator BeginRecoveryFinalPhase(Maneuver mm)
     {
         yield return new WaitForEndOfFrame();
-        _controlledCraft.BeginRecoveryFinalPhase(_recoveryTarget.Item2);
+        _controlledCraft.BeginRecoveryFinalPhase(_recoveryTarget.RecoveryEnd, _recoveryTarget.Idx);
         yield return null;
     }
 
@@ -186,31 +180,40 @@ public class StrikeCraftAIController : ShipAIController
         CurrActivity = ShipActivity.NavigatingToRecovery;
     }
 
-    public void OrderReturnToHost(Tuple<Transform, Transform, Vector3> recoveryPositions)
+    public void OrderReturnToHost(CarrierBehavior.RecoveryTransforms recoveryPositions)
     {
-        if (CurrActivity == ShipActivity.StartingRecovering || CurrActivity == ShipActivity.Recovering)
+        if (CurrActivity == ShipActivity.StartingRecovery || CurrActivity == ShipActivity.Recovering)
         {
             return;
         }
-        CurrActivity = ShipActivity.StartingRecovering;
+        CurrActivity = ShipActivity.StartingRecovery;
         _recoveryTarget = recoveryPositions;
-        Vector3 vecToRecovery = recoveryPositions.Item1.position - transform.position;
+        Vector3 vecToRecovery = recoveryPositions.RecoveryStart.position - transform.position;
         float m = vecToRecovery.magnitude;
         if (m < GlobalDistances.StrikeCraftAIRecoveryDist)
         {
             Debug.Log("Too close for recovery?");
-            Maneuver ma = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.Item1.transform, _recoveryTarget.Item3);
-            ma.OnManeuverFinish += delegate (Maneuver ma2)
-            {
-                StartCoroutine(BeginRecoveryFinalPhase(ma2));
-            };
-            _controlledCraft.StartManeuver(ma);
-            CurrActivity = ShipActivity.Recovering;
+            RecoveryStartClimb();
         }
         else
         {
             Vector3 dirToRecovery = vecToRecovery / m;
-            SetFollowTarget(recoveryPositions.Item1, GlobalDistances.StrikeCraftAIRecoveryDist * 0.95f);
+            SetFollowTarget(recoveryPositions.RecoveryStart, GlobalDistances.StrikeCraftAIRecoveryDist * 0.95f);
+        }
+    }
+
+    private void RecoveryStartClimb()
+    {
+        Vector3 carrierVelocity = _controlledCraft.ContainingFormation.HostCarrier.Velocity;
+        if (_controlledCraft.ContainingFormation.HostCarrier.RecoveryTryStartSingle(_controlledCraft, _recoveryTarget.Idx, _controlledCraft.OnRecoveryHangerOpen))
+        {
+            Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.RecoveryStart.transform, carrierVelocity);
+            m.OnManeuverFinish += delegate (Maneuver mm)
+            {
+                StartCoroutine(BeginRecoveryFinalPhase(mm));
+            };
+            _controlledCraft.StartManeuver(m);
+            CurrActivity = ShipActivity.Recovering;
         }
     }
 
@@ -267,5 +270,5 @@ public class StrikeCraftAIController : ShipAIController
     private StrikeCraft _controlledCraft;
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;
-    private Tuple<Transform, Transform, Vector3> _recoveryTarget;
+    private CarrierBehavior.RecoveryTransforms _recoveryTarget;
 }

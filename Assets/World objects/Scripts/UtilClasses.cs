@@ -13,3 +13,5 @@ public static class FlagsUtils
         return (flagsValue & flagValue) != 0;
     }
 }
+
+public delegate void GenericEmptyDelegate();
