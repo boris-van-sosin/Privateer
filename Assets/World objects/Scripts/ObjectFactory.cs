@@ -665,22 +665,24 @@ public static class ObjectFactory
             string[] elements = s.Trim().Split(',');
             if (elements[0].Trim() == "3")
             {
+                int i = 1;
                 return new WarheadDataEntry3()
                 {
-                    LaunchWeaponSize = (WeaponSize) System.Enum.Parse(typeof(WeaponSize), elements[1].Trim(), true),
-                    LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[2].Trim(), true),
-                    Ammo = (AmmoType)System.Enum.Parse(typeof(AmmoType), elements[3].Trim(), true),
+                    LaunchWeaponSize = (WeaponSize) System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
+                    LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
+                    Ammo = (AmmoType)System.Enum.Parse(typeof(AmmoType), elements[i++].Trim(), true),
                     WarheadData = new Warhead()
                     {
-                        ShieldDamage = int.Parse(elements[4].Trim()),
-                        ArmourPenetration = int.Parse(elements[5].Trim()),
-                        ArmourDamage = int.Parse(elements[6].Trim()),
-                        SystemDamage = int.Parse(elements[7].Trim()),
-                        HullDamage = int.Parse(elements[8].Trim()),
-                        HeatGenerated = int.Parse(elements[9].Trim()),
-                        SystemHitMultiplicity = int.Parse(elements[10].Trim()),
-                        BlastRadius = float.Parse(elements[11].Trim()),
-                        WeaponEffectScale = float.Parse(elements[12].Trim())
+                        ShieldDamage = int.Parse(elements[i++].Trim()),
+                        ArmourPenetration = int.Parse(elements[i++].Trim()),
+                        ArmourDamage = int.Parse(elements[i++].Trim()),
+                        SystemDamage = int.Parse(elements[i++].Trim()),
+                        HullDamage = int.Parse(elements[i++].Trim()),
+                        HeatGenerated = int.Parse(elements[i++].Trim()),
+                        SystemHitMultiplicity = int.Parse(elements[i++].Trim()),
+                        BlastRadius = float.Parse(elements[i++].Trim()),
+                        EffectVsStrikeCraft = float.Parse(elements[i++].Trim()),
+                        WeaponEffectScale = float.Parse(elements[i++].Trim())
                     }
                 };
             }

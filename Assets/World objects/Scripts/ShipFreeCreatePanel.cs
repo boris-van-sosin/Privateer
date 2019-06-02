@@ -29,7 +29,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
         bool userShip = UserToggle.isOn;
         if (ObjectFactory.GetAllShipTypes().Contains(shipKey))
         {
-            CreateShipInner(shipKey, friendly, userShip);
+            for (int i = 0; i < _numToSpawn; ++i)
+            {
+                Vector3 offset = new Vector3(friendly ? -(i % 4) : (i % 4), -(i / 4), 0) * 6;
+                CreateShipInner(shipKey, friendly, userShip && (i == 0), offset);
+            }
         }
         else if (ObjectFactory.GetAllStrikeCraftTypes().Contains(shipKey))
         {
@@ -37,7 +41,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
     }
 
-    private void CreateShipInner(string shipKey, bool friendly, bool userShip)
+    private void CreateShipInner(string shipKey, bool friendly, bool userShip, Vector3 offset)
     {
         Ship s = ObjectFactory.CreateShip(shipKey);
 
@@ -144,6 +148,8 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             s.gameObject.AddComponent<ShipAIController>();
         }
+
+        s.transform.Translate(offset);
 
         _cfgPanelVisible = false;
         _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
@@ -256,9 +262,18 @@ public class ShipFreeCreatePanel : MonoBehaviour
         return res;
     }
 
+    public void SetNumToSpawn()
+    {
+        _numToSpawn = Mathf.RoundToInt(SliderNumToSpawn.value);
+        TextNumToSpawn.text = _numToSpawn.ToString();
+    }
+
     public UnityEngine.UI.Dropdown ShipDropdown;
     public UnityEngine.UI.Dropdown SideDropdown;
     public UnityEngine.UI.Toggle UserToggle;
+    public UnityEngine.UI.Slider SliderNumToSpawn;
+    public UnityEngine.UI.Text TextNumToSpawn;
     private WeaponControlGroupCfgPanel _weaponsCfgPanel;
+    private int _numToSpawn;
     private bool _cfgPanelVisible;
 }

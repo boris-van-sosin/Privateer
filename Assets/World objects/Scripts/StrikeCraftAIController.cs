@@ -164,13 +164,26 @@ public class StrikeCraftAIController : ShipAIController
     {
         if (_formationAI.DoMaintainFormation())
         {
+            Vector3 navTarget;
             if (_controlledCraft.AheadOfPositionInFormation())
             {
-                NavigateTo(_formation.GetPosition(_controlledCraft) + _formation.transform.up * GlobalDistances.StrikeCraftAIAheadOfFormationNavDist);
+                navTarget = _formation.GetPosition(_controlledCraft) + (_formation.transform.up * GlobalDistances.StrikeCraftAIAheadOfFormationNavDist);
+                
             }
             else
             {
-                NavigateTo(_formation.GetPosition(_controlledCraft) - _formation.transform.up * GlobalDistances.StrikeCraftAIBehindFormationNavDist);
+                navTarget = _formation.GetPosition(_controlledCraft) - (_formation.transform.up * GlobalDistances.StrikeCraftAIBehindFormationNavDist);
+            }
+            Vector3? bypassVec = BypassObstacle(navTarget - transform.position);
+            if (bypassVec == null)
+            {
+                NavigateTo(navTarget);
+            }
+            else
+            {
+                NavigateTo(bypassVec.Value);
+                _bypassing = true;
+                _bypassStartedTime = Time.time;
             }
         }
     }

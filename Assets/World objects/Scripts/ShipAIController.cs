@@ -137,6 +137,7 @@ public class ShipAIController : MonoBehaviour
         }
 
         Vector3 heading = transform.up;
+
         Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
         Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
         float angleToTarget = Quaternion.FromToRotation(heading, vecToTarget).eulerAngles.y;
@@ -222,7 +223,7 @@ public class ShipAIController : MonoBehaviour
         _doFollow = true;
     }
 
-    private Vector3? BypassObstacle(Vector3 direction)
+    protected Vector3? BypassObstacle(Vector3 direction)
     {
         Vector3 directionNormalized = direction.normalized;
         Vector3 rightVec = Quaternion.AngleAxis(90, Vector3.up) * directionNormalized;
@@ -304,6 +305,10 @@ public class ShipAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
+            if (_bypassing && Time.time - _bypassStartedTime > 5f)
+            {
+                _bypassing = false;
+            }
             if (_controlledShip.ShipControllable && DoSeekTargets)
             {
                 if (_targetShip == null)
@@ -318,7 +323,7 @@ public class ShipAIController : MonoBehaviour
                         continue;
                     }
                     Vector3 attackPos = NavigationDest(_targetShip);
-                    Vector3? bypassVec = BypassObstacle(attackPos);
+                    Vector3? bypassVec = BypassObstacle(attackPos - transform.position);
                     if (bypassVec == null)
                     {
                         NavigateTo(attackPos);
@@ -326,6 +331,8 @@ public class ShipAIController : MonoBehaviour
                     else
                     {
                         NavigateTo(bypassVec.Value);
+                        _bypassing = true;
+                        _bypassStartedTime = Time.time;
                     }
                 }
                 else
@@ -392,6 +399,8 @@ public class ShipAIController : MonoBehaviour
     private static readonly float _rangeCoefficient = 0.95f;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
+    protected bool _bypassing = false;
+    protected float _bypassStartedTime;
 
     public enum ShipActivity
     {

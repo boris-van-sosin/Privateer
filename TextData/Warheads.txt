@@ -1,62 +1,62 @@
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Weapon effect size
-3,Light,Autocannon,KineticPenetrator,10,90,3,8,2,0,1,0,0.1
-3,Light,Autocannon,ShapedCharge     ,15,70,5,7,4,0,1,0,0.1
-3,Light,Autocannon,ShrapnelRound    ,20,0,3,8,1,0,1,0.125,0.15
-,,,,,,,,,,,,
-3,Light,HVGun,KineticPenetrator,60,250,8,40,8,0,1,0,0.15
-3,Light,HVGun,ShapedCharge     ,80,145,12,28,16,0,1,0,0.15
-3,Light,HVGun,ShrapnelRound    ,90,35,6,30,6,0,1,0.145833333,0.175
-,,,,,,,,,,,,
-3,Light,Howitzer,KineticPenetrator,50,180,6,36,6,0,1,0,0.15
-3,Light,Howitzer,ShapedCharge     ,100,175,16,34,24,0,1,0,0.175
-3,Light,Howitzer,ShrapnelRound    ,120,45,6,35,6,0,1,0.145833333,0.175
-,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,
-2,Light,Lance       ,45,225,10,32,8,8,1,0,,
-2,Light,Laser       ,100,125,5,30,7,10,1,0,,
-2,Light,PlasmaCannon,75,110,7,31,7,12,1,0.1,,
-,,,,,,,,,,,,
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Weapon effect size
-3,Medium,Autocannon,KineticPenetrator,30,155,9,24,6,0,1,0,0.15
-3,Medium,Autocannon,ShapedCharge     ,45,140,15,21,12,0,1,0,0.15
-3,Medium,Autocannon,ShrapnelRound    ,60,50,9,24,3,0,1,0.145833333,0.175
-,,,,,,,,,,,,
-3,Medium,HVGun,KineticPenetrator,240,500,32,160,32,0,1,0,0.175
-3,Medium,HVGun,ShapedCharge     ,320,280,48,112,64,0,1,0,0.175
-3,Medium,HVGun,ShrapnelRound    ,360,100,24,120,24,0,1,0.166666667,0.2
-,,,,,,,,,,,,
-3,Medium,Howitzer,KineticPenetrator,200,380,24,144,24,0,1,0,0.175
-3,Medium,Howitzer,ShapedCharge     ,400,350,64,136,96,0,1,0,0.225
-3,Medium,Howitzer,ShrapnelRound    ,480,130,24,140,24,0,1,0.1875,0.225
-,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,
-2,Medium,Lance       ,100,450,22,80,20,8,1,0,,
-2,Medium,Laser       ,250,250,12,70,18,10,1,0,,
-2,Medium,PlasmaCannon,170,180,16,75,16,12,1,0.125,,
-,,,,,,,,,,,,
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Weapon effect size
-3,Heavy,Autocannon,KineticPenetrator,100,270,30,80,20,0,1,0,0.15
-3,Heavy,Autocannon,ShapedCharge     ,150,250,50,70,40,0,1,0,0.15
-3,Heavy,Autocannon,ShrapnelRound    ,200,100,30,80,10,0,1,0.145833333,0.175
-,,,,,,,,,,,,
-3,Heavy,HVGun,KineticPenetrator,1200,1000,160,800,160,0,1,0,0.2
-3,Heavy,HVGun,ShapedCharge     ,1600,600,240,560,320,0,1,0,0.225
-3,Heavy,HVGun,ShrapnelRound    ,1800,160,120,600,120,0,1,0.208333333,0.25
-,,,,,,,,,,,,
-3,Heavy,Howitzer,KineticPenetrator,1000,770,120,720,120,0,1,0,0.2
-3,Heavy,Howitzer,ShapedCharge     ,2000,700,320,680,480,0,1,0,0.25
-3,Heavy,Howitzer,ShrapnelRound    ,2400,180,120,700,120,0,1,0.229166667,0.275
-,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,
-2,Heavy,Lance       ,210,800,50,165,41,12,1,0,,
-2,Heavy,Laser       ,560,450,25,150,38,14,1,0,,
-2,Heavy,PlasmaCannon,370,240,35,160,36,16,1,1.5,,
-,,,,,,,,,,,,
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Weapon effect size
-3,StrikeCraft,FighterCannon,KineticPenetrator,30,175,9,24,6,0,1,0,0.15
-3,StrikeCraft,FighterAutoannon,KineticPenetrator,0,0,0,0,0,0,0,0,0.1
-,,,,,,,,,,,,
-#,Torpedo Type,Spread Size,Range,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Projectile Size
-4,LongRange,4,26,250,350,160,680,360,0,2,0.225,5
-4,Heavy,3,15,500,700,400,935,600,0,3,0.25,9
-4,Tracking,2,19,250,280,112,680,312,0,2,0.225,6
+#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Vs. strike craft,Weapon effect size
+3,Light,Autocannon,KineticPenetrator,10,90,3,8,2,0,1,0,0.65,0.2
+3,Light,Autocannon,ShapedCharge     ,15,70,5,7,4,0,1,0,0.65,0.2
+3,Light,Autocannon,ShrapnelRound    ,20,0,3,8,1,0,1,0.5,0.8,0.3
+,,,,,,,,,,,,,
+3,Light,HVGun,KineticPenetrator,60,250,8,40,8,0,1,0,0.6,0.3
+3,Light,HVGun,ShapedCharge     ,80,145,12,28,16,0,1,0,0.6,0.3
+3,Light,HVGun,ShrapnelRound    ,90,35,6,30,6,0,1,0.583333333,0.9,0.35
+,,,,,,,,,,,,,
+3,Light,Howitzer,KineticPenetrator,50,180,6,36,6,0,1,0,0.6,0.3
+3,Light,Howitzer,ShapedCharge     ,100,175,16,34,24,0,1,0,0.6,0.35
+3,Light,Howitzer,ShrapnelRound    ,120,45,6,35,6,0,1,0.583333333,0.9,0.35
+,,,,,,,,,,,,,
+#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,,
+2,Light,Lance       ,45,225,10,32,8,8,1,0,,,
+2,Light,Laser       ,100,125,5,30,7,10,1,0,,,
+2,Light,PlasmaCannon,75,110,7,31,7,12,1,0.1,,,
+,,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Vs. strike craft,Weapon effect size
+3,Medium,Autocannon,KineticPenetrator,30,155,9,24,6,0,1,0,0.45,0.3
+3,Medium,Autocannon,ShapedCharge     ,45,140,15,21,12,0,1,0,0.45,0.3
+3,Medium,Autocannon,ShrapnelRound    ,60,50,9,24,3,0,1,0.583333333,0.9,0.35
+,,,,,,,,,,,,,
+3,Medium,HVGun,KineticPenetrator,240,500,32,160,32,0,1,0,0.35,0.35
+3,Medium,HVGun,ShapedCharge     ,320,280,48,112,64,0,1,0,0.35,0.35
+3,Medium,HVGun,ShrapnelRound    ,360,100,24,120,24,0,1,0.666666667,0.95,0.4
+,,,,,,,,,,,,,
+3,Medium,Howitzer,KineticPenetrator,200,380,24,144,24,0,1,0,0.35,0.35
+3,Medium,Howitzer,ShapedCharge     ,400,350,64,136,96,0,1,0,0.35,0.45
+3,Medium,Howitzer,ShrapnelRound    ,480,130,24,140,24,0,1,0.75,0.95,0.45
+,,,,,,,,,,,,,
+#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,,
+2,Medium,Lance       ,100,450,22,80,20,8,1,0,,,
+2,Medium,Laser       ,250,250,12,70,18,10,1,0,,,
+2,Medium,PlasmaCannon,170,180,16,75,16,12,1,0.125,,,
+,,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Vs. strike craft,Weapon effect size
+3,Heavy,Autocannon,KineticPenetrator,100,270,30,80,20,0,1,0,0.3,0.3
+3,Heavy,Autocannon,ShapedCharge     ,150,250,50,70,40,0,1,0,0.3,0.3
+3,Heavy,Autocannon,ShrapnelRound    ,200,100,30,80,10,0,1,0.291666667,1,0.35
+,,,,,,,,,,,,,
+3,Heavy,HVGun,KineticPenetrator,1200,1000,160,800,160,0,1,0,0.2,0.4
+3,Heavy,HVGun,ShapedCharge     ,1600,600,240,560,320,0,1,0,0.2,0.45
+3,Heavy,HVGun,ShrapnelRound    ,1800,160,120,600,120,0,1,0.416666667,1,0.5
+,,,,,,,,,,,,,
+3,Heavy,Howitzer,KineticPenetrator,1000,770,120,720,120,0,1,0,0.2,0.4
+3,Heavy,Howitzer,ShapedCharge     ,2000,700,320,680,480,0,1,0,0.2,0.5
+3,Heavy,Howitzer,ShrapnelRound    ,2400,180,120,700,120,0,1,0.458333333,1,0.55
+,,,,,,,,,,,,,
+#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,,,
+2,Heavy,Lance       ,210,800,50,165,41,12,1,0,,,
+2,Heavy,Laser       ,560,450,25,150,38,14,1,0,,,
+2,Heavy,PlasmaCannon,370,240,35,160,36,16,1,1.5,,,
+,,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Vs. strike craft,Weapon effect size
+3,StrikeCraft,FighterCannon,KineticPenetrator,30,175,9,24,6,0,1,0,1,0.15
+3,StrikeCraft,FighterAutoannon,KineticPenetrator,0,0,0,0,0,0,0,0,0.65,0.1
+,,,,,,,,,,,,,
+#,Torpedo Type,Spread Size,Range,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Projectile Size,
+4,LongRange,4,26,250,350,160,680,360,0,2,0.225,5,
+4,Heavy,3,15,500,700,400,935,600,0,3,0.25,9,
+4,Tracking,2,19,250,280,112,680,312,0,2,0.225,6,

@@ -80,7 +80,7 @@ public class Projectile : MonoBehaviour
             if (hitobj.GetComponent<Projectile>() == null)
             {
                 shipHit = ShipBase.FromCollider(hit.collider);
-                if (shipHit != null && shipHit != OriginShip)
+                if (shipHit != null && shipHit != OriginShip && IsHit(shipHit))
                 {
                     DoHit(hit, shipHit);
                     return true;
@@ -88,7 +88,7 @@ public class Projectile : MonoBehaviour
                 else
                 {
                     Torpedo torpHit = hitobj.GetComponent<Torpedo>();
-                    if (torpHit != null)
+                    if (torpHit != null && IsHit(torpHit))
                     {
                         DoHit(hit, torpHit);
                         return true;
@@ -113,8 +113,11 @@ public class Projectile : MonoBehaviour
                 //Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", s, pos, blastRadius));
                 if (s != OriginShip)
                 {
-                    Vector3 hitLocation = c.ClosestPoint(pos);
-                    s.TakeHit(ProjectileWarhead, hitLocation);
+                    if (IsHit(s))
+                    {
+                        Vector3 hitLocation = c.ClosestPoint(pos);
+                        s.TakeHit(ProjectileWarhead, hitLocation);
+                    }
                     validHit = true;
                 }
             }
@@ -122,7 +125,10 @@ public class Projectile : MonoBehaviour
             {
                 //Debug.Log(string.Format("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", t, pos, blastRadius));
                 validHit = true;
-                Destroy(t.gameObject); //TODO: replace with damage calculation
+                if (IsHit(t))
+                {
+                    Destroy(t.gameObject); //TODO: replace with damage calculation
+                }
             }
         }
         if (validHit)
@@ -136,6 +142,25 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
         }
         return validHit;
+    }
+
+    private bool IsHit(ShipBase s)
+    {
+        if (TargetableEntityUtils.IsTargetable(s.TargetableBy, TargetableEntityInfo.Flak))
+        {
+            float roll = Random.Range(0f, 1f);
+            return (roll <= ProjectileWarhead.EffectVsStrikeCraft);
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private bool IsHit(Torpedo t)
+    {
+        float roll = Random.Range(0, 1);
+        return (roll <= ProjectileWarhead.EffectVsStrikeCraft);
     }
 
     /*void OnDrawGizmos()
