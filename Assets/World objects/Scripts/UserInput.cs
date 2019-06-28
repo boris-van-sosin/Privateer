@@ -26,6 +26,13 @@ public class UserInput : MonoBehaviour
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Torpedoes"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Weapons"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Effects"), true);
+
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Ships"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Shields"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Strike Craft"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Torpedoes"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Weapons"), true);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Effects"), true);
     }
 
     // Update is called once per frame

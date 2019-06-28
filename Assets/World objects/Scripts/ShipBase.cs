@@ -400,38 +400,6 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         //Debug.Log(sb.ToString());
     }
 
-    public virtual void MoveForeward()
-    {
-        if (_movementDirection == ShipDirection.Stopped)
-        {
-            _movementDirection = ShipDirection.Forward;
-        }
-        if (_movementDirection == ShipDirection.Forward)
-        {
-            ApplyThrust();
-        }
-        else if (_movementDirection == ShipDirection.Reverse)
-        {
-            ApplyBrakingInner();
-        }
-    }
-
-    public virtual void MoveBackward()
-    {
-        if (_movementDirection == ShipDirection.Stopped)
-        {
-            _movementDirection = ShipDirection.Reverse;
-        }
-        if (_movementDirection == ShipDirection.Forward)
-        {
-            ApplyBrakingInner();
-        }
-        else if (_movementDirection == ShipDirection.Reverse)
-        {
-            ApplyThrust();
-        }
-    }
-
     protected override void ApplyBrakingInner()
     {
         base.ApplyBrakingInner();
