@@ -12,6 +12,7 @@ public class Bug0
         _wallFollowMinRange = _entityLength * _wallFollowMinRangeFactor;
         _wallFollowMaxRange = entityLegnth * _wallFollowMaxRangeFactor;
         _wallFollowRangeDiff = entityLegnth * _wallFollowRangeDiffFactor;
+        _accelerateOnTurn = false;
     }
 
     public void Step()
@@ -76,7 +77,11 @@ public class Bug0
                     RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true);
                     if (hit.HasValue)
                     {
-                        _controlledShip.ApplyTurning(false);
+                        _controlledShip.ApplyTurning(true);
+                        if (_accelerateOnTurn)
+                        {
+                            _controlledShip.MoveForward();
+                        }
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r, 0.1f);
                     }
                     else
@@ -91,7 +96,11 @@ public class Bug0
                     RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true);
                     if (hit.HasValue)
                     {
-                        _controlledShip.ApplyTurning(true);
+                        _controlledShip.ApplyTurning(false);
+                        if (_accelerateOnTurn)
+                        {
+                            _controlledShip.MoveForward();
+                        }
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l, 0.1f);
                     }
                     else
@@ -108,7 +117,8 @@ public class Bug0
                     if (hit.HasValue)
                     {
                         _bug0State = Bug0State.TurningToBypassRight;
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * 3f * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
+                        _accelerateOnTurn = false;
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
                     }
 
                     if (_bug0State == Bug0State.BypassingRight)
@@ -126,10 +136,12 @@ public class Bug0
                         {
                             _controlledShip.ApplyTurning(true);
                         }
+                        _controlledShip.MoveForward();
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * 3f * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
+
 
                         // Check if can continue to target:
                         Vector3 vecToTargetNormalized = vecToTarget.normalized;
@@ -137,6 +149,7 @@ public class Bug0
                         if (!toTarget.HasValue)
                         {
                             _bug0State = Bug0State.TurningToTarget;
+                            _accelerateOnTurn = true;
                         }
                     }
                 }
@@ -150,7 +163,8 @@ public class Bug0
                     if (hit.HasValue)
                     {
                         _bug0State = Bug0State.TurningToBypassLeft;
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * 3f * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
+                        _accelerateOnTurn = false;
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
                     }
 
                     if (_bug0State == Bug0State.BypassingLeft)
@@ -168,8 +182,9 @@ public class Bug0
                         {
                             _controlledShip.ApplyTurning(false);
                         }
+                        _controlledShip.MoveForward();
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * 3f * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
 
@@ -179,6 +194,7 @@ public class Bug0
                         if (!toTarget.HasValue)
                         {
                             _bug0State = Bug0State.TurningToTarget;
+                            _accelerateOnTurn = true;
                         }
                     }
                 }
@@ -193,6 +209,7 @@ public class Bug0
             if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
             {
                 _bug0State = Bug0State.Stopped;
+                _accelerateOnTurn = false;
             }
         }
     }
@@ -205,14 +222,14 @@ public class Bug0
         {
             case RaycastOrigin.Center:
                 originPt = _controlledShip.transform.position;
-                projectFactor = _entityLength * 3f;
+                projectFactor = _entityLength * _forwardCastDistFactor;
                 break;
             case RaycastOrigin.Fore:
-                originPt = _controlledShip.transform.position + 0.75f * _entityLength * _controlledShip.transform.up;
+                originPt = _controlledShip.transform.position + 0.25f * _entityLength * _controlledShip.transform.up;
                 projectFactor = _wallFollowMaxRange * 1.1f;
                 break;
             case RaycastOrigin.Aft:
-                originPt = _controlledShip.transform.position - 0.75f * _entityLength * _controlledShip.transform.up;
+                originPt = _controlledShip.transform.position - 0.25f * _entityLength * _controlledShip.transform.up;
                 projectFactor = _wallFollowMaxRange * 1.1f;
                 break;
             default:
@@ -240,7 +257,7 @@ public class Bug0
     private RaycastHit[] CheckForObstructionsInner(Vector3 origin, Vector3 direction, float dist, bool wide)
     {
         if (wide)
-            return Physics.SphereCastAll(origin, _entityWidth * 1.0f, direction, dist, ObjectFactory.NavBoxesLayerMask);
+            return Physics.SphereCastAll(origin, _entityWidth * _forwardCastWidthFactor, direction, dist, ObjectFactory.NavBoxesLayerMask);
         else
             return Physics.RaycastAll(origin, direction, dist, ObjectFactory.NavBoxesLayerMask);
     }
@@ -340,6 +357,8 @@ public class Bug0
     private static readonly float _wallFollowMinRangeFactor = 0.5f;
     private static readonly float _wallFollowMaxRangeFactor = 1f;
     private static readonly float _wallFollowRangeDiffFactor = 0.2f;
+    private static readonly float _forwardCastWidthFactor = 1f;
+    private static readonly float _forwardCastDistFactor = 3f;
 
     public Vector3 NavTarget
     {
@@ -362,6 +381,8 @@ public class Bug0
     private Vector3 _navTarget;
 
     private Bug0State _bug0State;
+    private bool _accelerateOnTurn;
+
     private readonly MovementBase _controlledShip;
     private readonly float _entityLength, _entityWidth;
     private readonly float _wallFollowMinRange, _wallFollowMaxRange, _wallFollowRangeDiff;
