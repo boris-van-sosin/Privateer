@@ -11,7 +11,8 @@ public class ShipAIController : MonoBehaviour
         _controlledShip = GetComponent<ShipBase>();
         CurrActivity = ShipActivity.ControllingPosition;
         StartCoroutine(AcquireTargetPulse());
-	}
+        _bug0Alg = new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth);
+    }
 	
 	// Update is called once per frame
 	protected virtual void Update ()
@@ -133,8 +134,23 @@ public class ShipAIController : MonoBehaviour
         Vector3 vecToTarget;
         if (!GetCurrMovementTarget(out vecToTarget))
         {
+            _bug0Alg.HasNavTarget = false;
             return;
         }
+
+        _bug0Alg.NavTarget = vecToTarget;
+
+        _bug0Alg.Step();
+
+        if (vecToTarget.sqrMagnitude <= (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
+        {
+            _controlledShip.ApplyBraking();
+            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
+            {
+                _doNavigate = false;
+            }
+        }
+        return;
 
         Vector3 heading = transform.up;
 
@@ -167,7 +183,7 @@ public class ShipAIController : MonoBehaviour
         {
             if (Vector3.Dot(vecToTarget, heading) > 0)
             {
-                _controlledShip.MoveForeward();
+                _controlledShip.MoveForward();
             }
             else
             {
@@ -207,7 +223,6 @@ public class ShipAIController : MonoBehaviour
         _doFollow = false;
 
         _navTarget = target;
-        Debug.DrawLine(transform.position, _navTarget, Color.red, 0.5f);
         _doNavigate = true;
         _orderCallback = onCompleteNavigation;
     }
@@ -256,7 +271,7 @@ public class ShipAIController : MonoBehaviour
                 };
                 for (int i = 0; i < otherShipCorners.Length; ++i)
                 {
-                    Debug.DrawLine(other.transform.position, otherShipCorners[i], Color.cyan, 0.25f);
+                    //Debug.DrawLine(other.transform.position, otherShipCorners[i], Color.cyan, 0.25f);
                     dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, rightVec));
                     if (dotMin < 0 || Mathf.Abs(dotToCorners[i]) < dotMin)
                     {
@@ -324,6 +339,7 @@ public class ShipAIController : MonoBehaviour
                     }
                     Vector3 attackPos = NavigationDest(_targetShip);
                     Vector3? bypassVec = BypassObstacle(attackPos - transform.position);
+                    bypassVec = null;
                     if (bypassVec == null)
                     {
                         NavigateTo(attackPos);
@@ -380,9 +396,16 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, _navTarget);
+    }
+
     public delegate void OrderCompleteDlg();
 
     protected ShipBase _controlledShip;
+    protected Bug0 _bug0Alg;
 
     protected static readonly int _numAttackAngles = 12;
     protected static readonly int _numAttackDistances = 3;

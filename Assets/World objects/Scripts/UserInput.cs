@@ -81,7 +81,7 @@ public class UserInput : MonoBehaviour
 
         if (Input.GetKey(_keyMapping[UserOperation.Forward]))
         {
-            ControlledShip.MoveForeward();
+            ControlledShip.MoveForward();
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Backward]))
         {

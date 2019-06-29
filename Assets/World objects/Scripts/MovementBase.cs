@@ -66,7 +66,7 @@ public abstract class MovementBase : MonoBehaviour
         _nextTurnRight = !left;
     }
 
-    public virtual void MoveForeward()
+    public virtual void MoveForward()
     {
         if (_movementDirection == ShipDirection.Stopped)
         {

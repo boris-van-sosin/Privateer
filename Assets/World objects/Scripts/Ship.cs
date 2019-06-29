@@ -428,9 +428,9 @@ public class Ship : ShipBase
         }
     }
 
-    public override void MoveForeward()
+    public override void MoveForward()
     {
-        base.MoveForeward();
+        base.MoveForward();
 
         _acceleratingForward = MovingForward;
         _brakingForward = !_acceleratingForward;
