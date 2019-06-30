@@ -48,28 +48,17 @@ public class UserInput : MonoBehaviour
         }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+        Vector3? hitFlat;
+        Collider colliderHit;
         if (Physics.Raycast(ray, out hit, 2000))
         {
-            Vector3 hitFlat = new Vector3(hit.point.x, 0, hit.point.z);
-            if (!_autoTarget)
-            {
-                ControlledShip.ManualTarget(hitFlat);
-            }
-            if (Input.GetMouseButton(0))
-            {
-                if (!_grapplingMode)
-                {
-                    ControlledShip.FireManual(hitFlat);
-                }
-                else
-                {
-                    ControlledShip.FireHarpaxManual(hitFlat);
-                }
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                ControlledShip.SetRequiredHeading(hitFlat);
-            }
+            hitFlat = new Vector3(hit.point.x, 0, hit.point.z);
+            colliderHit = hit.collider;
+        }
+        else
+        {
+            hitFlat = null;
+            colliderHit = null;
         }
 
         float scroll;
@@ -78,6 +67,44 @@ public class UserInput : MonoBehaviour
             _cameraOffsetFactor += (-scroll * 0.1f);
         }
 
+        if (Input.GetKey(_keyMapping[UserOperation.SwitchMode]))
+        {
+            _fleetMode = !_fleetMode;
+        }
+
+        if (!_fleetMode)
+        {
+            ShipControlMode(hitFlat, colliderHit);
+        }
+        else
+        {
+            FleetCommandMode(hitFlat, colliderHit);
+        }
+
+        _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
+    }
+
+    private void ShipControlMode(Vector3? clickPt, Collider colliderHit)
+    {
+        if (clickPt.HasValue)
+        {
+            ControlledShip.ManualTarget(clickPt.Value);
+            if (Input.GetMouseButton(0))
+            {
+                if (!_grapplingMode)
+                {
+                    ControlledShip.FireManual(clickPt.Value);
+                }
+                else
+                {
+                    ControlledShip.FireHarpaxManual(clickPt.Value);
+                }
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                ControlledShip.SetRequiredHeading(clickPt.Value);
+            }
+        }
 
         if (Input.GetKey(_keyMapping[UserOperation.Forward]))
         {
@@ -87,6 +114,11 @@ public class UserInput : MonoBehaviour
         {
             ControlledShip.MoveBackward();
         }
+        else if (Input.GetKey(_keyMapping[UserOperation.Break]))
+        {
+            ControlledShip.ApplyBraking();
+        }
+
         if (Input.GetKey(_keyMapping[UserOperation.Left]))
         {
             ControlledShip.ApplyTurning(true);
@@ -95,11 +127,8 @@ public class UserInput : MonoBehaviour
         {
             ControlledShip.ApplyTurning(false);
         }
-        else if (Input.GetKey(_keyMapping[UserOperation.Break]))
-        {
-            ControlledShip.ApplyBraking();
-        }
-        else if (Input.GetKeyDown(_keyMapping[UserOperation.MagneticClamps]))
+
+        if (Input.GetKeyDown(_keyMapping[UserOperation.MagneticClamps]))
         {
             ControlledShip.ToggleElectromagneticClamps();
         }
@@ -149,22 +178,52 @@ public class UserInput : MonoBehaviour
                 _statusTopLevelDisplay.ForceUpdateTurretModes();
             }
         }
+    }
 
-        _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
+    private void FleetCommandMode(Vector3? clickPt, Collider colliderHit)
+    {
+        if (clickPt.HasValue)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                if (colliderHit != null)
+                {
+                    ShipBase s = ShipBase.FromCollider(colliderHit);
+                    if (s != null && s is Ship)
+                    {
+                        _fleetSelectedShips.Clear();
+                        _fleetSelectedShips.Add(s);
+                    }
+                }
+            }
+            if (Input.GetMouseButtonDown(1))
+            {
+                foreach (Ship s in _fleetSelectedShips)
+                {
+                    ShipAIController controller = s.GetComponent<ShipAIController>();
+                    if (controller != null && !s.ShipDisabled && !s.ShipSurrendered)
+                    {
+                        controller.NavigateTo(clickPt.Value);
+                    }
+                }
+            }
+        }
     }
 
     public Ship ControlledShip; // temporary
-    private bool _autoTarget = false; // temporary
     private bool _grapplingMode = false; // temporary
     private StatusTopLevel _statusTopLevelDisplay = null;
     public Transform ShipStatusPanel;
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;
+    private bool _fleetMode = false;
+    private List<ShipBase> _fleetSelectedShips = new List<ShipBase>();
 
     public enum UserOperation
     {
         Forward, Backward, Left, Right, Break, MagneticClamps, Shields, GrapplingTool, StrikeCraftLaunch,
+        SwitchMode,
         ControlGroup1,
         ControlGroup2,
         ControlGroup3,
@@ -184,6 +243,7 @@ public class UserInput : MonoBehaviour
         { UserOperation.Backward, KeyCode.S },
         { UserOperation.Right, KeyCode.D },
         { UserOperation.Break, KeyCode.X },
+        { UserOperation.SwitchMode, KeyCode.Tab },
         { UserOperation.MagneticClamps, KeyCode.F },
         { UserOperation.Shields, KeyCode.G },
         { UserOperation.GrapplingTool, KeyCode.H },

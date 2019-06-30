@@ -128,6 +128,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         if (friendly)
         {
             s.Owner = faction1;
+            s.SetCircleToFactionColor();
 
             for (int i = 0; i < 100; ++i)
             {
@@ -139,6 +140,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.Owner = faction2;
             s.transform.Translate(30, 0, 0);
         }
+        s.SetCircleToFactionColor();
         if (friendly && userShip)
         {
             UserInput input = FindObjectOfType<UserInput>();
@@ -150,6 +152,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
 
         s.transform.Translate(offset);
+        //s.transform.Rotate(Vector3.up, UnityEngine.Random.Range(0f, 360f), Space.World);
 
         _cfgPanelVisible = false;
         _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);

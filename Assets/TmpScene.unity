@@ -1067,7 +1067,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.00001
+      value: 100.000084
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -3088,6 +3088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerFaction: 0
+  FactionColor: {r: 0, g: 0, b: 1, a: 0}
 --- !u!4 &1333997528
 Transform:
   m_ObjectHideFlags: 0
@@ -4053,6 +4054,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerFaction: 1
+  FactionColor: {r: 1, g: 0, b: 0, a: 0}
 --- !u!4 &1817640918
 Transform:
   m_ObjectHideFlags: 0

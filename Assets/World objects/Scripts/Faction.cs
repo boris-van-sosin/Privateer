@@ -96,6 +96,8 @@ public class Faction : MonoBehaviour
 
     public bool PlayerFaction;
 
+    public Color FactionColor;
+
     private bool _tmpInitialized = false;
 
     private int _factionIdx = -1;

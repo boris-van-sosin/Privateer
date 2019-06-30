@@ -22,6 +22,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     {
         FindTurrets();
         InitShield();
+        InitCircle();
         ShipDisabled = false;
         ShipImmobilized = false;
     }
@@ -244,6 +245,29 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         ShipUnscaledWidth = m.bounds.size.x;
         ShipLength = ShipUnscaledLength * transform.lossyScale.y;
         ShipWidth = ShipUnscaledWidth * transform.lossyScale.x;
+    }
+
+    private void InitCircle()
+    {
+        LineRenderer lr = GetComponentInChildren<LineRenderer>();
+        if (lr != null)
+        {
+            int numPts = 48;
+            lr.positionCount = numPts;
+            lr.loop = true;
+            float angleStep = Mathf.PI * 2 / numPts;
+            float r = ShipUnscaledLength * 0.5f * 0.85f;
+            lr.SetPositions(Enumerable.Range(0, numPts).Select(i => new Vector3(r * Mathf.Cos(i * angleStep), r * Mathf.Sin(i * angleStep), 0)).ToArray());
+        }
+    }
+
+    public void SetCircleToFactionColor()
+    {
+        LineRenderer lr = GetComponentInChildren<LineRenderer>();
+        if (Owner != null && lr != null)
+        {
+            lr.startColor = lr.endColor = new Color(Owner.FactionColor.r, Owner.FactionColor.g, Owner.FactionColor.b, 0.75f);
+        }
     }
 
     protected virtual void FindTurrets()

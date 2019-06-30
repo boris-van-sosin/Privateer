@@ -213,7 +213,7 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
-    protected void NavigateTo(Vector3 target)
+    public void NavigateTo(Vector3 target)
     {
         NavigateTo(target, null);
     }
