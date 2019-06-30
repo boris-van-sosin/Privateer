@@ -13,6 +13,7 @@ public class Bug0
         _wallFollowMaxRange = entityLegnth * _wallFollowMaxRangeFactor;
         _wallFollowRangeDiff = entityLegnth * _wallFollowRangeDiffFactor;
         _accelerateOnTurn = false;
+        AtDestination = false;
     }
 
     public void Step()
@@ -203,13 +204,15 @@ public class Bug0
                 break;
         }
 
-        if (vecToTarget.sqrMagnitude <= (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
+        float stoppingDist = StoppingDistance(_controlledShip.CurrSpeed, _controlledShip.Braking) + 20f * GlobalDistances.ShipAIDistEps;
+        if (vecToTarget.sqrMagnitude <= stoppingDist * stoppingDist)
         {
             _controlledShip.ApplyBraking();
-            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
+            if (_controlledShip.ActualVelocity.sqrMagnitude == 0f)
             {
                 _bug0State = Bug0State.Stopped;
                 _accelerateOnTurn = false;
+                AtDestination = true;
             }
         }
     }
@@ -244,7 +247,7 @@ public class Bug0
             {
                 continue;
             }
-            ShipBase other = Ship.FromCollider(h.collider);
+            ShipBase other = ShipBase.FromCollider(h.collider);
             if (other != null && other != _controlledShip && other is Ship)
             {
                 Debug.DrawLine(originPt, h.point, wide ? _gizmoColor0 : _gizmoColor1, 0.1f);
@@ -265,15 +268,12 @@ public class Bug0
     private int TurnToHeading(Vector3 targetHeading)
     {
         Vector3 heading = _controlledShip.transform.up;
-
-        Quaternion qToTarget = Quaternion.LookRotation(targetHeading, _controlledShip.transform.forward);
-        Quaternion qHeading = Quaternion.LookRotation(heading, _controlledShip.transform.forward);
-        float angleToTarget = Quaternion.FromToRotation(heading, targetHeading).eulerAngles.y;
-        if (angleToTarget > 180 && angleToTarget < 360 - _angleEps)
+        float angleToTarget = Vector3.SignedAngle(heading, targetHeading, Vector3.up);
+        if (angleToTarget < -_angleEps)
         {
             return 1;
         }
-        else if (angleToTarget < 180 && angleToTarget > _angleEps)
+        else if (angleToTarget > _angleEps)
         {
             return -1;
         }
@@ -349,6 +349,11 @@ public class Bug0
         return 0;
     }
 
+    private float StoppingDistance(float speed, float deceleration)
+    {
+        return speed * speed / (2f * deceleration);
+    }
+
     public enum Bug0State { Stopped, MovingToTarget, TurningToTarget, TurningToBypassRight, TurningToBypassLeft, BypassingRight, BypassingLeft };
 
     private enum RaycastOrigin { Center, Fore, Aft };
@@ -374,9 +379,11 @@ public class Bug0
             {
                 _bug0State = Bug0State.TurningToTarget;
             }
+            AtDestination = false;
         }
     }
     public bool HasNavTarget { get; set; }
+    public bool AtDestination { get; private set; }
 
     private Vector3 _navTarget;
 

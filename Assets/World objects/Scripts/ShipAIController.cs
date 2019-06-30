@@ -138,57 +138,13 @@ public class ShipAIController : MonoBehaviour
             return;
         }
 
-        _bug0Alg.NavTarget = vecToTarget;
+        _bug0Alg.NavTarget = _navTarget;
 
         _bug0Alg.Step();
 
-        if (vecToTarget.sqrMagnitude <= (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
+        if (_bug0Alg.AtDestination)
         {
-            _controlledShip.ApplyBraking();
-            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
-            {
-                _doNavigate = false;
-            }
-        }
-        return;
-
-        Vector3 heading = transform.up;
-
-        Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
-        Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
-        float angleToTarget = Quaternion.FromToRotation(heading, vecToTarget).eulerAngles.y;
-        bool atRequiredHeaing = false;
-        if (angleToTarget > 180 && angleToTarget < 360 -_angleEps)
-        {
-            _controlledShip.ApplyTurning(true);
-        }
-        else if (angleToTarget < 180 && angleToTarget > _angleEps)
-        {
-            _controlledShip.ApplyTurning(false);
-        }
-        else
-        {
-            atRequiredHeaing = true;
-        }
-
-        if (vecToTarget.sqrMagnitude <= (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps))
-        {
-            _controlledShip.ApplyBraking();
-            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.ShipAIDistEps * GlobalDistances.ShipAIDistEps) && atRequiredHeaing)
-            {
-                _doNavigate = false;
-            }
-        }
-        else
-        {
-            if (Vector3.Dot(vecToTarget, heading) > 0)
-            {
-                _controlledShip.MoveForward();
-            }
-            else
-            {
-                _controlledShip.MoveBackward();
-            }
+            _doNavigate = false;
         }
     }
 
