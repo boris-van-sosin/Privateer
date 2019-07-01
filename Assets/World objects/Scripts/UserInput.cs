@@ -67,7 +67,7 @@ public class UserInput : MonoBehaviour
             _cameraOffsetFactor += (-scroll * 0.1f);
         }
 
-        if (Input.GetKey(_keyMapping[UserOperation.SwitchMode]))
+        if (Input.GetKeyDown(_keyMapping[UserOperation.SwitchMode]))
         {
             _fleetMode = !_fleetMode;
         }

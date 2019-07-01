@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class BoardingProgressPanel : MonoBehaviour
 {
     void Awake()
     {
-        _phaseText = transform.Find("PhaseText").GetComponent<UnityEngine.UI.Text>();
-        _progressText = transform.Find("ProgressText").GetComponent<UnityEngine.UI.Text>();
+        _phaseText = transform.Find("PhaseText").GetComponent<TextMeshProUGUI>();
+        _progressText = transform.Find("ProgressText").GetComponent<TextMeshProUGUI>();
         _outerBar = transform.Find("BG bar").GetComponent<UnityEngine.UI.Image>();
         _innerBar = _outerBar.transform.Find("BoardingBar").GetComponent<UnityEngine.UI.Image>();
     }
@@ -49,8 +50,8 @@ public class BoardingProgressPanel : MonoBehaviour
 
     public enum BoardingPhase { Breaching, Boarding }
 
-    private UnityEngine.UI.Text _phaseText;
-    private UnityEngine.UI.Text _progressText;
+    private TextMeshProUGUI _phaseText;
+    private TextMeshProUGUI _progressText;
     private UnityEngine.UI.Image _outerBar;
     private UnityEngine.UI.Image _innerBar;
     private Ship _attacker, _defender;

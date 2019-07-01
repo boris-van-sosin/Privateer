@@ -186,10 +186,6 @@ public static class Combat
         return combatResult < side1Strength;
     }
 
-    private static readonly float _minArmourPenetration = .05f;
-    private static readonly float _maxArmourPenetration = .95f;
-    private static readonly float _armourPenetrationSteepness = .2f;
-
     private static readonly int _soldiersInCombatPulse = 10;
     private static readonly float _combatDeathChance = 0.2f;
     private static readonly float _surrenderChance = 0.2f;

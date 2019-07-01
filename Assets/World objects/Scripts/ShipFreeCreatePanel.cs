@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using System;
+using TMPro;
 
 public class ShipFreeCreatePanel : MonoBehaviour
 {
@@ -271,12 +272,12 @@ public class ShipFreeCreatePanel : MonoBehaviour
         TextNumToSpawn.text = _numToSpawn.ToString();
     }
 
-    public UnityEngine.UI.Dropdown ShipDropdown;
-    public UnityEngine.UI.Dropdown SideDropdown;
+    public TMP_Dropdown ShipDropdown;
+    public TMP_Dropdown SideDropdown;
     public UnityEngine.UI.Toggle UserToggle;
     public UnityEngine.UI.Slider SliderNumToSpawn;
-    public UnityEngine.UI.Text TextNumToSpawn;
+    public TextMeshProUGUI TextNumToSpawn;
     private WeaponControlGroupCfgPanel _weaponsCfgPanel;
-    private int _numToSpawn;
+    private int _numToSpawn = 1;
     private bool _cfgPanelVisible;
 }

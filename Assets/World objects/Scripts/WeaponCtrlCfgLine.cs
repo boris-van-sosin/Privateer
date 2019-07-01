@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class WeaponCtrlCfgLine : MonoBehaviour
 {
     void Awake()
     {
-        WeaponTextBox = GetComponentInChildren<Text>();
+        WeaponTextBox = GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public Text WeaponTextBox { get; private set; }
+    public TextMeshProUGUI WeaponTextBox { get; private set; }
     public Toggle[] WeaponGroupCheckboxes;
     public string HardpointKey { get; set; }
 }

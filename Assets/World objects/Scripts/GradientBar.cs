@@ -1,14 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GradientBar : MonoBehaviour
 {
     void Awake()
     {
         _barMask = GetComponentInChildren<Mask>();
-        _valueText = GetComponentInChildren<Text>();
+        _valueText = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void UpdateBar()
@@ -33,5 +32,5 @@ public class GradientBar : MonoBehaviour
     private int _value;
     public int MaxValue;
     Mask _barMask;
-    Text _valueText;
+    TextMeshProUGUI _valueText;
 }
