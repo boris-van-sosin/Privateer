@@ -24,14 +24,11 @@ public class Bug0
         }
         Vector3 vecToTarget = NavTarget - _controlledShip.transform.position;
 
-        float nextCheck = -1f;
-
         switch (_bug0State)
         {
             case Bug0State.MovingToTarget:
                 {
                     int turnRes = TurnToHeading(vecToTarget);
-                    nextCheck = 0.5f;
                     Vector3 predictedHeading;
                     if (turnRes == 0)
                     {
@@ -41,10 +38,10 @@ public class Bug0
                     else
                     {
                         _controlledShip.ApplyTurning(turnRes == 1);
-                        predictedHeading = PredictHeading(_controlledShip.transform.up, -turnRes, nextCheck);
+                        predictedHeading = PredictHeading(_controlledShip.transform.up, -turnRes, _cacheItemValidTime);
                     }
                     _controlledShip.MoveForward();
-                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, predictedHeading, true);
+                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, predictedHeading, true, RaycastCacheKey.ForwardPredicted);
                     if (hit.HasValue)
                     {
                         int bypassDir = ChooseBypassDirection(hit.Value);
@@ -74,8 +71,7 @@ public class Bug0
                 break;
             case Bug0State.TurningToBypassRight:
                 {
-                    nextCheck = 0.5f;
-                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true);
+                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true, RaycastCacheKey.Forward);
                     if (hit.HasValue)
                     {
                         _controlledShip.ApplyTurning(true);
@@ -93,8 +89,7 @@ public class Bug0
                 break;
             case Bug0State.TurningToBypassLeft:
                 {
-                    nextCheck = 0.5f;
-                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true);
+                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true, RaycastCacheKey.Forward);
                     if (hit.HasValue)
                     {
                         _controlledShip.ApplyTurning(false);
@@ -114,7 +109,7 @@ public class Bug0
                 {
                     // Apply simple wall-following:
                     // First check if forward direction is obstructed:
-                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true);
+                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true, RaycastCacheKey.Forward);
                     if (hit.HasValue)
                     {
                         _bug0State = Bug0State.TurningToBypassRight;
@@ -125,8 +120,8 @@ public class Bug0
                     if (_bug0State == Bug0State.BypassingRight)
                     {
                         // Maintain distance from obstacle:
-                        RaycastHit? hitFore = CheckForObstructions(RaycastOrigin.Fore, -_controlledShip.transform.right, false);
-                        RaycastHit? hitAft = CheckForObstructions(RaycastOrigin.Aft, -_controlledShip.transform.right, false);
+                        RaycastHit? hitFore = CheckForObstructions(RaycastOrigin.Fore, -_controlledShip.transform.right, false, RaycastCacheKey.RightFore);
+                        RaycastHit? hitAft = CheckForObstructions(RaycastOrigin.Aft, -_controlledShip.transform.right, false, RaycastCacheKey.RightAft);
                         if ((!hitFore.HasValue) ||
                             (hitFore.HasValue && hitAft.HasValue && (hitFore.Value.distance > _wallFollowMaxRange || hitFore.Value.distance > hitFore.Value.distance + _wallFollowRangeDiff)))
                         {
@@ -146,7 +141,7 @@ public class Bug0
 
                         // Check if can continue to target:
                         Vector3 vecToTargetNormalized = vecToTarget.normalized;
-                        RaycastHit? toTarget = CheckForObstructions(RaycastOrigin.Center, vecToTargetNormalized, true);
+                        RaycastHit? toTarget = CheckForObstructions(RaycastOrigin.Center, vecToTargetNormalized, true, RaycastCacheKey.ToTarget);
                         if (!toTarget.HasValue)
                         {
                             _bug0State = Bug0State.TurningToTarget;
@@ -160,7 +155,7 @@ public class Bug0
                     // Apply simple wall-following:
                     // Apply simple wall-following:
                     // First check if forward direction is obstructed:
-                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true);
+                    RaycastHit? hit = CheckForObstructions(RaycastOrigin.Center, _controlledShip.transform.up, true, RaycastCacheKey.Forward);
                     if (hit.HasValue)
                     {
                         _bug0State = Bug0State.TurningToBypassLeft;
@@ -171,8 +166,8 @@ public class Bug0
                     if (_bug0State == Bug0State.BypassingLeft)
                     {
                         // Maintain distance from obstacle:
-                        RaycastHit? hitFore = CheckForObstructions(RaycastOrigin.Fore, _controlledShip.transform.right, false);
-                        RaycastHit? hitAft = CheckForObstructions(RaycastOrigin.Aft, _controlledShip.transform.right, false);
+                        RaycastHit? hitFore = CheckForObstructions(RaycastOrigin.Fore, _controlledShip.transform.right, false, RaycastCacheKey.LeftFore);
+                        RaycastHit? hitAft = CheckForObstructions(RaycastOrigin.Aft, _controlledShip.transform.right, false, RaycastCacheKey.LeftAft);
                         if ((!hitFore.HasValue) ||
                             (hitFore.HasValue && hitAft.HasValue && (hitFore.Value.distance > _wallFollowMaxRange || hitFore.Value.distance > hitFore.Value.distance + _wallFollowRangeDiff)))
                         {
@@ -191,7 +186,7 @@ public class Bug0
 
                         // Check if can continue to target:
                         Vector3 vecToTargetNormalized = vecToTarget.normalized;
-                        RaycastHit? toTarget = CheckForObstructions(RaycastOrigin.Center, vecToTargetNormalized, true);
+                        RaycastHit? toTarget = CheckForObstructions(RaycastOrigin.Center, vecToTargetNormalized, true, RaycastCacheKey.ToTarget);
                         if (!toTarget.HasValue)
                         {
                             _bug0State = Bug0State.TurningToTarget;
@@ -217,8 +212,18 @@ public class Bug0
         }
     }
 
-    private RaycastHit? CheckForObstructions(RaycastOrigin origin, Vector3 direction, bool wide)
+    private RaycastHit? CheckForObstructions(RaycastOrigin origin, Vector3 direction, bool wide, RaycastCacheKey key)
     {
+        if (_raycastCache.TryGetValue(key, out RaycastCacheItem fromCache))
+        {
+            if (fromCache.Timestamp > Time.time - _cacheItemValidTime)
+            {
+                if (fromCache.HitExists)
+                    return fromCache.Hit;
+                else
+                    return null;
+            }
+        }
         float projectFactor;
         Vector3 originPt;
         switch (origin)
@@ -250,10 +255,12 @@ public class Bug0
             ShipBase other = ShipBase.FromCollider(h.collider);
             if (other != null && other != _controlledShip && other is Ship)
             {
+                _raycastCache[key] = new RaycastCacheItem() { Timestamp = Time.time, Hit = h, HitExists = true };
                 Debug.DrawLine(originPt, h.point, wide ? _gizmoColor0 : _gizmoColor1, 0.1f);
                 return h;
             }
         }
+        _raycastCache[key] = new RaycastCacheItem() { Timestamp = Time.time, HitExists = false };
         return null;
     }
 
@@ -357,6 +364,14 @@ public class Bug0
     public enum Bug0State { Stopped, MovingToTarget, TurningToTarget, TurningToBypassRight, TurningToBypassLeft, BypassingRight, BypassingLeft };
 
     private enum RaycastOrigin { Center, Fore, Aft };
+    private enum RaycastCacheKey { Forward, ForwardPredicted, ToTarget, RightFore, RightAft, LeftFore,LeftAft };
+    private struct RaycastCacheItem
+    {
+        public RaycastHit Hit;
+        public bool HitExists;
+        public float Timestamp;
+    }
+    private static readonly float _cacheItemValidTime = 0.5f;
 
     private static readonly float _angleEps = 0.1f;
     private static readonly float _wallFollowMinRangeFactor = 0.5f;
@@ -389,6 +404,7 @@ public class Bug0
 
     private Bug0State _bug0State;
     private bool _accelerateOnTurn;
+    private Dictionary<RaycastCacheKey, RaycastCacheItem> _raycastCache = new Dictionary<RaycastCacheKey, RaycastCacheItem>();
 
     private readonly MovementBase _controlledShip;
     private readonly float _entityLength, _entityWidth;
