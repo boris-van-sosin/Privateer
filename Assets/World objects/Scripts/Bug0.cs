@@ -1,19 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using Unity.Collections;
+using Unity.Jobs;
 
 public class Bug0
 {
-    public Bug0(MovementBase controlledEntity, float entityLegnth, float entityWidth)
+    public Bug0(MovementBase controlledEntity, float entityLegnth, float entityWidth, bool strikeCraftMode)
     {
         _controlledShip = controlledEntity;
         _entityLength = entityLegnth;
         _entityWidth = entityWidth;
-        _wallFollowMinRange = _entityLength * _wallFollowMinRangeFactor;
-        _wallFollowMaxRange = entityLegnth * _wallFollowMaxRangeFactor;
-        _wallFollowRangeDiff = entityLegnth * _wallFollowRangeDiffFactor;
+
         _accelerateOnTurn = false;
         AtDestination = false;
+        _strikeCraftMode = strikeCraftMode;
+        if (_strikeCraftMode)
+        {
+            float turnRadius = (360f / _controlledShip.TurnRate) * _controlledShip.MaxSpeed / (2f * Mathf.PI);
+
+            _wallFollowMinRange = turnRadius * _wallFollowMinRangeFactor;
+            _wallFollowMaxRange = turnRadius * _wallFollowMaxRangeFactor;
+            _wallFollowRangeDiff = turnRadius * _wallFollowRangeDiffFactor;
+            _cacheItemValidTime = 0.1f;
+            _stopAtDest = false;
+            _forwardCastActualDist = turnRadius * 1.5f;
+            _qForwardCastRight = Quaternion.AngleAxis(Mathf.Atan2(turnRadius / 2f, _forwardCastActualDist) * Mathf.Rad2Deg, Vector3.up);
+            _qForwardCastLeft = Quaternion.Inverse(_qForwardCastRight);
+        }
+        else
+        {
+            _wallFollowMinRange = _entityLength * _wallFollowMinRangeFactor;
+            _wallFollowMaxRange = entityLegnth * _wallFollowMaxRangeFactor;
+            _wallFollowRangeDiff = entityLegnth * _wallFollowRangeDiffFactor;
+            _cacheItemValidTime = 0.5f;
+            _stopAtDest = true;
+            _forwardCastActualDist = _forwardCastDistFactor * _entityLength;
+            _qForwardCastRight = Quaternion.AngleAxis(Mathf.Atan2(_entityWidth, _forwardCastActualDist) * Mathf.Rad2Deg, Vector3.up);
+            _qForwardCastLeft = Quaternion.Inverse(_qForwardCastRight);
+        }
     }
 
     public void Step()
@@ -114,7 +140,7 @@ public class Bug0
                     {
                         _bug0State = Bug0State.TurningToBypassRight;
                         _accelerateOnTurn = false;
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
                     }
 
                     if (_bug0State == Bug0State.BypassingRight)
@@ -134,7 +160,7 @@ public class Bug0
                         }
                         _controlledShip.MoveForward();
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
 
@@ -160,7 +186,7 @@ public class Bug0
                     {
                         _bug0State = Bug0State.TurningToBypassLeft;
                         _accelerateOnTurn = false;
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
                     }
 
                     if (_bug0State == Bug0State.BypassingLeft)
@@ -180,7 +206,7 @@ public class Bug0
                         }
                         _controlledShip.MoveForward();
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _entityLength * _forwardCastDistFactor * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
+                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
                         Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
 
@@ -199,6 +225,14 @@ public class Bug0
                 break;
         }
 
+        if (_stopAtDest)
+        {
+            BrakeAtDestination(vecToTarget);
+        }
+    }
+
+    private void BrakeAtDestination(Vector3 vecToTarget)
+    {
         float stoppingDist = StoppingDistance(_controlledShip.CurrSpeed, _controlledShip.Braking) + 20f * GlobalDistances.ShipAIDistEps;
         if (vecToTarget.sqrMagnitude <= stoppingDist * stoppingDist)
         {
@@ -230,7 +264,7 @@ public class Bug0
         {
             case RaycastOrigin.Center:
                 originPt = _controlledShip.transform.position;
-                projectFactor = _entityLength * _forwardCastDistFactor;
+                projectFactor = _forwardCastActualDist;
                 break;
             case RaycastOrigin.Fore:
                 originPt = _controlledShip.transform.position + 0.25f * _entityLength * _controlledShip.transform.up;
@@ -253,7 +287,7 @@ public class Bug0
                 continue;
             }
             ShipBase other = ShipBase.FromCollider(h.collider);
-            if (other != null && other != _controlledShip && other is Ship)
+            if (other != null && other != _controlledShip && other is Ship && !_ignoreList.Any(t => t == other))
             {
                 _raycastCache[key] = new RaycastCacheItem() { Timestamp = Time.time, Hit = h, HitExists = true };
                 Debug.DrawLine(originPt, h.point, wide ? _gizmoColor0 : _gizmoColor1, 0.1f);
@@ -267,9 +301,43 @@ public class Bug0
     private RaycastHit[] CheckForObstructionsInner(Vector3 origin, Vector3 direction, float dist, bool wide)
     {
         if (wide)
-            return Physics.SphereCastAll(origin, _entityWidth * _forwardCastWidthFactor, direction, dist, ObjectFactory.NavBoxesLayerMask);
+        {
+            //return Physics.SphereCastAll(origin, _entityWidth * _forwardCastWidthFactor, direction, dist, ObjectFactory.NavBoxesLayerMask);
+
+            Vector3 originRight = origin - _entityWidth * 0.5f * _controlledShip.transform.right;
+            Vector3 originLeft = origin + _entityWidth * 0.5f * _controlledShip.transform.right;
+            Vector3 vecRight = _qForwardCastRight * direction;
+            Vector3 vecLeft = _qForwardCastLeft * direction;
+
+            //Debug.DrawLine(originRight, originRight + vecRight * dist, Color.blue, 0.5f);
+            //Debug.DrawLine(originLeft, originLeft + vecLeft * dist, Color.blue, 0.5f);
+
+            // Triple raycast implementation. Should be more efficient than sphere cast.
+            return
+                Physics.RaycastAll(origin, direction, dist, ObjectFactory.NavBoxesLayerMask).Union(
+                    Physics.RaycastAll(originRight, vecRight, dist, ObjectFactory.NavBoxesLayerMask)).Union(
+                        Physics.RaycastAll(originLeft, vecLeft, dist, ObjectFactory.NavBoxesLayerMask)).ToArray();
+
+            // Batch implementation, likely buggy
+            /*
+            NativeArray<RaycastHit> hitsArr = new NativeArray<RaycastHit>(30, Allocator.TempJob);
+            NativeArray<RaycastCommand> commandsArr = new NativeArray<RaycastCommand>(3, Allocator.TempJob);
+            commandsArr[0] = new RaycastCommand(origin, direction, dist, ObjectFactory.NavBoxesLayerMask, 10);
+            commandsArr[1] = new RaycastCommand(originRight, _qForwardCastRight * direction, dist, ObjectFactory.NavBoxesLayerMask, 10);
+            commandsArr[2] = new RaycastCommand(originLeft, _qForwardCastLeft * direction, dist, ObjectFactory.NavBoxesLayerMask, 10);
+            JobHandle handle = RaycastCommand.ScheduleBatch(commandsArr, hitsArr, 3);
+            handle.Complete();
+            RaycastHit[] hits = hitsArr.Where(h => h.collider != null).ToArray();
+            hitsArr.Dispose();
+            commandsArr.Dispose();
+
+            return hits;
+            */
+        }
         else
+        {
             return Physics.RaycastAll(origin, direction, dist, ObjectFactory.NavBoxesLayerMask);
+        }
     }
 
     private int TurnToHeading(Vector3 targetHeading)
@@ -361,6 +429,19 @@ public class Bug0
         return speed * speed / (2f * deceleration);
     }
 
+    public void AddToIgnoreList(ShipBase b)
+    {
+        if (!_ignoreList.Any(t => t == b))
+        {
+            _ignoreList.Add(b);
+        }
+    }
+
+    public void RemoveFromIgnoreList(ShipBase b)
+    {
+        _ignoreList.Remove(b);
+    }
+
     public enum Bug0State { Stopped, MovingToTarget, TurningToTarget, TurningToBypassRight, TurningToBypassLeft, BypassingRight, BypassingLeft };
 
     private enum RaycastOrigin { Center, Fore, Aft };
@@ -371,14 +452,14 @@ public class Bug0
         public bool HitExists;
         public float Timestamp;
     }
-    private static readonly float _cacheItemValidTime = 0.5f;
+    private readonly float _cacheItemValidTime;
 
     private static readonly float _angleEps = 0.1f;
     private static readonly float _wallFollowMinRangeFactor = 0.5f;
     private static readonly float _wallFollowMaxRangeFactor = 1f;
     private static readonly float _wallFollowRangeDiffFactor = 0.2f;
     private static readonly float _forwardCastWidthFactor = 1f;
-    private static readonly float _forwardCastDistFactor = 3f;
+    private static readonly float _forwardCastDistFactor = 2f;
 
     public Vector3 NavTarget
     {
@@ -404,11 +485,17 @@ public class Bug0
 
     private Bug0State _bug0State;
     private bool _accelerateOnTurn;
+    private readonly bool _strikeCraftMode;
     private Dictionary<RaycastCacheKey, RaycastCacheItem> _raycastCache = new Dictionary<RaycastCacheKey, RaycastCacheItem>();
+    private bool _stopAtDest;
+    private List<ShipBase> _ignoreList = new List<ShipBase>();
+    private readonly Quaternion _qForwardCastLeft, _qForwardCastRight;
 
     private readonly MovementBase _controlledShip;
+
     private readonly float _entityLength, _entityWidth;
     private readonly float _wallFollowMinRange, _wallFollowMaxRange, _wallFollowRangeDiff;
+    private readonly float _forwardCastActualDist;
     private readonly Color _gizmoColor0 = new Color(0f, 0f, 0.6f);
     private readonly Color _gizmoColor1 = new Color(0.3f, 0f, 0.3f);
     private readonly Color _gizmoColor2hit = new Color(1f, 1f, 0.2f);

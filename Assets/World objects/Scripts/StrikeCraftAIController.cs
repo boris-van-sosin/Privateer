@@ -43,42 +43,14 @@ public class StrikeCraftAIController : ShipAIController
         Vector3 vecToTarget;
         if (!GetCurrMovementTarget(out vecToTarget))
         {
+            _bug0Alg.HasNavTarget = false;
             return;
         }
 
-        Vector3 heading = transform.up;
-        Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
-        Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
-        float angleToTarget = Vector3.SignedAngle(heading, vecToTarget, Vector3.up);
-        bool atRequiredHeaing = false;
-        if (angleToTarget > _strikeCraftAngleEps)
-        {
-            _controlledShip.ApplyTurning(false);
-            //Debug.Log("Strike craft turning right");
-        }
-        else if (angleToTarget < -_strikeCraftAngleEps)
-        {
-            _controlledShip.ApplyTurning(true);
-            //Debug.Log("Strike craft turning left");
-        }
-        else
-        {
-            atRequiredHeaing = true;
-            //Debug.Log("Strike craft going straight");
-        }
+        _bug0Alg.NavTarget = transform.position + vecToTarget;
 
-        if (vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
-        {
-            _controlledShip.ApplyBraking();
-            if (_controlledShip.ActualVelocity.sqrMagnitude < (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps) && atRequiredHeaing)
-            {
-                _doNavigate = false;
-            }
-        }
-        else
-        {
-            _controlledShip.TargetSpeed = _controlledShip.MaxSpeed;
-        }
+        _bug0Alg.Step();
+        //_controlledShip.TargetSpeed = _controlledShip.MaxSpeed;
     }
 
     protected override Vector3 AttackPosition(ShipBase enemyShip)
@@ -174,18 +146,13 @@ public class StrikeCraftAIController : ShipAIController
             {
                 navTarget = _formation.GetPosition(_controlledCraft) - (_formation.transform.up * GlobalDistances.StrikeCraftAIBehindFormationNavDist);
             }
-            Vector3? bypassVec = BypassObstacle(navTarget - transform.position);
-            if (bypassVec == null)
-            {
-                NavigateTo(navTarget);
-            }
-            else
-            {
-                NavigateTo(bypassVec.Value);
-                _bypassing = true;
-                _bypassStartedTime = Time.time;
-            }
+            NavigateTo(navTarget);
         }
+    }
+
+    protected override Bug0 GenBug0Algorithm()
+    {
+        return new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth, true);
     }
 
     public void OrderStartNavigatenToHost()

@@ -11,7 +11,7 @@ public class ShipAIController : MonoBehaviour
         _controlledShip = GetComponent<ShipBase>();
         CurrActivity = ShipActivity.ControllingPosition;
         StartCoroutine(AcquireTargetPulse());
-        _bug0Alg = new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth);
+        _bug0Alg = GenBug0Algorithm();
     }
 	
 	// Update is called once per frame
@@ -192,94 +192,13 @@ public class ShipAIController : MonoBehaviour
         _followTarget = followTarget;
         _followDist = dist;
         _doFollow = true;
-    }
-
-    protected Vector3? BypassObstacle(Vector3 direction)
-    {
-        Vector3 directionNormalized = direction.normalized;
-        Vector3 rightVec = Quaternion.AngleAxis(90, Vector3.up) * directionNormalized;
-        float projectFactor = _controlledShip.ShipLength * 4;
-        Vector3 projectedPath = directionNormalized * projectFactor;
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, _controlledShip.ShipWidth * 3.0f, directionNormalized, projectFactor, ObjectFactory.AllTargetableLayerMask);
-        bool obstruction = false;
-        List<float> dotToCorners = new List<float>(4 * hits.Length);
-        float dotMin = -1;
-        foreach (RaycastHit h in hits)
-        {
-            if (h.collider.gameObject == this.gameObject)
-            {
-                continue;
-            }
-            Ship other = h.collider.GetComponent<Ship>();
-            if (other != null)
-            {
-                obstruction = true;
-                Vector3 obstructionLocation = h.point;
-                obstructionLocation.y = 0;
-                float obstructionLength = other.ShipLength * 1.1f;
-                float obstructionWidth = other.ShipLength * 1.1f;
-                Vector3[] otherShipCorners = new Vector3[]
-                {
-                    other.transform.position + (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
-                    other.transform.position + (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
-                    other.transform.position - (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
-                    other.transform.position - (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
-                };
-                for (int i = 0; i < otherShipCorners.Length; ++i)
-                {
-                    //Debug.DrawLine(other.transform.position, otherShipCorners[i], Color.cyan, 0.25f);
-                    dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, rightVec));
-                    if (dotMin < 0 || Mathf.Abs(dotToCorners[i]) < dotMin)
-                    {
-                        dotMin = Mathf.Abs(dotToCorners[i]);
-                    }
-                }
-            }
-        }
-        if (obstruction)
-        {
-            int maxRight = -1;
-            int maxLeft = -1;
-            for (int i = 0; i < dotToCorners.Count; ++i)
-            {
-                if (dotToCorners[i] > 0 && (maxRight == -1 || dotToCorners[i] > dotToCorners[maxRight]))
-                {
-                    maxRight = i;
-                }
-                else if (dotToCorners[i] < 0 && (maxLeft == -1 || dotToCorners[i] < dotToCorners[maxLeft]))
-                {
-                    maxLeft = i;
-                }
-            }
-            if (maxLeft == -1)
-            {
-                return (transform.position - (rightVec * dotMin * 2f));
-            }
-            else if (maxRight == -1)
-            {
-                return (transform.position + (rightVec * dotMin * 2f));
-            }
-            else if (-dotToCorners[maxLeft] >= dotToCorners[maxRight])
-            {
-                return (transform.position + (rightVec * dotToCorners[maxRight] * 2f));
-            }
-            else if (-dotToCorners[maxLeft] < dotToCorners[maxRight])
-            {
-                return (transform.position + (rightVec * dotToCorners[maxLeft] * 2f));
-            }
-        }
-        return null;
-    }
+    } 
 
     private IEnumerator AcquireTargetPulse()
     {
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (_bypassing && Time.time - _bypassStartedTime > 5f)
-            {
-                _bypassing = false;
-            }
             if (_controlledShip.ShipControllable && DoSeekTargets)
             {
                 if (_targetShip == null)
@@ -294,18 +213,7 @@ public class ShipAIController : MonoBehaviour
                         continue;
                     }
                     Vector3 attackPos = NavigationDest(_targetShip);
-                    Vector3? bypassVec = BypassObstacle(attackPos - transform.position);
-                    bypassVec = null;
-                    if (bypassVec == null)
-                    {
-                        NavigateTo(attackPos);
-                    }
-                    else
-                    {
-                        NavigateTo(bypassVec.Value);
-                        _bypassing = true;
-                        _bypassStartedTime = Time.time;
-                    }
+                    NavigateTo(attackPos);
                 }
                 else
                 {
@@ -352,6 +260,11 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
+    protected virtual Bug0 GenBug0Algorithm()
+    {
+        return new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth, false);
+    }
+
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -378,8 +291,6 @@ public class ShipAIController : MonoBehaviour
     private static readonly float _rangeCoefficient = 0.95f;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
-    protected bool _bypassing = false;
-    protected float _bypassStartedTime;
 
     public enum ShipActivity
     {
