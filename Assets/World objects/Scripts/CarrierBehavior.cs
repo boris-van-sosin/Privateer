@@ -36,6 +36,7 @@ public class CarrierBehavior : MonoBehaviour
 
         _inLaunch = true;
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
+        formation.DestroyOnEmpty = false;
         _formations.Add(new Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
 
         StrikeCraft[] currLaunchingStrikeCraft = new StrikeCraft[CarrierHangerAnim.Length];
@@ -52,6 +53,7 @@ public class CarrierBehavior : MonoBehaviour
             if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed)
             {
                 StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(strikeCraftKey);
+                s.IgnoreHits = true;
                 s.Owner = formation.Owner;
                 s.transform.position = _elevatorBed[i].position;
                 s.transform.rotation = _elevatorBed[i].rotation;
@@ -67,6 +69,7 @@ public class CarrierBehavior : MonoBehaviour
             {
                 currLaunchingStrikeCraft[i].DetachHangerElevator();
                 Maneuver m = CreateLaunchManeuver(_launchTransform[i]);
+                StrikeCraft currStrikeCraft = currLaunchingStrikeCraft[i];
                 if (numLaunched == 0)
                 {
                     m.OnManeuverFinish += delegate (Maneuver m1)
@@ -74,10 +77,22 @@ public class CarrierBehavior : MonoBehaviour
                         formation.transform.position = formation.AllStrikeCraft().First().transform.position;
                         formation.transform.rotation = formation.AllStrikeCraft().First().transform.rotation;
                         formation.GetComponent<StrikeCraftFormationAIController>().OrderEscort(_ship);
+                        currStrikeCraft.IgnoreHits = false;
+                    };
+                }
+                else
+                {
+                    m.OnManeuverFinish += delegate (Maneuver m1)
+                    {
+                        currStrikeCraft.IgnoreHits = false;
                     };
                 }
                 currLaunchingStrikeCraft[i].StartManeuver(m);
                 ++numLaunched;
+                if (numLaunched == formation.Positions.Length)
+                {
+                    formation.DestroyOnEmpty = true;
+                }
                 yield return new WaitForSeconds(0.5f);
                 CarrierHangerAnim[i].Close();
             }

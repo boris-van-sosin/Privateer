@@ -5,6 +5,12 @@ using System.Linq;
 
 public class StrikeCraft : ShipBase
 {
+    protected override void Awake()
+    {
+        base.Awake();
+        IgnoreHits = false;
+    }
+
     public override void Activate()
     {
         base.Activate();
@@ -59,6 +65,9 @@ public class StrikeCraft : ShipBase
 
     public override void TakeHit(Warhead w, Vector3 location)
     {
+        if (IgnoreHits)
+            return;
+
         if (w.HullDamage == 0) // Ugly hack. Fix later.
         {
             --_strikeCraftHitPoints;
@@ -230,6 +239,8 @@ public class StrikeCraft : ShipBase
             _trail.enabled = true;
         }
     }
+
+    public bool IgnoreHits { get; set; }
 
     private int _strikeCraftHitPoints = 5;
 

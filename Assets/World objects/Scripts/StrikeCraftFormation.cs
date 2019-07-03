@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class StrikeCraftFormation : MovementBase
 {
+    void Awake()
+    {
+        DestroyOnEmpty = true;
+    }
+
     void Start()
     {
         ComputeDiameter();
@@ -28,7 +33,7 @@ public class StrikeCraftFormation : MovementBase
             _craft.Remove(s);
             _AICache.Remove(s);
             _positionsCache.Clear();
-            if (_craft.Count == 0)
+            if (_craft.Count == 0 && DestroyOnEmpty)
             {
                 HostCarrier.DeactivateFormation(this);
                 Destroy(gameObject);
@@ -112,6 +117,8 @@ public class StrikeCraftFormation : MovementBase
             return _AICache.Values;
         }
     }
+
+    public bool DestroyOnEmpty { get; set; }
 
     public CarrierBehavior HostCarrier { get; set; }
 
