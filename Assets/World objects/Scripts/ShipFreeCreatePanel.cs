@@ -152,6 +152,9 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.gameObject.AddComponent<ShipAIController>();
         }
 
+        s.DisplayName = NamingSystem.GenShipName(ObjectFactory.GetCultureNames("Terran"), "German", ObjectFactory.InternalShipTypeToNameType(s.ShipSize), s.Owner.UsedNames);
+        s.Owner.UsedNames.Add(s.DisplayName.FullNameKey);
+
         s.transform.Translate(offset);
         //s.transform.Rotate(Vector3.up, UnityEngine.Random.Range(0f, 360f), Space.World);
 

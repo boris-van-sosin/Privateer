@@ -8,38 +8,8 @@ public class Faction : MonoBehaviour
     void Awake()
     {
         RegisterFaction();
+        UsedNames = new List<string>();
     }
-
-    // Use this for initialization
-    void Start ()
-    {
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		if (!_tmpInitialized)
-        {
-            if (!PlayerFaction)
-            {
-                Ship[] ships = FindObjectsOfType<Ship>();
-                foreach (Ship s in ships)
-                {
-                    if (s.Owner == this)
-                    {
-                        if (s.Turrets != null)
-                        {
-                            foreach (ITurret t in s.Turrets)
-                            {
-                                t.SetTurretBehavior(TurretBase.TurretMode.Auto);
-                            }
-                            _tmpInitialized = true;
-                        }
-                    }
-                }
-            }
-        }
-	}
 
     public bool IsEnemy(Faction other)
     {
@@ -93,6 +63,8 @@ public class Faction : MonoBehaviour
         }
         _allFactions.Add(this);
     }
+
+    public List<string> UsedNames { get; set; }
 
     public bool PlayerFaction;
 

@@ -1145,6 +1145,7 @@ public class Ship : ShipBase
     public bool ShipSurrendered { get; private set; }
     public bool InBoarding { get; private set; }
 
+    public int SkeletonCrew;
     public int OperationalCrew;
     public int MaxCrew;
     public int MaxSpecialCharacters;
@@ -1153,6 +1154,7 @@ public class Ship : ShipBase
     public IEnumerable<SpecialCharacter> SpecialCharacters { get { return _specialCharacters; } }
     private List<SpecialCharacter> _specialCharacters;
     public ShipCharacter Captain { get; set; }
+    public ShipDisplayName DisplayName { get; set; }
 
     private bool _inCollision = false;
 

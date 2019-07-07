@@ -45,6 +45,7 @@ public class UserInput : MonoBehaviour
         if (_statusTopLevelDisplay == null)
         {
             _statusTopLevelDisplay = ObjectFactory.CreateStatusPanel(ControlledShip, ShipStatusPanel);
+            _statusTopLevelDisplay.SetName(ControlledShip.DisplayName);
         }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;

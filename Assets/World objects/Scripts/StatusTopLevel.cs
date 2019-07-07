@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using TMPro;
+using System;
 
 public class StatusTopLevel : MonoBehaviour
 {
@@ -12,6 +14,9 @@ public class StatusTopLevel : MonoBehaviour
         _shieldBar = transform.Find("ShieldBar").GetComponent<GradientBar>();
         _energyBar = transform.Find("EnergyBar").GetComponent<GradientBar>();
         _heatBar  = transform.Find("HeatBar").GetComponent<GradientBar>();
+        _shortNameBox = transform.Find("TextShortName").GetComponent<TextMeshProUGUI>();
+        _fullNameBox= transform.Find("TextFullName").GetComponent<TextMeshProUGUI>();
+        _fluffBox = transform.Find("TextFluff").GetComponent<TextMeshProUGUI>();
     }
 
     public void AttachShip(Ship s)
@@ -106,6 +111,13 @@ public class StatusTopLevel : MonoBehaviour
         }
     }
 
+    public void SetName(ShipDisplayName dn)
+    {
+        _shortNameBox.text = dn.ShortName;
+        _fullNameBox.text = dn.FullName;
+        _fluffBox.text = dn.Fluff;
+    }
+
     public void DetachShip()
     {
         _turretProgressBars.Clear();
@@ -158,6 +170,9 @@ public class StatusTopLevel : MonoBehaviour
     private GradientBar _energyBar;
     private GradientBar _heatBar;
     private RectTransform _compsPanel;
+    private TextMeshProUGUI _shortNameBox;
+    private TextMeshProUGUI _fullNameBox;
+    private TextMeshProUGUI _fluffBox;
     private static readonly Color _autoTurretColor = new Color(83f / 255f, 198f / 255f, 255f / 255f);
     private static readonly Color _manualTurretColor = new Color(0f / 255f, 0f / 255f, 120f / 255f);
     private static readonly Color _offTurretColor = Color.black;

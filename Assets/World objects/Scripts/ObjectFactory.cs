@@ -29,6 +29,10 @@ public static class ObjectFactory
         {
             LoadPenetrationTable();
         }
+        if (_cultureNamingLists == null)
+        {
+            LoadNamingLists();
+        }
     }
 
     public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
@@ -373,6 +377,30 @@ public static class ObjectFactory
         return res;
     }
 
+    public static CultureNames GetCultureNames(string culture)
+    {
+        return _cultureNamingLists[culture];
+    }
+
+    public static NamingSystem.ShipType InternalShipTypeToNameType(ShipSize sz)
+    {
+        switch (sz)
+        {
+            case ShipSize.Sloop:
+                return NamingSystem.ShipType.Sloop;
+            case ShipSize.Frigate:
+                return NamingSystem.ShipType.Frigate;
+            case ShipSize.Destroyer:
+                return NamingSystem.ShipType.Destroyer;
+            case ShipSize.Cruiser:
+                return NamingSystem.ShipType.Cruiser;
+            case ShipSize.CapitalShip:
+                return NamingSystem.ShipType.CapitalShip;
+            default:
+                return NamingSystem.ShipType.Any;
+        }
+    }
+
     public static StatusTopLevel CreateStatusPanel(Ship s, Transform containingPanel)
     {
         StatusTopLevel res = CreateStatusPanel();
@@ -574,6 +602,12 @@ public static class ObjectFactory
         }
     }
 
+    private static void LoadNamingLists()
+    {
+        _cultureNamingLists = new Dictionary<string, CultureNames>();
+        _cultureNamingLists.Add("Terran", NamingSystem.Load());
+    }
+
     private static void GenerateWarheadsSampleFile()
     {
         Warhead dummyWarhead = new Warhead()
@@ -626,6 +660,7 @@ public static class ObjectFactory
     private static Dictionary<Tuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
     private static WeaponTorpedoDataEntry _weapons_torpedo = null;
     private static ArmourPenetrationTable _penetrationTable = null;
+    private static Dictionary<string, CultureNames> _cultureNamingLists = null;
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
     private static readonly int _allStrikeCraftLayerMask = LayerMask.GetMask("Strike Craft");

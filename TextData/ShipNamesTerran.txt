@@ -1,0 +1,6645 @@
+{
+  "Name": "Terran",
+  "Subcultures": [
+    {
+      "Name": "British",
+      "Prefix": "HMS"
+    },
+    {
+      "Name": "German",
+      "Prefix": null
+    },
+    {
+      "Name": "Russian",
+      "Prefix": null
+    },
+    {
+      "Name": "Pirate",
+      "Prefix": null
+    },
+    {
+      "Name": "Chilean",
+      "Prefix": null
+    },
+    {
+      "Name": "Civilian",
+      "Prefix": null
+    }
+  ],
+  "Sloops": [
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Bandit",
+          "FullName": "Bandit",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Samurai",
+          "FullName": "Samurai",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Havoc",
+          "FullName": "Havoc",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Mayhem",
+          "FullName": "Mayhem",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Malice",
+          "FullName": "Malice",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Mischief",
+          "FullName": "Mischief",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Karma",
+          "FullName": "Karma",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Antagonist",
+          "FullName": "Antagonist",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Elizabeth",
+          "FullName": "Elizabeth",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Plunder",
+          "FullName": "Plunder",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Avarice",
+          "FullName": "Avarice",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Berserker",
+          "FullName": "Berserker",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "War Pig",
+          "FullName": "War Pig",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Hellebore",
+          "FullName": "Hellebore",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Forlorn Hope",
+          "FullName": "Forlorn Hope",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Grief",
+          "FullName": "Grief",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Silence",
+          "FullName": "Silence",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Sulfur",
+          "FullName": "Sulfur",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Granado",
+          "FullName": "Granado",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Richelieu",
+          "FullName": "Richelieu",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Warlock",
+          "FullName": "Warlock",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Nine Lives",
+          "FullName": "Nine Lives",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Something Awful",
+          "FullName": "Something Awful",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Siren",
+          "FullName": "Siren",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Wildfire",
+          "FullName": "Wildfire",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Vanessa",
+          "FullName": "Vanessa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Harkonnen",
+          "FullName": "Harkonnen",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Fancy",
+          "FullName": "Fancy",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Swan Song",
+          "FullName": "Swan Song",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Anarchy",
+          "FullName": "Anarchy",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Ace of Spades",
+          "FullName": "Ace of Spades",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Rebellion",
+          "FullName": "Rebellion",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Ronin",
+          "FullName": "Ronin",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Amon Amarth",
+          "FullName": "Amon Amarth",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Larissa",
+          "FullName": "Larissa",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Wild Hunt",
+          "FullName": "Wild Hunt",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Cassandra",
+          "FullName": "Cassandra",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Hannibal",
+          "FullName": "Hannibal",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Cithara",
+          "FullName": "Cithara",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Johann Weyer",
+          "FullName": "Johann Weyer",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Princess Caraboo",
+          "FullName": "Princess Caraboo",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Hastur",
+          "FullName": "Hastur",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Artemisia of Caria",
+          "FullName": "Artemisia of Caria",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Petard",
+          "FullName": "Petard",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Honey Badger",
+          "FullName": "Honey Badger",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Satyr",
+          "FullName": "Satyr",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Shinobi",
+          "FullName": "Shinobi",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Dead Reckoning",
+          "FullName": "Dead Reckoning",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Baphomet",
+          "FullName": "Baphomet",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Götz von Berlichingen",
+          "FullName": "Götz von Berlichingen",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Bloody Magpie",
+          "FullName": "Bloody Magpie",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Bittersweet",
+          "FullName": "Bittersweet",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Wages of Sin",
+          "FullName": "Wages of Sin",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        },
+        {
+          "ShortName": "Omerta",
+          "FullName": "Omerta",
+          "Fluff": "",
+          "Subcultures": [
+            "Pirate"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Harpy",
+          "FullName": "Harpy",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ellinor",
+          "FullName": "Ellinor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Stalker",
+          "FullName": "Stalker",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corsair",
+          "FullName": "Corsair",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ambition",
+          "FullName": "Ambition",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vampire",
+          "FullName": "Vampire",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Andromeda",
+          "FullName": "Andromeda",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Adventure",
+          "FullName": "Adventure",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Spearhead",
+          "FullName": "Spearhead",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hellhound",
+          "FullName": "Hellhound",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Firebrand",
+          "FullName": "Firebrand",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hammerhead",
+          "FullName": "Hammerhead",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Venom",
+          "FullName": "Venom",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mandrake",
+          "FullName": "Mandrake",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Iris",
+          "FullName": "Iris",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Flavia",
+          "FullName": "Flavia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vigo",
+          "FullName": "Vigo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nautilus",
+          "FullName": "Nautilus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nebula",
+          "FullName": "Nebula",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dauntless",
+          "FullName": "Dauntless",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Venture",
+          "FullName": "Venture",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Challenger",
+          "FullName": "Challenger",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Velox",
+          "FullName": "Velox",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Stratagem",
+          "FullName": "Stratagem",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Comet",
+          "FullName": "Comet",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fortune",
+          "FullName": "Fortune",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Meteor",
+          "FullName": "Meteor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Horizon",
+          "FullName": "Horizon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phantom",
+          "FullName": "Phantom",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phoenix",
+          "FullName": "Phoenix",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lotus",
+          "FullName": "Lotus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sherwood",
+          "FullName": "Sherwood",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Montagu",
+          "FullName": "Montagu",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Solstice",
+          "FullName": "Solstice",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Equinox",
+          "FullName": "Equinox",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vectis",
+          "FullName": "Vectis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Alacrity",
+          "FullName": "Alacrity",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Crescent",
+          "FullName": "Crescent",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Diadem",
+          "FullName": "Diadem",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Alert",
+          "FullName": "Alert",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rapid",
+          "FullName": "Rapid",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pioneer",
+          "FullName": "Pioneer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Growler",
+          "FullName": "Growler",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Volcano",
+          "FullName": "Volcano",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Prospero",
+          "FullName": "Prospero",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Riptide",
+          "FullName": "Riptide",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kodiak",
+          "FullName": "Kodiak",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gladiator",
+          "FullName": "Gladiator",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Blenheim",
+          "FullName": "Blenheim",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Brazen",
+          "FullName": "Brazen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Acasta",
+          "FullName": "Acasta",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arno",
+          "FullName": "Arno",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Daring",
+          "FullName": "Daring",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Humber",
+          "FullName": "Humber",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Calliope",
+          "FullName": "Calliope",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pelorus",
+          "FullName": "Pelorus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bacchante",
+          "FullName": "Bacchante",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Egeria",
+          "FullName": "Egeria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sarpedon",
+          "FullName": "Sarpedon",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    }
+  ],
+  "Frigates": [
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Harpy",
+          "FullName": "Harpy",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ellinor",
+          "FullName": "Ellinor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Stalker",
+          "FullName": "Stalker",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corsair",
+          "FullName": "Corsair",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ambition",
+          "FullName": "Ambition",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vampire",
+          "FullName": "Vampire",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Andromeda",
+          "FullName": "Andromeda",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Adventure",
+          "FullName": "Adventure",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Spearhead",
+          "FullName": "Spearhead",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hellhound",
+          "FullName": "Hellhound",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Firebrand",
+          "FullName": "Firebrand",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hammerhead",
+          "FullName": "Hammerhead",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Venom",
+          "FullName": "Venom",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mandrake",
+          "FullName": "Mandrake",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Iris",
+          "FullName": "Iris",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Flavia",
+          "FullName": "Flavia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vigo",
+          "FullName": "Vigo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nautilus",
+          "FullName": "Nautilus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nebula",
+          "FullName": "Nebula",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dauntless",
+          "FullName": "Dauntless",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Venture",
+          "FullName": "Venture",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Challenger",
+          "FullName": "Challenger",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Velox",
+          "FullName": "Velox",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Stratagem",
+          "FullName": "Stratagem",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Comet",
+          "FullName": "Comet",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fortune",
+          "FullName": "Fortune",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Meteor",
+          "FullName": "Meteor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Horizon",
+          "FullName": "Horizon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phantom",
+          "FullName": "Phantom",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phoenix",
+          "FullName": "Phoenix",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lotus",
+          "FullName": "Lotus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sherwood",
+          "FullName": "Sherwood",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Montagu",
+          "FullName": "Montagu",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Solstice",
+          "FullName": "Solstice",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Equinox",
+          "FullName": "Equinox",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vectis",
+          "FullName": "Vectis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Alacrity",
+          "FullName": "Alacrity",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Crescent",
+          "FullName": "Crescent",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Diadem",
+          "FullName": "Diadem",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Alert",
+          "FullName": "Alert",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rapid",
+          "FullName": "Rapid",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pioneer",
+          "FullName": "Pioneer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Growler",
+          "FullName": "Growler",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Volcano",
+          "FullName": "Volcano",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Prospero",
+          "FullName": "Prospero",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Riptide",
+          "FullName": "Riptide",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kodiak",
+          "FullName": "Kodiak",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gladiator",
+          "FullName": "Gladiator",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Blenheim",
+          "FullName": "Blenheim",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Brazen",
+          "FullName": "Brazen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Acasta",
+          "FullName": "Acasta",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arno",
+          "FullName": "Arno",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Daring",
+          "FullName": "Daring",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Humber",
+          "FullName": "Humber",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Calliope",
+          "FullName": "Calliope",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pelorus",
+          "FullName": "Pelorus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bacchante",
+          "FullName": "Bacchante",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Egeria",
+          "FullName": "Egeria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sarpedon",
+          "FullName": "Sarpedon",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Castle",
+      "ShipNames": [
+        {
+          "ShortName": "Allington",
+          "FullName": "Allington",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bamborough",
+          "FullName": "Bamborough",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Caistor",
+          "FullName": "Caistor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Denbigh",
+          "FullName": "Denbigh",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Farnham",
+          "FullName": "Farnham",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hedingham",
+          "FullName": "Hedingham",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hadleigh",
+          "FullName": "Hadleigh",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kenilworth",
+          "FullName": "Kenilworth",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Norham",
+          "FullName": "Norham",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pembroke",
+          "FullName": "Pembroke",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rayleigh",
+          "FullName": "Rayleigh",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Alnwick",
+          "FullName": "Alnwick",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Barnard",
+          "FullName": "Barnard",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Guildford",
+          "FullName": "Guildford",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sandgate",
+          "FullName": "Sandgate",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tamworth",
+          "FullName": "Tamworth",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Walmer",
+          "FullName": "Walmer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hever",
+          "FullName": "Hever",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scarborough",
+          "FullName": "Scarborough",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sherborne",
+          "FullName": "Sherborne",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Amberley",
+          "FullName": "Amberley",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Carisbrooke",
+          "FullName": "Carisbrooke",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Portchester",
+          "FullName": "Portchester",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Caldecot",
+          "FullName": "Caldecot",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Monmouth",
+          "FullName": "Monmouth",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aydon",
+          "FullName": "Aydon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hohenzollern",
+          "FullName": "Hohenzollern",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Neuschwanstein",
+          "FullName": "Neuschwanstein",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Altenburg",
+          "FullName": "Altenburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Engelburg",
+          "FullName": "Engelburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gaisburg",
+          "FullName": "Gaisburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hedelfingen",
+          "FullName": "Hedelfingen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hohenheim",
+          "FullName": "Hohenheim",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Wilhelma",
+          "FullName": "Wilhelma",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Burghausen",
+          "FullName": "Burghausen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hornberg",
+          "FullName": "Hornberg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lohrbach",
+          "FullName": "Lohrbach",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Schwetzingen",
+          "FullName": "Schwetzingen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Albeck",
+          "FullName": "Albeck",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Granegg",
+          "FullName": "Granegg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mörnsheim",
+          "FullName": "Mörnsheim",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Jetzendorf",
+          "FullName": "Jetzendorf",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scheyern",
+          "FullName": "Scheyern",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Trausnitz",
+          "FullName": "Trausnitz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Spandau",
+          "FullName": "Spandau",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Storkow",
+          "FullName": "Storkow",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hirschhorn",
+          "FullName": "Hirschhorn",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Otzberg",
+          "FullName": "Otzberg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Altweilnau",
+          "FullName": "Altweilnau",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kronberg",
+          "FullName": "Kronberg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Schwarzenfels",
+          "FullName": "Schwarzenfels",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Steckelberg",
+          "FullName": "Steckelberg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Brömserburg",
+          "FullName": "Brömserburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ehrenfels",
+          "FullName": "Ehrenfels",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bentheim",
+          "FullName": "Bentheim",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dömitz",
+          "FullName": "Dömitz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Klempenow",
+          "FullName": "Klempenow",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Allner",
+          "FullName": "Allner",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Godesburg",
+          "FullName": "Godesburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Reifferscheid",
+          "FullName": "Reifferscheid",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Herten",
+          "FullName": "Herten",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zülpich",
+          "FullName": "Zülpich",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Monschau",
+          "FullName": "Monschau",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hexenturm",
+          "FullName": "Hexenturm",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ebernburg",
+          "FullName": "Ebernburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Balga",
+          "FullName": "Balga",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gdov",
+          "FullName": "Gdov",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Izborsk",
+          "FullName": "Izborsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Koporye",
+          "FullName": "Koporye",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ragnit",
+          "FullName": "Ragnit",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Schaaken",
+          "FullName": "Schaaken",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kolomna",
+          "FullName": "Kolomna",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Stolobny",
+          "FullName": "Stolobny",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Sirius",
+          "FullName": "Sirius",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Orion",
+          "FullName": "Orion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Polaris",
+          "FullName": "Polaris",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Crux",
+          "FullName": "Crux",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sagittarius",
+          "FullName": "Sagittarius",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lyra",
+          "FullName": "Lyra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cygnus",
+          "FullName": "Cygnus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corvus",
+          "FullName": "Corvus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ursa Major",
+          "FullName": "Ursa Major",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cepheus",
+          "FullName": "Cepheus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Delphinus",
+          "FullName": "Delphinus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Capricorn",
+          "FullName": "Capricorn",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gemini",
+          "FullName": "Gemini",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Auriga",
+          "FullName": "Auriga",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corona Borealis",
+          "FullName": "Corona Borealis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vela",
+          "FullName": "Vela",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Canis Major",
+          "FullName": "Canis Major",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Anser",
+          "FullName": "Anser",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Libra",
+          "FullName": "Libra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Octans",
+          "FullName": "Octans",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aquarius",
+          "FullName": "Aquarius",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Procyon",
+          "FullName": "Procyon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gliese",
+          "FullName": "Gliese",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vega",
+          "FullName": "Vega",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pollux",
+          "FullName": "Pollux",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Deneb",
+          "FullName": "Deneb",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arcturus",
+          "FullName": "Arcturus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Capella",
+          "FullName": "Capella",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fornax",
+          "FullName": "Fornax",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aldebaran",
+          "FullName": "Aldebaran",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Kestrel",
+          "FullName": "Kestrel",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Falcon",
+          "FullName": "Falcon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Wolverine",
+          "FullName": "Wolverine",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tiger",
+          "FullName": "Tiger",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bulldog",
+          "FullName": "Bulldog",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mastiff",
+          "FullName": "Mastiff",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Beagle",
+          "FullName": "Beagle",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bloodhound",
+          "FullName": "Bloodhound",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Greyhound",
+          "FullName": "Greyhound",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Boxer",
+          "FullName": "Boxer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scorpion",
+          "FullName": "Scorpion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Shark",
+          "FullName": "Shark",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Shrike",
+          "FullName": "Shrike",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hornet",
+          "FullName": "Hornet",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vulture",
+          "FullName": "Vulture",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Orca",
+          "FullName": "Orca",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aquila",
+          "FullName": "Aquila",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lion",
+          "FullName": "Lion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Serpent",
+          "FullName": "Serpent",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Raptor",
+          "FullName": "Raptor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Berkut",
+          "FullName": "Berkut",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Raven",
+          "FullName": "Raven",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Crocodile",
+          "FullName": "Crocodile",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cayman",
+          "FullName": "Cayman",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Razorback",
+          "FullName": "Razorback",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Osprey",
+          "FullName": "Osprey",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lynx",
+          "FullName": "Lynx",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Worcester",
+          "FullName": "Worcester",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Northampton",
+          "FullName": "Northampton",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Manchester",
+          "FullName": "Manchester",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Manhattan",
+          "FullName": "Manhattan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lancaster",
+          "FullName": "Lancaster",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Colchester",
+          "FullName": "Colchester",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dorset",
+          "FullName": "Dorset",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Exeter",
+          "FullName": "Exeter",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rochester",
+          "FullName": "Rochester",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cordoba",
+          "FullName": "Cordoba",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Virginia",
+          "FullName": "Virginia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corinth",
+          "FullName": "Corinth",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Knossos",
+          "FullName": "Knossos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Belfast",
+          "FullName": "Belfast",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Carthage",
+          "FullName": "Carthage",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Milano",
+          "FullName": "Milano",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Genova",
+          "FullName": "Genova",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Venice",
+          "FullName": "Venice",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sunderland",
+          "FullName": "Sunderland",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Detroit",
+          "FullName": "Detroit",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ontario",
+          "FullName": "Ontario",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Minsk",
+          "FullName": "Minsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kiev",
+          "FullName": "Kiev",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Novgorod",
+          "FullName": "Novgorod",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kronstadt",
+          "FullName": "Kronstadt",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sevastopol",
+          "FullName": "Sevastopol",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Stuttgart",
+          "FullName": "Stuttgart",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Heilbronn",
+          "FullName": "Heilbronn",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Köln",
+          "FullName": "Köln",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Emden",
+          "FullName": "Emden",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Halifax",
+          "FullName": "Halifax",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cadiz",
+          "FullName": "Cadiz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Magnitogorsk",
+          "FullName": "Magnitogorsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Astrakhan",
+          "FullName": "Astrakhan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rostov-on-Don",
+          "FullName": "Rostov-on-Don",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kazan",
+          "FullName": "Kazan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Chelyabinsk",
+          "FullName": "Chelyabinsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Omsk",
+          "FullName": "Omsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Krasnodar",
+          "FullName": "Krasnodar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Izhevsk",
+          "FullName": "Izhevsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Orenburg",
+          "FullName": "Orenburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Novosibirsk",
+          "FullName": "Novosibirsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Yekaterinburg",
+          "FullName": "Yekaterinburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Krasnoyarsk",
+          "FullName": "Krasnoyarsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ulyanovsk",
+          "FullName": "Ulyanovsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Irkutsk",
+          "FullName": "Irkutsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bryansk",
+          "FullName": "Bryansk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arkhangelsk",
+          "FullName": "Arkhangelsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cherkessk",
+          "FullName": "Cherkessk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Elista",
+          "FullName": "Elista",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Argyle",
+          "FullName": "Argyle",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cambria",
+          "FullName": "Cambria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Wilhelmshaven",
+          "FullName": "Wilhelmshaven",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Coventry",
+          "FullName": "Coventry",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Anglesey",
+          "FullName": "Anglesey",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Leeds",
+          "FullName": "Leeds",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bristol",
+          "FullName": "Bristol",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Glasgow",
+          "FullName": "Glasgow",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Edinburgh",
+          "FullName": "Edinburgh",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aberdeen",
+          "FullName": "Aberdeen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gloucester",
+          "FullName": "Gloucester",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bradford",
+          "FullName": "Bradford",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mansfield",
+          "FullName": "Mansfield",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Newport",
+          "FullName": "Newport",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nikopolis",
+          "FullName": "Nikopolis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Memphis",
+          "FullName": "Memphis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Firenze",
+          "FullName": "Firenze",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Napoli",
+          "FullName": "Napoli",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Torino",
+          "FullName": "Torino",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Palermo",
+          "FullName": "Palermo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bologna",
+          "FullName": "Bologna",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Messina",
+          "FullName": "Messina",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Trieste",
+          "FullName": "Trieste",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Taranto",
+          "FullName": "Taranto",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "La Spezia",
+          "FullName": "La Spezia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Wiesbaden",
+          "FullName": "Wiesbaden",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Karlsruhe",
+          "FullName": "Karlsruhe",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Konstanz",
+          "FullName": "Konstanz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Heidelberg",
+          "FullName": "Heidelberg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Düsseldorf",
+          "FullName": "Düsseldorf",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Leipzig",
+          "FullName": "Leipzig",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Augsburg",
+          "FullName": "Augsburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Potsdam",
+          "FullName": "Potsdam",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lübeck",
+          "FullName": "Lübeck",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Darmstadt",
+          "FullName": "Darmstadt",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bremen",
+          "FullName": "Bremen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dortmund",
+          "FullName": "Dortmund",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Erfurt",
+          "FullName": "Erfurt",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kassel",
+          "FullName": "Kassel",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Magdeburg",
+          "FullName": "Magdeburg",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mainz",
+          "FullName": "Mainz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rostock",
+          "FullName": "Rostock",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Koblenz",
+          "FullName": "Koblenz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Trier",
+          "FullName": "Trier",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Solingen",
+          "FullName": "Solingen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ulm",
+          "FullName": "Ulm",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Toledo",
+          "FullName": "Toledo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Barcelona",
+          "FullName": "Barcelona",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Malaga",
+          "FullName": "Malaga",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Valencia",
+          "FullName": "Valencia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Seville",
+          "FullName": "Seville",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zaragoza",
+          "FullName": "Zaragoza",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Samara",
+          "FullName": "Samara",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vladivostok",
+          "FullName": "Vladivostok",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kaliningrad",
+          "FullName": "Kaliningrad",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kerch",
+          "FullName": "Kerch",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Smolensk",
+          "FullName": "Smolensk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Murmansk",
+          "FullName": "Murmansk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zelenogorsk",
+          "FullName": "Zelenogorsk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Anguilla",
+          "FullName": "Anguilla",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Montserrat",
+          "FullName": "Montserrat",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Palmyra",
+          "FullName": "Palmyra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kaluga",
+          "FullName": "Kaluga",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Valparaiso",
+          "FullName": "Valparaiso",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cyrene",
+          "FullName": "Cyrene",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vancouver",
+          "FullName": "Vancouver",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Onyx",
+          "FullName": "Onyx",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Diamond",
+          "FullName": "Diamond",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ruby",
+          "FullName": "Ruby",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Topaz",
+          "FullName": "Topaz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sapphire",
+          "FullName": "Sapphire",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Jade",
+          "FullName": "Jade",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Amethyst",
+          "FullName": "Amethyst",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Emerald",
+          "FullName": "Emerald",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Obsidian",
+          "FullName": "Obsidian",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Azurite",
+          "FullName": "Azurite",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Heliodor",
+          "FullName": "Heliodor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zircon",
+          "FullName": "Zircon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Spinel",
+          "FullName": "Spinel",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tourmaline",
+          "FullName": "Tourmaline",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tanzanite",
+          "FullName": "Tanzanite",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cinnabar",
+          "FullName": "Cinnabar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Larimar",
+          "FullName": "Larimar",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    }
+  ],
+  "Destroyers": [
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Trailblazer",
+          "FullName": "Trailblazer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Galatea",
+          "FullName": "Galatea",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ophelia",
+          "FullName": "Ophelia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Redoubt",
+          "FullName": "Redoubt",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Torrent",
+          "FullName": "Torrent",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Calypso",
+          "FullName": "Calypso",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Courageous",
+          "FullName": "Courageous",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Whirlwind",
+          "FullName": "Whirlwind",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Typhoon",
+          "FullName": "Typhoon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thunderstorm",
+          "FullName": "Thunderstorm",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lightning",
+          "FullName": "Lightning",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Avalanche",
+          "FullName": "Avalanche",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Endeavor",
+          "FullName": "Endeavor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Reaver",
+          "FullName": "Reaver",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zenith",
+          "FullName": "Zenith",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Terror",
+          "FullName": "Terror",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sanguine",
+          "FullName": "Sanguine",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Interceptor",
+          "FullName": "Interceptor",
+          "Fluff": "No real ship can match the Interceptor for speed",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Merlin",
+          "FullName": "Merlin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hurricane",
+          "FullName": "Hurricane",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pharaoh",
+          "FullName": "Pharaoh",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fury",
+          "FullName": "Fury",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Elba",
+          "FullName": "Elba",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Buran",
+          "FullName": "Buran",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Karelia",
+          "FullName": "Karelia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Umbra",
+          "FullName": "Umbra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rurik",
+          "FullName": "Rurik",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Askold",
+          "FullName": "Askold",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Windsor",
+          "FullName": "Windsor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arbiter",
+          "FullName": "Arbiter",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nicator",
+          "FullName": "Nicator",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ivanhoe",
+          "FullName": "Ivanhoe",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Amphitrite",
+          "FullName": "Amphitrite",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Adroit",
+          "FullName": "Adroit",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Forte",
+          "FullName": "Forte",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Tribal",
+      "ShipNames": [
+        {
+          "ShortName": "Cossack",
+          "FullName": "Cossack",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hoplite",
+          "FullName": "Hoplite",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vitiaz",
+          "FullName": "Vitiaz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Varyag",
+          "FullName": "Varyag",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cataphract",
+          "FullName": "Cataphract",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Centurion",
+          "FullName": "Centurion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Templar",
+          "FullName": "Templar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Jäger",
+          "FullName": "Jäger",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Samurai",
+          "FullName": "Samurai",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Myrmidon",
+          "FullName": "Myrmidon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Viking",
+          "FullName": "Viking",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hussar",
+          "FullName": "Hussar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Amazon",
+          "FullName": "Amazon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ghurka",
+          "FullName": "Ghurka",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Niobe",
+          "FullName": "Niobe",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Osiris",
+          "FullName": "Osiris",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Penelope",
+          "FullName": "Penelope",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Persephone",
+          "FullName": "Persephone",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Weapon",
+      "ShipNames": [
+        {
+          "ShortName": "Trident",
+          "FullName": "Trident",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scimitar",
+          "FullName": "Scimitar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rapier",
+          "FullName": "Rapier",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Falchion",
+          "FullName": "Falchion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gladius",
+          "FullName": "Gladius",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sabre",
+          "FullName": "Sabre",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Falcata",
+          "FullName": "Falcata",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kopis",
+          "FullName": "Kopis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Xiphos",
+          "FullName": "Xiphos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Broadsword",
+          "FullName": "Broadsword",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Halberd",
+          "FullName": "Halberd",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mace",
+          "FullName": "Mace",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Morning Star",
+          "FullName": "Morning Star",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Katana",
+          "FullName": "Katana",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Battleaxe",
+          "FullName": "Battleaxe",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Glaive",
+          "FullName": "Glaive",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Voulge",
+          "FullName": "Voulge",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bardiche",
+          "FullName": "Bardiche",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Warhammer",
+          "FullName": "Warhammer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dagger",
+          "FullName": "Dagger",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Claymore",
+          "FullName": "Claymore",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cutlass",
+          "FullName": "Cutlass",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Estoc",
+          "FullName": "Estoc",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Viper",
+          "FullName": "Viper",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Boa",
+          "FullName": "Boa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cobra",
+          "FullName": "Cobra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Python",
+          "FullName": "Python",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Copperhead",
+          "FullName": "Copperhead",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Taipan",
+          "FullName": "Taipan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bushmaster",
+          "FullName": "Bushmaster",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Komodo",
+          "FullName": "Komodo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Anaconda",
+          "FullName": "Anaconda",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Allosaurus",
+          "FullName": "Allosaurus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tyrannosaurus",
+          "FullName": "Tyrannosaurus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Baryonyx",
+          "FullName": "Baryonyx",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ceratosaurus",
+          "FullName": "Ceratosaurus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Carnotaurus",
+          "FullName": "Carnotaurus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scipionyx",
+          "FullName": "Scipionyx",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hagryphus",
+          "FullName": "Hagryphus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Oviraptor",
+          "FullName": "Oviraptor",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Monster",
+      "ShipNames": [
+        {
+          "ShortName": "Chimera",
+          "FullName": "Chimera",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Wyvern",
+          "FullName": "Wyvern",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Unicorn",
+          "FullName": "Unicorn",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Minotaur",
+          "FullName": "Minotaur",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Centaur",
+          "FullName": "Centaur",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Manticore",
+          "FullName": "Manticore",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hydra",
+          "FullName": "Hydra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scylla",
+          "FullName": "Scylla",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Basilisk",
+          "FullName": "Basilisk",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Yeti",
+          "FullName": "Yeti",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Talos",
+          "FullName": "Talos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sphinx",
+          "FullName": "Sphinx",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gargoyle",
+          "FullName": "Gargoyle",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gorgon",
+          "FullName": "Gorgon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cyclops",
+          "FullName": "Cyclops",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ogre",
+          "FullName": "Ogre",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kraken",
+          "FullName": "Kraken",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Banshee",
+          "FullName": "Banshee",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Oni",
+          "FullName": "Oni",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Strigoi",
+          "FullName": "Strigoi",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Salamander",
+          "FullName": "Salamander",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Griffin",
+          "FullName": "Griffin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tarasque",
+          "FullName": "Tarasque",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hippogriff",
+          "FullName": "Hippogriff",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Brandenburg",
+          "FullName": "Brandenburg",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Schwaben",
+          "FullName": "Schwaben",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Braunschweig",
+          "FullName": "Braunschweig",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Hessen",
+          "FullName": "Hessen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Preussen",
+          "FullName": "Preussen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Hannover",
+          "FullName": "Hannover",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Nassau",
+          "FullName": "Nassau",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Westfalen",
+          "FullName": "Westfalen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Schleswig-Holstein",
+          "FullName": "Schleswig-Holstein",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Thüringen",
+          "FullName": "Thüringen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Bayern",
+          "FullName": "Bayern",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Sachsen",
+          "FullName": "Sachsen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Baden-Württemberg",
+          "FullName": "Baden-Württemberg",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Helgoland",
+          "FullName": "Helgoland",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Mecklenburg-Schwerin",
+          "FullName": "Mecklenburg-Schwerin",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        }
+      ]
+    }
+  ],
+  "Cruisers": [
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Independence",
+          "FullName": "Independence",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Frontier",
+          "FullName": "Frontier",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Champion",
+          "FullName": "Champion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Guardian",
+          "FullName": "Guardian",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Paragon",
+          "FullName": "Paragon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Africa",
+          "FullName": "Africa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Magnificent",
+          "FullName": "Magnificent",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Defiance",
+          "FullName": "Defiance",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pinnacle",
+          "FullName": "Pinnacle",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Excalibur",
+          "FullName": "Excalibur",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Discovery",
+          "FullName": "Discovery",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Glory",
+          "FullName": "Glory",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Retribution",
+          "FullName": "Retribution",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Infinity",
+          "FullName": "Infinity",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Valor",
+          "FullName": "Valor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vigilance",
+          "FullName": "Vigilance",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vindicator",
+          "FullName": "Vindicator",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Indomitable",
+          "FullName": "Indomitable",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sentinel",
+          "FullName": "Sentinel",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Audacity",
+          "FullName": "Audacity",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Darius",
+          "FullName": "Darius",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cyrus",
+          "FullName": "Cyrus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Damocles",
+          "FullName": "Damocles",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aegis",
+          "FullName": "Aegis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Renown",
+          "FullName": "Renown",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dragon",
+          "FullName": "Dragon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Paladin",
+          "FullName": "Paladin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Beowolf",
+          "FullName": "Beowolf",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Illustrious",
+          "FullName": "Illustrious",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dominion",
+          "FullName": "Dominion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Charles Martel",
+          "FullName": "Charles Martel",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Europa",
+          "FullName": "Europa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Relentless",
+          "FullName": "Relentless",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Olympia",
+          "FullName": "Olympia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phalanx",
+          "FullName": "Phalanx",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Adamant",
+          "FullName": "Adamant",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fortitude",
+          "FullName": "Fortitude",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vostok",
+          "FullName": "Vostok",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Loki",
+          "FullName": "Loki",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Parnassus",
+          "FullName": "Parnassus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phaeton",
+          "FullName": "Phaeton",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Conquest",
+          "FullName": "Conquest",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Baikonur",
+          "FullName": "Baikonur",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bucephalus",
+          "FullName": "Bucephalus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Boreas",
+          "FullName": "Boreas",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Euphrates",
+          "FullName": "Euphrates",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Albion",
+          "FullName": "Albion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Iron Duke",
+          "FullName": "Iron Duke",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lictor",
+          "FullName": "Lictor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Praetorian",
+          "FullName": "Praetorian",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gungnir",
+          "FullName": "Gungnir",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sleipnir",
+          "FullName": "Sleipnir",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hippolyta",
+          "FullName": "Hippolyta",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Steadfast",
+          "FullName": "Steadfast",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Admiral",
+      "ShipNames": [
+        {
+          "ShortName": "Nelson",
+          "FullName": "Horatio Nelson",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Anson",
+          "FullName": "George Anson",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Rodney",
+          "FullName": "George Rodney",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Howe",
+          "FullName": "Richard Howe",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Benbow",
+          "FullName": "John Benbow",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Drake",
+          "FullName": "Francis Drake",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Jellicoe",
+          "FullName": "John Jellicoe",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Hood",
+          "FullName": "Samuel Hood",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Collingwood",
+          "FullName": "Cuthbert Collingwood",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Beatty",
+          "FullName": "David Beatty",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Cunningham",
+          "FullName": "Andrew Cunningham",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Clausewitz",
+          "FullName": "Carl von Clausewitz",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Blücher",
+          "FullName": "Gebhard Leberecht von Blücher",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Scharnhorst",
+          "FullName": "Gerhard von Scharnhorst",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Gneisenau",
+          "FullName": "August von Gneisenau",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Lützow",
+          "FullName": "Ludwig von Lützow",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Götzen",
+          "FullName": "Johann von Götzen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Roon",
+          "FullName": "Albrecht von Roon",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Lewinski",
+          "FullName": "Eduard von Lewinski",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Manstein",
+          "FullName": "Albrecht von Manstein",
+          "Fluff": "Named after the hero of the Franco-Prussian war",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Seydlitz",
+          "FullName": "Friedrich Wilhelm von Seydlitz",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Moltke",
+          "FullName": "Helmuth von Moltke",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Tirpitz",
+          "FullName": "Alfred von Tirpitz",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Scheer",
+          "FullName": "Reinhard Scheer",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Hipper",
+          "FullName": "Franz von Hipper",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Goeben",
+          "FullName": "August Karl von Goeben",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Kleist",
+          "FullName": "Kleist",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Arminius",
+          "FullName": "Arminius",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Hindenburg",
+          "FullName": "Paul von Hindenburg",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Ludendorff",
+          "FullName": "Erich Ludendorff",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Mackensen",
+          "FullName": "August von Mackensen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Braunschweig",
+          "FullName": "Friedrich Wilhelm von Braunschweig",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Graf Zeppelin",
+          "FullName": "Graf Ferdinand von Zeppelin",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Volga",
+          "FullName": "Volga",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Lena",
+          "FullName": "Lena",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Danube",
+          "FullName": "Danube",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Niva",
+          "FullName": "Niva",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Onega",
+          "FullName": "Onega",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Dnieper",
+          "FullName": "Dnieper",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Yenisei",
+          "FullName": "Yenisei",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Narva",
+          "FullName": "Narva",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Berezina",
+          "FullName": "Berezina",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Angara",
+          "FullName": "Angara",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Abakan",
+          "FullName": "Abakan",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Yana",
+          "FullName": "Yana",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Baikal",
+          "FullName": "Baikal",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Vuoksa",
+          "FullName": "Vuoksa",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Ladoga",
+          "FullName": "Ladoga",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Ural",
+          "FullName": "Ural",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Iremel",
+          "FullName": "Iremel",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Elbrus",
+          "FullName": "Elbrus",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Marathon",
+          "FullName": "Marathon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thermopylae",
+          "FullName": "Thermopylae",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mycale",
+          "FullName": "Mycale",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Plataea",
+          "FullName": "Plataea",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Granicus",
+          "FullName": "Granicus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Miletus",
+          "FullName": "Miletus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Trafalgar",
+          "FullName": "Trafalgar",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Jutland",
+          "FullName": "Jutland",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Agincourt",
+          "FullName": "Agincourt",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Lepanto",
+          "FullName": "Lepanto",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Borodino",
+          "FullName": "Borodino",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Gangut",
+          "FullName": "Gangut",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Navarino",
+          "FullName": "Navarino",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "El Alamein",
+          "FullName": "El Alamein",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Waterloo",
+          "FullName": "Waterloo",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Artemisium",
+          "FullName": "Artemisium",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lilybaeum",
+          "FullName": "Lilybaeum",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gravelines",
+          "FullName": "Gravelines",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Flores",
+          "FullName": "Flores",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ramillies",
+          "FullName": "Ramillies",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Poltava",
+          "FullName": "Poltava",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Erastfer",
+          "FullName": "Erastfer",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Finisterre",
+          "FullName": "Finisterre",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mollwitz",
+          "FullName": "Mollwitz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Soor",
+          "FullName": "Soor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kesselsdorf",
+          "FullName": "Kesselsdorf",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Beauséjour",
+          "FullName": "Beauséjour",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rossbach",
+          "FullName": "Rossbach",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Leuthen",
+          "FullName": "Leuthen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Krefeld",
+          "FullName": "Krefeld",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tornow",
+          "FullName": "Tornow",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lagos",
+          "FullName": "Lagos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Liegnitz",
+          "FullName": "Liegnitz",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Valencia de Alcántara",
+          "FullName": "Valencia de Alcántara",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arachova",
+          "FullName": "Arachova",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vasilika",
+          "FullName": "Vasilika",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Doliana",
+          "FullName": "Doliana",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Solferino",
+          "FullName": "Solferino",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vitoria",
+          "FullName": "Vitoria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Chesma",
+          "FullName": "Chesma",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Athos",
+          "FullName": "Athos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arpachai",
+          "FullName": "Arpachai",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tarutino",
+          "FullName": "Tarutino",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kulevicha",
+          "FullName": "Kulevicha",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Balaclava",
+          "FullName": "Balaclava",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sinop",
+          "FullName": "Sinop",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Khalkhin Gol",
+          "FullName": "Khalkhin Gol",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Korsun",
+          "FullName": "Korsun",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Cherkassy",
+          "FullName": "Cherkassy",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Iskra",
+          "FullName": "Iskra",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Ecnomus",
+          "FullName": "Ecnomus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aegates",
+          "FullName": "Aegates",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Itter",
+          "FullName": "Itter",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": "Chthonic",
+      "ShipNames": [
+        {
+          "ShortName": "Nox",
+          "FullName": "Nox",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Erebus",
+          "FullName": "Erebus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Acheron",
+          "FullName": "Acheron",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Styx",
+          "FullName": "Styx",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lethe",
+          "FullName": "Lethe",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tartarus",
+          "FullName": "Tartarus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kronus",
+          "FullName": "Kronus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hades",
+          "FullName": "Hades",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Charon",
+          "FullName": "Charon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Avernus",
+          "FullName": "Avernus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Phobos",
+          "FullName": "Phobos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Deimos",
+          "FullName": "Deimos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Typhon",
+          "FullName": "Typhon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Echidna",
+          "FullName": "Echidna",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Melinoë",
+          "FullName": "Melinoë",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Alecto",
+          "FullName": "Alecto",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Megaera",
+          "FullName": "Megaera",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tisiphone",
+          "FullName": "Tisiphone",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Phoebe",
+          "FullName": "Phoebe",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Uranus",
+          "FullName": "Uranus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Selene",
+          "FullName": "Selene",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hyperion",
+          "FullName": "Hyperion",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Prometheus",
+          "FullName": "Prometheus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Atlas",
+          "FullName": "Atlas",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nike",
+          "FullName": "Nike",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Astarte",
+          "FullName": "Astarte",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Hibernia",
+          "FullName": "Hibernia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Colchis",
+          "FullName": "Colchis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Caledonia",
+          "FullName": "Caledonia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Iberia",
+          "FullName": "Iberia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aquitania",
+          "FullName": "Aquitania",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Illyria",
+          "FullName": "Illyria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Macedonia",
+          "FullName": "Macedonia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pontus",
+          "FullName": "Pontus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bithynia",
+          "FullName": "Bithynia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cimmeria",
+          "FullName": "Cimmeria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lusitania",
+          "FullName": "Lusitania",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Moesia",
+          "FullName": "Moesia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dacia",
+          "FullName": "Dacia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cappadocia",
+          "FullName": "Cappadocia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thrace",
+          "FullName": "Thrace",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Epirus",
+          "FullName": "Epirus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pannonia",
+          "FullName": "Pannonia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cyrenaica",
+          "FullName": "Cyrenaica",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Queen Elizabeth I",
+          "FullName": "Queen Elizabeth I",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Queen Elizabeth II",
+          "FullName": "Queen Elizabeth II",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King George I",
+          "FullName": "King George I",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King George V",
+          "FullName": "King George V",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Queen Victoria",
+          "FullName": "Queen Victoria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King Richard I the Lionheart",
+          "FullName": "King Richard I the Lionheart",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King Edward I",
+          "FullName": "King Edward I",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King Edward VII",
+          "FullName": "King Edward VII",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King Henry V",
+          "FullName": "King Henry V",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King William III",
+          "FullName": "King William III",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Queen Mary II",
+          "FullName": "Queen Mary II",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "King Robert the Bruce",
+          "FullName": "King Robert the Bruce",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    }
+  ],
+  "FleetNames": [
+    {
+      "Name": "Blah"
+    }
+  ],
+  "NumberConvention": 2,
+  "MerchantShips": [
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "New Guinea",
+          "FullName": "New Guinea",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Borneo",
+          "FullName": "Borneo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Madagascar",
+          "FullName": "Madagascar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sumatra",
+          "FullName": "Sumatra",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Java",
+          "FullName": "Java",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Luzon",
+          "FullName": "Luzon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cuba",
+          "FullName": "Cuba",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hispaniola",
+          "FullName": "Hispaniola",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tasmania",
+          "FullName": "Tasmania",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Berkner",
+          "FullName": "Berkner",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Melville",
+          "FullName": "Melville",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Taiwan",
+          "FullName": "Taiwan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Timor",
+          "FullName": "Timor",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sicily",
+          "FullName": "Sicily",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sardinia",
+          "FullName": "Sardinia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corsica",
+          "FullName": "Corsica",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Burano",
+          "FullName": "Burano",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lido",
+          "FullName": "Lido",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sant Antioco",
+          "FullName": "Sant Antioco",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Pantelleria",
+          "FullName": "Pantelleria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thurston",
+          "FullName": "Thurston",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nordaustlandet",
+          "FullName": "Nordaustlandet",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Flores",
+          "FullName": "Flores",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Jamaica",
+          "FullName": "Jamaica",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Trinidad",
+          "FullName": "Trinidad",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fiji",
+          "FullName": "Fiji",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Puerto Rico",
+          "FullName": "Puerto Rico",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Samoa",
+          "FullName": "Samoa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Saipan",
+          "FullName": "Saipan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aitutaki",
+          "FullName": "Aitutaki",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tonga",
+          "FullName": "Tonga",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Praslin",
+          "FullName": "Praslin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "La Digue",
+          "FullName": "La Digue",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Malta",
+          "FullName": "Malta",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gozo",
+          "FullName": "Gozo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Comino",
+          "FullName": "Comino",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cres",
+          "FullName": "Cres",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Drvenik",
+          "FullName": "Drvenik",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Madeira",
+          "FullName": "Madeira",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Porto Santo",
+          "FullName": "Porto Santo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Desertas",
+          "FullName": "Desertas",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Selvagens",
+          "FullName": "Selvagens",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cyprus",
+          "FullName": "Cyprus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rhodes",
+          "FullName": "Rhodes",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Crete",
+          "FullName": "Crete",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Euboea",
+          "FullName": "Euboea",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lesbos",
+          "FullName": "Lesbos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Chios",
+          "FullName": "Chios",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cephalonia",
+          "FullName": "Cephalonia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Corfu",
+          "FullName": "Corfu",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lemnos",
+          "FullName": "Lemnos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Samos",
+          "FullName": "Samos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Naxos",
+          "FullName": "Naxos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zakynthos",
+          "FullName": "Zakynthos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thassos",
+          "FullName": "Thassos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Andros",
+          "FullName": "Andros",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lefkada",
+          "FullName": "Lefkada",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kos",
+          "FullName": "Kos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kythera",
+          "FullName": "Kythera",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Icaria",
+          "FullName": "Icaria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Skyros",
+          "FullName": "Skyros",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Milos",
+          "FullName": "Milos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ithaca",
+          "FullName": "Ithaca",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Santorini",
+          "FullName": "Santorini",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Honshu",
+          "FullName": "Honshu",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kyushu",
+          "FullName": "Kyushu",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Shikoku",
+          "FullName": "Shikoku",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hokkaido",
+          "FullName": "Hokkaido",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Okinawa",
+          "FullName": "Okinawa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Amami Oshima",
+          "FullName": "Amami Oshima",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tsushima",
+          "FullName": "Tsushima",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Awaji",
+          "FullName": "Awaji",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Shimoshima",
+          "FullName": "Shimoshima",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Yakushima",
+          "FullName": "Yakushima",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tanegashima",
+          "FullName": "Tanegashima",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Leyte",
+          "FullName": "Leyte",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Zealand",
+          "FullName": "Zealand",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Rügen",
+          "FullName": "Rügen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Wolin",
+          "FullName": "Wolin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sakhalin",
+          "FullName": "Sakhalin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kotlin",
+          "FullName": "Kotlin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Onekotan",
+          "FullName": "Onekotan",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Paramushir",
+          "FullName": "Paramushir",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Simushir",
+          "FullName": "Simushir",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Shantar",
+          "FullName": "Shantar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vilcheka",
+          "FullName": "Vilcheka",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cornwallis",
+          "FullName": "Cornwallis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Skye",
+          "FullName": "Skye",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bute",
+          "FullName": "Bute",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Arran",
+          "FullName": "Arran",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Islay",
+          "FullName": "Islay",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Great Cumbrae",
+          "FullName": "Great Cumbrae",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Baleshare",
+          "FullName": "Baleshare",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Auskerry",
+          "FullName": "Auskerry",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Langeland",
+          "FullName": "Langeland",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Senja",
+          "FullName": "Senja",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mallorca",
+          "FullName": "Mallorca",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tenerife",
+          "FullName": "Tenerife",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fuerteventura",
+          "FullName": "Fuerteventura",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gran Canaria",
+          "FullName": "Gran Canaria",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lanzarote",
+          "FullName": "Lanzarote",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "La Palma",
+          "FullName": "La Palma",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Menorca",
+          "FullName": "Menorca",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ibiza",
+          "FullName": "Ibiza",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "El Hierro",
+          "FullName": "El Hierro",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Formentera",
+          "FullName": "Formentera",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Antigua",
+          "FullName": "Antigua",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Barbados",
+          "FullName": "Barbados",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Belize",
+          "FullName": "Belize",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dominica",
+          "FullName": "Dominica",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Martinique",
+          "FullName": "Martinique",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gotland",
+          "FullName": "Gotland",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Öland",
+          "FullName": "Öland",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Orust",
+          "FullName": "Orust",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hisingen",
+          "FullName": "Hisingen",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Maui",
+          "FullName": "Maui",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lifou",
+          "FullName": "Lifou",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tahiti",
+          "FullName": "Tahiti",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mayotte",
+          "FullName": "Mayotte",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Miquelon",
+          "FullName": "Miquelon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Oléron",
+          "FullName": "Oléron",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Bora Bora",
+          "FullName": "Bora Bora",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Baffin",
+          "FullName": "Baffin",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Anticosti",
+          "FullName": "Anticosti",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Milneland",
+          "FullName": "Milneland",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Singapore",
+          "FullName": "Singapore",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Amity",
+          "FullName": "Amity",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fibber",
+          "FullName": "Fibber",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gravett",
+          "FullName": "Gravett",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Nublar",
+          "FullName": "Nublar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sorna",
+          "FullName": "Sorna",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Jambalaya",
+          "FullName": "Jambalaya",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Kokovoko",
+          "FullName": "Kokovoko",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Laputa",
+          "FullName": "Laputa",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lucre",
+          "FullName": "Lucre",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Navarone",
+          "FullName": "Navarone",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "San Lorenzo",
+          "FullName": "San Lorenzo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aeolia",
+          "FullName": "Aeolia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Telepylos",
+          "FullName": "Telepylos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thrinacia",
+          "FullName": "Thrinacia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Ogygia",
+          "FullName": "Ogygia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scheria",
+          "FullName": "Scheria",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    }
+  ],
+  "CapitalShips": [
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Bismarck",
+          "FullName": "Otto von Bismarck",
+          "Fluff": "\"Pride of a nation, a beast made of steel\"",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Kaiser Wilhelm",
+          "FullName": "Kaiser Wilhelm",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Friedrich der Grosse",
+          "FullName": "Friedrich der Grosse",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Barbarossa",
+          "FullName": "Friedrich Barbarossa",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Charlemagne",
+          "FullName": "Charlemagne",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Fenris",
+          "FullName": "Fenris",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Götz von Berlichingen",
+          "FullName": "Götz von Berlichingen",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": "Roman",
+      "ShipNames": [
+        {
+          "ShortName": "Romulus",
+          "FullName": "Romulus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Caesar",
+          "FullName": "Gaius Julius Caesar",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tiberius",
+          "FullName": "Tiberius Claudius Nero",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Marcus Aurelius",
+          "FullName": "Marcus Aurelius",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fabius Maximus",
+          "FullName": "Quintus Fabius Maximus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Camillus",
+          "FullName": "Marcus Furius Camillus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Scipio",
+          "FullName": "Publius Cornelius Scipio",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Brutus",
+          "FullName": "Lucius Junius Brutus",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Spartan",
+      "ShipNames": [
+        {
+          "ShortName": "Agesilaus",
+          "FullName": "Agesilaus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Menelaus",
+          "FullName": "Menelaus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lycurgus",
+          "FullName": "Lycurgus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Archidamus",
+          "FullName": "Archidamus",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cleomenes",
+          "FullName": "Cleomenes",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Leonidas",
+          "FullName": "Leonidas",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Gorgo",
+          "FullName": "Gorgo",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": "Kirov",
+      "ShipNames": [
+        {
+          "ShortName": "Kirov",
+          "FullName": "Sergei Mironovich Kirov",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Tukhachevsky",
+          "FullName": "Mikhail Tukhachevsky",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Zhukov",
+          "FullName": "Georgy Zhukov",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Budyonny",
+          "FullName": "Semyon Budyonny",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Timoshenko",
+          "FullName": "Semyon Timoshenko",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": "Capital",
+      "ShipNames": [
+        {
+          "ShortName": "Washington",
+          "FullName": "Washington",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "London",
+          "FullName": "London",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Berlin",
+          "FullName": "Berlin",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Rome",
+          "FullName": "Rome",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Moscow",
+          "FullName": "Moscow",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Beijing",
+          "FullName": "Beijing",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tokyo",
+          "FullName": "Tokyo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Paris",
+          "FullName": "Paris",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Madrid",
+          "FullName": "Madrid",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Amsterdam",
+          "FullName": "Amsterdam",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vienna",
+          "FullName": "Vienna",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Budapest",
+          "FullName": "Budapest",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Athens",
+          "FullName": "Athens",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Prague",
+          "FullName": "Prague",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Buenos Aires",
+          "FullName": "Buenos Aires",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hanoi",
+          "FullName": "Hanoi",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Havana",
+          "FullName": "Havana",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Lisbon",
+          "FullName": "Lisbon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Cairo",
+          "FullName": "Cairo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Seoul",
+          "FullName": "Seoul",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Britainnia",
+          "FullName": "Britainnia",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Athena",
+          "FullName": "Athena",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Aurora",
+          "FullName": "Aurora",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Eos",
+          "FullName": "Eos",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Jupiter",
+          "FullName": "Jupiter",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mars",
+          "FullName": "Mars",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Thor",
+          "FullName": "Thor",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Odin",
+          "FullName": "Odin",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Dreadnought",
+          "FullName": "Dreadnought",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Superbia",
+          "FullName": "Superbia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vengeance",
+          "FullName": "Vengeance",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Vanguard",
+          "FullName": "Vanguard",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Victory",
+          "FullName": "Victory",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Valhalla",
+          "FullName": "Valhalla",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Valkyrie",
+          "FullName": "Valkyrie",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Agamemnon",
+          "FullName": "Agamemnon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Hercules",
+          "FullName": "Hercules",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Achilles",
+          "FullName": "Achilles",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Artemis",
+          "FullName": "Artemis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Apollo",
+          "FullName": "Apollo",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Elysium",
+          "FullName": "Elysium",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tyrant",
+          "FullName": "Tyrant",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Columbia",
+          "FullName": "Columbia",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Asgard",
+          "FullName": "Asgard",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Nemesis",
+          "FullName": "Nemesis",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Eclipse",
+          "FullName": "Eclipse",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Everest",
+          "FullName": "Everest",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Fenris",
+          "FullName": "Fenris",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Stalingrad",
+          "FullName": "Stalingrad",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Kursk",
+          "FullName": "Kursk",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Stalin",
+          "FullName": "Joseph Vissarionich Stalin",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        },
+        {
+          "ShortName": "Lenin",
+          "FullName": "Vladimir Ilyich Lenin",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": null,
+      "ShipNames": [
+        {
+          "ShortName": "Libertad",
+          "FullName": "Libertad",
+          "Fluff": "",
+          "Subcultures": [
+            "Chilean"
+          ]
+        }
+      ]
+    }
+  ],
+  "SpecialCapitalShips": [
+    {
+      "ClassName": "Apocalypse",
+      "ShipNames": [
+        {
+          "ShortName": "Armageddon",
+          "FullName": "Armageddon",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Götterdämmerung",
+          "FullName": "Götterdämmerung",
+          "Fluff": "",
+          "Subcultures": [
+            "German"
+          ]
+        },
+        {
+          "ShortName": "Ragnarök",
+          "FullName": "Ragnarök",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Dies Irae",
+          "FullName": "Dies Irae",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": "Class name",
+      "ShipNames": [
+        {
+          "ShortName": "Vredefort",
+          "FullName": "Vredefort",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Sudbury",
+          "FullName": "Sudbury",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Tunguska",
+          "FullName": "Tunguska",
+          "Fluff": "",
+          "Subcultures": [
+            "Russian"
+          ]
+        }
+      ]
+    },
+    {
+      "ClassName": "Class name",
+      "ShipNames": [
+        {
+          "ShortName": "Warwolf",
+          "FullName": "Warwolf",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Basilica",
+          "FullName": "Basilica",
+          "Fluff": "",
+          "Subcultures": []
+        },
+        {
+          "ShortName": "Mons Meg",
+          "FullName": "Mons Meg",
+          "Fluff": "",
+          "Subcultures": [
+            "British"
+          ]
+        },
+        {
+          "ShortName": "Helepolis",
+          "FullName": "Helepolis",
+          "Fluff": "",
+          "Subcultures": []
+        }
+      ]
+    }
+  ]
+}
