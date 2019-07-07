@@ -70,8 +70,6 @@ public class Faction : MonoBehaviour
 
     public Color FactionColor;
 
-    private bool _tmpInitialized = false;
-
     private int _factionIdx = -1;
     private static int _nextFactionIdx = 0;
 

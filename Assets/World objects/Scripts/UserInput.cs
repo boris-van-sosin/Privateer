@@ -16,6 +16,7 @@ public class UserInput : MonoBehaviour
         //_userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
         //
         _cameraOffsetFactor = 1.0f;
+        ContextMenu.transform.parent.transform.rotation = Quaternion.LookRotation(_userCamera.transform.forward, _userCamera.transform.up);
     }
 
     void Awake()
@@ -55,11 +56,27 @@ public class UserInput : MonoBehaviour
         {
             hitFlat = new Vector3(hit.point.x, 0, hit.point.z);
             colliderHit = hit.collider;
+            ShipBase s = ShipBase.FromCollider(colliderHit);
+            if (DisplayContextMenu && s != null && s is Ship && ContextMenu != null)
+            {
+                ContextMenu.transform.parent.transform.gameObject.SetActive(true);
+                ContextMenu.transform.parent.transform.position = hitFlat.Value + new Vector3(0, 1, 0);
+                if (ContextMenu.DisplayedShip != s)
+                {
+                    ContextMenu.DisplayedShip = (Ship)s;
+                    ContextMenu.SetText();
+                }
+            }
+            else
+            {
+                ContextMenu.transform.parent.transform.gameObject.SetActive(false);
+            }
         }
         else
         {
             hitFlat = null;
             colliderHit = null;
+            ContextMenu.transform.parent.transform.gameObject.SetActive(false);
         }
 
         float scroll;
@@ -189,20 +206,20 @@ public class UserInput : MonoBehaviour
             {
                 if (colliderHit != null)
                 {
-                    ShipBase s = ShipBase.FromCollider(colliderHit);
-                    if (s != null && s is Ship)
+                    ShipBase s2 = ShipBase.FromCollider(colliderHit);
+                    if (s2 != null && s2 is Ship)
                     {
                         _fleetSelectedShips.Clear();
-                        _fleetSelectedShips.Add(s);
+                        _fleetSelectedShips.Add(s2);
                     }
                 }
             }
             if (Input.GetMouseButtonDown(1))
             {
-                foreach (Ship s in _fleetSelectedShips)
+                foreach (Ship s2 in _fleetSelectedShips)
                 {
-                    ShipAIController controller = s.GetComponent<ShipAIController>();
-                    if (controller != null && !s.ShipDisabled && !s.ShipSurrendered)
+                    ShipAIController controller = s2.GetComponent<ShipAIController>();
+                    if (controller != null && !s2.ShipDisabled && !s2.ShipSurrendered)
                     {
                         controller.NavigateTo(clickPt.Value);
                     }
@@ -215,6 +232,8 @@ public class UserInput : MonoBehaviour
     private bool _grapplingMode = false; // temporary
     private StatusTopLevel _statusTopLevelDisplay = null;
     public Transform ShipStatusPanel;
+    public ShipContextMenu ContextMenu;
+    public bool DisplayContextMenu;
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;
