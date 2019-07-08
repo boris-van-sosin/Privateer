@@ -75,9 +75,9 @@ public class TorpedoTurret : TurretBase
         return _isLegalAngle;
     }
 
-    protected override void FireInner(Vector3 firingVector)
+    protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        _torpedoTarget = Muzzles[_nextBarrel].position + firingVector;
+        _torpedoTarget = Muzzles[barrelIdx].position + firingVector;
         if (_torpedoTubeDoorsAnim)
         {
             _torpedoTubeDoorsAnim.SetBool("DoorsOpen", true);
@@ -99,7 +99,7 @@ public class TorpedoTurret : TurretBase
         return true;
     }
 
-    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
         throw new System.NotImplementedException();
     }

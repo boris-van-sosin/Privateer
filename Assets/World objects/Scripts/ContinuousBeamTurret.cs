@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ContinuousBeamTurret : GeneralBeamTurret
 {
-    protected override void FireInner(Vector3 firingVector)
+    protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
         bool prevFiring = _firing;
         _firing = true;
         _firingVector = firingVector;
-        _beamOrigin = Muzzles[_nextBarrel].position;
+        _beamOrigin = Muzzles[barrelIdx].position;
         if (!prevFiring)
         {
             StartCoroutine(DoBeam(ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.Laser, TurretSize)));
@@ -90,7 +90,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
         }
     }
 
-    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
         // Not implemeted yet
     }

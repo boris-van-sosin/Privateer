@@ -84,9 +84,9 @@ public class BomberTorpedoLauncher : TurretBase
         return _isLegalAngle;
     }
 
-    protected override void FireInner(Vector3 firingVector)
+    protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        _torpedoTarget = Muzzles[_nextBarrel].position + firingVector;
+        _torpedoTarget = Muzzles[barrelIdx].position + firingVector;
         StartCoroutine(LaunchSpread());
     }
 
@@ -145,7 +145,7 @@ public class BomberTorpedoLauncher : TurretBase
         return foundTarget;
     }
 
-    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
         throw new System.NotImplementedException();
     }

@@ -228,7 +228,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         return currTime - LastFire > ActualFiringInterval;
     }
 
-    protected abstract void FireInner(Vector3 firingVector);
+    protected abstract void FireInner(Vector3 firingVector, int barrelIdx);
 
     protected abstract Vector3 GetFiringVector(Vector3 vecToTarget);
 
@@ -276,7 +276,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             return false;
         }
 
-        FireInner(firingVector);
+        FireInner(firingVector, barrelIdx);
         return true;
     }
 
@@ -306,7 +306,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         return InstalledTurretMod == TurretMod.Harpax || InstalledTurretMod == TurretMod.TractorBeam;
     }
 
-    protected abstract void FireGrapplingToolInner(Vector3 firingVector);
+    protected abstract void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx);
 
     public void FireGrapplingTool(Vector3 target)
     {
@@ -330,7 +330,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             return;
         }
         LastFire = Time.time;
-        FireGrapplingToolInner(firingVector);
+        FireGrapplingToolInner(firingVector, _nextBarrel);
         _containingShip.NotifyInComabt();
 
         if (Muzzles.Length > 1)

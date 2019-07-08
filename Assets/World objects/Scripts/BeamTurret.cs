@@ -15,9 +15,9 @@ public class BeamTurret : GeneralBeamTurret
         yield return null;
     }
 
-    protected override void FireInner(Vector3 firingVector)
+    protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {        _firingVector = firingVector;
-        _beamOrigin = Muzzles[_nextBarrel].position;
+        _beamOrigin = Muzzles[barrelIdx].position;
         StartCoroutine(HandleBeam());
     }
 
@@ -38,7 +38,7 @@ public class BeamTurret : GeneralBeamTurret
         }
     }
 
-    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
         // Not implemented yet
     }

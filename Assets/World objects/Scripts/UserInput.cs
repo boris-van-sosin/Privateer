@@ -16,7 +16,7 @@ public class UserInput : MonoBehaviour
         //_userCamera.transform.rotation = Quaternion.LookRotation(Vector3.down, -Vector3.forward);
         //
         _cameraOffsetFactor = 1.0f;
-        ContextMenu.transform.parent.transform.rotation = Quaternion.LookRotation(_userCamera.transform.forward, _userCamera.transform.up);
+        //ContextMenu.transform.parent.transform.rotation = Quaternion.LookRotation(_userCamera.transform.forward, _userCamera.transform.up);
     }
 
     void Awake()
@@ -59,8 +59,8 @@ public class UserInput : MonoBehaviour
             ShipBase s = ShipBase.FromCollider(colliderHit);
             if (DisplayContextMenu && s != null && s is Ship && ContextMenu != null)
             {
-                ContextMenu.transform.parent.transform.gameObject.SetActive(true);
-                ContextMenu.transform.parent.transform.position = hitFlat.Value + new Vector3(0, 1, 0);
+                ContextMenu.gameObject.SetActive(true);
+                ContextMenu.transform.position = _userCamera.WorldToScreenPoint(hitFlat.Value) + new Vector3(70, 5, 0);
                 if (ContextMenu.DisplayedShip != s)
                 {
                     ContextMenu.DisplayedShip = (Ship)s;
@@ -69,14 +69,14 @@ public class UserInput : MonoBehaviour
             }
             else
             {
-                ContextMenu.transform.parent.transform.gameObject.SetActive(false);
+                ContextMenu.gameObject.SetActive(false);
             }
         }
         else
         {
             hitFlat = null;
             colliderHit = null;
-            ContextMenu.transform.parent.transform.gameObject.SetActive(false);
+            ContextMenu.gameObject.SetActive(false);
         }
 
         float scroll;

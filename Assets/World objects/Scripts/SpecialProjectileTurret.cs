@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class SpecialProjectileTurret : DirectionalTurret
 {
-    protected override void FireInner(Vector3 firingVector)
+    protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
         Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.PlasmaCannon, TurretSize);
         Projectile p = ObjectFactory.CreatePlasmaProjectile(firingVector, MuzzleVelocity, MaxRange, w, _containingShip);
         p.WeaponEffectKey = ObjectFactory.WeaponEffect.PlasmaExplosion;
-        p.transform.position = Muzzles[_nextBarrel].position;
+        p.transform.position = Muzzles[barrelIdx].position;
     }
 
     public override bool IsTurretModCombatible(TurretMod m)
@@ -29,7 +29,7 @@ public class SpecialProjectileTurret : DirectionalTurret
         }
     }
 
-    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
     }
 

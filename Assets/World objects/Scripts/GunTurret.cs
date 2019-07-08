@@ -6,7 +6,7 @@ using System;
 
 public class GunTurret : DirectionalTurret
 {
-    protected override void FireInner(Vector3 firingVector)
+    protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
         Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
         Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
@@ -27,10 +27,10 @@ public class GunTurret : DirectionalTurret
             default:
                 break;
         }
-        p.transform.position = Muzzles[_nextBarrel].position;
-        if (MuzzleFx[_nextBarrel] != null)
+        p.transform.position = Muzzles[barrelIdx].position;
+        if (MuzzleFx[barrelIdx] != null)
         {
-            MuzzleFx[_nextBarrel].Play(true);
+            MuzzleFx[barrelIdx].Play(true);
         }
     }
 
@@ -51,13 +51,13 @@ public class GunTurret : DirectionalTurret
         }
     }
 
-    protected override void FireGrapplingToolInner(Vector3 firingVector)
+    protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
         HarpaxBehavior p = ObjectFactory.CreateHarpaxProjectile(firingVector, MuzzleVelocity, MaxRange, _containingShip);
         p.transform.position = Muzzles[_nextBarrel].position;
-        if (MuzzleFx[_nextBarrel] != null)
+        if (MuzzleFx[barrelIdx] != null)
         {
-            MuzzleFx[_nextBarrel].Play(true);
+            MuzzleFx[barrelIdx].Play(true);
         }
     }
 
