@@ -945,6 +945,7 @@ public class Ship : ShipBase
     {
         //Debug.LogWarning(string.Format("Trigger exit: {0}, {1}", this, other.gameObject));
         HandleShipCollisionExit(other);
+        _rigidBody.angularVelocity = Vector3.zero;
     }
 
     private void HandleShipCollisionExit(Collider other)

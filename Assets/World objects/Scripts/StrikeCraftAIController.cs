@@ -187,6 +187,7 @@ public class StrikeCraftAIController : ShipAIController
         Vector3 carrierVelocity = _controlledCraft.ContainingFormation.HostCarrier.Velocity;
         if (_controlledCraft.ContainingFormation.HostCarrier.RecoveryTryStartSingle(_controlledCraft, _recoveryTarget.Idx, _controlledCraft.OnRecoveryHangerOpen))
         {
+            _controlledCraft.IgnoreHits = true;
             Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.RecoveryStart.transform, carrierVelocity);
             m.OnManeuverFinish += delegate (Maneuver mm)
             {
