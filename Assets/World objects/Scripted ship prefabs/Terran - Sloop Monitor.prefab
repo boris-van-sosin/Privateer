@@ -52047,10 +52047,12 @@ MonoBehaviour:
   DefaultMitigationArmourAft: 75
   DefaultMitigationArmourLeft: 75
   DefaultMitigationArmourRight: 50
-  SkeletonCrew: 0
-  OperationalCrew: 15
-  MaxCrew: 50
+  SkeletonCrew: 4
+  OperationalCrew: 14
+  MaxCrew: 40
   MaxSpecialCharacters: 3
+  TeamColorComponents:
+  - {fileID: 8031718632983132727}
 --- !u!54 &54858668100088670
 Rigidbody:
   m_ObjectHideFlags: 0

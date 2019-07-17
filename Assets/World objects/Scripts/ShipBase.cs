@@ -263,10 +263,12 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     public void SetCircleToFactionColor()
     {
-        LineRenderer lr = GetComponentInChildren<LineRenderer>();
-        if (Owner != null && lr != null)
+        if (Owner != null && TeamColorComponents != null)
         {
-            lr.startColor = lr.endColor = new Color(Owner.FactionColor.r, Owner.FactionColor.g, Owner.FactionColor.b, 0.75f);
+            foreach (MeshRenderer mr in TeamColorComponents)
+            {
+                mr.material.color = Owner.FactionColor;
+            }
         }
     }
 
@@ -624,4 +626,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     protected float _turnCoefficient;
 
     public Faction Owner;
+
+    // Team color
+    public MeshRenderer[] TeamColorComponents;
 }
