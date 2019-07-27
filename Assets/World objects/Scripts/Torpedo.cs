@@ -207,6 +207,16 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         }
     }
 
+    public static Torpedo FromCollider(Collider c)
+    {
+        Torpedo t;
+        if ((t = c.GetComponent<Torpedo>()) != null || (t = c.GetComponentInParent<Torpedo>()) != null)
+        {
+            return t;
+        }
+        return null;
+    }
+
     public float BurnAcceleration;
     public float MaxSpeed;
     public float ColdPhaseSpeed;

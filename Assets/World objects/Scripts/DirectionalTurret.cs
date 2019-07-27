@@ -121,7 +121,7 @@ public abstract class DirectionalTurret : TurretBase
 
     protected override ITargetableEntity AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.AllTargetableLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.NavBoxesAllLayerMask);
         ITargetableEntity foundTarget = null;
         foreach (Collider c in colliders)
         {
@@ -138,7 +138,7 @@ public abstract class DirectionalTurret : TurretBase
                     foundTarget = s;
                 }
             }
-            if ((t = c.GetComponent<Torpedo>()) != null)
+            if ((t = Torpedo.FromCollider(c)) != null)
             {
                 if (t.OriginShip != null && ContainingShip.Owner.IsEnemy(t.OriginShip.Owner))
                 {

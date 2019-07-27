@@ -29,16 +29,6 @@ public class Ship : ShipBase
         LastInCombat = Time.time;
         base.Activate();
         _manualTurrets = new HashSet<ITurret>(_turrets);
-        Transform navBox = transform.Find("NavBox");
-        if (navBox != null)
-        {
-            BoxCollider navBoxCollider = navBox.gameObject.AddComponent<BoxCollider>();
-            Bounds bbox = transform.GetComponent<MeshFilter>().mesh.bounds;
-            bbox.Expand(NavBoxExpandFactor * 0.5f / transform.localScale.x);
-            navBoxCollider.center = bbox.center;
-            navBoxCollider.size = bbox.size;
-            navBoxCollider.isTrigger = true;
-        }
     }
 
     protected override void FindTurrets()
@@ -1168,6 +1158,4 @@ public class Ship : ShipBase
     private bool _acceleratingBackwards = false;
     private bool _brakingForward = false;
     private bool _brakingBackwards = false;
-
-    private static readonly float NavBoxExpandFactor = 1.1f;
 }

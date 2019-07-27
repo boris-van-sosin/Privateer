@@ -35,6 +35,7 @@ Transform:
   m_Children:
   - {fileID: 4023200070324288}
   - {fileID: 4412031498959922}
+  - {fileID: 8996146068310093485}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -102,6 +103,7 @@ MonoBehaviour:
   ProductionKey: Fed Fighter
   MaxHullHitPoints: 3
   Owner: {fileID: 0}
+  TeamColorComponents: []
 --- !u!54 &54430829964750734
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -336,3 +338,33 @@ MonoBehaviour:
   AllowedWeaponTypes: 11000000
   LocationOnShip: 0
   DefaultGroup: 0
+--- !u!1 &2023781677401662702
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8996146068310093485}
+  m_Layer: 16
+  m_Name: NavBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8996146068310093485
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023781677401662702}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4376362533453686}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -25,6 +25,17 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         InitCircle();
         ShipDisabled = false;
         ShipImmobilized = false;
+
+        Transform navBox = transform.Find("NavBox");
+        if (navBox != null)
+        {
+            BoxCollider navBoxCollider = navBox.gameObject.AddComponent<BoxCollider>();
+            Bounds bbox = transform.GetComponent<MeshFilter>().mesh.bounds;
+            bbox.Expand(NavBoxExpandFactor * 0.5f / transform.localScale.x);
+            navBoxCollider.center = bbox.center;
+            navBoxCollider.size = bbox.size;
+            navBoxCollider.isTrigger = true;
+        }
     }
 
     protected override void ApplyMovement()
@@ -629,4 +640,6 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     // Team color
     public MeshRenderer[] TeamColorComponents;
+
+    private static readonly float NavBoxExpandFactor = 1.1f;
 }

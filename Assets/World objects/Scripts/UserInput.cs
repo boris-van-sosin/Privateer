@@ -21,6 +21,8 @@ public class UserInput : MonoBehaviour
 
     void Awake()
     {
+        // Moved to project settings, where it should be.
+        /*
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Ships"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Shields"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Strike Craft"), true);
@@ -34,6 +36,7 @@ public class UserInput : MonoBehaviour
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Torpedoes"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Weapons"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Effects"), true);
+        */
     }
 
     // Update is called once per frame

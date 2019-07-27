@@ -66,6 +66,7 @@ Transform:
   m_Children:
   - {fileID: 4852756935129642209}
   - {fileID: 4929592159492391898}
+  - {fileID: 7642505163085700456}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
@@ -267,6 +268,7 @@ MonoBehaviour:
   ProductionKey: Fed Torpedo Bomber
   MaxHullHitPoints: 6
   Owner: {fileID: 0}
+  TeamColorComponents: []
 --- !u!1 &4851142922529807329
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +403,36 @@ MonoBehaviour:
   LocationOnShip: 0
   DefaultGroup: 0
   LaunchVector: {x: 0, y: 0, z: -1}
+--- !u!1 &8930968400474897006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7642505163085700456}
+  m_Layer: 16
+  m_Name: NavBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7642505163085700456
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8930968400474897006}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4853101827076362569}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4852472298310756309
 PrefabInstance:
   m_ObjectHideFlags: 0

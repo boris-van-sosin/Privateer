@@ -444,6 +444,8 @@ public static class ObjectFactory
     public static int AllShipsNoShieldsLayerMask { get { return _allShipsNoShieldsLayerMask; } }
     public static int AllShipsNoShieldsNoStikeCraftLayerMask { get { return _allShipsNoStrikeCraftNoShieldsLayerMask; } }
     public static int NavBoxesLayerMask { get { return _navBoxesLayerMask; } }
+    public static int NavBoxesStrikeCraftLayerMask { get { return _navBoxesStrikeCraftLayerMask; } }
+    public static int NavBoxesAllLayerMask { get { return _navBoxesAllLayerMask; } }
 
     private static void LoadWarheads()
     {
@@ -668,6 +670,8 @@ public static class ObjectFactory
     private static readonly int _allShipsNoShieldsLayerMask = LayerMask.GetMask("Ships", "Strike Craft");
     private static readonly int _allShipsNoStrikeCraftNoShieldsLayerMask = LayerMask.GetMask("Ships");
     private static readonly int _navBoxesLayerMask = LayerMask.GetMask("NavColliders");
+    private static readonly int _navBoxesStrikeCraftLayerMask = LayerMask.GetMask("NavCollidersStrikeCraft");
+    private static readonly int _navBoxesAllLayerMask = LayerMask.GetMask("NavColliders", "NavCollidersStrikeCraft", "NavCollidersTorpedoes");
 
     public class WarheadDataEntry3
     {

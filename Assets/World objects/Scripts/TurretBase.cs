@@ -196,12 +196,12 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             origin.y = 0;
             Vector3 firingVector = Muzzles[_nextBarrel].up;
             firingVector.y = 0;
-            RaycastHit[] hits = Physics.RaycastAll(origin, firingVector, MaxRange, ObjectFactory.AllTargetableLayerMask);
+            RaycastHit[] hits = Physics.RaycastAll(origin, firingVector, MaxRange, ObjectFactory.NavBoxesAllLayerMask);
             int closestHit = -1;
             for (int i = 0; i < hits.Length; ++i)
             {
-                if (hits[i].collider.gameObject == ContainingShip.gameObject ||
-                    (ContainingShip.ShieldCapsule != null && hits[i].collider.gameObject == ContainingShip.ShieldCapsule.gameObject))
+                GameObject collisionGameObj = hits[i].collider.transform.parent.gameObject;
+                if (collisionGameObj == ContainingShip.gameObject)
                 {
                     continue;
                 }
