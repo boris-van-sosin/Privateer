@@ -14256,9 +14256,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   m_Radius: 0.0015200004
-  m_Height: 0.011822864
+  m_Height: 0.011220044
   m_Direction: 1
-  m_Center: {x: 0.000000059601657, y: -0.00064351066, z: -0.000000007454347}
+  m_Center: {x: 0, y: -0.0003014099, z: 0}
 --- !u!96 &-6714862966999914307
 TrailRenderer:
   serializedVersion: 2
@@ -14372,7 +14372,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2650685636392066160}
-  - component: {fileID: 978447875466987976}
+  - component: {fileID: 2192405179268414491}
   m_Layer: 17
   m_Name: TargetingCollider
   m_TagString: Untagged
@@ -14394,16 +14394,17 @@ Transform:
   m_Father: {fileID: 4342188521558536}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &978447875466987976
-BoxCollider:
+--- !u!136 &2192405179268414491
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 33549060752228382}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.00304, y: 0.01182286, z: 0.00304}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.0015200004
+  m_Height: 0.011220044
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.0003014099, z: 0}
