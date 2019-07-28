@@ -69,6 +69,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Fore, CapacitorBank.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Aft, TargetingComputer.DefaultComponent(s.ShipSize, s));
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
@@ -103,7 +104,8 @@ public class ShipFreeCreatePanel : MonoBehaviour
             }
             s.PlaceTurret(hp, t);
         }
-        for (int i = 0; i < s.OperationalCrew; ++i)
+        int numCrew = (s.OperationalCrew + s.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
+        for (int i = 0; i < numCrew; ++i)
         {
             s.AddCrew(ShipCharacter.GenerateTerranShipCrew());
         }

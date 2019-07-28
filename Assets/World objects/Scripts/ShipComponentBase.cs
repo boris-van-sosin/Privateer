@@ -10,6 +10,9 @@ public abstract class ShipComponentBase : IShipComponent
 
     protected Ship _containingShip;
 
+    private static Buff _dummyBuff = Buff.Default();
+    public virtual Buff ComponentBuff => _dummyBuff;
+
     public ObjectFactory.ShipSize MinShipSize { get; protected set; }
     public ObjectFactory.ShipSize MaxShipSize { get; protected set; }
 }

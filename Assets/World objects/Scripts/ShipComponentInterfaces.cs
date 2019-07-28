@@ -33,6 +33,7 @@ public interface IShipComponent
     IEnumerable<ComponentSlotType> AllowedSlotTypes { get; }
     ObjectFactory.ShipSize MinShipSize { get; }
     ObjectFactory.ShipSize MaxShipSize { get; }
+    Buff ComponentBuff { get; }
 }
 
 public interface IShipActiveComponent : IShipComponent
@@ -57,6 +58,7 @@ public interface ITurret : IShipActiveComponent
     float CurrLocalAngle { get; }
     float GetMaxRange { get; }
     bool IsOutOfAmmo { get; }
+    float FiringIntervalCoeff { get; set; }
 }
 
 public interface IPeriodicActionComponent : IShipComponent

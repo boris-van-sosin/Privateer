@@ -28,6 +28,8 @@ public class Ship : ShipBase
         InBoarding = false;
         LastInCombat = Time.time;
         base.Activate();
+        _crewNumBuff = Buff.Default();
+        SetCrewNumBuff();
         _manualTurrets = new HashSet<ITurret>(_turrets);
     }
 
@@ -383,7 +385,7 @@ public class Ship : ShipBase
         yield return new WaitForEndOfFrame();
         while (_inCollision)
         {
-            transform.position -= Time.deltaTime * 0.1f * MaxSpeed * collisionVec;
+            transform.position -= Time.deltaTime * 0.1f * MaxSpeedWBuf * collisionVec;
             yield return new WaitForEndOfFrame();
         }
         ResetSpeed();
@@ -393,14 +395,15 @@ public class Ship : ShipBase
 
     private IEnumerator ContinuousComponents()
     {
-        while(true)
+        int newMaxEnergy = 0;
+        foreach (IEnergyCapacityComponent comp in _energyCapacityComps)
         {
-            int newMaxEnergy = 0;
-            foreach (IEnergyCapacityComponent comp in _energyCapacityComps)
-            {
-                newMaxEnergy += comp.EnergyCapacity;
-            }
-            MaxEnergy = newMaxEnergy;
+            newMaxEnergy += comp.EnergyCapacity;
+        }
+        MaxEnergy = newMaxEnergy;
+        yield return new WaitForSeconds(UnityEngine.Random.Range(0f, 0.25f));
+        while (true)
+        {
             foreach (IPeriodicActionComponent comp in _updateComponents)
             {
                 comp.PeriodicAction();
@@ -410,11 +413,23 @@ public class Ship : ShipBase
                 _shieldCapsule.SetActive(ShipTotalShields > 0);
             }
 
+            UpdateAndApplyBuffs();
+
             if (HullHitPoints <= 0)
             {
                 yield break;
             }
             yield return new WaitForSeconds(0.25f);
+        }
+    }
+
+    private void UpdateAndApplyBuffs()
+    {
+        CombinedBuff = Buff.Combine(AllBuffs);
+        foreach (ITurret t in Turrets)
+        {
+            float reloadTimeCoeff = Mathf.Clamp(1f / (1f + CombinedBuff.WeaponRateOfFireFactor), 0.5f, 2f);
+            t.FiringIntervalCoeff = reloadTimeCoeff;
         }
     }
 
@@ -625,6 +640,7 @@ public class Ship : ShipBase
                 //
             }
             HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
+            SetCrewNumBuff();
         }
         CheckCriticalDamage();
     }
@@ -887,6 +903,7 @@ public class Ship : ShipBase
     private void ResetSpeed()
     {
         _speed = 0f;
+        _rigidBody.velocity = Vector3.zero;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -1109,6 +1126,51 @@ public class Ship : ShipBase
     public override bool ShipControllable { get { return base.ShipControllable && (!ShipSurrendered); } }
     public override bool ShipActiveInCombat { get { return base.ShipActiveInCombat && (!ShipSurrendered); } }
 
+    private void SetCrewNumBuff()
+    {
+        int numCrew = AllCrew.Where(c => c.Status == ShipCharacter.CharacterStaus.Active).Count();
+        if (numCrew >= OperationalCrew)
+        {
+            _crewNumBuff.ResetToDefault();
+        }
+        else if (numCrew >= SkeletonCrew)
+        {
+            float diff = numCrew - SkeletonCrew;
+            float maxDiff = OperationalCrew - SkeletonCrew;
+            float movBuff = -0.75f * (1f - (diff / maxDiff));
+            _crewNumBuff.SpeedFactor = movBuff;
+            _crewNumBuff.AcceleraionFactor = movBuff;
+            _crewNumBuff.WeaponRateOfFireFactor = movBuff;
+            _crewNumBuff.WeaponAccuracyFactor = -10f * (1f - (diff / maxDiff));
+            _crewNumBuff.WeaponVsStrikeCraftFactor = 0;
+            _crewNumBuff.RepairRateModifier = -1000;
+            _crewNumBuff.ShieldRechargeRateModifier = 0;
+        }
+        else
+        {
+            _crewNumBuff.SpeedFactor = -0.75f;
+            _crewNumBuff.AcceleraionFactor = -0.75f;
+            _crewNumBuff.WeaponRateOfFireFactor = -0.75f;
+            _crewNumBuff.WeaponAccuracyFactor = -10f;
+            _crewNumBuff.WeaponVsStrikeCraftFactor = 0;
+            _crewNumBuff.RepairRateModifier = -1000;
+            _crewNumBuff.ShieldRechargeRateModifier = -1;
+        }
+    }
+
+    private IEnumerable<Buff> AllBuffs
+    {
+        get
+        {
+            yield return _crewNumBuff;
+            yield return _crewExperienceBuff;
+            foreach (IShipComponent comp in AllComponents)
+            {
+                yield return comp.ComponentBuff;
+            }
+        }
+    }
+
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
@@ -1158,4 +1220,8 @@ public class Ship : ShipBase
     private bool _acceleratingBackwards = false;
     private bool _brakingForward = false;
     private bool _brakingBackwards = false;
+
+    // Buff/debuff mechanic
+    private Buff _crewNumBuff;
+    private Buff _crewExperienceBuff;
 }

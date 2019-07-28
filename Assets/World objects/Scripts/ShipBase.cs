@@ -25,6 +25,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         InitCircle();
         ShipDisabled = false;
         ShipImmobilized = false;
+        CombinedBuff = Buff.Default();
 
         Transform navBox = transform.Find("NavBox");
         if (navBox != null)
@@ -118,7 +119,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             if (!CanDoAcceleration())
                 return;
 
-            _speed = Mathf.Min(_speed + Thrust * _thrustCoefficient * Time.deltaTime, MaxSpeed);
+            _speed = Mathf.Min(_speed + AccelerationWBuf * _thrustCoefficient * Time.deltaTime, MaxSpeedWBuf);
         }
         else if (_nextBrake)
         {
@@ -127,7 +128,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             if (!CanDoBraking())
                 return;
 
-            float targetSpeed = MaxSpeed * Mathf.Clamp01(_brakingTargetSpeedFactor);
+            float targetSpeed = MaxSpeedWBuf * Mathf.Clamp01(_brakingTargetSpeedFactor);
             float newSpeed = _speed - Braking * Mathf.Clamp01(_brakingFactor) * Time.deltaTime;
             if (targetSpeed > _speed)
             {
@@ -146,20 +147,20 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         else if (UseTargetSpeed)
         {
             _nextAccelerate = _nextBrake = false;
-            float actualTargetSpeed = Mathf.Clamp(TargetSpeed, 0, MaxSpeed);
+            float actualTargetSpeed = Mathf.Clamp(TargetSpeed, 0, MaxSpeedWBuf);
             if (_speed < actualTargetSpeed)
             {
                 if (!CanDoAcceleration())
                     return;
 
-                _speed = Mathf.Min(_speed + Thrust * _thrustCoefficient * Time.deltaTime, actualTargetSpeed);
+                _speed = Mathf.Min(_speed + AccelerationWBuf * _thrustCoefficient * Time.deltaTime, actualTargetSpeed);
             }
             else if (_speed > actualTargetSpeed)
             {
                 if (!CanDoBraking())
                     return;
 
-                float targetSpeedBraking = Mathf.Min(actualTargetSpeed, MaxSpeed * Mathf.Clamp01(_brakingTargetSpeedFactor));
+                float targetSpeedBraking = Mathf.Min(actualTargetSpeed, MaxSpeedWBuf * Mathf.Clamp01(_brakingTargetSpeedFactor));
                 float newSpeed = _speed - Braking * Mathf.Clamp01(_brakingFactor) * Time.deltaTime;
                 if (targetSpeedBraking > _speed)
                 {
@@ -640,6 +641,11 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     // Team color
     public MeshRenderer[] TeamColorComponents;
+
+    // Buff/debuff mechanic
+    public Buff CombinedBuff { get; protected set; }
+    protected float MaxSpeedWBuf => Mathf.Max(MaxSpeed * 0.25f, MaxSpeed * (1f + CombinedBuff.SpeedFactor));
+    protected float AccelerationWBuf => Mathf.Max(Thrust * 0.25f, Thrust * (1f + CombinedBuff.AcceleraionFactor));
 
     private static readonly float NavBoxExpandFactor = 1.1f;
 }

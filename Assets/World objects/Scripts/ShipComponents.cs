@@ -717,3 +717,85 @@ public class CombatDetachment : ShipComponentBase
 
     private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
+
+public class TargetingComputer : ShipActiveComponentBase, IPeriodicActionComponent
+{
+    public int PowerUsage;
+    private Buff _activeBuff;
+    private static Buff _inactiveBuff = Buff.Default();
+    private bool _nextActive;
+
+    public void PeriodicAction()
+    {
+        _nextActive = false;
+        if (!ComponentIsWorking)
+        {
+            return;
+        }
+
+        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, 0))
+        {
+            return;
+        }
+        _nextActive = true;
+    }
+
+    public override Buff ComponentBuff => _nextActive ? _activeBuff : _inactiveBuff;
+
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+
+    public override string SpriteKey { get { return "Damage control"; } }
+
+    public static TargetingComputer DefaultComponent(Ship containingShip)
+    {
+        return new TargetingComputer()
+        {
+            ComponentMaxHitPoints = 400,
+            ComponentHitPoints = 400,
+            Status = ComponentStatus.Undamaged,
+            _activeBuff = new Buff()
+            {
+                WeaponAccuracyFactor = 10f,
+
+                SpeedFactor = 0,
+                AcceleraionFactor = 0,
+                WeaponRateOfFireFactor = 0f,
+                WeaponVsStrikeCraftFactor = 0,
+                RepairRateModifier = 0,
+                ShieldRechargeRateModifier = 0
+            },
+            PowerUsage = 1,
+            _containingShip = containingShip
+        };
+    }
+
+    public static TargetingComputer DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
+    {
+        TargetingComputer res = DefaultComponent(containingShip);
+        res.MinShipSize = grade;
+        res.MaxShipSize = ObjectFactory.ShipSize.CapitalShip;
+        switch (grade)
+        {
+            case ObjectFactory.ShipSize.Sloop:
+                res.ComponentHitPoints = res.ComponentMaxHitPoints = 300;
+                break;
+            case ObjectFactory.ShipSize.Frigate:
+                res.ComponentHitPoints = res.ComponentMaxHitPoints = 400;
+                break;
+            case ObjectFactory.ShipSize.Destroyer:
+                res.ComponentHitPoints = res.ComponentMaxHitPoints = 600;
+                break;
+            case ObjectFactory.ShipSize.Cruiser:
+                res.ComponentHitPoints = res.ComponentMaxHitPoints = 800;
+                break;
+            case ObjectFactory.ShipSize.CapitalShip:
+                res.ComponentHitPoints = res.ComponentMaxHitPoints = 1100;
+                break;
+            default:
+                break;
+        }
+        return res;
+    }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+}
