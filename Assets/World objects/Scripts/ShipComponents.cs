@@ -718,7 +718,7 @@ public class CombatDetachment : ShipComponentBase
     private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
 
-public class TargetingComputer : ShipActiveComponentBase, IPeriodicActionComponent
+public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionComponent
 {
     public int PowerUsage;
     private Buff _activeBuff;
@@ -744,11 +744,11 @@ public class TargetingComputer : ShipActiveComponentBase, IPeriodicActionCompone
 
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
-    public override string SpriteKey { get { return "Damage control"; } }
+    public override string SpriteKey { get { return "Fire control general"; } }
 
-    public static TargetingComputer DefaultComponent(Ship containingShip)
+    public static FireControlGeneral DefaultComponent(Ship containingShip)
     {
-        return new TargetingComputer()
+        return new FireControlGeneral()
         {
             ComponentMaxHitPoints = 400,
             ComponentHitPoints = 400,
@@ -769,9 +769,9 @@ public class TargetingComputer : ShipActiveComponentBase, IPeriodicActionCompone
         };
     }
 
-    public static TargetingComputer DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
+    public static FireControlGeneral DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
     {
-        TargetingComputer res = DefaultComponent(containingShip);
+        FireControlGeneral res = DefaultComponent(containingShip);
         res.MinShipSize = grade;
         res.MaxShipSize = ObjectFactory.ShipSize.CapitalShip;
         switch (grade)

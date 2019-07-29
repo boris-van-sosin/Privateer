@@ -1024,7 +1024,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.000046
+      value: 100.00001
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -3898,6 +3898,8 @@ MonoBehaviour:
   - Power plant
   - Damage control
   - Torpedo tube
+  - Fire control general
+  - Fire control flak
   Sprites:
   - {fileID: 21300000, guid: 463fd345a3df81b459d4421fe7e69bd6, type: 3}
   - {fileID: 21300000, guid: 55ede17e1473e9e498d530a497a0a654, type: 3}
@@ -3905,6 +3907,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ada6652268623aa45afd08547e45161e, type: 3}
   - {fileID: 21300000, guid: f9db9d8ec1911c748962fa498b4a5c7f, type: 3}
   - {fileID: 21300000, guid: 0db51c84f8b0c5f439741c80a6877f0a, type: 3}
+  - {fileID: 21300000, guid: a4ec017fe4873de4393919415e05964c, type: 3}
+  - {fileID: 21300000, guid: ee67d24491440a34d81cd8d7f29eacbd, type: 3}
   BoardingStatusCanvas: {fileID: 223708177522948386, guid: d7732c5d13a81d441b7d04c25a00644b,
     type: 3}
   ShipStatusPanelCamera: {fileID: 1958525745}
