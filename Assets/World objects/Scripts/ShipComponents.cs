@@ -755,7 +755,7 @@ public class TargetingComputer : ShipActiveComponentBase, IPeriodicActionCompone
             Status = ComponentStatus.Undamaged,
             _activeBuff = new Buff()
             {
-                WeaponAccuracyFactor = 10f,
+                WeaponAccuracyFactor = 0.1f,
 
                 SpeedFactor = 0,
                 AcceleraionFactor = 0,

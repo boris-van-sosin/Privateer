@@ -428,8 +428,7 @@ public class Ship : ShipBase
         CombinedBuff = Buff.Combine(AllBuffs);
         foreach (ITurret t in Turrets)
         {
-            float reloadTimeCoeff = Mathf.Clamp(1f / (1f + CombinedBuff.WeaponRateOfFireFactor), 0.5f, 2f);
-            t.FiringIntervalCoeff = reloadTimeCoeff;
+            t.ApplyBuff(CombinedBuff);
         }
     }
 
@@ -1141,7 +1140,7 @@ public class Ship : ShipBase
             _crewNumBuff.SpeedFactor = movBuff;
             _crewNumBuff.AcceleraionFactor = movBuff;
             _crewNumBuff.WeaponRateOfFireFactor = movBuff;
-            _crewNumBuff.WeaponAccuracyFactor = -10f * (1f - (diff / maxDiff));
+            _crewNumBuff.WeaponAccuracyFactor = -0.2f * (1f - (diff / maxDiff));
             _crewNumBuff.WeaponVsStrikeCraftFactor = 0;
             _crewNumBuff.RepairRateModifier = -1000;
             _crewNumBuff.ShieldRechargeRateModifier = 0;
@@ -1151,7 +1150,7 @@ public class Ship : ShipBase
             _crewNumBuff.SpeedFactor = -0.75f;
             _crewNumBuff.AcceleraionFactor = -0.75f;
             _crewNumBuff.WeaponRateOfFireFactor = -0.75f;
-            _crewNumBuff.WeaponAccuracyFactor = -10f;
+            _crewNumBuff.WeaponAccuracyFactor = -0.2f;
             _crewNumBuff.WeaponVsStrikeCraftFactor = 0;
             _crewNumBuff.RepairRateModifier = -1000;
             _crewNumBuff.ShieldRechargeRateModifier = -1;

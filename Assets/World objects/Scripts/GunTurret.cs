@@ -61,6 +61,12 @@ public class GunTurret : DirectionalTurret
         }
     }
 
+    public override void ApplyBuff(Buff b)
+    {
+        base.ApplyBuff(b);
+        _inaccuracyCoeff = Mathf.Max(1f - b.WeaponAccuracyFactor, 0.05f);
+    }
+
     public ValueTuple<float, float, float> DebugGetDPS()
     {
         int numBarrels = FindBarrels(transform).Count();

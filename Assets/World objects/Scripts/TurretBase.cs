@@ -41,7 +41,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         SetDefaultAngle();
         LastFire = 0f;
         _initialized = true;
-        FiringIntervalCoeff = 1f;
+        _firingIntervalCoeff = 1f;
     }
 
     protected virtual void Awake()
@@ -226,7 +226,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected virtual bool ReadyToFire()
     {
         float currTime = Time.time;
-        return currTime - LastFire > ActualFiringInterval * FiringIntervalCoeff;
+        return currTime - LastFire > ActualFiringInterval * _firingIntervalCoeff;
     }
 
     protected abstract void FireInner(Vector3 firingVector, int barrelIdx);
@@ -569,6 +569,12 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
     public bool DefaultAlternatingFire;
+
+    public virtual void ApplyBuff(Buff b)
+    {
+        _firingIntervalCoeff = Mathf.Clamp(1f / (1f + b.WeaponRateOfFireFactor), 0.5f, 2f);
+    }
+
     protected bool _initialized = false; // ugly hack
 
     // Rotation behavior variables:
@@ -598,9 +604,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public float MaxRange;
     public float FiringInterval;
     public float ActualFiringInterval { get; protected set; }
-    public float FiringIntervalCoeff { get; set; }
     public ObjectFactory.WeaponSize TurretSize;
     public ObjectFactory.WeaponType TurretWeaponType;
+    protected float _firingIntervalCoeff;
 
     // Turret status:
     public int IsJammed { get; private set; }
