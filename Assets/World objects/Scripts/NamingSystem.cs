@@ -43,15 +43,22 @@ public static class NamingSystem
             FleetNames = new FleetName[] { n0 },
             NumberConvention = NumberingSystem.Roman
         };
-
-        File.WriteAllText(Path.Combine("TextData", "DummyNames.txt"), JsonUtility.ToJson(names, true));
+        using (StreamWriter tw = new StreamWriter(Path.Combine("TextData", "ShipNamesTerranExample.txt"), false, System.Text.Encoding.UTF8))
+        {
+            YamlDotNet.Serialization.Serializer s = new YamlDotNet.Serialization.Serializer();
+            s.Serialize(tw, names);
+        }
     }
 
     public static CultureNames Load()
     {
         string nameListText = File.ReadAllText(Path.Combine("TextData", "ShipNamesTerran.txt"), System.Text.Encoding.UTF8);
-        CultureNames res = JsonUtility.FromJson<CultureNames>(nameListText);
-        return res;
+        using (StreamReader sr = new StreamReader(Path.Combine("TextData", "ShipNamesTerran.txt"), System.Text.Encoding.UTF8))
+        {
+            YamlDotNet.Serialization.Deserializer ds = new YamlDotNet.Serialization.Deserializer();
+            CultureNames res = ds.Deserialize<CultureNames>(sr);
+            return res;
+        }
     }
 
     public static ShipDisplayName GenShipName(CultureNames nameList, string subculture, ShipType shipType)
@@ -78,13 +85,20 @@ public static class NamingSystem
                 ng.RandomName(subculture, usedNames)
                 :
                 ng.RandomName(subculture);
-        return new ShipDisplayName()
+        if (!n.Numbered)
         {
-            ShortName = prefix != string.Empty ? string.Format("{0} {1}", prefix, n.ShortName) : n.ShortName,
-            FullName = prefix != string.Empty ? string.Format("{0} {1}", prefix, n.FullName) : n.FullName,
-            FullNameKey = n.FullName,
-            Fluff = n.Fluff
-        };
+            return new ShipDisplayName()
+            {
+                ShortName = prefix != string.Empty ? string.Format("{0} {1}", prefix, n.ShortName) : n.ShortName,
+                FullName = prefix != string.Empty ? string.Format("{0} {1}", prefix, n.FullName) : n.FullName,
+                FullNameKey = n.FullName,
+                Fluff = n.Fluff
+            };
+        }
+        else
+        {
+            return ng.GetNumberedName(prefix, n);
+        }
     }
 
     public enum ShipType { Any, Merchant, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, SpecialCapitalShip }
@@ -101,10 +115,11 @@ public struct ShipDisplayName
 [Serializable]
 public struct ShipName
 {
-    public string ShortName;
-    public string FullName;
-    public string Fluff;
-    public string[] Subcultures;
+    public string ShortName { get; set; }
+    public string FullName { get; set; }
+    public string Fluff { get; set; }
+    public string[] Subcultures { get; set; }
+    public bool Numbered { get; set; }
 
     public bool AllowedInSubculture(string subculture)
     {
@@ -117,8 +132,8 @@ public struct ShipName
 [Serializable]
 public class NameGroup
 {
-    public string ClassName;
-    public ShipName[] ShipNames;
+    public string ClassName { get; set; }
+    public ShipName[] ShipNames { get; set; }
 
     public ShipName RandomName()
     {
@@ -137,43 +152,72 @@ public class NameGroup
 
     public ShipName RandomName(string subculture, IEnumerable<string> usedNames)
     {
-        return ObjectFactory.GetRandom(ShipNames.Where(n => !usedNames.Contains(n.FullName) && n.AllowedInSubculture(subculture)));
+        return ObjectFactory.GetRandom(ShipNames.Where(
+            n =>
+                ((n.Numbered || !usedNames.Contains(n.FullName)) &&
+                n.AllowedInSubculture(subculture))));
     }
 
     public bool HasUnusedNames(string subculture, IEnumerable<string> usedNames)
     {
-        return ShipNames.Any(n => !usedNames.Contains(n.FullName) && n.AllowedInSubculture(subculture));
+        return ShipNames.Any(n =>
+                                ((n.Numbered || !usedNames.Contains(n.FullName)) &&
+                                n.AllowedInSubculture(subculture)));
     }
+
+    public ShipDisplayName GetNumberedName(string prefix, ShipName name)
+    {
+        int num;
+        if (!_numberedNaming.TryGetValue(name.FullName, out num))
+        {
+            num = 0;
+        }
+        else
+        {
+            ++num;
+        }
+        _numberedNaming[name.FullName] = num;
+
+        return new ShipDisplayName()
+        {
+            ShortName = prefix != string.Empty ? string.Format("{0} {1}{2}", prefix, name.ShortName, num) : string.Format("{0}{1}", name.ShortName, num),
+            FullName = prefix != string.Empty ? string.Format("{0} {1}{2}", prefix, name.FullName, num) : string.Format("{0}{1}", name.FullName, num),
+            FullNameKey = name.FullName,
+            Fluff = name.Fluff
+        };
+    }
+
+    private Dictionary<string, int> _numberedNaming = new Dictionary<string, int>();
 }
 
 [Serializable]
 public class FleetName
 {
-    public string Name;
-    public int? PreferredNumber;
+    public string Name { get; set; }
+    public int? PreferredNumber { get; set; }
 }
 
 [Serializable]
 public class Subculture
 {
-    public string Name;
-    public string Prefix;
+    public string Name { get; set; }
+    public string Prefix { get; set; }
 }
 
 [Serializable]
 public class CultureNames
 {
-    public string Name;
-    public Subculture[] Subcultures;
-    public NameGroup[] MerchantShips;
-    public NameGroup[] Sloops;
-    public NameGroup[] Frigates;
-    public NameGroup[] Destroyers;
-    public NameGroup[] Cruisers;
-    public NameGroup[] CapitalShips;
-    public NameGroup[] SpecialCapitalShips;
-    public FleetName[] FleetNames;
-    public NumberingSystem NumberConvention;
+    public string Name { get; set; }
+    public Subculture[] Subcultures { get; set; }
+    public NameGroup[] MerchantShips { get; set; }
+    public NameGroup[] Sloops { get; set; }
+    public NameGroup[] Frigates { get; set; }
+    public NameGroup[] Destroyers { get; set; }
+    public NameGroup[] Cruisers { get; set; }
+    public NameGroup[] CapitalShips { get; set; }
+    public NameGroup[] SpecialCapitalShips { get; set; }
+    public FleetName[] FleetNames { get; set; }
+    public NumberingSystem NumberConvention { get; set; }
 
     public NameGroup RandomNameGroup()
     {
