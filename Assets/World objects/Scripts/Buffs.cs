@@ -153,11 +153,11 @@ public struct Buff
 
 public static class StandardBuffs
 {
-    public static void SetUnderCrewedDebuff(ref Buff crewNumBuf, int currCrew, int operationalCrew, int skeletonCrew)
+    public static Buff UndercrewedDebuff(int currCrew, int operationalCrew, int skeletonCrew)
     {
+        Buff crewNumBuf = Buff.Default();
         if (currCrew >= operationalCrew)
         {
-            crewNumBuf.ResetToDefault();
         }
         else if (currCrew >= skeletonCrew)
         {
@@ -182,6 +182,60 @@ public static class StandardBuffs
             crewNumBuf.RepairRateModifier = -1000;
             crewNumBuf.ShieldRechargeRateModifier = -1;
         }
+        return crewNumBuf;
+    }
+
+    public static Buff CrewExperienceBuff(int Level, bool underStrength)
+    {
+        if (Level > 0 && underStrength)
+        {
+            return Buff.Default();
+        }
+        Buff res = Buff.Default();
+        switch (Level)
+        {
+            case 0:
+                // Recruit
+                res.WeaponAccuracyFactor = -0.5f;
+                res.WeaponRateOfFireFactor = -0.25f;
+                res.WeaponVsStrikeCraftFactor = -0.5f;
+                res.AcceleraionFactor = -0.25f;
+                res.SpeedFactor = -0.25f;
+                res.RepairRateModifier = -1;
+                res.ShieldRechargeRateModifier = -1;
+                break;
+            case 1:
+                // Trained
+                // Default values
+                break;
+            case 2:
+                // Experienced
+                res.WeaponAccuracyFactor = 0.1f;
+                res.AcceleraionFactor = 0.05f;
+                res.SpeedFactor = 0.05f;
+                break;
+            case 3:
+                // Veteran
+                res.WeaponAccuracyFactor = 0.1f;
+                res.WeaponRateOfFireFactor = 0.1f;
+                res.WeaponVsStrikeCraftFactor = 0.2f;
+                res.RepairRateModifier = 1;
+                res.ShieldRechargeRateModifier = 1;
+                break;
+            case 4:
+                // Elite
+                res.WeaponAccuracyFactor = 0.2f;
+                res.WeaponRateOfFireFactor = 0.1f;
+                res.WeaponVsStrikeCraftFactor = 0.2f;
+                res.AcceleraionFactor = 0.1f;
+                res.SpeedFactor = 0.1f;
+                res.RepairRateModifier = 1;
+                res.ShieldRechargeRateModifier = 1;
+                break;
+            default:
+                break;
+        };
+        return res;
     }
 
     public static Buff MediumCruiserBuff()

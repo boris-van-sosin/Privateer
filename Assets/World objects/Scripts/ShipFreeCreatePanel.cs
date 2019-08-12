@@ -10,7 +10,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
 	void Start ()
     {
         ShipDropdown.AddOptions(ObjectFactory.GetAllShipTypes().ToList());
-        ShipDropdown.AddOptions(ObjectFactory.GetAllStrikeCraftTypes().ToList());
+        //ShipDropdown.AddOptions(ObjectFactory.GetAllStrikeCraftTypes().ToList());
         ShipDropdown.onValueChanged.AddListener(ShipSelectChanged);
         _weaponsCfgPanel = FindObjectOfType<WeaponControlGroupCfgPanel>();
         _cfgPanelVisible = false;
@@ -107,7 +107,9 @@ public class ShipFreeCreatePanel : MonoBehaviour
         int numCrew = (s.OperationalCrew + s.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
         for (int i = 0; i < numCrew; ++i)
         {
-            s.AddCrew(ShipCharacter.GenerateTerranShipCrew());
+            ShipCharacter currCrew = ShipCharacter.GenerateTerranShipCrew();
+            currCrew.Level = ShipCharacter.CharacterLevel.Trained;
+            s.AddCrew(currCrew);
         }
         if (friendly && userShip)
         {
@@ -124,6 +126,14 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.SetTurretConfigAllAuto();
         }
 
+        if (friendly)
+        {
+            for (int i = 0; i < 100; ++i)
+            {
+                s.AddCrew(ShipCharacter.GenerateTerranCombatCrew(30));
+            }
+        }
+
         s.Activate();
 
         Faction[] factions = FindObjectsOfType<Faction>();
@@ -132,11 +142,6 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             s.Owner = faction1;
             s.SetCircleToFactionColor();
-
-            for (int i = 0; i < 100; ++i)
-            {
-                s.AddCrew(ShipCharacter.GenerateTerranCombatCrew(30));
-            }
         }
         else
         {

@@ -692,13 +692,13 @@ public class CombatDetachment : ShipComponentBase
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
-                res.CrewCapacity = 15;
+                res.CrewCapacity = 5;
                 break;
             case ObjectFactory.ShipSize.Frigate:
-                res.CrewCapacity = 20;
+                res.CrewCapacity = 10;
                 break;
             case ObjectFactory.ShipSize.Destroyer:
-                res.CrewCapacity = 30;
+                res.CrewCapacity = 20;
                 break;
             case ObjectFactory.ShipSize.Cruiser:
                 res.CrewCapacity = 45;

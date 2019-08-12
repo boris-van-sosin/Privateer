@@ -596,6 +596,8 @@ public class Ship : ShipBase
         ShipSection sec = GetHitSection(location);
         //Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
         LastInCombat = Time.time;
+        bool tookCasualties = false;
+
         // if shields are present, take shield damage
         if (!Combat.DamageShields(w.ShieldDamage, _shieldComponents))
         {
@@ -653,6 +655,7 @@ public class Ship : ShipBase
                             int NumCasualties = UnityEngine.Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
                             foreach (ShipCharacter character in casualtiesQueue.Take(NumCasualties))
                             {
+                                tookCasualties = true;
                                 character.Status = ShipCharacter.CharacterStaus.Incapacitated;
                             }
                         }
@@ -661,7 +664,10 @@ public class Ship : ShipBase
                 HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
             }
         }
-        SetCrewNumBuff();
+        if (tookCasualties)
+        {
+            SetCrewNumBuff();
+        }
         CheckCriticalDamage();
     }
 
@@ -1015,7 +1021,7 @@ public class Ship : ShipBase
             case ShipCharacter.CharacterProfession.Captain:
                 break;
             case ShipCharacter.CharacterProfession.Combat:
-                foreach (CombatDetachment cd in _combatDetachments)
+                foreach (CombatDetachment cd in AllComponents.Where(x => x is CombatDetachment).Select(y => y as CombatDetachment))
                 {
                     if (cd.Forces.Count < cd.CrewCapacity)
                     {
@@ -1117,7 +1123,7 @@ public class Ship : ShipBase
         }
     }
 
-    public IEnumerable<ShipCharacter> AllCrew
+    public IEnumerable<ShipCharacter> ShipCrew
     {
         get
         {
@@ -1133,6 +1139,13 @@ public class Ship : ShipBase
             {
                 yield return c;
             }
+        }
+    }
+
+    public IEnumerable<ShipCharacter> CombatCrew
+    {
+        get
+        {
             foreach (CombatDetachment combatGroup in _combatDetachments)
             {
                 foreach (ShipCharacter c in combatGroup.Forces)
@@ -1143,13 +1156,45 @@ public class Ship : ShipBase
         }
     }
 
+    public IEnumerable<ShipCharacter> AllCrew
+    {
+        get
+        {
+            return ShipCrew.Union(CombatCrew);
+        }
+    }
+
     public override bool ShipControllable { get { return base.ShipControllable && (!ShipSurrendered); } }
     public override bool ShipActiveInCombat { get { return base.ShipActiveInCombat && (!ShipSurrendered); } }
 
     private void SetCrewNumBuff()
     {
-        int numCrew = AllCrew.Where(c => c.Status == ShipCharacter.CharacterStaus.Active).Count();
-        StandardBuffs.SetUnderCrewedDebuff(ref _crewNumBuff, numCrew, OperationalCrew, SkeletonCrew);
+        int numCrew = 0;
+        int totalLevels = 0;
+        int avgLevel = 0;
+        foreach (ShipCharacter currCrew in ShipCrew.Where(c => c.Status == ShipCharacter.CharacterStaus.Active))
+        {
+            totalLevels += (int)currCrew.Level;
+            ++numCrew;
+        }
+        if (numCrew >= OperationalCrew)
+        {
+            avgLevel = Mathf.RoundToInt(((float)totalLevels) / numCrew);
+        }
+        else
+        {
+            foreach (ShipCharacter currCrew in CombatCrew.Where(c => c.Status == ShipCharacter.CharacterStaus.Active))
+            {
+                ++numCrew;
+                if (numCrew >= OperationalCrew)
+                {
+                    break;
+                }
+            }
+            avgLevel = Mathf.RoundToInt(((float)totalLevels) / numCrew);
+        }
+        _crewNumBuff = StandardBuffs.UndercrewedDebuff(numCrew, OperationalCrew, SkeletonCrew);
+        _crewExperienceBuff = StandardBuffs.CrewExperienceBuff(avgLevel, numCrew < OperationalCrew);
     }
 
     private IEnumerable<Buff> AllBuffs

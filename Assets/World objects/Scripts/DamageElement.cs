@@ -267,13 +267,6 @@ public class ArmourPenetrationTable
         return Mathf.Lerp(min, max, newVal);
     }
 
-    private static float SmoothStep(float t)
-    {
-        // Implements SmoothestStep, orginally by Kyle McDonald
-        float t2 = Mathf.Clamp01(t);
-        return -20f*Mathf.Pow(t2, 7) + 70f*Mathf.Pow(t2, 6) - 84f*Mathf.Pow(t2, 5) + 35f*Mathf.Pow(t2, 4);
-    }
-
     private static int ApproxBinarySearch(int[] arr, int val)
     {
         int low = 0, high = arr.Length - 1, idx;
@@ -303,5 +296,4 @@ public class ArmourPenetrationTable
     private readonly int[] _penetrationKeys;
     private readonly float _minArmour, _maxArmour, _minPenetration, _maxPenetration;
     private readonly float[,] _penetrationTable;
-    private static readonly float _slopeFactor = 0.1f;
 }
