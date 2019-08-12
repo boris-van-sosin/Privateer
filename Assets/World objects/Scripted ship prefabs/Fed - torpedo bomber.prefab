@@ -103,6 +103,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -171,6 +172,7 @@ TrailRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -266,7 +268,7 @@ MonoBehaviour:
   Braking: 1.4
   TurnRate: 25
   ProductionKey: Fed Torpedo Bomber
-  MaxHullHitPoints: 6
+  MaxHullHitPoints: 40
   Owner: {fileID: 0}
   TeamColorComponents: []
 --- !u!1 &4851142922529807329

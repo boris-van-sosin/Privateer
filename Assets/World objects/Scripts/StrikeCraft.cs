@@ -68,19 +68,8 @@ public class StrikeCraft : ShipBase
         if (IgnoreHits)
             return;
 
-        if (w.HullDamage == 0) // Ugly hack. Fix later.
-        {
-            --_strikeCraftHitPoints;
-        }
-        else
-        {
-            HullHitPoints -= w.HullDamage;
-        }
-        if (_strikeCraftHitPoints <= 0)
-        {
-            --HullHitPoints;
-            _strikeCraftHitPoints = 5;
-        }
+        HullHitPoints -= w.HullDamage;
+
         if (HullHitPoints <= 0)
         {
             ParticleSystem ps = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.SmallExplosion, transform.position);
@@ -241,8 +230,6 @@ public class StrikeCraft : ShipBase
     }
 
     public bool IgnoreHits { get; set; }
-
-    private int _strikeCraftHitPoints = 5;
 
     private bool _inRecoveryFinalPhase = false;
     private bool _inRecoveryPositionForDescent = false;

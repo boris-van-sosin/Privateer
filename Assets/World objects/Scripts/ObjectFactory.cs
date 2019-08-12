@@ -694,7 +694,7 @@ public static class ObjectFactory
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
                 WarheadData.HeatGenerated.ToString(),
-                WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.HitMultiplicity.ToString(),
                 WarheadData.BlastRadius.ToString(),
                 WarheadData.WeaponEffectScale.ToString()
             };
@@ -720,7 +720,7 @@ public static class ObjectFactory
                         SystemDamage = int.Parse(elements[i++].Trim()),
                         HullDamage = int.Parse(elements[i++].Trim()),
                         HeatGenerated = int.Parse(elements[i++].Trim()),
-                        SystemHitMultiplicity = int.Parse(elements[i++].Trim()),
+                        HitMultiplicity = int.Parse(elements[i++].Trim()),
                         BlastRadius = float.Parse(elements[i++].Trim()),
                         EffectVsStrikeCraft = float.Parse(elements[i++].Trim()),
                         WeaponEffectScale = float.Parse(elements[i++].Trim())
@@ -753,7 +753,7 @@ public static class ObjectFactory
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
                 WarheadData.HeatGenerated.ToString(),
-                WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.HitMultiplicity.ToString(),
                 WarheadData.WeaponEffectScale.ToString()
 
             };
@@ -777,7 +777,7 @@ public static class ObjectFactory
                         SystemDamage = int.Parse(elements[6].Trim()),
                         HullDamage = int.Parse(elements[7].Trim()),
                         HeatGenerated = int.Parse(elements[8].Trim()),
-                        SystemHitMultiplicity = int.Parse(elements[9].Trim()),
+                        HitMultiplicity = int.Parse(elements[9].Trim()),
                         WeaponEffectScale = float.Parse(elements[10].Trim())
                     }
                 };
@@ -811,7 +811,7 @@ public static class ObjectFactory
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
                 WarheadData.HeatGenerated.ToString(),
-                WarheadData.SystemHitMultiplicity.ToString(),
+                WarheadData.HitMultiplicity.ToString(),
                 WarheadData.WeaponEffectScale.ToString(),
                 ProjectileScale.ToString()
             };
@@ -836,7 +836,7 @@ public static class ObjectFactory
                         SystemDamage = int.Parse(elements[7].Trim()),
                         HullDamage = int.Parse(elements[8].Trim()),
                         HeatGenerated = int.Parse(elements[9].Trim()),
-                        SystemHitMultiplicity = int.Parse(elements[10].Trim()),
+                        HitMultiplicity = int.Parse(elements[10].Trim()),
                         WeaponEffectScale = float.Parse(elements[11].Trim())
                     },
                     ProjectileScale = float.Parse(elements[12].Trim())

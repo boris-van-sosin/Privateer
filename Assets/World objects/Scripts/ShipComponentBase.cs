@@ -102,6 +102,15 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
         }
     }
 
+    public void ApplyHitPointBuff(Buff b)
+    {
+        ComponentMaxHitPoints += b.HitPointModifiers.Component;
+        if (ComponentHitPoints > 0)
+        {
+            ComponentHitPoints += b.HitPointModifiers.Component;
+        }
+    }
+
     public abstract string SpriteKey { get; }
 
     public event ComponentHitpointsChangedDelegate OnHitpointsChanged;

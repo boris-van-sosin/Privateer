@@ -575,6 +575,15 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         _firingIntervalCoeff = Mathf.Clamp(1f / (1f + b.WeaponRateOfFireFactor), 0.5f, 2f);
     }
 
+    public void ApplyHitPointBuff(Buff b)
+    {
+        if (ComponentHitPoints > 0)
+        {
+            ComponentMaxHitPoints += b.HitPointModifiers.Component;
+            ComponentHitPoints += b.HitPointModifiers.Component;
+        }
+    }
+
     protected bool _initialized = false; // ugly hack
 
     // Rotation behavior variables:

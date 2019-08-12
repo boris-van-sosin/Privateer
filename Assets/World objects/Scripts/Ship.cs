@@ -31,6 +31,7 @@ public class Ship : ShipBase
         _crewNumBuff = Buff.Default();
         SetCrewNumBuff();
         _manualTurrets = new HashSet<ITurret>(_turrets);
+        ApplyHitPointBuffs();
     }
 
     protected override void FindTurrets()
@@ -432,6 +433,24 @@ public class Ship : ShipBase
         }
     }
 
+    private void ApplyHitPointBuffs()
+    {
+        CombinedBuff = Buff.Combine(AllBuffs);
+        foreach (ITurret t in Turrets)
+        {
+            t.ApplyHitPointBuff(CombinedBuff);
+        }
+        foreach (IShipActiveComponent comp in AllComponents.Where(c => c is IShipActiveComponent))
+        {
+            comp.ApplyHitPointBuff(CombinedBuff);
+        }
+        MaxHullHitPoints += CombinedBuff.HitPointModifiers.Hull;
+        if (HullHitPoints > 0)
+        {
+            HullHitPoints += CombinedBuff.HitPointModifiers.Hull;
+        }
+    }
+
     public override void MoveForward()
     {
         base.MoveForward();
@@ -593,54 +612,56 @@ public class Ship : ShipBase
 
         // armour penetration
         int armourAtLocation = _armour[sec];
-        if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
+        for (int i = 0; i < w.HitMultiplicity; ++i)
         {
-            float mitigationFactor = 1f;
-            if (_currMitigationArmour[sec] > 0)
+            if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
             {
-                _currMitigationArmour[sec] = System.Math.Max(0, _currMitigationArmour[sec] - w.ArmourDamage);
-                mitigationFactor = 1f - ArmourMitigation;
-            }
-            // a random component at the section is damaged.
-            List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlotsOccupied[sec].Length + _turretSlotsOccupied[sec].Count);
-            foreach (IShipComponent c in AllComponentsInSection(sec, true))
-            {
-                IShipActiveComponent c2 = c as IShipActiveComponent;
-                if (c2 != null && c2.Status != ComponentStatus.Destroyed)
+                float mitigationFactor = 1f;
+                if (_currMitigationArmour[sec] > 0)
                 {
-                    damageableComps.Add(c2);
+                    _currMitigationArmour[sec] = System.Math.Max(0, _currMitigationArmour[sec] - w.ArmourDamage);
+                    mitigationFactor = 1f - ArmourMitigation;
                 }
-            }
-            foreach (IShipComponent c in AllComponentsInSection(ShipSection.Center, true))
-            {
-                IShipActiveComponent c2 = c as IShipActiveComponent;
-                if (c2 != null && c2.Status != ComponentStatus.Destroyed)
+                // a random component at the section is damaged.
+                List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlotsOccupied[sec].Length + _turretSlotsOccupied[sec].Count);
+                foreach (IShipComponent c in AllComponentsInSection(sec, true))
                 {
-                    damageableComps.Add(c2);
-                }
-            }
-            if (damageableComps.Count > 0)
-            {
-                IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
-                comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
-                // Experimental:
-                if (comp.ComponentHitPoints <= 0)
-                {
-                    LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
-                    if (casualtiesQueue.Count > 0)
+                    IShipActiveComponent c2 = c as IShipActiveComponent;
+                    if (c2 != null && c2.Status != ComponentStatus.Destroyed)
                     {
-                        int NumCasualties = UnityEngine.Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
-                        foreach (ShipCharacter character in casualtiesQueue.Take(NumCasualties))
+                        damageableComps.Add(c2);
+                    }
+                }
+                foreach (IShipComponent c in AllComponentsInSection(ShipSection.Center, true))
+                {
+                    IShipActiveComponent c2 = c as IShipActiveComponent;
+                    if (c2 != null && c2.Status != ComponentStatus.Destroyed)
+                    {
+                        damageableComps.Add(c2);
+                    }
+                }
+                if (damageableComps.Count > 0)
+                {
+                    IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
+                    comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
+                    // Crew casualties:
+                    if (comp.ComponentHitPoints <= 0)
+                    {
+                        LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
+                        if (casualtiesQueue.Count > 0)
                         {
-                            character.Status = ShipCharacter.CharacterStaus.Incapacitated;
+                            int NumCasualties = UnityEngine.Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
+                            foreach (ShipCharacter character in casualtiesQueue.Take(NumCasualties))
+                            {
+                                character.Status = ShipCharacter.CharacterStaus.Incapacitated;
+                            }
                         }
                     }
                 }
-                //
+                HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
             }
-            HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
-            SetCrewNumBuff();
         }
+        SetCrewNumBuff();
         CheckCriticalDamage();
     }
 
@@ -1128,39 +1149,14 @@ public class Ship : ShipBase
     private void SetCrewNumBuff()
     {
         int numCrew = AllCrew.Where(c => c.Status == ShipCharacter.CharacterStaus.Active).Count();
-        if (numCrew >= OperationalCrew)
-        {
-            _crewNumBuff.ResetToDefault();
-        }
-        else if (numCrew >= SkeletonCrew)
-        {
-            float diff = numCrew - SkeletonCrew;
-            float maxDiff = OperationalCrew - SkeletonCrew;
-            float movBuff = -0.75f * (1f - (diff / maxDiff));
-            _crewNumBuff.SpeedFactor = movBuff;
-            _crewNumBuff.AcceleraionFactor = movBuff;
-            _crewNumBuff.WeaponRateOfFireFactor = movBuff;
-            _crewNumBuff.WeaponAccuracyFactor = -0.2f * (1f - (diff / maxDiff));
-            _crewNumBuff.WeaponVsStrikeCraftFactor = 0;
-            _crewNumBuff.RepairRateModifier = -1000;
-            _crewNumBuff.ShieldRechargeRateModifier = 0;
-        }
-        else
-        {
-            _crewNumBuff.SpeedFactor = -0.75f;
-            _crewNumBuff.AcceleraionFactor = -0.75f;
-            _crewNumBuff.WeaponRateOfFireFactor = -0.75f;
-            _crewNumBuff.WeaponAccuracyFactor = -0.2f;
-            _crewNumBuff.WeaponVsStrikeCraftFactor = 0;
-            _crewNumBuff.RepairRateModifier = -1000;
-            _crewNumBuff.ShieldRechargeRateModifier = -1;
-        }
+        StandardBuffs.SetUnderCrewedDebuff(ref _crewNumBuff, numCrew, OperationalCrew, SkeletonCrew);
     }
 
     private IEnumerable<Buff> AllBuffs
     {
         get
         {
+            yield return InherentBuff;
             yield return _crewNumBuff;
             yield return _crewExperienceBuff;
             foreach (IShipComponent comp in AllComponents)
@@ -1221,6 +1217,7 @@ public class Ship : ShipBase
     private bool _brakingBackwards = false;
 
     // Buff/debuff mechanic
+    public Buff InherentBuff { get; set; }
     private Buff _crewNumBuff;
     private Buff _crewExperienceBuff;
 }
