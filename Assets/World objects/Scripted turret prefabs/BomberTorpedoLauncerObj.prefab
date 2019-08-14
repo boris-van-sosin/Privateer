@@ -43,9 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39d99775076b77a4ca37ee573c1ab97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultAlternatingFire: 0
   RotationSpeed: 0
   TurretAxis: 1
-  TurretType: 20
+  TurretType: 21
   MaxRange: 0
   FiringInterval: 1
   TurretSize: 4

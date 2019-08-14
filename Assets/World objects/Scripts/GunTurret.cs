@@ -9,6 +9,7 @@ public class GunTurret : DirectionalTurret
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
         Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
+        warhead.EffectVsStrikeCraft = Mathf.Clamp(warhead.EffectVsStrikeCraft + _vsStrikeCraftModifier, 0.05f, 0.95f);
         Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
         switch (AmmoType)
         {
@@ -65,6 +66,7 @@ public class GunTurret : DirectionalTurret
     {
         base.ApplyBuff(b);
         _inaccuracyCoeff = Mathf.Max(1f - b.WeaponAccuracyFactor, 0.05f);
+        _vsStrikeCraftModifier = b.WeaponVsStrikeCraftFactor;
     }
 
     public ValueTuple<float, float, float> DebugGetDPS()

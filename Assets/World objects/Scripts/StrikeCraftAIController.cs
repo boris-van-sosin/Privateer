@@ -155,6 +155,11 @@ public class StrikeCraftAIController : ShipAIController
         return new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth, true);
     }
 
+    void OnDrawGizmos()
+    {
+        _bug0Alg.DrawDebugLines();
+    }
+
     public void OrderStartNavigatenToHost()
     {
         CurrActivity = ShipActivity.NavigatingToRecovery;

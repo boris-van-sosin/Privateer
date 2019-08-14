@@ -73,7 +73,6 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             if (transform.position.y > GlobalDistances.TorpedoAltEpsilon || transform.position.y < -GlobalDistances.TorpedoAltEpsilon)
             {
                 vecToTarget = vecToTarget.normalized * StepSize;
-                Debug.DrawLine(transform.position, Target, Color.red, Time.deltaTime);
             }
             else
             {
@@ -215,6 +214,12 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             return t;
         }
         return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, Target);
     }
 
     public float BurnAcceleration;

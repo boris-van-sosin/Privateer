@@ -166,7 +166,6 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         _doFollow = false;
 
         _navTarget = target;
-        Debug.DrawLine(transform.position, _navTarget, Color.red, 0.5f);
         _doNavigate = true;
         _orderCallback = onCompleteNavigation;
     }
@@ -200,6 +199,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
             if (other != null)
             {
                 obstruction = true;
+                _dbgDrawObstacleBox = obstruction;
                 Vector3 obstructionLocation = h.point;
                 obstructionLocation.y = 0;
                 float obstructionLength = other.ShipLength * 1.1f;
@@ -211,9 +211,10 @@ public class StrikeCraftFormationAIController : MonoBehaviour
                     other.transform.position - (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
                     other.transform.position - (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
                 };
+                _dbgObstacleCorners[0] = other.transform.position;
                 for (int i = 0; i < otherShipCorners.Length; ++i)
                 {
-                    Debug.DrawLine(other.transform.position, otherShipCorners[i], Color.cyan, 0.25f);
+                    _dbgObstacleCorners[i + 1] = otherShipCorners[i];
                     dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, rightVec));
                     if (dotMin < 0 || Mathf.Abs(dotToCorners[i]) < dotMin)
                     {
@@ -394,4 +395,22 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     protected bool _doFollow = false;
     private FormationState _currState;
     private static readonly float _angleEps = 0.1f;
+
+    // Visual debug:
+    private Vector3[] _dbgObstacleCorners = new Vector3[5];
+    private bool _dbgDrawObstacleBox;
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, _navTarget);
+        if (_dbgDrawObstacleBox)
+        {
+            Gizmos.color = Color.cyan;
+            for (int i = 1; i < _dbgObstacleCorners.Length; ++i)
+            {
+                Gizmos.DrawLine(_dbgObstacleCorners[0], _dbgObstacleCorners[i]);
+            }
+        }
+    }
+
 }

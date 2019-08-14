@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e454a9cbe89fbaa4d8b2def71d463159, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultAlternatingFire: 0
   RotationSpeed: 0
   TurretAxis: 1
-  TurretType: 17
+  TurretType: 18
   MaxRange: 13
   FiringInterval: 0.75
   TurretSize: 4
@@ -4753,7 +4754,7 @@ ParticleSystem:
 --- !u!199 &199976906074103334
 ParticleSystemRenderer:
   serializedVersion: 6
-  m_ObjectHideFlags: 2
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -4777,6 +4778,7 @@ ParticleSystemRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

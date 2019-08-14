@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Unity.Collections;
 using Unity.Jobs;
+using System;
 
 public class Bug0
 {
@@ -40,6 +41,8 @@ public class Bug0
             _qForwardCastRight = Quaternion.AngleAxis(Mathf.Atan2(_entityWidth, _forwardCastActualDist) * Mathf.Rad2Deg, Vector3.up);
             _qForwardCastLeft = Quaternion.Inverse(_qForwardCastRight);
         }
+
+        _dbgDoDebugLines = true;
     }
 
     public void Step()
@@ -48,6 +51,7 @@ public class Bug0
         {
             return;
         }
+        DbgResetLines();
         Vector3 vecToTarget = NavTarget - _controlledShip.transform.position;
 
         switch (_bug0State)
@@ -105,7 +109,7 @@ public class Bug0
                         {
                             _controlledShip.MoveForward();
                         }
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r, 0.1f);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r);
                     }
                     else
                     {
@@ -123,7 +127,7 @@ public class Bug0
                         {
                             _controlledShip.MoveForward();
                         }
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l, 0.1f);
+                        DbgAddLine( _controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l);
                     }
                     else
                     {
@@ -140,7 +144,7 @@ public class Bug0
                     {
                         _bug0State = Bug0State.TurningToBypassRight;
                         _accelerateOnTurn = false;
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2hit);
                     }
 
                     if (_bug0State == Bug0State.BypassingRight)
@@ -159,10 +163,10 @@ public class Bug0
                             _controlledShip.ApplyTurning(true);
                         }
                         _controlledShip.MoveForward();
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2r);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2noHit);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position - _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit);
 
 
                         // Check if can continue to target:
@@ -186,7 +190,7 @@ public class Bug0
                     {
                         _bug0State = Bug0State.TurningToBypassLeft;
                         _accelerateOnTurn = false;
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2hit, 0.1f);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2hit);
                     }
 
                     if (_bug0State == Bug0State.BypassingLeft)
@@ -205,10 +209,10 @@ public class Bug0
                             _controlledShip.ApplyTurning(false);
                         }
                         _controlledShip.MoveForward();
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2noHit, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
-                        Debug.DrawLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit, 0.1f);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position - _entityLength * 1f * _controlledShip.transform.up, _gizmoColor2l);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position + _forwardCastActualDist * _controlledShip.transform.up, _gizmoColor2noHit);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitFore.HasValue ? _gizmoColor2hit : _gizmoColor2noHit);
+                        DbgAddLine(_controlledShip.transform.position, _controlledShip.transform.position + _wallFollowMaxRange * _controlledShip.transform.right, hitAft.HasValue ? _gizmoColor2hit : _gizmoColor2noHit);
 
                         // Check if can continue to target:
                         Vector3 vecToTargetNormalized = vecToTarget.normalized;
@@ -290,7 +294,7 @@ public class Bug0
             if (other != null && other != _controlledShip && other is Ship && !_ignoreList.Any(t => t == other))
             {
                 _raycastCache[key] = new RaycastCacheItem() { Timestamp = Time.time, Hit = h, HitExists = true };
-                Debug.DrawLine(originPt, h.point, wide ? _gizmoColor0 : _gizmoColor1, 0.1f);
+                DbgAddLine(originPt, h.point, wide ? _gizmoColor0 : _gizmoColor1);
                 return h;
             }
         }
@@ -309,8 +313,8 @@ public class Bug0
             Vector3 vecRight = _qForwardCastRight * direction;
             Vector3 vecLeft = _qForwardCastLeft * direction;
 
-            //Debug.DrawLine(originRight, originRight + vecRight * dist, Color.blue, 0.5f);
-            //Debug.DrawLine(originLeft, originLeft + vecLeft * dist, Color.blue, 0.5f);
+            //DrawOneDbgLine(originRight, originRight + vecRight * dist, Color.blue);
+            //DrawOneDbgLine(originLeft, originLeft + vecLeft * dist, Color.blue);
 
             // Triple raycast implementation. Should be more efficient than sphere cast.
             return
@@ -502,4 +506,36 @@ public class Bug0
     private readonly Color _gizmoColor2noHit = new Color(0.2f, 1f, 1f);
     private readonly Color _gizmoColor2l = new Color(0.7f, 0.7f, 0f);
     private readonly Color _gizmoColor2r = new Color(0f, 0.7f, 0.7f);
+
+    // Visual debug:
+    private readonly bool _dbgDoDebugLines;
+    private List<ValueTuple<bool, Vector3, Vector3, Color>> _dbgLines = new List<ValueTuple<bool, Vector3, Vector3, Color>>(8);
+
+    private void DbgResetLines()
+    {
+        if (_dbgDoDebugLines)
+        {
+            _dbgLines.Clear();
+        }
+    }
+
+    private void DbgAddLine(Vector3 from, Vector3 to, Color c)
+    {
+        if (_dbgDoDebugLines)
+        {
+            _dbgLines.Add(new ValueTuple<bool, Vector3, Vector3, Color>(true, from, to, c));
+        }
+    }
+
+    public void DrawDebugLines()
+    {
+        foreach (ValueTuple<bool, Vector3, Vector3, Color> dbg in _dbgLines)
+        {
+            if (dbg.Item1)
+            {
+                Gizmos.color = dbg.Item4;
+                Gizmos.DrawLine(dbg.Item2, dbg.Item3);
+            }
+        }
+    }
 }

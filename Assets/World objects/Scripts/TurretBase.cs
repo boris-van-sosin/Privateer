@@ -42,6 +42,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         LastFire = 0f;
         _initialized = true;
         _firingIntervalCoeff = 1f;
+        _vsStrikeCraftModifier = 0f;
     }
 
     protected virtual void Awake()
@@ -579,8 +580,52 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (ComponentHitPoints > 0)
         {
-            ComponentMaxHitPoints += b.HitPointModifiers.Component;
-            ComponentHitPoints += b.HitPointModifiers.Component;
+            switch (TurretType)
+            {
+                case ComponentSlotType.SmallBroadside:
+                case ComponentSlotType.SmallBarbetteDual:
+                    ComponentMaxHitPoints += b.HitPointModifiers.SmallBroadside;
+                    ComponentHitPoints += b.HitPointModifiers.SmallBroadside;
+                    break;
+                case ComponentSlotType.SmallFixed:
+                case ComponentSlotType.SmallBarbette:
+                    ComponentMaxHitPoints += b.HitPointModifiers.SmallBarbette;
+                    ComponentHitPoints += b.HitPointModifiers.SmallBarbette;
+                    break;
+                case ComponentSlotType.SmallTurret:
+                case ComponentSlotType.SmallTurretDual:
+                    ComponentMaxHitPoints += b.HitPointModifiers.SmallTurret;
+                    ComponentHitPoints += b.HitPointModifiers.SmallTurret;
+                    break;
+                case ComponentSlotType.MediumBroadside:
+                    ComponentMaxHitPoints += b.HitPointModifiers.MediumBroadside;
+                    ComponentHitPoints += b.HitPointModifiers.MediumBroadside;
+                    break;
+                case ComponentSlotType.MediumBarbette:
+                case ComponentSlotType.MediumBarbetteDualSmall:
+                    ComponentMaxHitPoints += b.HitPointModifiers.MediumBarbette;
+                    ComponentHitPoints += b.HitPointModifiers.MediumBarbette;
+                    break;
+                case ComponentSlotType.MediumTurret:
+                case ComponentSlotType.MediumTurretDualSmall:
+                    ComponentMaxHitPoints += b.HitPointModifiers.MediumTurret;
+                    ComponentHitPoints += b.HitPointModifiers.MediumTurret;
+                    break;
+                case ComponentSlotType.LargeBarbette:
+                    ComponentMaxHitPoints += b.HitPointModifiers.HeavyBarbette;
+                    ComponentHitPoints += b.HitPointModifiers.HeavyBarbette;
+                    break;
+                case ComponentSlotType.LargeTurret:
+                    ComponentMaxHitPoints += b.HitPointModifiers.HeavyTurret;
+                    ComponentHitPoints += b.HitPointModifiers.HeavyTurret;
+                    break;
+                case ComponentSlotType.TorpedoTube:
+                    ComponentMaxHitPoints += b.HitPointModifiers.TorpedoTube;
+                    ComponentHitPoints += b.HitPointModifiers.TorpedoTube;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -616,6 +661,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public ObjectFactory.WeaponSize TurretSize;
     public ObjectFactory.WeaponType TurretWeaponType;
     protected float _firingIntervalCoeff;
+    protected float _vsStrikeCraftModifier;
 
     // Turret status:
     public int IsJammed { get; private set; }

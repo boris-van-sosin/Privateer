@@ -269,6 +269,7 @@ public class ShipAIController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, _navTarget);
+        _bug0Alg.DrawDebugLines();
     }
 
     public delegate void OrderCompleteDlg();
