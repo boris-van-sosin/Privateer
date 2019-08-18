@@ -370,7 +370,7 @@ public class Ship : ShipBase
     // Update is called once per frame
     protected override void Update()
     {
-        if (!_inCollision)
+        if (!InBoarding)
         {
             ApplyMovement();
         }
@@ -379,19 +379,6 @@ public class Ship : ShipBase
     protected void RevertRotation()
     {
         transform.rotation = _prevRot;
-    }
-
-    private IEnumerator MoveBackAfterCollision(Vector3 collisionVec, float massFactor)
-    {
-        yield return new WaitForEndOfFrame();
-        while (_inCollision)
-        {
-            transform.position -= Time.deltaTime * 0.1f * MaxSpeedWBuf * collisionVec;
-            yield return new WaitForEndOfFrame();
-        }
-        ResetSpeed();
-        ActualVelocity = Vector3.zero;
-        yield return null;
     }
 
     private IEnumerator ContinuousComponents()
@@ -513,10 +500,6 @@ public class Ship : ShipBase
 
     public override void ApplyTurning(bool left)
     {
-        if (_inCollision)
-        {
-            return;
-        }
         if (_engine != null)
         {
             _engine.ComponentActive = true;
@@ -923,7 +906,6 @@ public class Ship : ShipBase
             }
         }
         InBoarding = false;
-        ResolveCollision(otherShip, Mass + otherShip.Mass);
     }
 
     private void ResetSpeed()
@@ -932,23 +914,17 @@ public class Ship : ShipBase
         _rigidBody.velocity = Vector3.zero;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        //Debug.LogWarning(string.Format("Trigger enter: {0}, {1}", this, other.gameObject));
-        HandleShipCollision(other);
-    }
-
     private void HandleShipCollision(Collider other)
     {
         Ship otherShip = other.GetComponent<Ship>();
         if (otherShip != null)
         {
             // Stop immediately
-            _rigidBody.AddForce(-_rigidBody.velocity, ForceMode.VelocityChange);
-
-            RevertRotation();
-            otherShip.RevertRotation();
-            _inCollision = true;
+            //_rigidBody.AddForce(-_rigidBody.velocity, ForceMode.VelocityChange);
+            _rigidBody.velocity = Vector3.zero;
+            //RevertRotation();
+            //otherShip.RevertRotation();
+            //_inCollision = true;
             float massSum = Mass + otherShip.Mass;
             NotifyInComabt();
 
@@ -969,43 +945,30 @@ public class Ship : ShipBase
             }
             else
             {
-                ResolveCollision(otherShip, massSum);
+                //ResolveCollision(otherShip, massSum);
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void HandleShipCollisionExit()
     {
-        //Debug.LogWarning(string.Format("Trigger exit: {0}, {1}", this, other.gameObject));
-        HandleShipCollisionExit(other);
+        Vector3 up = transform.up;
+        Vector3 forward = transform.forward;
+        transform.rotation = Quaternion.LookRotation(forward, up);
         _rigidBody.angularVelocity = Vector3.zero;
     }
 
-    private void HandleShipCollisionExit(Collider other)
-    {
-        Ship otherShip = other.GetComponent<Ship>();
-        if (otherShip != null)
-        {
-            _inCollision = false;
-        }
-    }
-
-    void OnCollisionEnter()
+    void OnCollisionEnter(Collision c)
     {
         Debug.LogWarning(string.Format("Collision {0}", this));
-        //HandleShipCollision(c.collider);
+        HandleShipCollision(c.collider);
     }
 
     private void OnCollisionExit(Collision c)
     {
         Debug.LogWarning(string.Format("Collision exit: {0},", this));
-        //HandleShipCollisionExit(c.collider);
-    }
-
-    private void ResolveCollision(Ship otherShip, float massSum)
-    {
-        Vector3 collisionVec = (otherShip.transform.position - transform.position).normalized;
-        StartCoroutine(MoveBackAfterCollision(collisionVec, Mass / massSum));
+        _rigidBody.angularVelocity = Vector3.zero;
+        HandleShipCollisionExit();
     }
 
     public void AddCrew(ShipCharacter c)
@@ -1248,8 +1211,6 @@ public class Ship : ShipBase
     private List<SpecialCharacter> _specialCharacters;
     public ShipCharacter Captain { get; set; }
     public ShipDisplayName DisplayName { get; set; }
-
-    private bool _inCollision = false;
 
     public float LastInCombat { get; private set; }
 

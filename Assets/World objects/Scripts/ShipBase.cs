@@ -468,6 +468,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         Transform t = transform.Find("Shield");
         if (t != null)
         {
+            Physics.IgnoreCollision(GetComponent<Collider>(), t.GetComponent<Collider>());
             _shieldCapsule = t.gameObject;
             if (ShipTotalShields > 0 && _shieldCapsule)
             {
