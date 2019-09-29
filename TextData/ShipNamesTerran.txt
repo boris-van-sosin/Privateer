@@ -3355,6 +3355,11 @@ Cruisers:
     FullName: Steadfast
     Fluff: ''
     Subcultures: []
+  - ShortName: Lada
+    FullName: Lada
+    Fluff: ''
+    Subcultures:
+    - Russian
 - ClassName: Admiral
   ShipNames:
   - ShortName: Nelson
@@ -4201,7 +4206,7 @@ CapitalShips:
     - Russian
   - ShortName: Santiago de Chile
     FullName: Santiago de Chile
-    Fluff: ''
+    Fluff: 'Por la razón o la fuerza'
     Subcultures:
     - Chilean
   - ShortName: Beijing
