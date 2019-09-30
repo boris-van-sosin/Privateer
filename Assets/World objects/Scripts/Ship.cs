@@ -750,11 +750,11 @@ public class Ship : ShipBase
         {
             if (HullHitPoints > 0)
             {
-                Debug.Log(string.Format("Ship {0} is in critical!", this));
+                Debug.Log(string.Format("Ship {0} {1} is in critical!", this, DisplayName.ShortName));
             }
             else
             {
-                Debug.Log(string.Format("Ship {0} destroyed!", this));
+                Debug.Log(string.Format("Ship {0} {1} destroyed!", this, DisplayName.ShortName));
             }
             ShipDisabled = true;
         }

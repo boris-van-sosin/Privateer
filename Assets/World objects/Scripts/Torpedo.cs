@@ -23,6 +23,14 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         TargetShip = null;
         StartCoroutine(TargetAcquirePulse());
         StartCoroutine(TargetAdjustPulse());
+        if (OriginShip != null)
+        {
+            _coldVFromOriginShip = OriginShip.ActualVelocity;
+        }
+        else
+        {
+            _coldVFromOriginShip = Vector3.zero;
+        }
     }
 
     void Awake()
@@ -35,7 +43,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         if (!_inBurnPhase)
         {
             float distanceToTravel = Time.deltaTime * ColdPhaseSpeed;
-            transform.position += distanceToTravel * ColdLaunchVec;
+            transform.position += distanceToTravel * ColdLaunchVec + (_coldVFromOriginShip * Time.deltaTime);
             _distanceTraveled += distanceToTravel;
             Vector3 randRotAxis = Random.onUnitSphere;
             float rotAmount = Random.Range(0f, 5f);
@@ -227,6 +235,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     public float StepSize;
     public float ColdLaunchDist;
     private float _distanceTraveled = 0.0f;
+    private Vector3 _coldVFromOriginShip;
     //private Vector3 _lastVecToTarget;
     private bool _targetReached;
     private Vector3 Origin;

@@ -87,7 +87,15 @@ public class CarrierBehavior : MonoBehaviour
                         currStrikeCraft.IgnoreHits = false;
                     };
                 }
-                currLaunchingStrikeCraft[i].StartManeuver(m);
+                float launchSpeed = Vector3.Dot(_launchTransform[i].up, _ship.ActualVelocity);
+                if (launchSpeed > 0)
+                {
+                    currLaunchingStrikeCraft[i].StartManeuver(m, launchSpeed);
+                }
+                else
+                {
+                    currLaunchingStrikeCraft[i].StartManeuver(m);
+                }
                 ++numLaunched;
                 if (numLaunched == formation.Positions.Length)
                 {

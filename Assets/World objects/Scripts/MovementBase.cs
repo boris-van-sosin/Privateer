@@ -192,6 +192,12 @@ public abstract class MovementBase : MonoBehaviour
         _currManeuver.Start(this);
     }
 
+    public virtual void StartManeuver(Maneuver m, float forceSpeed)
+    {
+        _currManeuver = m;
+        _currManeuver.Start(this, forceSpeed);
+    }
+
     public bool UseTargetSpeed { get; set; }
     public virtual float TargetSpeed
     {

@@ -23,6 +23,14 @@ public class Maneuver
         StartSegment();
     }
 
+    public void Start(MovementBase s, float forceSpeed)
+    {
+        _ship = s;
+        _currSeg = 0;
+        Velocity = _ship.transform.up * forceSpeed;
+        StartSegment(forceSpeed);
+    }
+
     public IEnumerable<Tuple<Vector3, Vector3>> DebugCurve()
     {
         if (_segments[_currSeg] is BsplinePathSegmnet path)
@@ -88,6 +96,14 @@ public class Maneuver
         _t = 0;
         _segStartVelocity = _ship.ActualVelocity;
         _segStartSpeed = _segStartVelocity.magnitude;
+        _toNextSeg = false;
+        Finished = false;
+    }
+
+    private void StartSegment(float forceSpeed)
+    {
+        _t = 0;
+        _segStartSpeed = forceSpeed;
         _toNextSeg = false;
         Finished = false;
     }
