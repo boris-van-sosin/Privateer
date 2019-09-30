@@ -8,6 +8,7 @@ public interface ITargetableEntity
     Vector3 EntityLocation { get; }
     bool Targetable { get; }
     TargetableEntityInfo TargetableBy { get; }
+    ObjectFactory.TacMapEntityType TargetableEntityType { get; }
 }
 
 [Flags]

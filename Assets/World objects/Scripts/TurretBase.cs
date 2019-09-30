@@ -161,6 +161,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     public abstract void ManualTarget(Vector3 target);
 
+    protected abstract bool TargetInFiringArc(Vector3 target, float tolerance);
+
     protected virtual bool CanFire()
     {
         if (!ReadyToFire())
@@ -507,9 +509,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                 case TurretMode.Manual:
                     yield break;
                 case TurretMode.Auto:
-                    if (_targetShip == null || !_targetShip.Targetable)
+                    if (_targetShip == null || !_targetShip.Targetable || Time.time > _retargetTime)
                     {
                         _targetShip = AcquireTarget();
+                        _retargetTime = Time.time + UnityEngine.Random.Range(1f, 2f);
+
                     }
                     if (_targetShip != null)
                     {
@@ -529,6 +533,37 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     }
 
     protected abstract ITargetableEntity AcquireTarget();
+
+    protected int TargetScore(ITargetableEntity target)
+    {
+        int score = 0;
+        if (TargetPriorityList != null)
+        {
+            int idx = TargetPriorityList.IndexOf(target.TargetableEntityType);
+            if (idx != -1)
+            {
+                score += TargetPriorityList.Count - idx;
+            }
+        }
+        // Prefer targets within the firing arc of the weapon:
+        if (TargetInFiringArc(target.EntityLocation, _firingArcTolerance))
+        {
+            score += _firingArcScoreBonus;
+        }
+
+        // Prefer the "main target" for this ship (according to the ship AI), if applicable:
+        if (ContainingShip != null && ContainingShip.PreferredTarget != null && ContainingShip.PreferredTarget == target)
+        {
+            score += _preferredTargetScoreBonus;
+        }
+
+        // If the weapon already has a target, prefer it:
+        if (_targetShip != null && _targetShip == target)
+        {
+            score += _currTargetScoreBonus;
+        }
+        return score;
+    }
 
     public virtual bool IsOutOfAmmo => false;
 
@@ -680,6 +715,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     private int _currHitPoints;
     private ComponentStatus _status;
 
+    public List<ObjectFactory.TacMapEntityType> TargetPriorityList { get; set; }
+
     public ShipBase ContainingShip { get { return _containingShip; } }
 
     // The ship containing the turret:
@@ -778,6 +815,12 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     }
 
     protected virtual float MaxAngleToTarget => 2.0f;
+    protected static readonly float _firingArcTolerance = 10.0f;
+    protected static readonly int _firingArcScoreBonus = 2;
+    protected static readonly int _preferredTargetScoreBonus = 1;
+    protected static readonly int _currTargetScoreBonus = 1;
+
+    private float _retargetTime = 0f;
 
     public float GetMaxRange { get { return MaxRange; } }
 

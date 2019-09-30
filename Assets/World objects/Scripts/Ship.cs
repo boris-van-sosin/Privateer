@@ -32,6 +32,7 @@ public class Ship : ShipBase
         SetCrewNumBuff();
         _manualTurrets = new HashSet<ITurret>(_turrets);
         ApplyHitPointBuffs();
+        _shipAI = GetComponent<ShipAIController>();
     }
 
     protected override void FindTurrets()
@@ -1006,11 +1007,26 @@ public class Ship : ShipBase
     }
 
     public override bool Targetable { get { return ShipActiveInCombat; } }
-    public override TargetableEntityInfo TargetableBy
+    public override TargetableEntityInfo TargetableBy => TargetableEntityInfo.AntiShip | TargetableEntityInfo.Torpedo;
+    public override ObjectFactory.TacMapEntityType TargetableEntityType
     {
         get
         {
-            return TargetableEntityInfo.AntiShip | TargetableEntityInfo.Torpedo;
+            switch (ShipSize)
+            {
+                case ObjectFactory.ShipSize.Sloop:
+                    return ObjectFactory.TacMapEntityType.Sloop;
+                case ObjectFactory.ShipSize.Frigate:
+                    return ObjectFactory.TacMapEntityType.Frigate;
+                case ObjectFactory.ShipSize.Destroyer:
+                    return ObjectFactory.TacMapEntityType.Destroyer;
+                case ObjectFactory.ShipSize.Cruiser:
+                    return ObjectFactory.TacMapEntityType.Cruiser;
+                case ObjectFactory.ShipSize.CapitalShip:
+                    return ObjectFactory.TacMapEntityType.CapitalShip;
+                default:
+                    throw new Exception("ShipSize not found. This should never happen.");
+            }
         }
     }
 

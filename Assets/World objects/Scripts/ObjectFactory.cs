@@ -33,6 +33,10 @@ public static class ObjectFactory
         {
             LoadNamingLists();
         }
+        if (_defaultPriorityLists == null)
+        {
+            LoadDefaultPriorityLists();
+        }
     }
 
     public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
@@ -437,6 +441,16 @@ public static class ObjectFactory
         return _prototypes.GetPath(key);
     }
 
+    public static List<TacMapEntityType> GetDefaultTargetPriorityList(WeaponType weaponType, WeaponSize sz)
+    {
+        List<TacMapEntityType> res;
+        if (_defaultPriorityLists.TryGetValue(new ValueTuple<WeaponType, WeaponSize>(weaponType, sz), out res))
+        {
+            return new List<TacMapEntityType>(res);
+        }
+        return null;
+    }
+
     public static int AllTargetableLayerMask { get { return _allTargetableLayerMask; } }
     public static int AllShipsLayerMask { get { return _allShipsLayerMask; } }
     public static int AllStikeCraftLayerMask { get { return _allStrikeCraftLayerMask; } }
@@ -537,6 +551,32 @@ public static class ObjectFactory
                 return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.StrikeCraft, w);
             default:
                 throw new Exception("Weapon not found");
+        }
+    }
+
+    private static void LoadDefaultPriorityLists()
+    {
+        _defaultPriorityLists = new Dictionary<(WeaponType, WeaponSize), List<TacMapEntityType>>();
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "DefaultPriorities.csv"));
+        int idx = 0;
+        while (!lines[idx].Trim().StartsWith("x"))
+        {
+            ++idx;
+        }
+        WeaponType[] typesOrder = lines[idx].Split(',').Skip(1).Select(s => (WeaponType) Enum.Parse(typeof(WeaponType), s)).ToArray();
+        foreach (string line in lines.Skip(idx + 1))
+        {
+            string[] items = line.Split(',');
+            WeaponSize sz = (WeaponSize) Enum.Parse(typeof(WeaponSize), items[0]);
+            for (int i = 0; i < items.Length - 1; ++i)
+            {
+                if (items[i + 1] != string.Empty)
+                {
+                    _defaultPriorityLists.Add(
+                        new ValueTuple<WeaponType, WeaponSize>(typesOrder[i], sz),
+                        items[i + 1].Split(':').Select(s => (TacMapEntityType)Enum.Parse(typeof(TacMapEntityType), s)).ToList());
+                }
+            }
         }
     }
 
@@ -653,6 +693,7 @@ public static class ObjectFactory
     public enum TorpedoType { LongRange, Heavy, Tracking }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
+    public enum TacMapEntityType { Torpedo, SrikeCraft, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, StaticDefence }
 
     private static Dictionary<ValueTuple<WeaponType, WeaponSize, AmmoType>, Warhead> _gunWarheads = null;
     private static Dictionary<ValueTuple<WeaponType, WeaponSize>, Warhead> _otherWarheads = null;
@@ -663,6 +704,7 @@ public static class ObjectFactory
     private static WeaponTorpedoDataEntry _weapons_torpedo = null;
     private static ArmourPenetrationTable _penetrationTable = null;
     private static Dictionary<string, CultureNames> _cultureNamingLists = null;
+    private static Dictionary<ValueTuple<WeaponType, WeaponSize>, List<TacMapEntityType>> _defaultPriorityLists = null;
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
     private static readonly int _allStrikeCraftLayerMask = LayerMask.GetMask("Strike Craft");

@@ -198,13 +198,8 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     // TargetableEntity properties:
     public Vector3 EntityLocation { get { return transform.position; } }
     public bool Targetable { get; private set; }
-    public TargetableEntityInfo TargetableBy
-    {
-        get
-        {
-            return TargetableEntityInfo.Flak | TargetableEntityInfo.AntiTorpedo;
-        }
-    }
+    public TargetableEntityInfo TargetableBy => TargetableEntityInfo.Flak | TargetableEntityInfo.AntiTorpedo;
+    public ObjectFactory.TacMapEntityType TargetableEntityType => ObjectFactory.TacMapEntityType.Torpedo;
 
     public static Torpedo FromCollider(Collider c)
     {

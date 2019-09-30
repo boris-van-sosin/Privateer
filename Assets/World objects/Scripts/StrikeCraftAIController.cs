@@ -128,7 +128,7 @@ public class StrikeCraftAIController : ShipAIController
         }
         else
         {
-            return AttackPosition(_targetShip);
+            return AttackPosition(TargetShip);
         }
     }
 

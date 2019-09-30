@@ -24,6 +24,7 @@ public class StrikeCraft : ShipBase
         }
         _recoverySpeed = MaxSpeed * 1f;
         _trail = GetComponent<TrailRenderer>();
+        _shipAI = GetComponent<StrikeCraftAIController>();
     }
 
     protected override void Update()
@@ -80,13 +81,8 @@ public class StrikeCraft : ShipBase
         }
     }
 
-    public override TargetableEntityInfo TargetableBy
-    {
-        get
-        {
-            return TargetableEntityInfo.Flak;
-        }
-    }
+    public override TargetableEntityInfo TargetableBy => TargetableEntityInfo.Flak;
+    public override ObjectFactory.TacMapEntityType TargetableEntityType => ObjectFactory.TacMapEntityType.SrikeCraft;
 
     public bool IsOutOfAmmo()
     {

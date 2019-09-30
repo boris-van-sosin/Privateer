@@ -70,6 +70,32 @@ public class TorpedoTurret : TurretBase
         //Debug.DrawLine(transform.position + (LaunchVector*0.01f), transform.position + (LaunchVector * 0.01f) - (transform.forward * 0.1f), Color.cyan, Time.deltaTime);
     }
 
+    protected override bool TargetInFiringArc(Vector3 target, float tolerance)
+    {
+        if (!_initialized)
+        {
+            return false;
+        }
+
+        Vector3 vecToTarget = target - transform.position;
+        Vector3 flatVec = new Vector3(vecToTarget.x, 0, vecToTarget.z);
+
+        if (flatVec == Vector3.zero)
+        {
+            return  false;
+        }
+
+        float relativeAngle = GlobalDirToShipHeading(flatVec);
+        foreach (Tuple<float, float> r in _rotationAllowedRanges)
+        {
+            if (r.Item1 - tolerance <= relativeAngle && relativeAngle <= r.Item2 + tolerance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected override bool IsAimedAtTarget()
     {
         return _isLegalAngle;
@@ -108,6 +134,7 @@ public class TorpedoTurret : TurretBase
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.NavBoxesAllLayerMask);
         ITargetableEntity foundTarget = null;
+        int bestScore = 0;
         foreach (Collider c in colliders)
         {
             Ship s = ShipBase.FromCollider(c) as Ship;
@@ -125,7 +152,12 @@ public class TorpedoTurret : TurretBase
             }
             if (ContainingShip.Owner.IsEnemy(s.Owner))
             {
-                foundTarget = s;
+                int currScore = TargetScore(s);
+                if (foundTarget == null || currScore > bestScore)
+                {
+                    foundTarget = s;
+                    bestScore = currScore;
+                }
             }
         }
         return foundTarget;

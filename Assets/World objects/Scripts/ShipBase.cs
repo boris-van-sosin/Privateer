@@ -580,6 +580,17 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     // Getting hit:
     public abstract void TakeHit(Warhead w, Vector3 location);
 
+    public virtual ITargetableEntity PreferredTarget
+    {
+        get
+        {
+            if (_shipAI == null)
+                return null;
+
+            return _shipAI.TargetShip;
+        }
+    }
+
     // TargetableEntity properties:
     public Vector3 EntityLocation { get { return transform.position; } }
     public virtual bool Targetable
@@ -597,6 +608,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     // Things not in use, but needed in other classes:
     public virtual bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat) { return true; }
     public virtual void NotifyInComabt() { }
+    public abstract ObjectFactory.TacMapEntityType TargetableEntityType { get; }
 
     public string ProductionKey;
 
@@ -647,6 +659,9 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     public Buff CombinedBuff { get; protected set; }
     protected float MaxSpeedWBuf => Mathf.Max(MaxSpeed * 0.25f, MaxSpeed * (1f + CombinedBuff.SpeedFactor));
     protected float AccelerationWBuf => Mathf.Max(Thrust * 0.25f, Thrust * (1f + CombinedBuff.AcceleraionFactor));
+
+    // AI:
+    protected ShipAIController _shipAI;
 
     private static readonly float NavBoxExpandFactor = 1.1f;
 }

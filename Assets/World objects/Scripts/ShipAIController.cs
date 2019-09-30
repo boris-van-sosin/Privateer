@@ -12,6 +12,7 @@ public class ShipAIController : MonoBehaviour
         CurrActivity = ShipActivity.ControllingPosition;
         StartCoroutine(AcquireTargetPulse());
         _bug0Alg = GenBug0Algorithm();
+        TargetShip = null;
     }
 	
 	// Update is called once per frame
@@ -53,7 +54,7 @@ public class ShipAIController : MonoBehaviour
         {
             if (TargetToFollow(foundTarget))
             {
-                _targetShip = foundTarget;
+                TargetShip = foundTarget;
             }
             foreach (ITurret t in _controlledShip.Turrets)
             {
@@ -71,9 +72,9 @@ public class ShipAIController : MonoBehaviour
 
     private void CheckTarget()
     {
-        if (_targetShip != null && (_targetShip.ShipActiveInCombat || (_targetShip.transform.position - transform.position).sqrMagnitude > 50 * 50))
+        if (TargetShip != null && (TargetShip.ShipActiveInCombat || (TargetShip.transform.position - transform.position).sqrMagnitude > 50 * 50))
         {
-            _targetShip = null;
+            TargetShip = null;
         }
     }
 
@@ -201,18 +202,18 @@ public class ShipAIController : MonoBehaviour
         {
             if (_controlledShip.ShipControllable && DoSeekTargets)
             {
-                if (_targetShip == null)
+                if (TargetShip == null)
                 {
                     AcquireTarget();
                 }
-                if (_targetShip != null)
+                if (TargetShip != null)
                 {
-                    if (_targetShip.ShipDisabled)
+                    if (TargetShip.ShipDisabled)
                     {
-                        _targetShip = null;
+                        TargetShip = null;
                         continue;
                     }
-                    Vector3 attackPos = NavigationDest(_targetShip);
+                    Vector3 attackPos = NavigationDest(TargetShip);
                     NavigateTo(attackPos);
                 }
                 else
@@ -230,7 +231,7 @@ public class ShipAIController : MonoBehaviour
 
     protected virtual Vector3 NavigationDest(ShipBase targetShip)
     {
-        return AttackPosition(_targetShip);
+        return AttackPosition(TargetShip);
     }
 
     protected virtual void NavigateWithoutTarget()
@@ -282,7 +283,7 @@ public class ShipAIController : MonoBehaviour
     protected Vector3[] _attackPositions = new Vector3[_numAttackAngles * _numAttackDistances];
     protected float[] _attackPositionWeights = new float[_numAttackAngles * _numAttackDistances];
 
-    protected ShipBase _targetShip = null;
+    public ShipBase TargetShip { get; protected set; }
     protected Vector3 _navTarget;
     private Vector3 _targetHeading;
     protected Transform _followTarget = null;

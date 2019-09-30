@@ -88,6 +88,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             {
                 t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);
             }
+            t.TargetPriorityList = ObjectFactory.GetDefaultTargetPriorityList(t.TurretWeaponType, t.TurretSize);
             //TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
             GunTurret gt = t as GunTurret;
             if (gt != null)

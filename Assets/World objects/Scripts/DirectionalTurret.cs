@@ -104,6 +104,33 @@ public abstract class DirectionalTurret : TurretBase
         }
     }
 
+    protected override bool TargetInFiringArc(Vector3 target, float tolerance)
+    {
+        if (!_initialized)
+        {
+            return false;
+        }
+
+        Vector3 vecToTarget = target - transform.position;
+        Vector3 flatVec = new Vector3(vecToTarget.x, 0, vecToTarget.z);
+        if (CanRotate)
+        {
+            float relativeAngle = GlobalDirToShipHeading(flatVec);
+            foreach (Tuple<float, float> r in _rotationAllowedRanges)
+            {
+                if (r.Item1 - tolerance <= relativeAngle && relativeAngle <= r.Item2 + tolerance)
+                {
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            return Vector3.Angle(flatVec, Muzzles[_nextBarrel].right) <= tolerance;
+        }
+        return false;
+    }
+
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
     {
         Vector3 preciseVec = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
@@ -124,6 +151,7 @@ public abstract class DirectionalTurret : TurretBase
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.NavBoxesAllLayerMask);
         ITargetableEntity foundTarget = null;
+        int bestScore = 0;
         foreach (Collider c in colliders)
         {
             ShipBase s;
@@ -136,14 +164,24 @@ public abstract class DirectionalTurret : TurretBase
                 }
                 if (ContainingShip.Owner.IsEnemy(s.Owner))
                 {
-                    foundTarget = s;
+                    int currScore = TargetScore(s);
+                    if (foundTarget == null || currScore > bestScore)
+                    {
+                        foundTarget = s;
+                        bestScore = currScore;
+                    }
                 }
             }
-            if ((t = Torpedo.FromCollider(c)) != null)
+            else if ((t = Torpedo.FromCollider(c)) != null)
             {
                 if (t.OriginShip != null && ContainingShip.Owner.IsEnemy(t.OriginShip.Owner))
                 {
-                    foundTarget = t;
+                    int currScore = TargetScore(t);
+                    if (foundTarget == null || currScore > bestScore)
+                    {
+                        foundTarget = t;
+                        bestScore = currScore;
+                    }
                 }
             }
         }
