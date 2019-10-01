@@ -126,14 +126,14 @@ public abstract class DirectionalTurret : TurretBase
         }
         else
         {
-            return Vector3.Angle(flatVec, Muzzles[_nextBarrel].right) <= tolerance;
+            return Vector3.Angle(flatVec, Muzzles[_nextBarrel].up) <= tolerance;
         }
         return false;
     }
 
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
     {
-        Vector3 preciseVec = vecToTarget - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        Vector3 preciseVec = vecToTarget - (Muzzles[_nextBarrel].forward * Vector3.Dot(Muzzles[_nextBarrel].forward, vecToTarget));
         float computedInaccuracy = Mathf.Clamp(Inaccuracy * _inaccuracyCoeff, 0f, _maxInaccuracy);
         if (computedInaccuracy == 0f)
         {
