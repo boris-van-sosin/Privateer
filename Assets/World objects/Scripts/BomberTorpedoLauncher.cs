@@ -136,7 +136,7 @@ public class BomberTorpedoLauncher : TurretBase
 
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
     {
-        return vecToTarget;// - (Muzzles[_nextBarrel].right * Vector3.Dot(Muzzles[_nextBarrel].right, vecToTarget));
+        return vecToTarget;// - (Muzzles[_nextBarrel].up * Vector3.Dot(Muzzles[_nextBarrel].up, vecToTarget));
     }
 
     protected override bool MuzzleOppositeDirCheck(Transform Muzzle, Vector3 vecToTarget)
