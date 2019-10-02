@@ -9,7 +9,7 @@ public enum ComponentSlotType
     // Weapons:
     SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
     MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
-    LargeBroadside, LargeBarbette, LargeTurret,
+    LargeBroadside, LargeBarbetteSingle, LargeBarbette, LargeTurret,
     TorpedoTube, SpecialWeapon,
     FighterCannon, FighterAutogun, BomberAutogun, BomberTorpedoTube,
     // Boarding tool
