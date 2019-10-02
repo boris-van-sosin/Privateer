@@ -133,7 +133,7 @@ public abstract class DirectionalTurret : TurretBase
 
     protected override Vector3 GetFiringVector(Vector3 vecToTarget)
     {
-        Vector3 preciseVec = vecToTarget - (Muzzles[_nextBarrel].forward * Vector3.Dot(Muzzles[_nextBarrel].forward, vecToTarget));
+        Vector3 preciseVec = Vector3.ProjectOnPlane(vecToTarget, Muzzles[_nextBarrel].right);
         float computedInaccuracy = Mathf.Clamp(Inaccuracy * _inaccuracyCoeff, 0f, _maxInaccuracy);
         if (computedInaccuracy == 0f)
         {
