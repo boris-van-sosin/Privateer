@@ -27,12 +27,14 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             {
                 _rotationSpan = 360 - _maxRotation + _minRotation;
             }
+            HardpointAIHint = parentHardpoint.WeaponAIHint;
         }
         else
         {
             _minRotation = 0.0f;
             _maxRotation = 0.0f;
             _deadZoneAngleStrings = null;
+            HardpointAIHint = TurretAIHint.Main;
         }
         _containingShip = FindContainingShip(transform.parent);
         ParseDeadZones();
@@ -148,7 +150,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (_targetShip != null && Mode == TurretMode.Auto)
         {
-            if (!_targetShip.Targetable || (transform.position - _targetShip.EntityLocation).sqrMagnitude > (MaxRange * 1.05f) * (MaxRange * 1.05f))
+            if (!_targetShip.Targetable || (transform.position - _targetShip.EntityLocation).sqrMagnitude > (MaxRange * GlobalDistances.TurretTargetAcquisitionRangeFactor) * (MaxRange * GlobalDistances.TurretTargetAcquisitionRangeFactor))
             {
                 _targetShip = null;
             }
@@ -715,7 +717,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     private int _currHitPoints;
     private ComponentStatus _status;
 
-    public List<ObjectFactory.TacMapEntityType> TargetPriorityList { get; set; }
+    public IList<ObjectFactory.TacMapEntityType> TargetPriorityList { get; set; }
+
+    public TurretAIHint HardpointAIHint { get; private set; }
 
     public ShipBase ContainingShip { get { return _containingShip; } }
 

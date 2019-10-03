@@ -9,5 +9,6 @@ public class TurretHardpoint : MonoBehaviour
     public string[] DeadZoneAngles;
     public ComponentSlotType[] AllowedWeaponTypes;
     public Ship.ShipSection LocationOnShip;
+    public TurretAIHint WeaponAIHint;
     public int DefaultGroup;
 }

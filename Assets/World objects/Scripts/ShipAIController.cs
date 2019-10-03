@@ -85,7 +85,7 @@ public class ShipAIController : MonoBehaviour
 
     protected virtual Vector3 AttackPosition(ShipBase enemyShip)
     {
-        float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
+        float minRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.Main || t.HardpointAIHint == TurretAIHint.Secondary).Select(x => x.GetMaxRange).Min();
         Vector3 Front = enemyShip.transform.up.normalized;
         //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
         //Vector3 Right = -Left;
@@ -193,7 +193,33 @@ public class ShipAIController : MonoBehaviour
         _followTarget = followTarget;
         _followDist = dist;
         _doFollow = true;
-    } 
+    }
+
+    protected virtual Vector3? AntiClumpNav()
+    {
+        float clumpingDetectRadius = _controlledShip.ShipLength * GlobalDistances.ShipAIAntiClumpLengthFactor;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, clumpingDetectRadius, ObjectFactory.NavBoxesLayerMask);
+        int clumping = 1;
+        Vector3 centroid = transform.position;
+        foreach (Collider c in colliders)
+        {
+            ShipBase s = ShipBase.FromCollider(c);
+            if (s == null || s == _controlledShip)
+            {
+                continue;
+            }
+            centroid += s.transform.position;
+            ++clumping;
+        }
+        if (clumping >= 4)
+        {
+            return (transform.position - (centroid / clumping)).normalized * (clumpingDetectRadius * GlobalDistances.ShipAIAntiClumpMoveDistFactor * clumping);
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     private IEnumerator AcquireTargetPulse()
     {
@@ -206,7 +232,12 @@ public class ShipAIController : MonoBehaviour
                 {
                     AcquireTarget();
                 }
-                if (TargetShip != null)
+                Vector3? antiClumpDest = AntiClumpNav();
+                if (antiClumpDest.HasValue)
+                {
+                    NavigateTo(antiClumpDest.Value);
+                }
+                else if (TargetShip != null)
                 {
                     if (TargetShip.ShipDisabled)
                     {
@@ -221,10 +252,19 @@ public class ShipAIController : MonoBehaviour
                     NavigateWithoutTarget();
                 }
             }
+            else if (_controlledShip.ShipControllable && CurrActivity != ShipActivity.Following && CurrActivity != ShipActivity.ControllingPosition)
+            {
+                Vector3? antiClumpDest = AntiClumpNav();
+                if (antiClumpDest.HasValue)
+                {
+                    NavigateTo(antiClumpDest.Value);
+                }
+            }
             else if (!_controlledShip.ShipActiveInCombat)
             {
                 yield break;
             }
+
             yield return new WaitForSeconds(0.25f);
         }
     }

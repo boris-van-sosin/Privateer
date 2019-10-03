@@ -60,6 +60,8 @@ public interface ITurret : IShipActiveComponent
     float GetMaxRange { get; }
     bool IsOutOfAmmo { get; }
     void ApplyBuff(Buff b);
+    IList<ObjectFactory.TacMapEntityType> TargetPriorityList { get; }
+    TurretAIHint HardpointAIHint { get; }
 }
 
 public interface IPeriodicActionComponent : IShipComponent

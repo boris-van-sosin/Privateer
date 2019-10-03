@@ -56,11 +56,11 @@ public class StrikeCraftAIController : ShipAIController
     protected override Vector3 AttackPosition(ShipBase enemyShip)
     {
         float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
-        Vector3 Front = enemyShip.transform.up.normalized;
+        Vector3 Front = enemyShip.transform.up;
 
         if (enemyShip is StrikeCraft)
         {
-            return enemyShip.transform.position - Front * 0.01f * minRange;
+            return enemyShip.transform.position - Front * GlobalDistances.StrikeCraftAIVsStrikeCrafRangeFactor * minRange;
         }
         else
         {
@@ -86,7 +86,7 @@ public class StrikeCraftAIController : ShipAIController
                 }
                 for (int j = 0; j < _numAttackDistances; ++j)
                 {
-                    float dist = minRange * 0.75f * (j + 1) / _numAttackDistances;
+                    float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeFactor * (j + 1) / _numAttackDistances;
                     _attackPositions[k] = enemyShip.transform.position + dir * dist;
                     _attackPositionWeights[k] = currWeight;
                     ++k;
@@ -111,6 +111,11 @@ public class StrikeCraftAIController : ShipAIController
     protected override bool TargetToFollow(ShipBase s)
     {
         return true;
+    }
+
+    protected override Vector3? AntiClumpNav()
+    {
+        return null;
     }
 
     protected override Vector3 NavigationDest(ShipBase targetShip)
@@ -183,7 +188,7 @@ public class StrikeCraftAIController : ShipAIController
         else
         {
             Vector3 dirToRecovery = vecToRecovery / m;
-            SetFollowTarget(recoveryPositions.RecoveryStart, GlobalDistances.StrikeCraftAIRecoveryDist * 0.95f);
+            SetFollowTarget(recoveryPositions.RecoveryStart, GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAICarrierFollowDistFactor);
         }
     }
 

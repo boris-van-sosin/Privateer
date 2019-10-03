@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class GlobalDistances
 {
+    // Constants:
     public static readonly float TorpedoBomberColdLaunchDist = 0.25f;
 
     public static readonly Vector3 BoardingPanelOffset = new Vector3(0, 0.05f, 0.5f);
@@ -30,6 +31,31 @@ public static class GlobalDistances
     public static readonly float ShipAIDistEps = 0.005f;
 
     public static readonly float TorpedoAltEpsilon = 1e-3f;
+    public static readonly float TorpedoLaunchNoiseMagnitude = 0.001f;
 
     public static readonly float HarpaxCableWinchSpeed = 2f;
+
+    // Factors:
+    public static readonly float ShipAIAntiClumpLengthFactor = 2f;
+    public static readonly float ShipAIAntiClumpMoveDistFactor = 0.5f;
+
+    public static readonly float Bug0StoppingDistFactor = 20f;
+    public static readonly float Bug0AvoidObstacleOriginPtFactor = 0.25f;
+    public static readonly float Bug0AvoidObstacleRangeFactor = 1.1f;
+    public static readonly float Bug0ObstacleMarginFactor = 1.1f;
+    public static readonly float Bug0WallFollowMinRangeFactor = 0.5f;
+    public static readonly float Bug0WallFollowMaxRangeFactor = 1f;
+    public static readonly float Bug0WallFollowRangeDiffFactor = 0.2f;
+    public static readonly float Bug0ForwardCastDistFactor = 2f;
+
+    public static readonly float StrikeCraftAIAttackPosRangeFactor = 0.75f;
+    public static readonly float StrikeCraftAIVsStrikeCrafRangeFactor = 0.01f;
+    public static readonly float StrikeCraftAICarrierFollowDistFactor = 0.95f;
+
+    public static readonly float TurretTargetAcquisitionRangeFactor = 1.05f;
+}
+
+public static class GlobalTimes
+{
+
 }

@@ -21,9 +21,9 @@ public class Bug0
         {
             float turnRadius = (360f / _controlledShip.TurnRate) * _controlledShip.MaxSpeed / (2f * Mathf.PI);
 
-            _wallFollowMinRange = turnRadius * _wallFollowMinRangeFactor;
-            _wallFollowMaxRange = turnRadius * _wallFollowMaxRangeFactor;
-            _wallFollowRangeDiff = turnRadius * _wallFollowRangeDiffFactor;
+            _wallFollowMinRange = turnRadius * GlobalDistances.Bug0WallFollowMinRangeFactor;
+            _wallFollowMaxRange = turnRadius * GlobalDistances.Bug0WallFollowMaxRangeFactor;
+            _wallFollowRangeDiff = turnRadius * GlobalDistances.Bug0WallFollowRangeDiffFactor;
             _cacheItemValidTime = 0.1f;
             _stopAtDest = false;
             _forwardCastActualDist = turnRadius * 1.5f;
@@ -32,12 +32,12 @@ public class Bug0
         }
         else
         {
-            _wallFollowMinRange = _entityLength * _wallFollowMinRangeFactor;
-            _wallFollowMaxRange = entityLegnth * _wallFollowMaxRangeFactor;
-            _wallFollowRangeDiff = entityLegnth * _wallFollowRangeDiffFactor;
+            _wallFollowMinRange = _entityLength * GlobalDistances.Bug0WallFollowMinRangeFactor;
+            _wallFollowMaxRange = entityLegnth * GlobalDistances.Bug0WallFollowMaxRangeFactor;
+            _wallFollowRangeDiff = entityLegnth * GlobalDistances.Bug0WallFollowRangeDiffFactor;
             _cacheItemValidTime = 0.5f;
             _stopAtDest = true;
-            _forwardCastActualDist = _forwardCastDistFactor * _entityLength;
+            _forwardCastActualDist = GlobalDistances.Bug0ForwardCastDistFactor * _entityLength;
             _qForwardCastRight = Quaternion.AngleAxis(Mathf.Atan2(_entityWidth, _forwardCastActualDist) * Mathf.Rad2Deg, Vector3.up);
             _qForwardCastLeft = Quaternion.Inverse(_qForwardCastRight);
         }
@@ -237,7 +237,7 @@ public class Bug0
 
     private void BrakeAtDestination(Vector3 vecToTarget)
     {
-        float stoppingDist = StoppingDistance(_controlledShip.CurrSpeed, _controlledShip.Braking) + 20f * GlobalDistances.ShipAIDistEps;
+        float stoppingDist = StoppingDistance(_controlledShip.CurrSpeed, _controlledShip.Braking) + GlobalDistances.Bug0StoppingDistFactor * GlobalDistances.ShipAIDistEps;
         if (vecToTarget.sqrMagnitude <= stoppingDist * stoppingDist)
         {
             _controlledShip.ApplyBraking();
@@ -271,12 +271,12 @@ public class Bug0
                 projectFactor = _forwardCastActualDist;
                 break;
             case RaycastOrigin.Fore:
-                originPt = _controlledShip.transform.position + 0.25f * _entityLength * _controlledShip.transform.up;
-                projectFactor = _wallFollowMaxRange * 1.1f;
+                originPt = _controlledShip.transform.position + GlobalDistances.Bug0AvoidObstacleOriginPtFactor * _entityLength * _controlledShip.transform.up;
+                projectFactor = _wallFollowMaxRange * GlobalDistances.Bug0AvoidObstacleRangeFactor;
                 break;
             case RaycastOrigin.Aft:
-                originPt = _controlledShip.transform.position - 0.25f * _entityLength * _controlledShip.transform.up;
-                projectFactor = _wallFollowMaxRange * 1.1f;
+                originPt = _controlledShip.transform.position - GlobalDistances.Bug0AvoidObstacleOriginPtFactor * _entityLength * _controlledShip.transform.up;
+                projectFactor = _wallFollowMaxRange * GlobalDistances.Bug0AvoidObstacleRangeFactor;
                 break;
             default:
                 originPt = Vector3.zero;
@@ -376,8 +376,8 @@ public class Bug0
         Vector3 obstructionLocation = h.point;
         obstructionLocation.y = 0;
         ShipBase other = ShipBase.FromCollider(h.collider);
-        float obstructionLength = other.ShipLength * 1.1f;
-        float obstructionWidth = other.ShipLength * 1.1f;
+        float obstructionLength = other.ShipLength * GlobalDistances.Bug0ObstacleMarginFactor;
+        float obstructionWidth = other.ShipLength * GlobalDistances.Bug0ObstacleMarginFactor;
         Vector3[] otherShipCorners = new Vector3[]
         {
             other.transform.position + (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
@@ -459,11 +459,6 @@ public class Bug0
     private readonly float _cacheItemValidTime;
 
     private static readonly float _angleEps = 0.1f;
-    private static readonly float _wallFollowMinRangeFactor = 0.5f;
-    private static readonly float _wallFollowMaxRangeFactor = 1f;
-    private static readonly float _wallFollowRangeDiffFactor = 0.2f;
-    private static readonly float _forwardCastWidthFactor = 1f;
-    private static readonly float _forwardCastDistFactor = 2f;
 
     public Vector3 NavTarget
     {

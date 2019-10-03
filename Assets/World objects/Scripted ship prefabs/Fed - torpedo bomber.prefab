@@ -444,6 +444,7 @@ MonoBehaviour:
   DeadZoneAngles: []
   AllowedWeaponTypes: 15000000
   LocationOnShip: 0
+  WeaponAIHint: 1
   DefaultGroup: 0
 --- !u!1 &4851462542121423605
 GameObject:
@@ -527,6 +528,7 @@ MonoBehaviour:
   DeadZoneAngles: []
   AllowedWeaponTypes: 16000000
   LocationOnShip: 0
+  WeaponAIHint: 3
   DefaultGroup: 0
   LaunchVector: {x: 0, y: 0, z: -1}
 --- !u!1 &8930968400474897006

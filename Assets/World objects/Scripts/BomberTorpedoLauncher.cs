@@ -121,7 +121,7 @@ public class BomberTorpedoLauncher : TurretBase
         while (TorpedoesLoaded > 0)
         {
             int idx = TorpedoesLoaded - 1;
-            Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
+            Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * GlobalDistances.TorpedoLaunchNoiseMagnitude)).normalized;
             Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, w, ContainingShip);
             t.ColdLaunchDist = GlobalDistances.TorpedoBomberColdLaunchDist;

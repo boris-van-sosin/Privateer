@@ -89,13 +89,16 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);
             }
             t.TargetPriorityList = ObjectFactory.GetDefaultTargetPriorityList(t.TurretWeaponType, t.TurretSize);
-            //TurretBase t = ObjectFactory.CreateTurret(hp.AllowedWeaponTypes[0], ObjectFactory.WeaponType.Howitzer);
             GunTurret gt = t as GunTurret;
             if (gt != null)
             {
                 if (gt.TurretSize == ObjectFactory.WeaponSize.Light && gt.TurretWeaponType == ObjectFactory.WeaponType.Autocannon)
                 {
                     gt.AmmoType = ObjectFactory.AmmoType.ShrapnelRound;
+                }
+                else if (gt.TurretWeaponType == ObjectFactory.WeaponType.HVGun)
+                {
+                    gt.AmmoType = ObjectFactory.AmmoType.KineticPenetrator;
                 }
                 else
                 {
