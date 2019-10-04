@@ -36,7 +36,7 @@ public class StatusTopLevel : MonoBehaviour
             Vector3 shipAxis = _attachedShip.transform.up;
             Vector3 downDir = Vector3.down;
             Camera cam = ObjectFactory.GetShipStatusPanelCamera();
-            cam.transform.position = _attachedShip.transform.position;
+            cam.transform.position = _attachedShip.transform.position + (_attachedShip.transform.up * ShipLenCenter(_attachedShip));
             float height = requiredSize * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
             cam.transform.position += new Vector3(0, height, 0);
             cam.transform.rotation = Quaternion.LookRotation(downDir, shipAxis);
@@ -116,6 +116,13 @@ public class StatusTopLevel : MonoBehaviour
         _shortNameBox.text = dn.ShortName;
         _fullNameBox.text = dn.FullName;
         _fluffBox.text = dn.Fluff;
+    }
+
+    private static float ShipLenCenter(ShipBase sb)
+    {
+        Mesh m = sb.GetComponent<MeshFilter>().mesh;
+        float localCenter = (m.bounds.max.y + m.bounds.min.y) / 2.0f;
+        return localCenter * sb.transform.lossyScale.y;
     }
 
     public void DetachShip()
