@@ -260,7 +260,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     private IEnumerator AcquireTargetPulse()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return _targetAcquirePulseDelay;
         while (true)
         {
             if (_controlledFormation.AllStrikeCraft().All(s => ((StrikeCraft)s).IsOutOfAmmo()) && _controlledFormation.AllStrikeCraft().Any())
@@ -294,7 +294,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
                     NavigateTo(bypassVec.Value);
                 }
             }
-            yield return new WaitForSeconds(0.25f);
+            yield return _targetAcquirePulseDelay;
         }
     }
 
@@ -413,4 +413,5 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
     }
 
+    private static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
 }

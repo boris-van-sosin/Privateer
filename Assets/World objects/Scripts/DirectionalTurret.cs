@@ -34,7 +34,7 @@ public abstract class DirectionalTurret : TurretBase
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
         _isLegalAngle = false;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
-        foreach (Tuple<float, float> r in _rotationAllowedRanges)
+        foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 <= relativeAngle && relativeAngle <= r.Item2)
             {
@@ -116,7 +116,7 @@ public abstract class DirectionalTurret : TurretBase
         if (CanRotate)
         {
             float relativeAngle = GlobalDirToShipHeading(flatVec);
-            foreach (Tuple<float, float> r in _rotationAllowedRanges)
+            foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
             {
                 if (r.Item1 - tolerance <= relativeAngle && relativeAngle <= r.Item2 + tolerance)
                 {

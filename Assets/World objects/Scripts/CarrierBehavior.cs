@@ -14,7 +14,7 @@ public class CarrierBehavior : MonoBehaviour
         _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
         _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
         _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
-        _formations = new List<Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>>(MaxFormations);
+        _formations = new List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>>(MaxFormations);
         _inLaunch = false;
         _inRecovery = false;
     }
@@ -37,7 +37,7 @@ public class CarrierBehavior : MonoBehaviour
         _inLaunch = true;
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
         formation.DestroyOnEmpty = false;
-        _formations.Add(new Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
+        _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
 
         StrikeCraft[] currLaunchingStrikeCraft = new StrikeCraft[CarrierHangerAnim.Length];
 
@@ -103,7 +103,7 @@ public class CarrierBehavior : MonoBehaviour
                 {
                     formation.DestroyOnEmpty = true;
                 }
-                yield return new WaitForSeconds(0.5f);
+                yield return _hangerLaunchCycleDelay;
                 CarrierHangerAnim[i].Close();
             }
 
@@ -111,7 +111,7 @@ public class CarrierBehavior : MonoBehaviour
             if (i >= _launchTransform.Length)
             {
                 i = 0;
-                yield return new WaitForSeconds(0.5f);
+                yield return _hangerLaunchCycleDelay;
             }
             else
             {
@@ -171,7 +171,7 @@ public class CarrierBehavior : MonoBehaviour
         return false;
     }
 
-    private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr)
+    private IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr)
     {
         int numPathPts = rawPath.Points.Length;
         Matrix4x4 ptTransform = Matrix4x4.TRS(currLaunchTr.position, currLaunchTr.rotation, Vector3.one);
@@ -181,14 +181,14 @@ public class CarrierBehavior : MonoBehaviour
             if (i < numPathPts - 2)
             {
                 yield return
-                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
                         p => ptTransform.MultiplyPoint3x4(p),
                         v => ptTransform.MultiplyVector(v));
             }
             else
             {
                 yield return
-                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
                         p => ClearY(ptTransform.MultiplyPoint3x4(p)),
                         v => ptTransform.MultiplyVector(v));
             }
@@ -239,8 +239,11 @@ public class CarrierBehavior : MonoBehaviour
     private StrikeCraftFormation _currRecovering = null;
     private int _lastRecoveryHanger = 0;
 
-    private List<Tuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
+    private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
 
     public CarrierHangerGenericAnim[] CarrierHangerAnim;
     public int MaxFormations;
+
+    private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
+    private static readonly WaitForSeconds _hangerLaunchCycleDelay = new WaitForSeconds(0.5f);
 }

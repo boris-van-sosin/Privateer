@@ -307,10 +307,10 @@ public class ObjectPrototypes : MonoBehaviour
         }
     }
 
-    public Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
+    public ValueTuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         Canvas boardibfCanvas = Instantiate(BoardingStatusCanvas);
-        return new Tuple<Canvas, BoardingProgressPanel>(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
+        return new ValueTuple<Canvas, BoardingProgressPanel>(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
     }
 
     public Canvas GetSelectionBoxCanvas()

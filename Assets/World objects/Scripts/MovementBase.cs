@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ public abstract class MovementBase : MonoBehaviour
     {
         if (_currManeuver != null)
         {
-            foreach (System.Tuple<Vector3, Vector3> sample in _currManeuver.DebugCurve())
+            foreach (ValueTuple<Vector3, Vector3> sample in _currManeuver.DebugCurve())
             {
                 Gizmos.DrawLine(sample.Item1, sample.Item2);
             }

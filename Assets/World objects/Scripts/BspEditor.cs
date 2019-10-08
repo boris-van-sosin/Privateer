@@ -23,13 +23,13 @@ public class BspEditor : Editor
         BspPathLight lt = path.ExractLightweightPath();
         if (path.UseForwardOrientaion || path.UseUpOrientaion)
         {
-            IEnumerable<Tuple<Vector3, Vector3, Vector3>> evalPts = SampleCurveWithOrientation(lt, numSamples);
+            IEnumerable<ValueTuple<Vector3, Vector3, Vector3>> evalPts = SampleCurveWithOrientation(lt, numSamples);
 
-            IEnumerator<Tuple<Vector3, Vector3, Vector3>> ptsIter = evalPts.GetEnumerator();
+            IEnumerator<ValueTuple<Vector3, Vector3, Vector3>> ptsIter = evalPts.GetEnumerator();
             ptsIter.MoveNext();
-            Tuple<Vector3, Vector3, Vector3> prevPt = ptsIter.Current;
+            ValueTuple<Vector3, Vector3, Vector3> prevPt = ptsIter.Current;
             ptsIter.MoveNext();
-            Tuple<Vector3, Vector3, Vector3> nextPt = ptsIter.Current;
+            ValueTuple<Vector3, Vector3, Vector3> nextPt = ptsIter.Current;
             for (int i = 0; i < numSamples; ++i)
             {
                 Gizmos.DrawLine(prevPt.Item1, nextPt.Item1);
@@ -68,7 +68,7 @@ public class BspEditor : Editor
         return Enumerable.Range(0, numSamples + 1).Select(i => path.EvalPoint(Mathf.Clamp01(((float)i) / numSamples)));
     }
 
-    private static IEnumerable<Tuple<Vector3, Vector3, Vector3>> SampleCurveWithOrientation(BspPathLight path, int numSamples)
+    private static IEnumerable<ValueTuple<Vector3, Vector3, Vector3>> SampleCurveWithOrientation(BspPathLight path, int numSamples)
     {
         return Enumerable.Range(0, numSamples + 1).Select(i => path.EvalPointAndOrientation(Mathf.Clamp01(((float)i) / numSamples)));
     }

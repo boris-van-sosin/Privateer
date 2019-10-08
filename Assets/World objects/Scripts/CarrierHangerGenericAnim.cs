@@ -86,7 +86,7 @@ public class CarrierHangerGenericAnim : MonoBehaviour
                     HangerComponents[i].localRotation = Quaternion.Slerp(Quaternion.Euler(prev.Rotations[i]), Quaternion.Euler(curr.Rotations[i]), phaseProgress);
                 }
             }
-            yield return new WaitForEndOfFrame();
+            yield return _endOfFrameWait;
         }
         HangerState = State.Open;
         onFinish?.Invoke();
@@ -130,7 +130,7 @@ public class CarrierHangerGenericAnim : MonoBehaviour
                     HangerComponents[i].localRotation = Quaternion.Slerp(Quaternion.Euler(prev.Rotations[i]), Quaternion.Euler(curr.Rotations[i]), phaseProgress);
                 }
             }
-            yield return new WaitForEndOfFrame();
+            yield return _endOfFrameWait;
         }
         HangerState = State.Closed;
         onFinish?.Invoke();
@@ -162,4 +162,6 @@ public class CarrierHangerGenericAnim : MonoBehaviour
     public AnimState OpenState;
     public AnimState[] AnimWaypoints;
     private AnimState[] _phases;
+
+    private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
 }

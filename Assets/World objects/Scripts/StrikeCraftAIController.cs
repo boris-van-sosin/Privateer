@@ -33,7 +33,7 @@ public class StrikeCraftAIController : ShipAIController
 
     private System.Collections.IEnumerator BeginRecoveryFinalPhase(Maneuver mm)
     {
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
         _controlledCraft.BeginRecoveryFinalPhase(_recoveryTarget.RecoveryEnd, _recoveryTarget.Idx);
         yield return null;
     }
@@ -208,7 +208,7 @@ public class StrikeCraftAIController : ShipAIController
         }
     }
 
-    private IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
+    private IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
     {
         int numPathPts = rawPath.Points.Length;
         Matrix4x4 ptTransform = Matrix4x4.TRS(currLaunchTr.position, currLaunchTr.rotation, Vector3.one);
@@ -220,21 +220,21 @@ public class StrikeCraftAIController : ShipAIController
             if (i < numPathPts - 2)
             {
                 yield return
-                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
                         p => ptTransform.MultiplyPoint3x4(p),
                         v => ptTransform.MultiplyVector(v));
             }
             else if (i == numPathPts - 2)
             {
                 yield return
-                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
                         p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity) - (GlobalDistances.StrikeCraftAIRecoveryPathFixSize * carrierRecoveryHint.up),
                         v => carrierRecoveryHint.up);
             }
             else if (i == numPathPts - 1)
             {
                 yield return
-                    new Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
                         p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity),
                         v => carrierRecoveryHint.up);
             }
@@ -262,4 +262,6 @@ public class StrikeCraftAIController : ShipAIController
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;
     private CarrierBehavior.RecoveryTransforms _recoveryTarget;
+
+    private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
 }

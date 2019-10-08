@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class BeamTurret : GeneralBeamTurret
 {
+    protected override void Start()
+    {
+        base.Start();
+        _beamDurationWait = new WaitForSeconds(BeamDuration);
+    }
+
     IEnumerator HandleBeam()
     {
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
         _beamRenderer.enabled = true;
         Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.Lance, TurretSize);
         DoBeamHit(w);
@@ -44,4 +50,6 @@ public class BeamTurret : GeneralBeamTurret
     }
 
     public float BeamDuration;
+
+    private WaitForSeconds _beamDurationWait;
 }

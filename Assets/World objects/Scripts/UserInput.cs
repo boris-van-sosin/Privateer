@@ -187,7 +187,7 @@ public class UserInput : MonoBehaviour
                 sc.OrderReturnToHost();
             }
         }
-        foreach (Tuple<UserOperation, int> cg in _controlGroupKeys)
+        foreach (ValueTuple<UserOperation, int> cg in _controlGroupKeys)
         {
             if (Input.GetKeyDown(_keyMapping[cg.Item1]))
             {
@@ -298,13 +298,13 @@ public class UserInput : MonoBehaviour
         { UserOperation.ControlGroup6, KeyCode.Alpha6 },
     };
 
-    private readonly Tuple<UserOperation, int>[] _controlGroupKeys = new Tuple<UserOperation, int>[]
+    private readonly ValueTuple<UserOperation, int>[] _controlGroupKeys = new ValueTuple<UserOperation, int>[]
     {
-        new Tuple<UserOperation, int>(UserOperation.ControlGroup1, 1),
-        new Tuple<UserOperation, int>(UserOperation.ControlGroup2, 2),
-        new Tuple<UserOperation, int>(UserOperation.ControlGroup3, 3),
-        new Tuple<UserOperation, int>(UserOperation.ControlGroup4, 4),
-        new Tuple<UserOperation, int>(UserOperation.ControlGroup5, 5),
-        new Tuple<UserOperation, int>(UserOperation.ControlGroup6, 6)
+        new ValueTuple<UserOperation, int>(UserOperation.ControlGroup1, 1),
+        new ValueTuple<UserOperation, int>(UserOperation.ControlGroup2, 2),
+        new ValueTuple<UserOperation, int>(UserOperation.ControlGroup3, 3),
+        new ValueTuple<UserOperation, int>(UserOperation.ControlGroup4, 4),
+        new ValueTuple<UserOperation, int>(UserOperation.ControlGroup5, 5),
+        new ValueTuple<UserOperation, int>(UserOperation.ControlGroup6, 6)
     };
 }

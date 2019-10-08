@@ -31,22 +31,22 @@ public class Maneuver
         StartSegment(forceSpeed);
     }
 
-    public IEnumerable<Tuple<Vector3, Vector3>> DebugCurve()
+    public IEnumerable<ValueTuple<Vector3, Vector3>> DebugCurve()
     {
         if (_segments[_currSeg] is BsplinePathSegmnet path)
         {
             int numSamples = 20;
-            IEnumerable<Tuple<Vector3, Vector3, Vector3>> evalPts =
+            IEnumerable<ValueTuple<Vector3, Vector3, Vector3>> evalPts =
                 Enumerable.Range(0, numSamples + 1).Select(i => path.Path.EvalPointAndOrientation(Mathf.Clamp01(((float)i) / numSamples)));
 
-            IEnumerator<Tuple<Vector3, Vector3, Vector3>> ptsIter = evalPts.GetEnumerator();
+            IEnumerator<ValueTuple<Vector3, Vector3, Vector3>> ptsIter = evalPts.GetEnumerator();
             ptsIter.MoveNext();
-            Tuple<Vector3, Vector3, Vector3> prevPt = ptsIter.Current;
+            ValueTuple<Vector3, Vector3, Vector3> prevPt = ptsIter.Current;
             ptsIter.MoveNext();
-            Tuple<Vector3, Vector3, Vector3> nextPt = ptsIter.Current;
+            ValueTuple<Vector3, Vector3, Vector3> nextPt = ptsIter.Current;
             for (int i = 0; i < numSamples; ++i)
             {
-                yield return new Tuple<Vector3, Vector3>(prevPt.Item1, nextPt.Item1);
+                yield return new ValueTuple<Vector3, Vector3>(prevPt.Item1, nextPt.Item1);
                 
                 prevPt = nextPt;
                 ptsIter.MoveNext();
@@ -156,7 +156,7 @@ public class Maneuver
         }
         else if (activeSeg is BsplinePathSegmnet pathSeg)
         {
-            Tuple<Vector3, Vector3> pathVelocity = pathSeg.Path.EvalPointAndVelocity(_t);
+            ValueTuple<Vector3, Vector3> pathVelocity = pathSeg.Path.EvalPointAndVelocity(_t);
             float paramSpeed = pathVelocity.Item2.magnitude;
             float currSpeed = Velocity.magnitude;
             float targetSpeed = currSpeed;
@@ -181,7 +181,7 @@ public class Maneuver
                 targetSpeed = Mathf.Lerp(_segStartSpeed, targetSpeed, _t);
             }
 
-            Tuple<Vector3, Vector3, Vector3> nextPos;
+            ValueTuple<Vector3, Vector3, Vector3> nextPos;
             float nextT = _t + (targetSpeed * timeInterval / paramSpeed);
             float tOvershoot = nextT - 1f;
             if (tOvershoot > 0f)
@@ -189,7 +189,7 @@ public class Maneuver
                 tOvershoot = nextT - 1f;
                 _t = 1f;
                 nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
-                nextPos = new Tuple<Vector3, Vector3, Vector3>(
+                nextPos = new ValueTuple<Vector3, Vector3, Vector3>(
                     nextPos.Item1 + pathVelocity.Item2 * tOvershoot,
                     nextPos.Item2,
                     nextPos.Item3);

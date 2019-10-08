@@ -165,10 +165,10 @@ public static class ObjectFactory
         return _torpedoWarheads[tt].WarheadData;
     }
 
-    public static Tuple<int, float> TorpedoLaunchDataFromTorpedoType(TorpedoType tt)
+    public static ValueTuple<int, float> TorpedoLaunchDataFromTorpedoType(TorpedoType tt)
     {
         WarheadDataEntry4 tropData = _torpedoWarheads[tt];
-        return new Tuple<int, float>(tropData.SpeardSize, tropData.MaxRange);
+        return new ValueTuple<int, float>(tropData.SpeardSize, tropData.MaxRange);
     }
 
     public static string[] GetAllShipTypes()
@@ -422,7 +422,7 @@ public static class ObjectFactory
         return res;
     }
 
-    public static Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
+    public static ValueTuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         return _prototypes.CreateBoardingProgressPanel();
     }

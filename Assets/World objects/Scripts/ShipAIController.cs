@@ -223,7 +223,7 @@ public class ShipAIController : MonoBehaviour
 
     private IEnumerator AcquireTargetPulse()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return _targetAcquirePulseDelay;
         while (true)
         {
             if (_controlledShip.ShipControllable && DoSeekTargets)
@@ -265,7 +265,7 @@ public class ShipAIController : MonoBehaviour
                 yield break;
             }
 
-            yield return new WaitForSeconds(0.25f);
+            yield return _targetAcquirePulseDelay;
         }
     }
 
@@ -348,4 +348,6 @@ public class ShipAIController : MonoBehaviour
     }
 
     public ShipActivity CurrActivity { get; protected set; }
+
+    protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
 }

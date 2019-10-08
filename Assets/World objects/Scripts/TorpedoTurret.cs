@@ -20,7 +20,7 @@ public class TorpedoTurret : TurretBase
             _launchDirection = new Vector3(0, 1, 0);
         }
         _torpedoTubeDoorsAnim = GetComponent<Animator>();
-        Tuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
+        ValueTuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
         _torpedoesInSpread = launchData.Item1;
     }
@@ -58,7 +58,7 @@ public class TorpedoTurret : TurretBase
         float relativeAngle = GlobalDirToShipHeading(flatVec);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
         _isLegalAngle = false;
-        foreach (Tuple<float, float> r in _rotationAllowedRanges)
+        foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
             {
@@ -86,7 +86,7 @@ public class TorpedoTurret : TurretBase
         }
 
         float relativeAngle = GlobalDirToShipHeading(flatVec);
-        foreach (Tuple<float, float> r in _rotationAllowedRanges)
+        foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 - tolerance <= relativeAngle && relativeAngle <= r.Item2 + tolerance)
             {
@@ -177,7 +177,7 @@ public class TorpedoTurret : TurretBase
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, LoadedTorpedoType, ContainingShip);
             t.IsTracking = (LoadedTorpedoType == ObjectFactory.TorpedoType.Tracking);
             t.transform.position = Muzzles[_nextBarrel].position;
-            yield return new WaitForSeconds(0.1f);
+            yield return _spreadDelay;
         }
         _torpedoTubeDoorsAnim.SetBool("DoorsOpen", false);
         yield return null;
@@ -198,4 +198,6 @@ public class TorpedoTurret : TurretBase
     private Vector3 LaunchOrientation { get { return -transform.forward; } }
     private Animator _torpedoTubeDoorsAnim;
     private Vector3 _torpedoTarget;
+
+    private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
 }

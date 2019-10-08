@@ -52,17 +52,17 @@ public class BspPathLight
         }
     }
 
-    public BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
+    public BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
         : this(points, order, useForwardOrientation, true, Vector3.zero, transforms)
     {
     }
 
-    public BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, Vector3 defaultUp, IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
+    public BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, Vector3 defaultUp, IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
         : this(points, order, useForwardOrientation, false, defaultUp, transforms)
     {
     }
 
-    private BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, bool useUpOrientation, Vector3 defaultUp, IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
+    private BspPathLight(IEnumerable<Transform> points, int order, bool useForwardOrientation, bool useUpOrientation, Vector3 defaultUp, IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> transforms)
     {
         _defaultUp = defaultUp;
         _useForwardOrientaion = useForwardOrientation;
@@ -94,29 +94,29 @@ public class BspPathLight
         return _pathCurve.Eval(t);
     }
 
-    public Tuple<Vector3, Vector3> EvalPointAndVelocity(float t)
+    public ValueTuple<Vector3, Vector3> EvalPointAndVelocity(float t)
     {
-        return new Tuple<Vector3, Vector3>(_pathCurve.Eval(t), _velocityCurve.Eval(t));
+        return new ValueTuple<Vector3, Vector3>(_pathCurve.Eval(t), _velocityCurve.Eval(t));
     }
 
-    public Tuple<Vector3, Vector3> EvalPointAndForward(float t)
+    public ValueTuple<Vector3, Vector3> EvalPointAndForward(float t)
     {
         if (!_useForwardOrientaion)
         {
-            return new Tuple<Vector3, Vector3>(_pathCurve.Eval(t), _velocityCurve.Eval(t).normalized);
+            return new ValueTuple<Vector3, Vector3>(_pathCurve.Eval(t), _velocityCurve.Eval(t).normalized);
         }
         else
         {
-            return new Tuple<Vector3, Vector3>(_pathCurve.Eval(t), _forwardCurve.Eval(t));
+            return new ValueTuple<Vector3, Vector3>(_pathCurve.Eval(t), _forwardCurve.Eval(t));
         }
     }
 
-    public Tuple<Vector3, Vector3, Vector3> EvalPointAndOrientation(float t)
+    public ValueTuple<Vector3, Vector3, Vector3> EvalPointAndOrientation(float t)
     {
         Vector3 pt = _pathCurve.Eval(t);
         Vector3 forward = (!_useForwardOrientaion) ? _velocityCurve.Eval(t).normalized : _forwardCurve.Eval(t);
         Vector3 up = Vector3.ProjectOnPlane((!_useUpOrientaion) ? _defaultUp : _upCurve.Eval(t), forward).normalized;
-        return new Tuple<Vector3, Vector3, Vector3>(pt, forward, up);
+        return new ValueTuple<Vector3, Vector3, Vector3>(pt, forward, up);
     }
 
     private readonly bool _useForwardOrientaion;

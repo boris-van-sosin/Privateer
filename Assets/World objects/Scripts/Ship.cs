@@ -408,7 +408,7 @@ public class Ship : ShipBase
             {
                 yield break;
             }
-            yield return new WaitForSeconds(0.25f);
+            yield return _componentPulseDelay;
         }
     }
 
@@ -1256,4 +1256,6 @@ public class Ship : ShipBase
     public Buff InherentBuff { get; set; }
     private Buff _crewNumBuff;
     private Buff _crewExperienceBuff;
+
+    private static readonly WaitForSeconds _componentPulseDelay = new WaitForSeconds(0.25f);
 }

@@ -73,22 +73,22 @@ public static class Combat
 
     public static IEnumerator BoardingCombat(Ship attacker, Ship defender)
     {
-        Tuple<Canvas, BoardingProgressPanel> panel = ObjectFactory.CreateBoardingProgressPanel();
+        ValueTuple<Canvas, BoardingProgressPanel> panel = ObjectFactory.CreateBoardingProgressPanel();
         panel.Item1.transform.position = (defender.transform.position + attacker.transform.position) / 2 + GlobalDistances.BoardingPanelOffset;
         panel.Item2.StartBreaching(attacker, defender);
         LinkedList<ShipCharacter> side1Q = new LinkedList<ShipCharacter>(attacker.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
         LinkedList<ShipCharacter> side2Q = new LinkedList<ShipCharacter>(defender.AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
         for (int i = 0; i < 100; ++i)
         {
             panel.Item2.UpdateBreaching(i + 1);
-            yield return new WaitForSeconds(0.1f);
+            yield return _boardingCombatPulseDelay;
         }
         int initialAttackerForce = side1Q.Count;
         int initialDefenderForce = side2Q.Count;
         panel.Item2.StartBoarding(initialAttackerForce, initialDefenderForce);
-        yield return new WaitForSeconds(0.1f);
+        yield return _boardingCombatPulseDelay;
         while (side1Q.Count > 0 && side2Q.Count > 0)
         {
             BoardingCombatPulse(side1Q, side2Q);
@@ -114,7 +114,7 @@ public static class Combat
                     break;
                 }
             }
-            yield return new WaitForSeconds(1.0f);
+            yield return _boardingCombatPulseDelay;
         }
         attacker.ResolveBoardingAction(defender, side1Q.Count == 0);
         defender.ResolveBoardingAction(attacker, side2Q.Count == 0);
@@ -191,6 +191,9 @@ public static class Combat
     private static readonly float _surrenderChance = 0.2f;
     private static readonly int _attackerSurrenderRatio = 2;
     private static readonly int _defenderSurrenderRatio = 4;
+
+    private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
+    private static readonly WaitForSeconds _boardingCombatPulseDelay = new WaitForSeconds(0.1f);
 }
 
 public class ArmourPenetrationTable

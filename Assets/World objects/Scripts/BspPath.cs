@@ -31,7 +31,7 @@ public class BspPath : MonoBehaviour
         }
     }
 
-    public BspPathLight ExractLightweightPath(IEnumerable<Tuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> tr)
+    public BspPathLight ExractLightweightPath(IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> tr)
     {
         if (UseUpOrientaion)
         {
@@ -60,17 +60,17 @@ public class BspPath : MonoBehaviour
         return DefaultPath.EvalPoint(t);
     }
 
-    public Tuple<Vector3, Vector3> EvalPointAndVelocity(float t)
+    public ValueTuple<Vector3, Vector3> EvalPointAndVelocity(float t)
     {
         return DefaultPath.EvalPointAndVelocity(t);
     }
 
-    public Tuple<Vector3, Vector3> EvalPointAndForward(float t)
+    public ValueTuple<Vector3, Vector3> EvalPointAndForward(float t)
     {
         return DefaultPath.EvalPointAndForward(t);
     }
 
-    public Tuple<Vector3, Vector3, Vector3> EvalPointAndOrientation(float t)
+    public ValueTuple<Vector3, Vector3, Vector3> EvalPointAndOrientation(float t)
     {
         return DefaultPath.EvalPointAndOrientation(t);
     }

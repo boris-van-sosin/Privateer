@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ContinuousBeamTurret : GeneralBeamTurret
 {
+    protected override void Start()
+    {
+        base.Start();
+        _pulseDelay = new WaitForSeconds(BeamPulseTime);
+    }
+
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
         bool prevFiring = _firing;
@@ -30,7 +36,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
 
     private IEnumerator DoBeam(Warhead w)
     {
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
         Warhead pulseWarhead = new Warhead()
         {
             ShieldDamage = w.ShieldDamage / 10,
@@ -64,7 +70,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
                 DoBeamHit(w);
             }
             _firing = false;
-            yield return new WaitForSeconds(BeamPulseTime);
+            yield return _pulseDelay;
             CurrTime = Time.time;
             --_pulesLeft;
         }
@@ -99,4 +105,6 @@ public class ContinuousBeamTurret : GeneralBeamTurret
     public float BeamDuration;
     private bool _firing;
     private int _pulesLeft;
+
+    private WaitForSeconds _pulseDelay;
 }

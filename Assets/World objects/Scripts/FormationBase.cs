@@ -142,7 +142,7 @@ public class FormationBase : MovementBase
         return _ships;
     }
 
-    public IEnumerable<Tuple<ShipBase, ShipAIController>> StrikeCraftAIs
+    public IEnumerable<ValueTuple<ShipBase, ShipAIController>> StrikeCraftAIs
     {
         get
         {
@@ -163,7 +163,7 @@ public class FormationBase : MovementBase
 
     protected List<ShipBase> _ships = new List<ShipBase>();
     protected Dictionary<ShipBase, int> _positionsCache = new Dictionary<ShipBase, int>();
-    protected Dictionary<ShipBase, Tuple<ShipBase, ShipAIController>> _AICache = new Dictionary<ShipBase, Tuple<ShipBase, ShipAIController>>();
+    protected Dictionary<ShipBase, ValueTuple<ShipBase, ShipAIController>> _AICache = new Dictionary<ShipBase, ValueTuple<ShipBase, ShipAIController>>();
 
     public enum FormationType { LineAhead, LineAbreast, DiagonalLeft, DiagonalRight, Vee };
 }

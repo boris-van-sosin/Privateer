@@ -22,7 +22,7 @@ public class StrikeCraftFormation : FormationBase
             return false;
         }
         _ships.Add(s);
-        _AICache.Add(s, new Tuple<ShipBase, ShipAIController>(s, s.GetComponent<StrikeCraftAIController>()));
+        _AICache.Add(s, new ValueTuple<ShipBase, ShipAIController>(s, s.GetComponent<StrikeCraftAIController>()));
         return true;
     }
 

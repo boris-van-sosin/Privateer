@@ -179,7 +179,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                 }
             }
             first = false;
-            yield return new WaitForSeconds(1f);
+            yield return _trackingDelay;
         }
         yield return null;
     }
@@ -194,11 +194,11 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             }
             if (IsTracking)
             {
-                yield return new WaitForSeconds(1f);
+                yield return _trackingDelay;
             }
             else
             {
-                yield return new WaitForSeconds(10f);
+                yield return _nonTrackingDelay;
             }
         }
     }
@@ -253,4 +253,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     private ParticleSystem _exhaustPatricleSystem;
     private TrailRenderer _trail;
     private Collider _collider;
+
+    private static readonly WaitForSeconds _trackingDelay = new WaitForSeconds(1f);
+    private static readonly WaitForSeconds _nonTrackingDelay = new WaitForSeconds(10f);
 }

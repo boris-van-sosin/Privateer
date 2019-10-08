@@ -48,4 +48,6 @@ public abstract class GeneralBeamTurret : DirectionalTurret
 
     protected Vector3 _firingVector, _beamOrigin;
     protected LineRenderer _beamRenderer;
+
+    protected static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
 }

@@ -21,7 +21,7 @@ public class BomberTorpedoLauncher : TurretBase
             _dummyTorpedoRoot = transform;
         }
         base.Start();
-        Tuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
+        ValueTuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
         TorpedoesLoaded = _torpedoesInSpread = Muzzles.Length;
     }
@@ -68,7 +68,7 @@ public class BomberTorpedoLauncher : TurretBase
         float relativeAngle = GlobalDirToShipHeading(flatVec);
         Debug.Log(string.Format("Torpedo bomber angle to target: {0}", relativeAngle));
         _isLegalAngle = false;
-        foreach (Tuple<float, float> r in _rotationAllowedRanges)
+        foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
             {
@@ -95,7 +95,7 @@ public class BomberTorpedoLauncher : TurretBase
         }
 
         float relativeAngle = GlobalDirToShipHeading(flatVec);
-        foreach (Tuple<float, float> r in _rotationAllowedRanges)
+        foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 - tolerance <= relativeAngle && relativeAngle <= r.Item2 + tolerance)
             {
@@ -129,7 +129,7 @@ public class BomberTorpedoLauncher : TurretBase
             t.transform.position = Muzzles[idx].position;
             Muzzles[idx].gameObject.SetActive(false);
             --TorpedoesLoaded;
-            yield return new WaitForSeconds(0.1f);
+            yield return _spreadDelay;
         }
         yield return null;
     }
@@ -205,4 +205,6 @@ public class BomberTorpedoLauncher : TurretBase
     private int _torpedoesInSpread;
     private Vector3 _torpedoTarget;
     private Transform _dummyTorpedoRoot;
+
+    private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
 }

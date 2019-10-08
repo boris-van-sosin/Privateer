@@ -27,7 +27,7 @@ public class Faction : MonoBehaviour
             return FactionRelationType.Ally;
         }
 
-        Tuple<Faction, Faction> dictKey = (other._factionIdx < _factionIdx) ? new Tuple<Faction, Faction>(other, this) : new Tuple<Faction, Faction>(this, other);
+        ValueTuple<Faction, Faction> dictKey = (other._factionIdx < _factionIdx) ? new ValueTuple<Faction, Faction>(other, this) : new ValueTuple<Faction, Faction>(this, other);
         FactionRelationType res;
         if (_factionRelations.TryGetValue(dictKey, out res))
         {
@@ -39,7 +39,7 @@ public class Faction : MonoBehaviour
 
     public void SetRelationsWith(Faction other, FactionRelationType relation)
     {
-        Tuple<Faction, Faction> dictKey = (other._factionIdx < _factionIdx) ? new Tuple<Faction, Faction>(other, this) : new Tuple<Faction, Faction>(this, other);
+        ValueTuple<Faction, Faction> dictKey = (other._factionIdx < _factionIdx) ? new ValueTuple<Faction, Faction>(other, this) : new ValueTuple<Faction, Faction>(this, other);
         _factionRelations[dictKey] = relation;
     }
 
@@ -54,11 +54,11 @@ public class Faction : MonoBehaviour
         {
             if (f._factionIdx < _factionIdx)
             {
-                _factionRelations.Add(new Tuple<Faction, Faction>(f, this), FactionRelationType.Enemy); // should be neutral
+                _factionRelations.Add(new ValueTuple<Faction, Faction>(f, this), FactionRelationType.Enemy); // should be neutral
             }
             else
             {
-                _factionRelations.Add(new Tuple<Faction, Faction>(this, f), FactionRelationType.Enemy); // should be neutral
+                _factionRelations.Add(new ValueTuple<Faction, Faction>(this, f), FactionRelationType.Enemy); // should be neutral
             }
         }
         _allFactions.Add(this);
@@ -74,7 +74,7 @@ public class Faction : MonoBehaviour
     private static int _nextFactionIdx = 0;
 
     private static HashSet<Faction> _allFactions = new HashSet<Faction>();
-    private static Dictionary<Tuple<Faction, Faction>, FactionRelationType> _factionRelations = new Dictionary<Tuple<Faction, Faction>, FactionRelationType>();
+    private static Dictionary<ValueTuple<Faction, Faction>, FactionRelationType> _factionRelations = new Dictionary<ValueTuple<Faction, Faction>, FactionRelationType>();
 
     public enum FactionRelationType { Neutral, Ally, Enemy };
 }

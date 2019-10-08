@@ -57,26 +57,26 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (_deadZoneAngleStrings != null)
         {
-            _deadZoneAngleRanges = new Tuple<float, float>[_deadZoneAngleStrings.Length];
+            _deadZoneAngleRanges = new ValueTuple<float, float>[_deadZoneAngleStrings.Length];
             for (int i = 0; i < _deadZoneAngleStrings.Length; ++i)
             {
                 string[] nums = _deadZoneAngleStrings[i].Split(',');
-                _deadZoneAngleRanges[i] = new Tuple<float, float>(float.Parse(nums[0]), float.Parse(nums[1]));
+                _deadZoneAngleRanges[i] = new ValueTuple<float, float>(float.Parse(nums[0]), float.Parse(nums[1]));
             }
         }
         if (_minRotation < _maxRotation)
         {
-            _rotationAllowedRanges = new Tuple<float, float>[1]
+            _rotationAllowedRanges = new ValueTuple<float, float>[1]
             {
-                new Tuple<float, float>(_minRotation, _maxRotation),
+                new ValueTuple<float, float>(_minRotation, _maxRotation),
             };
         }
         else if (_maxRotation < _minRotation)
         {
-            _rotationAllowedRanges = new Tuple<float, float>[2]
+            _rotationAllowedRanges = new ValueTuple<float, float>[2]
 {
-                new Tuple<float, float>(_minRotation, 360),
-                new Tuple<float, float>(0, _maxRotation)
+                new ValueTuple<float, float>(_minRotation, 360),
+                new ValueTuple<float, float>(0, _maxRotation)
             };
         }
         else
@@ -88,7 +88,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected virtual void ParseMuzzles()
     {
-        List<Tuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
+        List<ValueTuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
         Barrels = new Transform[barrelsFound.Count];
         Muzzles = new Transform[barrelsFound.Count];
         if (AlternatingFire)
@@ -108,20 +108,20 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    protected static IEnumerable<Tuple<Transform, Transform>> FindBarrels(Transform root)
+    protected static IEnumerable<ValueTuple<Transform, Transform>> FindBarrels(Transform root)
     {
         if (root.name.StartsWith(BarrelString))
         {
             string suffix = root.name.Substring(BarrelString.Length);
             Transform muzzle = root.Find(MuzzleString + suffix);
-            yield return new Tuple<Transform, Transform>(root, muzzle);
+            yield return new ValueTuple<Transform, Transform>(root, muzzle);
         }
         else
         {
             for (int i = 0; i < root.childCount; ++i)
             {
-                IEnumerable<Tuple<Transform, Transform>> resInChildren = FindBarrels(root.GetChild(i));
-                foreach (Tuple<Transform, Transform> r in resInChildren)
+                IEnumerable<ValueTuple<Transform, Transform>> resInChildren = FindBarrels(root.GetChild(i));
+                foreach (ValueTuple<Transform, Transform> r in resInChildren)
                 {
                     yield return r;
                 }
@@ -182,7 +182,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
         if (_deadZoneAngleRanges != null)
         {
-            foreach (Tuple<float, float> d in _deadZoneAngleRanges)
+            foreach (ValueTuple<float, float> d in _deadZoneAngleRanges)
             {
                 float currAngle = CurrLocalAngle;
                 if (d.Item1 < currAngle && currAngle < d.Item2)
@@ -298,7 +298,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                 LastFire = Time.time;
                 _containingShip.NotifyInComabt();
             }
-            yield return new WaitForSeconds(0.2f);
+            yield return _fullBroadsideDelay;
         }
     }
 
@@ -530,7 +530,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                 default:
                     break;
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return _autoBehaviorPulseDelay;
         }
     }
 
@@ -670,7 +670,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     // Rotation behavior variables:
     protected float _minRotation, _maxRotation, _rotationSpan;
-    protected Tuple<float, float>[] _rotationAllowedRanges;
+    protected ValueTuple<float, float>[] _rotationAllowedRanges;
     private bool _fixed = false;
     public float RotationSpeed;
     protected float _targetAngle;
@@ -678,7 +678,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected Vector3 _defaultDirection;
     private string[] _deadZoneAngleStrings;
-    private Tuple<float, float>[] _deadZoneAngleRanges;
+    private ValueTuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
     protected bool _isLegalAngle = false;
     protected bool CanRotate { get { return (!_fixed) && _status != ComponentStatus.HeavilyDamaged && _status != ComponentStatus.KnockedOut && _status != ComponentStatus.Destroyed; } }
@@ -841,4 +841,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     private static Buff _defaultBuff = Buff.Default();
     public Buff ComponentBuff => _defaultBuff;
+
+    protected static readonly WaitForSeconds _autoBehaviorPulseDelay = new WaitForSeconds(0.1f);
+    protected static readonly WaitForSeconds _fullBroadsideDelay = new WaitForSeconds(0.1f);
 }
