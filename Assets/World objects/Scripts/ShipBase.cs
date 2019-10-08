@@ -16,6 +16,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         GrapplingMode = false;
         _rigidBody = GetComponent<Rigidbody>();
         UseTargetSpeed = false;
+        _circleStatus = ShipCircleStatus.Deselected;
     }
 
     public virtual void Activate()
@@ -261,25 +262,47 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     private void InitCircle()
     {
-        LineRenderer lr = GetComponentInChildren<LineRenderer>();
-        if (lr != null)
+        _statusCircle = GetComponentInChildren<LineRenderer>();
+        if (_statusCircle != null)
         {
-            int numPts = 48;
-            lr.positionCount = numPts;
-            lr.loop = true;
+            int numPts = 24;
+            _statusCircle.positionCount = numPts;
+            _statusCircle.loop = true;
             float angleStep = Mathf.PI * 2 / numPts;
             float r = ShipUnscaledLength * 0.5f * 0.85f;
-            lr.SetPositions(Enumerable.Range(0, numPts).Select(i => new Vector3(r * Mathf.Cos(i * angleStep), r * Mathf.Sin(i * angleStep), 0)).ToArray());
+            _statusCircle.SetPositions(Enumerable.Range(0, numPts).Select(i => new Vector3(r * Mathf.Cos(i * angleStep), r * Mathf.Sin(i * angleStep), 0)).ToArray());
+        }
+    }
+
+    public void SetCircleSelectStatus(bool selected)
+    {
+        if (selected && _circleStatus == ShipCircleStatus.Deselected)
+        {
+            _circleStatus = ShipCircleStatus.Selected;
+            _statusCircle.sharedMaterial = ObjectFactory.GetMaterial("ShipRingSelectedMtl");
+        }
+        else if (!selected && _circleStatus == ShipCircleStatus.Selected)
+        {
+            _circleStatus = ShipCircleStatus.Deselected;
+            _statusCircle.sharedMaterial = ObjectFactory.GetMaterial("ShipRingDeselectedMtl");
         }
     }
 
     public void SetCircleToFactionColor()
     {
-        if (Owner != null && TeamColorComponents != null)
+        if (Owner != null)
         {
-            foreach (MeshRenderer mr in TeamColorComponents)
+            if (TeamColorComponents != null)
             {
-                mr.material.color = Owner.FactionColor;
+                foreach (MeshRenderer mr in TeamColorComponents)
+                {
+                    mr.material.color = Owner.FactionColor;
+                }
+            }
+            if (_statusCircle != null)
+            {
+                _statusCircle.startColor = Owner.FactionColor;
+                _statusCircle.endColor = Owner.FactionColor;
             }
         }
     }
@@ -683,6 +706,10 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     // Team color
     public MeshRenderer[] TeamColorComponents;
+    private LineRenderer _statusCircle;
+    private ShipCircleStatus _circleStatus;
+
+    protected enum ShipCircleStatus { Deselected, Selected, Disabled, Surrendered, Destroyed };
 
     // Buff/debuff mechanic
     public Buff CombinedBuff { get; protected set; }

@@ -23538,6 +23538,7 @@ MonoBehaviour:
   DeadZoneAngles: []
   AllowedWeaponTypes: 02000000
   LocationOnShip: 0
+  WeaponAIHint: 0
   DefaultGroup: 2
 --- !u!1 &1237873092757352
 GameObject:
@@ -113158,6 +113159,7 @@ MonoBehaviour:
   - 335,360
   AllowedWeaponTypes: 0c000000
   LocationOnShip: 0
+  WeaponAIHint: 0
   DefaultGroup: 1
 --- !u!1 &4865470492250843233
 GameObject:
@@ -113341,7 +113343,7 @@ LineRenderer:
   - {x: 0, y: 0.1, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -113388,8 +113390,8 @@ LineRenderer:
       m_NumAlphaKeys: 2
     numCornerVertices: 0
     numCapVertices: 0
-    alignment: 0
-    textureMode: 0
+    alignment: 1
+    textureMode: 3
     shadowBias: 0.5
     generateLightingData: 0
   m_UseWorldSpace: 0

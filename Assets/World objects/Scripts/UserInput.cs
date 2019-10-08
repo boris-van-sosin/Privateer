@@ -17,6 +17,9 @@ public class UserInput : MonoBehaviour
         //
         _cameraOffsetFactor = 1.0f;
         //ContextMenu.transform.parent.transform.rotation = Quaternion.LookRotation(_userCamera.transform.forward, _userCamera.transform.up);
+        _selectBox = ObjectFactory.GetSelectionBoxCanvas();
+        _selectBoxRect = _selectBox.GetComponent<RectTransform>();
+        _displaySelectBox = false;
     }
 
     void Awake()
@@ -205,28 +208,37 @@ public class UserInput : MonoBehaviour
     {
         if (clickPt.HasValue)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButtonDown(0))
             {
-                if (colliderHit != null)
+                _selectionHandler.ClickSelect(colliderHit);
+                _dragOrigin = clickPt.Value;
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                if (!_displaySelectBox)
                 {
-                    ShipBase s2 = ShipBase.FromCollider(colliderHit);
-                    if (s2 != null && s2 is Ship)
-                    {
-                        _fleetSelectedShips.Clear();
-                        _fleetSelectedShips.Add(s2);
-                    }
+                    _displaySelectBox = true;
+                    _selectBox.gameObject.SetActive(true);
                 }
+                //Vector3 corner1 = _userCamera.WorldToScreenPoint(_dragOrigin);
+                //Vector3 corner2 = _userCamera.WorldToScreenPoint(clickPt.Value);
+                Vector3 corner1 = _dragOrigin;
+                Vector3 corner2 = clickPt.Value;
+                Vector3 cornerMaxMin = new Vector3(Mathf.Max(_dragOrigin.x, clickPt.Value.x), 0, Mathf.Min(_dragOrigin.z, clickPt.Value.z));
+                _selectBox.transform.position = cornerMaxMin;
+                _selectBoxRect.sizeDelta = new Vector2(Mathf.Abs(corner2.x - corner1.x), Mathf.Abs(corner2.z - corner1.z));
+                _dragDest = corner2;
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                _selectionHandler.BoxSelect(_dragOrigin, _dragDest);
+                _displaySelectBox = false;
+                _selectBox.gameObject.SetActive(false);
+
             }
             if (Input.GetMouseButtonDown(1))
             {
-                foreach (Ship s2 in _fleetSelectedShips)
-                {
-                    ShipAIController controller = s2.GetComponent<ShipAIController>();
-                    if (controller != null && !s2.ShipDisabled && !s2.ShipSurrendered)
-                    {
-                        controller.NavigateTo(clickPt.Value);
-                    }
-                }
+                _selectionHandler.ClickOrder(clickPt.Value);
             }
         }
     }
@@ -241,7 +253,14 @@ public class UserInput : MonoBehaviour
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;
     private bool _fleetMode = false;
-    private List<ShipBase> _fleetSelectedShips = new List<ShipBase>();
+
+    private SelectionHandler _selectionHandler = new SelectionHandler();
+
+    // Selection bo stuff:
+    private bool _displaySelectBox;
+    private Canvas _selectBox;
+    private RectTransform _selectBoxRect;
+    private Vector3 _dragOrigin, _dragDest;
 
     public enum UserOperation
     {

@@ -241,9 +241,9 @@ public class ObjectPrototypes : MonoBehaviour
         Sprite res;
         if(!_sprites.TryGetValue(key, out res))
         {
-            for (int i = 0; i < SpriteKeys.Length; i++)
+            for (int i = 0; i < Sprites.Length; i++)
             {
-                _sprites[SpriteKeys[i]] = Sprites[i];
+                _sprites[Sprites[i].Key] = Sprites[i].SpriteLink;
             }
             if (_sprites.TryGetValue(key, out res))
             {
@@ -283,10 +283,39 @@ public class ObjectPrototypes : MonoBehaviour
         }
     }
 
+    public Material GetMaterial(string key)
+    {
+        Material res;
+        if (!_materials.TryGetValue(key, out res))
+        {
+            for (int i = 0; i < Materials.Length; i++)
+            {
+                _materials[Materials[i].Key] = Materials[i].Mtl;
+            }
+            if (_materials.TryGetValue(key, out res))
+            {
+                return res;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return res;
+        }
+    }
+
     public Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         Canvas boardibfCanvas = Instantiate(BoardingStatusCanvas);
         return new Tuple<Canvas, BoardingProgressPanel>(boardibfCanvas, boardibfCanvas.GetComponentInChildren<BoardingProgressPanel>());
+    }
+
+    public Canvas GetSelectionBoxCanvas()
+    {
+        return SelectionBoxCanvas;
     }
 
     public WeaponCtrlCfgLine CreateWeaponCtrlCfgLine()
@@ -316,10 +345,13 @@ public class ObjectPrototypes : MonoBehaviour
     public StatusSubsystem SubsystemStatusSprite;
     public StatusProgressBar SubsystemProgressRingTurretPrototype;
 
-    public string[] SpriteKeys;
-    public Sprite[] Sprites;
+    public SprikeKeyValue[] Sprites;
+
+    public MaterialKeyValue[] Materials;
 
     public Canvas BoardingStatusCanvas;
+
+    public Canvas SelectionBoxCanvas;
 
     public Camera ShipStatusPanelCamera;
 
@@ -330,4 +362,19 @@ public class ObjectPrototypes : MonoBehaviour
     private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
     private Dictionary<string, BspPath> _paths = new Dictionary<string, BspPath>();
+    private Dictionary<string, Material> _materials = new Dictionary<string, Material>();
+
+    [Serializable]
+    public struct SprikeKeyValue
+    {
+        public string Key;
+        public Sprite SpriteLink;
+    }
+
+    [Serializable]
+    public struct MaterialKeyValue
+    {
+        public string Key;
+        public Material Mtl;
+    }
 }

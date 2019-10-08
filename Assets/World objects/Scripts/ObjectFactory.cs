@@ -362,6 +362,12 @@ public static class ObjectFactory
         return _prototypes.GetSprite(key);
     }
 
+    public static Material GetMaterial(string key)
+    {
+        return _prototypes.GetMaterial(key);
+    }
+
+
     public static StatusSubsystem CreateStatusSubsytem(IShipActiveComponent comp)
     {
         StatusSubsystem res = _prototypes.CreateStatusSprite();
@@ -419,6 +425,11 @@ public static class ObjectFactory
     public static Tuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         return _prototypes.CreateBoardingProgressPanel();
+    }
+
+    public static Canvas GetSelectionBoxCanvas()
+    {
+        return _prototypes.GetSelectionBoxCanvas();
     }
 
     public static WeaponCtrlCfgLine CreateWeaponCtrlCfgLine(string label)

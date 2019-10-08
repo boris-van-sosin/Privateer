@@ -145,7 +145,6 @@ public class ShipFreeCreatePanel : MonoBehaviour
         if (friendly)
         {
             s.Owner = faction1;
-            s.SetCircleToFactionColor();
         }
         else
         {
