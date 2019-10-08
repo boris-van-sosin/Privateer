@@ -48,9 +48,10 @@ public class CarrierBehavior : MonoBehaviour
         formation.transform.rotation = _ship.transform.rotation;
 
         int numLaunched = 0;
+        int numCreated = 0;
         while (numLaunched < formation.Positions.Length)
         {
-            if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed)
+            if (numCreated < formation.Positions.Length && CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed)
             {
                 StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(strikeCraftKey);
                 s.IgnoreHits = true;
@@ -64,6 +65,7 @@ public class CarrierBehavior : MonoBehaviour
                 formation.TurnRate = s.TurnRate * 0.5f;
                 currLaunchingStrikeCraft[i] = s;
                 CarrierHangerAnim[i].Open();
+                ++numCreated;
             }
             else if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Open)
             {

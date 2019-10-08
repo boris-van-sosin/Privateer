@@ -89,51 +89,33 @@ public class StrikeCraft : ShipBase
         return Turrets.Any(t => t.IsOutOfAmmo);
     }
 
-    public StrikeCraftFormation ContainingFormation { get; private set; }
-
-    public void AddToFormation(StrikeCraftFormation f)
+    public override void AddToFormation(FormationBase f)
     {
+        if (!(f is StrikeCraftFormation))
+        {
+            throw new System.Exception("Not a strike craft formation");
+        }
         if (ContainingFormation != null)
         {
             RemoveFromFormation();
         }
         ContainingFormation = f;
-        ContainingFormation.AddStrikeCraft(this);
+        ((StrikeCraftFormation)ContainingFormation).AddStrikeCraft(this);
     }
 
-    public void RemoveFromFormation()
+    public override void RemoveFromFormation()
     {
         if (ContainingFormation == null)
         {
             return;
         }
-        ContainingFormation.RemoveStrikeCraft(this);
+        ((StrikeCraftFormation)ContainingFormation).RemoveStrikeCraft(this);
     }
 
-    public Vector3 PositionInFormation
-    {
-        get
-        {
-            return ContainingFormation.GetPosition(this);
-        }
-    }
-
-    public bool InPositionInFormation()
+    public override bool InPositionInFormation()
     {
         return ContainingFormation != null &&
             (ContainingFormation.GetPosition(this) - transform.position).sqrMagnitude <= (GlobalDistances.StrikeCraftAIFormationPositionTolerance * GlobalDistances.StrikeCraftAIFormationPositionTolerance);
-    }
-
-    public bool AheadOfPositionInFormation()
-    {
-        if (ContainingFormation == null)
-        {
-            return false;
-        }
-        Vector3 offset = transform.position - ContainingFormation.GetPosition(this);
-        return
-            Vector3.Dot(offset, transform.up) > 0 &&
-            Vector3.Angle(offset, transform.up) < 30;
     }
 
     void OnDestroy()
@@ -179,7 +161,7 @@ public class StrikeCraft : ShipBase
         {
             if ((transform.position - _recoveryFinalPhaseTarget.position).sqrMagnitude < recAdvance * recAdvance)
             {
-                if (ContainingFormation.HostCarrier.RecoveryTryLand(this, _recoveryFinalPhaseIdx, FinishRecovery))
+                if (((StrikeCraftFormation)ContainingFormation).HostCarrier.RecoveryTryLand(this, _recoveryFinalPhaseIdx, FinishRecovery))
                 {
                     _inRecoveryInsideElevator = true;
                 }

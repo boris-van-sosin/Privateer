@@ -9,7 +9,7 @@ public class StrikeCraftAIController : ShipAIController
     {
         base.Start();
         _controlledCraft = _controlledShip.GetComponent<StrikeCraft>();
-        _formation = _controlledCraft.ContainingFormation;
+        _formation = (StrikeCraftFormation)(_controlledCraft.ContainingFormation);
         _formationAI = _formation.GetComponent<StrikeCraftFormationAIController>();
     }
 
@@ -194,8 +194,8 @@ public class StrikeCraftAIController : ShipAIController
 
     private void RecoveryStartClimb()
     {
-        Vector3 carrierVelocity = _controlledCraft.ContainingFormation.HostCarrier.Velocity;
-        if (_controlledCraft.ContainingFormation.HostCarrier.RecoveryTryStartSingle(_controlledCraft, _recoveryTarget.Idx, _controlledCraft.OnRecoveryHangerOpen))
+        Vector3 carrierVelocity = _formation.HostCarrier.Velocity;
+        if (_formation.HostCarrier.RecoveryTryStartSingle(_controlledCraft, _recoveryTarget.Idx, _controlledCraft.OnRecoveryHangerOpen))
         {
             _controlledCraft.IgnoreHits = true;
             Maneuver m = CreateClimbForRecoveryManeuver(transform, _recoveryTarget.RecoveryStart.transform, carrierVelocity);

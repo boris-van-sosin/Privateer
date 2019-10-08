@@ -263,7 +263,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         yield return new WaitForSeconds(0.25f);
         while (true)
         {
-            if (_controlledFormation.AllStrikeCraft().All(s => s.IsOutOfAmmo()) && _controlledFormation.AllStrikeCraft().Any())
+            if (_controlledFormation.AllStrikeCraft().All(s => ((StrikeCraft)s).IsOutOfAmmo()) && _controlledFormation.AllStrikeCraft().Any())
             {
                 CarrierBehavior c = _controlledFormation.HostCarrier;
                 if (c != null)

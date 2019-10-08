@@ -605,6 +605,35 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         get;
     }
 
+    // Behavior in a formation:
+    public FormationBase ContainingFormation { get; protected set; }
+
+    public abstract void AddToFormation(FormationBase f);
+
+    public abstract void RemoveFromFormation();
+
+    public Vector3 PositionInFormation
+    {
+        get
+        {
+            return ContainingFormation.GetPosition(this);
+        }
+    }
+
+    public abstract bool InPositionInFormation();
+
+    public bool AheadOfPositionInFormation()
+    {
+        if (ContainingFormation == null)
+        {
+            return false;
+        }
+        Vector3 offset = transform.position - ContainingFormation.GetPosition(this);
+        return
+            Vector3.Dot(offset, transform.up) > 0 &&
+            Vector3.Angle(offset, transform.up) < 30;
+    }
+
     // Things not in use, but needed in other classes:
     public virtual bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat) { return true; }
     public virtual void NotifyInComabt() { }

@@ -1190,6 +1190,20 @@ public class Ship : ShipBase
         }
     }
 
+    // In formation behavior
+    public override void AddToFormation(FormationBase f)
+    {
+    }
+
+    public override void RemoveFromFormation()
+    {
+    }
+
+    public override bool InPositionInFormation()
+    {
+        return true;
+    }
+
     private IEnergyCapacityComponent[] _energyCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;

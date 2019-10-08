@@ -351,6 +351,8 @@ public static class ObjectFactory
     public static StrikeCraftFormation CreateStrikeCraftFormation(string prodKey)
     {
         StrikeCraftFormation res = _prototypes.CreateStrikeCraftFormation(prodKey);
+        res.CreatePositions(4);
+        res.SetFormationType(FormationBase.FormationType.Vee);
         res.gameObject.AddComponent<StrikeCraftFormationAIController>();
         return res;
     }

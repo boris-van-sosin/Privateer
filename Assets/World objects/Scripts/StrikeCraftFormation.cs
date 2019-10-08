@@ -3,37 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StrikeCraftFormation : MovementBase
+public class StrikeCraftFormation : FormationBase
 {
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         DestroyOnEmpty = true;
     }
 
-    void Start()
+    protected override void Start()
     {
-        ComputeDiameter();
     }
 
     public bool AddStrikeCraft(StrikeCraft s)
     {
-        if (_craft.Count >= Positions.Length || s.Owner != Owner || _craft.Contains(s))
+        if (_ships.Count >= Positions.Length || s.Owner != Owner || _ships.Contains(s))
         {
             return false;
         }
-        _craft.Add(s);
-        _AICache.Add(s, new Tuple<StrikeCraft, StrikeCraftAIController>(s, s.GetComponent<StrikeCraftAIController>()));
+        _ships.Add(s);
+        _AICache.Add(s, new Tuple<ShipBase, ShipAIController>(s, s.GetComponent<StrikeCraftAIController>()));
         return true;
     }
 
     public bool RemoveStrikeCraft(StrikeCraft s)
     {
-        if (_craft.Contains(s))
+        if (_ships.Contains(s))
         {
-            _craft.Remove(s);
+            _ships.Remove(s);
             _AICache.Remove(s);
             _positionsCache.Clear();
-            if (_craft.Count == 0 && DestroyOnEmpty)
+            if (_ships.Count == 0 && DestroyOnEmpty)
             {
                 HostCarrier.DeactivateFormation(this);
                 Destroy(gameObject);
@@ -43,92 +43,7 @@ public class StrikeCraftFormation : MovementBase
         return false;
     }
 
-    public Vector3 GetPosition(StrikeCraft s)
-    {
-        int res;
-        if (_positionsCache.TryGetValue(s, out res))
-        {
-            return Positions[res].position;
-        }
-        else
-        {
-            res = _craft.IndexOf(s);
-            if (res >= 0)
-            {
-                _positionsCache[s] = res;
-                return Positions[res].position;
-            }
-        }
-        throw new System.Exception("Strike craft not in formation");
-    }
-
-    public bool AllInFormation()
-    {
-        return _craft.All(s => s.InPositionInFormation());
-    }
-
-    public IEnumerable<ValueTuple<StrikeCraft, bool>> InFormationStatus()
-    {
-        return _craft.Select(s => new ValueTuple<StrikeCraft, bool>(s, s.InPositionInFormation()));
-    }
-
-    public IEnumerable<StrikeCraft> AllStrikeCraft()
-    {
-        return _craft;
-    }
-
-    void OnDrawGizmos()
-    {
-        int i = 0;
-        foreach (StrikeCraft s in _craft)
-        {
-            Gizmos.color = colors[i];
-            if (s.InPositionInFormation())
-            {
-                Gizmos.DrawWireSphere(GetPosition(s), 0.025f);
-            }
-            else
-            {
-                Gizmos.DrawWireSphere(GetPosition(s), 0.1f);
-            }
-            i = (i + 1) % colors.Length;
-        }
-    }
-
-    private void ComputeDiameter()
-    {
-        Diameter = 0;
-        for (int i = 0; i < Positions.Length; ++i)
-        {
-            for (int j = i + 1; j < Positions.Length; ++j)
-            {
-                float currDistSqr = (Positions[i].position - Positions[j].position).sqrMagnitude;
-                Diameter = Mathf.Max(Diameter, currDistSqr);
-            }
-        }
-        Diameter = Mathf.Sqrt(Diameter);
-    }
-    public float Diameter { get; private set; }
-
-    public IEnumerable<Tuple<StrikeCraft, StrikeCraftAIController>> StrikeCraftAIs
-    {
-        get
-        {
-            return _AICache.Values;
-        }
-    }
-
     public bool DestroyOnEmpty { get; set; }
 
     public CarrierBehavior HostCarrier { get; set; }
-
-    private static readonly Color[] colors = new Color[] { Color.red, Color.blue, Color.green, Color.magenta };
-    private List<StrikeCraft> _craft = new List<StrikeCraft>();
-    private Dictionary<StrikeCraft, int> _positionsCache = new Dictionary<StrikeCraft, int>();
-    private Dictionary<StrikeCraft, Tuple<StrikeCraft, StrikeCraftAIController>> _AICache = new Dictionary<StrikeCraft, Tuple<StrikeCraft, StrikeCraftAIController>>();
-
-    public string ProductionKey;
-    public Faction Owner;
-    public Transform[] Positions;
-    public float MaintainFormationSpeedCoefficient;
 }
