@@ -905,6 +905,7 @@ public class Ship : ShipBase
             {
                 t.SetTurretBehavior(TurretBase.TurretMode.Off);
             }
+            SetCircleStatus(ShipCircleStatus.Surrendered);
         }
         InBoarding = false;
     }

@@ -265,7 +265,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         _statusCircle = GetComponentInChildren<LineRenderer>();
         if (_statusCircle != null)
         {
-            int numPts = 24;
+            int numPts = 48;
             _statusCircle.positionCount = numPts;
             _statusCircle.loop = true;
             float angleStep = Mathf.PI * 2 / numPts;
@@ -285,6 +285,30 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             _circleStatus = ShipCircleStatus.Deselected;
             _statusCircle.sharedMaterial = ObjectFactory.GetMaterial("ShipRingDeselectedMtl");
+        }
+    }
+
+    protected void SetCircleStatus(ShipCircleStatus s)
+    {
+        switch (s)
+        {
+            case ShipCircleStatus.Deselected:
+                _statusCircle.sharedMaterial = ObjectFactory.GetMaterial("ShipRingDeselectedMtl");
+                break;
+            case ShipCircleStatus.Selected:
+                _statusCircle.sharedMaterial = ObjectFactory.GetMaterial("ShipRingSelectedMtl");
+                break;
+            case ShipCircleStatus.Disabled:
+                break;
+            case ShipCircleStatus.Surrendered:
+                _statusCircle.sharedMaterial = ObjectFactory.GetMaterial("ShipRingSurrenderMtl");
+                //_statusCircle.startColor = Color.white;
+                _statusCircle.endColor = Color.white;
+                break;
+            case ShipCircleStatus.Destroyed:
+                break;
+            default:
+                break;
         }
     }
 

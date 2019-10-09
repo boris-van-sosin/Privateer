@@ -83,12 +83,12 @@ public static class Combat
         for (int i = 0; i < 100; ++i)
         {
             panel.Item2.UpdateBreaching(i + 1);
-            yield return _boardingCombatPulseDelay;
+            yield return _boardingPreCombatDelay;
         }
         int initialAttackerForce = side1Q.Count;
         int initialDefenderForce = side2Q.Count;
         panel.Item2.StartBoarding(initialAttackerForce, initialDefenderForce);
-        yield return _boardingCombatPulseDelay;
+        yield return _boardingPreCombatDelay;
         while (side1Q.Count > 0 && side2Q.Count > 0)
         {
             BoardingCombatPulse(side1Q, side2Q);
@@ -193,7 +193,8 @@ public static class Combat
     private static readonly int _defenderSurrenderRatio = 4;
 
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
-    private static readonly WaitForSeconds _boardingCombatPulseDelay = new WaitForSeconds(0.1f);
+    private static readonly WaitForSeconds _boardingPreCombatDelay = new WaitForSeconds(0.1f);
+    private static readonly WaitForSeconds _boardingCombatPulseDelay = new WaitForSeconds(1f);
 }
 
 public class ArmourPenetrationTable
