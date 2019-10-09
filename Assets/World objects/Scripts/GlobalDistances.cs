@@ -39,6 +39,10 @@ public static class GlobalDistances
     public static readonly float ShipAIAntiClumpLengthFactor = 2f;
     public static readonly float ShipAIAntiClumpMoveDistFactor = 0.5f;
 
+    public static readonly float ShipAIAttackRangeCoefficient = 0.95f;
+    public static readonly float ShipAIArtilleryKeepDistCoefficient = 1.05f;
+    public static readonly float ShipAIHitAndRunAttackRangeCoefficient = 0.75f;
+
     public static readonly float Bug0StoppingDistFactor = 20f;
     public static readonly float Bug0AvoidObstacleOriginPtFactor = 0.25f;
     public static readonly float Bug0AvoidObstacleRangeFactor = 1.1f;

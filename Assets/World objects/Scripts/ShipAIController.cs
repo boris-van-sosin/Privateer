@@ -13,6 +13,9 @@ public class ShipAIController : MonoBehaviour
         StartCoroutine(AcquireTargetPulse());
         _bug0Alg = GenBug0Algorithm();
         TargetShip = null;
+
+        // temporary default:
+        _currAttackBehavior = ShipAttackPattern.Aggressive;
     }
 	
 	// Update is called once per frame
@@ -31,8 +34,9 @@ public class ShipAIController : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.AllShipsLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.NavBoxesLayerMask);
         ShipBase foundTarget = null;
+        _currAttackBehavior = ShipAttackPattern.Aggressive;
         foreach (Collider c in colliders)
         {
             ShipBase s = ShipBase.FromCollider(c);
@@ -47,6 +51,17 @@ public class ShipAIController : MonoBehaviour
             if (_controlledShip.Owner.IsEnemy(s.Owner))
             {
                 foundTarget = s;
+            }
+            else
+            {
+                if (s != _controlledShip && s is Ship alliedShip && _controlledShip is Ship currShip)
+                {
+                    if (currShip.ShipSize == ObjectFactory.ShipSize.Destroyer &&
+                        (alliedShip.ShipSize == ObjectFactory.ShipSize.Cruiser || alliedShip.ShipSize == ObjectFactory.ShipSize.CapitalShip))
+                    {
+                        _currAttackBehavior = ShipAttackPattern.HitAndRun;
+                    }
+                }
             }
         }
 
@@ -86,7 +101,7 @@ public class ShipAIController : MonoBehaviour
     protected virtual Vector3 AttackPosition(ShipBase enemyShip)
     {
         float minRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.Main || t.HardpointAIHint == TurretAIHint.Secondary).Select(x => x.GetMaxRange).Min();
-        Vector3 Front = enemyShip.transform.up.normalized;
+        Vector3 Front = enemyShip.transform.up;
         //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
         //Vector3 Right = -Left;
         //Vector3 Rear = -Front;
@@ -109,7 +124,7 @@ public class ShipAIController : MonoBehaviour
             }
             for (int j = 0; j < _numAttackDistances; ++j)
             {
-                float dist = minRange * _rangeCoefficient * (j + 1) / _numAttackDistances;
+                float dist = minRange * GlobalDistances.ShipAIAttackRangeCoefficient * (j + 1) / _numAttackDistances;
                 _attackPositions[k] = enemyShip.transform.position + dir * dist;
                 _attackPositionWeights[k] = currWeight;
                 ++k;
@@ -128,6 +143,146 @@ public class ShipAIController : MonoBehaviour
             }
         }
         return _attackPositions[minPos];
+    }
+
+    protected virtual Vector3 AttackPositionArtilery(ShipBase enemyShip)
+    {
+        float attackRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.Main).Select(x => x.GetMaxRange).Min();
+        float mainEnemyRange = enemyShip.Turrets.Select(x => x.GetMaxRange).Max();
+        Vector3 attackVec = enemyShip.transform.position - transform.position;
+        //Vector3 attackVecNormalized = attackVec.normalized;
+
+        Collider[] colliders = Physics.OverlapSphere(enemyShip.transform.position, attackRange, ObjectFactory.NavBoxesLayerMask);
+        Vector3 friendlyShipsCentroid = Vector3.zero;
+        Vector3 enemyShipsCentroid = enemyShip.transform.position;
+        float threatMaxRange = 0f;
+        int friendlyCount = 0, enemyCount = 0;
+        foreach (Collider c in colliders)
+        {
+            ShipBase sb = ShipBase.FromCollider(c);
+            if (sb == _controlledShip || sb == enemyShip || !sb.ShipActiveInCombat)
+            {
+                continue;
+            }
+            if (sb is Ship currShip)
+            {
+                if (_controlledShip.Owner.IsEnemy(currShip.Owner))
+                {
+                    //enemyShipsCentroid += currShip.transform.position;
+                    float threatRange = currShip.Turrets.Select(x => x.GetMaxRange).Max();
+                    Vector3 threatVec = (transform.position - currShip.transform.position).normalized * threatRange;
+                    Vector3 threatThresholdVec = Vector3.Project(-threatVec, attackVec);
+                    if (threatThresholdVec.sqrMagnitude > threatMaxRange)
+                    {
+                        threatMaxRange = threatThresholdVec.sqrMagnitude;
+                        ++enemyCount;
+                    }
+                }
+                else
+                {
+                    friendlyShipsCentroid += currShip.transform.position;
+                    ++friendlyCount;
+                }
+            }
+        }
+        if (enemyCount > 0)
+        {
+            threatMaxRange = Mathf.Sqrt(threatMaxRange);
+            if (friendlyCount > 0 && friendlyCount > enemyCount)
+            {
+                friendlyShipsCentroid = friendlyShipsCentroid / friendlyCount;
+                Vector3 newAttackVec = enemyShip.transform.position - friendlyShipsCentroid;
+                return friendlyShipsCentroid + (newAttackVec.normalized * threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient);
+            }
+            else if (friendlyCount > 0)
+            {
+                return transform.position + (attackVec.normalized * Mathf.Min(attackRange, threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient));
+            }
+            else
+            {
+                enemyShipsCentroid = enemyShipsCentroid / (enemyCount + 1);
+                return transform.position - ((enemyShipsCentroid - transform.position).normalized * threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient);
+            }
+        }
+        else
+        {
+            return transform.position + (attackVec.normalized * Mathf.Min(attackRange, mainEnemyRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient));
+        }
+    }
+
+    protected virtual Vector3 HitAndRunDest(ShipBase enemyShip)
+    {
+        float attackRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.HitandRun).Select(x => x.GetMaxRange).Min();
+        float mainEnemyRange = enemyShip.Turrets.Select(x => x.GetMaxRange).Max();
+
+        Collider[] colliders = Physics.OverlapSphere(enemyShip.transform.position, Mathf.Max(mainEnemyRange, attackRange), ObjectFactory.NavBoxesLayerMask);
+        int friendlyCount = 0, enemyCount = 1;
+        Vector3 friendlyCentroid = Vector3.zero;
+        Vector3 enemyCentroid = enemyShip.transform.position;
+        foreach (Collider c in colliders)
+        {
+            ShipBase sb = ShipBase.FromCollider(c);
+            if (sb == _controlledShip || sb == enemyShip || !sb.ShipActiveInCombat)
+            {
+                continue;
+            }
+            if (sb is Ship currShip)
+            {
+                if (_controlledShip.Owner.IsEnemy(currShip.Owner))
+                {
+                    enemyCentroid += currShip.transform.position;
+                    ++enemyCount;
+                }
+                else
+                {
+                    friendlyCentroid += currShip.transform.position;
+                    ++friendlyCount;
+                }
+            }
+        }
+
+
+        friendlyCentroid = friendlyCentroid / friendlyCount;
+        enemyCentroid = enemyCentroid / enemyCount;
+
+        Vector3 fightVec = enemyCentroid - friendlyCentroid;
+
+        if ((enemyCount * 3) <= (friendlyCount * 4) &&
+            _controlledShip.Turrets.
+                Where(t => t.HardpointAIHint == TurretAIHint.HitandRun && t.ComponentIsWorking).
+                    All(t2 => t2.ReadyToFire()))
+        {
+            // Hit
+            Quaternion q1 = Quaternion.AngleAxis(45, Vector3.up);
+            Quaternion q2 = Quaternion.AngleAxis(-45, Vector3.up);
+            Vector3 scaledFightVec = fightVec.normalized * attackRange * GlobalDistances.ShipAIHitAndRunAttackRangeCoefficient;
+            Vector3 attackPt1 = enemyShip.transform.position + (q1 * scaledFightVec);
+            Vector3 attackPt2 = enemyShip.transform.position + (q2 * scaledFightVec);
+            if ((transform.position - attackPt1).sqrMagnitude < (transform.position - attackPt2).sqrMagnitude)
+            {
+                return attackPt1;
+            }
+            else
+            {
+                return attackPt2;
+            }
+        }
+        else
+        {
+            // Run
+            Quaternion q1 = Quaternion.AngleAxis(90, Vector3.up);
+            Vector3 scaledFightVec = fightVec.normalized * _controlledShip.ShipLength * GlobalDistances.ShipAIAntiClumpLengthFactor;
+            Vector3 retreatPt1 = friendlyCentroid + (q1 * scaledFightVec);
+            Vector3 retreatPt2 = friendlyCentroid - (q1 * scaledFightVec);
+            if ((transform.position - retreatPt1).sqrMagnitude < (transform.position - retreatPt2).sqrMagnitude)
+            {
+                return retreatPt1;
+            }
+            else
+            {
+                return retreatPt2;
+            }
+        }
     }
 
     protected virtual void AdvanceToTarget()
@@ -244,8 +399,21 @@ public class ShipAIController : MonoBehaviour
                         TargetShip = null;
                         continue;
                     }
-                    Vector3 attackPos = NavigationDest(TargetShip);
-                    NavigateTo(attackPos);
+
+                    switch (_currAttackBehavior)
+                    {
+                        case ShipAttackPattern.Aggressive:
+                            NormalAttackBehavior();
+                            break;
+                        case ShipAttackPattern.Artillery:
+                            ArtilleryAttackBehavior();
+                            break;
+                        case ShipAttackPattern.HitAndRun:
+                            HitAndRunBehavior();
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 else
                 {
@@ -301,6 +469,23 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
+    protected void NormalAttackBehavior()
+    {
+        Vector3 attackPos = AttackPosition(TargetShip);
+        NavigateTo(attackPos);
+    }
+
+    protected void ArtilleryAttackBehavior()
+    {
+        Vector3 attackPos = NavigationDest(TargetShip);
+        NavigateTo(attackPos);
+    }
+
+    protected void HitAndRunBehavior()
+    {
+        NavigateTo(HitAndRunDest(TargetShip));
+    }
+
     protected virtual Bug0 GenBug0Algorithm()
     {
         return new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth, false);
@@ -330,9 +515,9 @@ public class ShipAIController : MonoBehaviour
     protected float _followDist;
     protected OrderCompleteDlg _orderCallback = null;
     private static readonly float _angleEps = 0.1f;
-    private static readonly float _rangeCoefficient = 0.95f;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
+    protected ShipAttackPattern _currAttackBehavior;
 
     public enum ShipActivity
     {
@@ -345,6 +530,14 @@ public class ShipAIController : MonoBehaviour
         NavigatingToRecovery,
         StartingRecovery,
         Recovering
+    }
+
+    public enum ShipAttackPattern
+    {
+        None,
+        Aggressive,
+        Artillery,
+        HitAndRun
     }
 
     public ShipActivity CurrActivity { get; protected set; }

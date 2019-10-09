@@ -206,8 +206,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             int closestHit = -1;
             for (int i = 0; i < hits.Length; ++i)
             {
-                GameObject collisionGameObj = hits[i].collider.transform.parent.gameObject;
-                if (collisionGameObj == ContainingShip.gameObject)
+                ShipBase shipDetected = ShipBase.FromCollider(hits[i].collider);
+                if (shipDetected == ContainingShip)
                 {
                     continue;
                 }
@@ -228,7 +228,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         return true;
     }
 
-    protected virtual bool ReadyToFire()
+    public virtual bool ReadyToFire()
     {
         float currTime = Time.time;
         return currTime - LastFire > ActualFiringInterval * _firingIntervalCoeff;

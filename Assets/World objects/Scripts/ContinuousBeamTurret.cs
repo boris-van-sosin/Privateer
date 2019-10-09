@@ -22,7 +22,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
         }
     }
 
-    protected override bool ReadyToFire()
+    public override bool ReadyToFire()
     {
         if (_pulesLeft > 0)
         {

@@ -12,7 +12,7 @@ public enum TurretAIHint
     Main,
     Secondary,
     CloseIn,
-    Torpedo
+    HitandRun
 }
 
 public enum ShipRole

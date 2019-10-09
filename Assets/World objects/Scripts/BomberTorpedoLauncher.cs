@@ -146,7 +146,7 @@ public class BomberTorpedoLauncher : TurretBase
 
     protected override ITargetableEntity AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.NavBoxesAllLayerMask);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * GlobalDistances.TurretTargetAcquisitionRangeFactor, ObjectFactory.NavBoxesAllLayerMask);
         ITargetableEntity foundTarget = null;
         int bestScore = 0;
         foreach (Collider c in colliders)

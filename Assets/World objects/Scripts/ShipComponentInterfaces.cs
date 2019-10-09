@@ -59,6 +59,7 @@ public interface ITurret : IShipActiveComponent
     float CurrLocalAngle { get; }
     float GetMaxRange { get; }
     bool IsOutOfAmmo { get; }
+    bool ReadyToFire();
     void ApplyBuff(Buff b);
     IList<ObjectFactory.TacMapEntityType> TargetPriorityList { get; }
     TurretAIHint HardpointAIHint { get; }
