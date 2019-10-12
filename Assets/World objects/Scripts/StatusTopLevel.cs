@@ -120,9 +120,9 @@ public class StatusTopLevel : MonoBehaviour
 
     private static float ShipLenCenter(ShipBase sb)
     {
-        Mesh m = sb.GetComponent<MeshFilter>().mesh;
+        Mesh m = sb.HullObject.GetComponent<MeshFilter>().mesh;
         float localCenter = (m.bounds.max.y + m.bounds.min.y) / 2.0f;
-        return localCenter * sb.transform.lossyScale.y;
+        return localCenter * sb.HullObject.transform.lossyScale.y;
     }
 
     public void DetachShip()

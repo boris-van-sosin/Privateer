@@ -396,8 +396,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected float GlobalDirToShipHeading(Vector3 dir)
     {
-        Vector3 flatDir = Vector3.ProjectOnPlane(dir, _containingShip.transform.forward);
-        return Vector3.SignedAngle(_containingShip.transform.up, flatDir, _containingShip.transform.forward) + 180;
+        Vector3 flatDir = Vector3.ProjectOnPlane(dir, _containingShip.transform.up);
+        return Vector3.SignedAngle(_containingShip.transform.forward, flatDir, _containingShip.transform.up) + 180;
     }
 
     /*protected float AngleToGlobal(float angle)

@@ -1,24 +1,43 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class MovementBase : MonoBehaviour
 {
+    protected virtual void Awake()
+    {
+        _navAgent = GetComponent<NavMeshAgent>();
+        _currControlMode = _prevControlMode = ControlType.NavAgent;
+    }
+
+    protected virtual void Start()
+    {
+        _navAgent.speed = MaxSpeed;
+        _navAgent.acceleration = Thrust;
+        _navAgent.angularSpeed = TurnRate;
+    }
+
     protected virtual void Update()
     {
-        if (_currManeuver != null)
+        switch (_currControlMode)
         {
-            _currManeuver.Advance(Time.deltaTime);
-            if (_currManeuver.Finished)
-            {
-                _currManeuver = null;
-            }
-        }
-        else
-        {
-            ApplyMovement();
-        }
+            case ControlType.Manual:
+                ApplyMovementManual();
+                break;
+            case ControlType.NavAgent:
+                ApplyMovementNavAgent();
+                break;
+            case ControlType.Maneuver:
+                _currManeuver.Advance(Time.deltaTime);
+                if (_currManeuver.Finished)
+                {
+                    FinishManeuver();
+                }
+                break;
+            default:
+                break;
+        };
     }
 
     private void OnDrawGizmos()
@@ -32,7 +51,7 @@ public abstract class MovementBase : MonoBehaviour
         }
     }
 
-    protected virtual void ApplyMovement()
+    protected virtual void ApplyMovementManual()
     {
         ApplyUpdateAcceleration();
         ApplyUpdateTurning();
@@ -49,7 +68,7 @@ public abstract class MovementBase : MonoBehaviour
 
         _prevPos = transform.position;
         _prevRot = transform.rotation;
-        ActualVelocity = directionMult * _speed * transform.up;// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+        ActualVelocity = directionMult * _speed * transform.forward;// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
 
         if (_movementDirection == ShipDirection.Stopped)
         {
@@ -58,6 +77,23 @@ public abstract class MovementBase : MonoBehaviour
         else
         {
             transform.position += ActualVelocity * Time.deltaTime;
+        }
+    }
+
+    protected virtual void ApplyMovementNavAgent()
+    {
+        if (_navAgent.isStopped)
+        {
+            return;
+        }
+        float angleLimit = _navAgent.angularSpeed * Time.deltaTime;
+        if (Vector3.Angle(transform.forward, _navAgent.desiredVelocity) > angleLimit)
+        {
+            Vector3 vTarget = _navAgent.desiredVelocity;
+            Vector3 vForward = transform.forward * vTarget.magnitude;
+            Vector3 vFixed = Vector3.RotateTowards(vForward, vTarget, Mathf.Deg2Rad * angleLimit, 0f);
+            transform.rotation = Quaternion.LookRotation(vFixed, Vector3.up);
+            _navAgent.velocity = vFixed;
         }
     }
 
@@ -183,20 +219,33 @@ public abstract class MovementBase : MonoBehaviour
         {
             turnFactor = -1.0f;
         }
-        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * Time.deltaTime, transform.forward);
+        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * Time.deltaTime, Vector3.up);
         transform.rotation = deltaRot * transform.rotation;
     }
 
     public virtual void StartManeuver(Maneuver m)
     {
         _currManeuver = m;
+        _prevControlMode = _currControlMode;
+        _currControlMode = ControlType.Maneuver;
+        _navAgent.enabled = false;
         _currManeuver.Start(this);
     }
 
     public virtual void StartManeuver(Maneuver m, float forceSpeed)
     {
         _currManeuver = m;
+        _prevControlMode = _currControlMode;
+        _currControlMode = ControlType.Maneuver;
+        _navAgent.enabled = false;
         _currManeuver.Start(this, forceSpeed);
+    }
+
+    private void FinishManeuver()
+    {
+        _currManeuver = null;
+        _navAgent.enabled = false;
+        _currControlMode = _prevControlMode;
     }
 
     public bool UseTargetSpeed { get; set; }
@@ -204,12 +253,14 @@ public abstract class MovementBase : MonoBehaviour
     {
         get
         {
+            _navAgent.speed = MaxSpeed;
             return _targetSpeed;
         }
         set
         {
             _targetSpeed = value;
             UseTargetSpeed = true;
+            _navAgent.speed = _targetSpeed;
             _movementDirection = ShipDirection.Forward;
         }
     }
@@ -218,6 +269,7 @@ public abstract class MovementBase : MonoBehaviour
     public float CurrSpeed { get { return _speed; } }
 
     protected enum ShipDirection { Stopped, Forward, Reverse };
+    protected enum ControlType { Manual, NavAgent, Maneuver };
 
     // Movement stats
     public float MaxSpeed;
@@ -228,12 +280,14 @@ public abstract class MovementBase : MonoBehaviour
     private float _targetSpeed;
 
     protected ShipDirection _movementDirection = ShipDirection.Stopped;
+    protected ControlType _currControlMode, _prevControlMode;
     protected Vector3 _prevPos;
     protected Quaternion _prevRot;
     protected bool _nextAccelerate;
     protected bool _nextBrake;
     protected bool _nextTurnLeft;
     protected bool _nextTurnRight;
+    protected NavMeshAgent _navAgent;
 
     private Maneuver _currManeuver;
 }

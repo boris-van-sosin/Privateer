@@ -156,6 +156,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             UserInput input = FindObjectOfType<UserInput>();
             input.ControlledShip = s;
+            s.SetManualControl(true);
         }
         else
         {

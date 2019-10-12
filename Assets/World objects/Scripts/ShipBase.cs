@@ -6,8 +6,9 @@ using System.Linq;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class ShipBase : MovementBase, ITargetableEntity
 {
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         HullHitPoints = MaxHullHitPoints;
         ComputeLength();
         WeaponGroups = null;
@@ -29,10 +30,10 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         CombinedBuff = Buff.Default();
 
         Transform navBox = transform.Find("NavBox");
-        if (navBox != null)
+        if (navBox != null && HullObject != null)
         {
             BoxCollider navBoxCollider = navBox.gameObject.AddComponent<BoxCollider>();
-            Bounds bbox = transform.GetComponent<MeshFilter>().mesh.bounds;
+            Bounds bbox = HullObject.GetComponent<MeshFilter>().mesh.bounds;
             bbox.Expand(NavBoxExpandFactor * 0.5f / transform.localScale.x);
             navBoxCollider.center = bbox.center;
             navBoxCollider.size = bbox.size;
@@ -40,7 +41,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         }
     }
 
-    protected override void ApplyMovement()
+    protected override void ApplyMovementManual()
     {
         ApplyUpdateAcceleration();
         ApplyUpdateTurning();
@@ -57,7 +58,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
         _prevPos = transform.position;
         _prevRot = transform.rotation;
-        Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.up);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
+        Vector3 targetVelocity = (ActualVelocity = directionMult * _speed * transform.forward);// was: Time.deltaTime * (ActualVelocity = directionMult * _speed * transform.up);
         Vector3 rbVelocity = _rigidBody.velocity;
         if (TowedByHarpax != null)
         {
@@ -79,7 +80,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         }
         else
         {
-            _rigidBody.AddForce(targetVelocity - rbVelocity, ForceMode.VelocityChange);
+            _rigidBody.velocity = targetVelocity;
+            transform.position += targetVelocity * Time.deltaTime;
         }
         if (_autoHeading && ShipControllable)
         {
@@ -201,7 +203,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             turnFactor = -1.0f;
         }
-        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * _turnCoefficient * Time.deltaTime, transform.forward);
+        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * _turnCoefficient * Time.deltaTime, Vector3.up);
         transform.rotation = deltaRot * transform.rotation;
     }
 
@@ -222,7 +224,6 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     public override void StartManeuver(Maneuver m)
     {
-        _rigidBody.isKinematic = true;
         _rigidBody.velocity = Vector3.zero;
         base.StartManeuver(m);
         m.OnManeuverFinish += delegate (Maneuver mm)
@@ -241,8 +242,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
                 _movementDirection = ShipDirection.Stopped;
             }
             _speed = mm.Velocity.magnitude;
-            _rigidBody.isKinematic = false;
-            _rigidBody.AddForce(mm.Velocity - _rigidBody.velocity, ForceMode.VelocityChange);
+            _rigidBody.velocity = mm.Velocity;
         };
     }
 
@@ -253,11 +253,19 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     private void ComputeLength()
     {
-        Mesh m = GetComponent<MeshFilter>().mesh;
-        ShipUnscaledLength = m.bounds.size.y;
-        ShipUnscaledWidth = m.bounds.size.x;
-        ShipLength = ShipUnscaledLength * transform.lossyScale.y;
-        ShipWidth = ShipUnscaledWidth * transform.lossyScale.x;
+        if (HullObject != null)
+        {
+            Mesh m = HullObject.GetComponent<MeshFilter>().mesh;
+            ShipUnscaledLength = m.bounds.size.y;
+            ShipUnscaledWidth = m.bounds.size.x;
+
+            ShipLength = ShipUnscaledLength * HullObject.lossyScale.y;
+            ShipWidth = ShipUnscaledWidth * HullObject.lossyScale.x;
+        }
+        else
+        {
+            ShipLength = ShipWidth = 0f;
+        }
     }
 
     private void InitCircle()
@@ -685,6 +693,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     public virtual bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat) { return true; }
     public virtual void NotifyInComabt() { }
     public abstract ObjectFactory.TacMapEntityType TargetableEntityType { get; }
+
+    public Transform HullObject;
 
     public string ProductionKey;
 

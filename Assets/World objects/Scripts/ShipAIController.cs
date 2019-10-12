@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 public class ShipAIController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class ShipAIController : MonoBehaviour
         _bug0Alg = GenBug0Algorithm();
         TargetShip = null;
 
+        _navAgent = GetComponent<NavMeshAgent>();
         // temporary default:
         _currAttackBehavior = ShipAttackPattern.Aggressive;
     }
@@ -101,7 +103,7 @@ public class ShipAIController : MonoBehaviour
     protected virtual Vector3 AttackPosition(ShipBase enemyShip)
     {
         float minRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.Main || t.HardpointAIHint == TurretAIHint.Secondary).Select(x => x.GetMaxRange).Min();
-        Vector3 Front = enemyShip.transform.up;
+        Vector3 Front = enemyShip.transform.forward;
         //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
         //Vector3 Right = -Left;
         //Vector3 Rear = -Front;
@@ -290,17 +292,31 @@ public class ShipAIController : MonoBehaviour
         Vector3 vecToTarget;
         if (!GetCurrMovementTarget(out vecToTarget))
         {
-            _bug0Alg.HasNavTarget = false;
+            if (_navAgent != null)
+            {
+                _navAgent.isStopped = true;
+            }
+            else
+            {
+                _bug0Alg.HasNavTarget = false;
+            }
             return;
         }
 
-        _bug0Alg.NavTarget = _navTarget;
-
-        _bug0Alg.Step();
-
-        if (_bug0Alg.AtDestination)
+        if (_navAgent != null)
         {
-            _doNavigate = false;
+        }
+        else
+        {
+
+            _bug0Alg.NavTarget = _navTarget;
+
+            _bug0Alg.Step();
+
+            if (_bug0Alg.AtDestination)
+            {
+                _doNavigate = false;
+            }
         }
     }
 
@@ -337,6 +353,10 @@ public class ShipAIController : MonoBehaviour
         _navTarget = target;
         _doNavigate = true;
         _orderCallback = onCompleteNavigation;
+        if (_navAgent != null)
+        {
+            _navAgent.SetDestination(_navTarget);
+        }
     }
 
     protected void SetFollowTarget(Transform followTarget, float dist)
@@ -502,6 +522,7 @@ public class ShipAIController : MonoBehaviour
 
     protected ShipBase _controlledShip;
     protected Bug0 _bug0Alg;
+    protected NavMeshAgent _navAgent;
 
     protected static readonly int _numAttackAngles = 12;
     protected static readonly int _numAttackDistances = 3;
@@ -542,5 +563,5 @@ public class ShipAIController : MonoBehaviour
 
     public ShipActivity CurrActivity { get; protected set; }
 
-    protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
+    protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(2f);
 }

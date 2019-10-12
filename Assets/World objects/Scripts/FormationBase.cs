@@ -5,14 +5,10 @@ using UnityEngine;
 
 public class FormationBase : MovementBase
 {
-    protected virtual void Start()
+    protected override void Start()
     {
+        base.Start();
         ComputeDiameter();
-    }
-
-    protected virtual void Awake()
-    {
-        
     }
 
     public void CreatePositions(int n)
