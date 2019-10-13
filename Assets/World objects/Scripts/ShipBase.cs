@@ -11,7 +11,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         base.Awake();
         HullHitPoints = MaxHullHitPoints;
         ComputeLength();
-        _navAgent.radius = Mathf.Min(ShipWidth, ShipLength) / 2;
+        _navAgent.radius = Mathf.Max(ShipWidth, ShipLength) / 2;
         WeaponGroups = null;
         TowingByHarpax = null;
         TowedByHarpax = null;
@@ -36,7 +36,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             BoxCollider navBoxCollider = navBox.gameObject.AddComponent<BoxCollider>();
             Bounds bbox = HullObject.GetComponent<MeshFilter>().mesh.bounds;
-            bbox.Expand(NavBoxExpandFactor * 0.5f / transform.localScale.x);
+            Vector3 tmpSz = bbox.size * NavBoxExpandFactor * HullObject.localScale.x;
+            bbox.size = new Vector3(tmpSz.x, tmpSz.z, tmpSz.y);
             navBoxCollider.center = bbox.center;
             navBoxCollider.size = bbox.size;
             navBoxCollider.isTrigger = true;
