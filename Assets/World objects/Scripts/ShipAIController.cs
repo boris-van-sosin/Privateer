@@ -353,7 +353,7 @@ public class ShipAIController : MonoBehaviour
         _navTarget = target;
         _doNavigate = true;
         _orderCallback = onCompleteNavigation;
-        if (_navAgent != null)
+        if (_navAgent != null && !_controlledShip.ShipImmobilized)
         {
             _navAgent.SetDestination(_navTarget);
         }
@@ -407,12 +407,7 @@ public class ShipAIController : MonoBehaviour
                 {
                     AcquireTarget();
                 }
-                Vector3? antiClumpDest = AntiClumpNav();
-                if (antiClumpDest.HasValue)
-                {
-                    NavigateTo(antiClumpDest.Value);
-                }
-                else if (TargetShip != null)
+                if (TargetShip != null)
                 {
                     if (TargetShip.ShipDisabled)
                     {
@@ -420,32 +415,40 @@ public class ShipAIController : MonoBehaviour
                         continue;
                     }
 
-                    switch (_currAttackBehavior)
+                    if (_cyclesToRecomputePath == 0)
                     {
-                        case ShipAttackPattern.Aggressive:
-                            NormalAttackBehavior();
-                            break;
-                        case ShipAttackPattern.Artillery:
-                            ArtilleryAttackBehavior();
-                            break;
-                        case ShipAttackPattern.HitAndRun:
-                            HitAndRunBehavior();
-                            break;
-                        default:
-                            break;
+                        switch (_currAttackBehavior)
+                        {
+                            case ShipAttackPattern.Aggressive:
+                                NormalAttackBehavior();
+                                break;
+                            case ShipAttackPattern.Artillery:
+                                ArtilleryAttackBehavior();
+                                break;
+                            case ShipAttackPattern.HitAndRun:
+                                HitAndRunBehavior();
+                                break;
+                            default:
+                                break;
+                        }
+                        _cyclesToRecomputePath = Random.Range(3, 7);
+                    }
+                    else
+                    {
+                        --_cyclesToRecomputePath;
                     }
                 }
                 else
                 {
-                    NavigateWithoutTarget();
-                }
-            }
-            else if (_controlledShip.ShipControllable && CurrActivity != ShipActivity.Following && CurrActivity != ShipActivity.ControllingPosition)
-            {
-                Vector3? antiClumpDest = AntiClumpNav();
-                if (antiClumpDest.HasValue)
-                {
-                    NavigateTo(antiClumpDest.Value);
+                    if (_cyclesToRecomputePath == 0)
+                    {
+                        NavigateWithoutTarget();
+                        _cyclesToRecomputePath = Random.Range(3, 7);
+                    }
+                    else
+                    {
+                        --_cyclesToRecomputePath;
+                    }
                 }
             }
             else if (!_controlledShip.ShipActiveInCombat)
@@ -539,6 +542,7 @@ public class ShipAIController : MonoBehaviour
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
     protected ShipAttackPattern _currAttackBehavior;
+    protected int _cyclesToRecomputePath = 0;
 
     public enum ShipActivity
     {
@@ -563,5 +567,5 @@ public class ShipAIController : MonoBehaviour
 
     public ShipActivity CurrActivity { get; protected set; }
 
-    protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(2f);
+    protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
 }

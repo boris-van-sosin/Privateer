@@ -15,6 +15,7 @@ public class Ship : ShipBase
         InitComponentSlots();
         InitCrew();
         InitDamageEffects();
+        _speedOnTurningCoefficient = 0.5f;
     }
 
     public override void Activate()
@@ -510,15 +511,14 @@ public class Ship : ShipBase
 
     protected override bool CanDoAcceleration()
     {
-        return _engine.ThrustWorks && _engine.ComponentIsWorking;
+        return _engine.RequestEngine();
     }
 
     public override void ApplyTurning(bool left)
     {
         if (_engine != null)
         {
-            _engine.ComponentActive = true;
-            if (!_engine.ThrustWorks || !_engine.ComponentIsWorking)
+            if (!_engine.RequestEngine())
             {
                 return;
             }
@@ -539,7 +539,7 @@ public class Ship : ShipBase
 
     protected override bool CanDoTurning()
     {
-        return _engine.ThrustWorks && _engine.ComponentIsWorking;
+        return _engine.RequestEngine();
     }
 
     public void SetRequiredHeading(Vector3 targetPoint)

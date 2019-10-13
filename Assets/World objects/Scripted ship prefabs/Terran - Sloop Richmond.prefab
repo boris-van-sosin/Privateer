@@ -47257,6 +47257,7 @@ GameObject:
   - component: {fileID: 114294262926575966}
   - component: {fileID: 54792771181453728}
   - component: {fileID: 64797826462041976}
+  - component: {fileID: -634744210187642912}
   m_Layer: 9
   m_Name: Terran - Sloop Richmond
   m_TagString: Untagged
@@ -47356,6 +47357,7 @@ MonoBehaviour:
   Thrust: 0.1
   Braking: 0.8
   TurnRate: 30
+  HullObject: {fileID: 0}
   ProductionKey: Richmond
   MaxHullHitPoints: 8000
   Owner: {fileID: 0}
@@ -47411,6 +47413,28 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 97000f975d2b3354392472170e54d320, type: 3}
+--- !u!195 &-634744210187642912
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516312774358914}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.015500003
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.10409654
+  m_BaseOffset: 0.05204827
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1523710320501636
 GameObject:
   m_ObjectHideFlags: 0

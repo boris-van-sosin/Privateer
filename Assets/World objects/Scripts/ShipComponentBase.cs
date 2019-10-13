@@ -63,10 +63,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
             {
                 Status = ComponentStatus.Undamaged;
             }
-            if (OnHitpointsChanged != null)
-            {
-                OnHitpointsChanged();
-            }
+            OnHitpointsChanged?.Invoke();
         }
     }
     public virtual bool ComponentIsWorking

@@ -11,6 +11,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         base.Awake();
         HullHitPoints = MaxHullHitPoints;
         ComputeLength();
+        _navAgent.radius = Mathf.Min(ShipWidth, ShipLength) / 2;
         WeaponGroups = null;
         TowingByHarpax = null;
         TowedByHarpax = null;
@@ -18,6 +19,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         _rigidBody = GetComponent<Rigidbody>();
         UseTargetSpeed = false;
         _circleStatus = ShipCircleStatus.Deselected;
+        _speedOnTurningCoefficient = 1f;
     }
 
     public virtual void Activate()
@@ -206,6 +208,39 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         }
         Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * _turnCoefficient * Time.deltaTime, Vector3.up);
         transform.rotation = deltaRot * transform.rotation;
+    }
+
+    protected override void ApplyMovementNavAgent()
+    {
+        if (_navAgent.isStopped)
+        {
+            return;
+        }
+        if (!CanDoAcceleration())
+        {
+            _navAgent.velocity = _rigidBody.velocity = ActualVelocity;
+            return;
+        }
+
+        float angleLimit = _navAgent.angularSpeed * Time.deltaTime;
+        float requiredTurningAngle = Vector3.Angle(transform.forward, _navAgent.desiredVelocity);
+        if (requiredTurningAngle > Mathf.Epsilon)
+        {
+            _navAgent.speed = MaxSpeedWBuf * _speedOnTurningCoefficient;
+        }
+        else
+        {
+            _navAgent.speed = MaxSpeedWBuf;
+        }
+        if (requiredTurningAngle > angleLimit)
+        {
+            Vector3 vTarget = _navAgent.desiredVelocity;
+            Vector3 vForward = transform.forward * vTarget.magnitude;
+            Vector3 vFixed = Vector3.RotateTowards(vForward, vTarget, Mathf.Deg2Rad * angleLimit, 0f);
+            transform.rotation = Quaternion.LookRotation(vFixed, Vector3.up);
+            _navAgent.velocity = vFixed;
+        }
+        ActualVelocity = _navAgent.velocity;
     }
 
     protected virtual bool CanDoAcceleration()
@@ -738,6 +773,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     protected float _brakingFactor;
     protected float _brakingTargetSpeedFactor;
     protected float _turnCoefficient;
+    protected float _speedOnTurningCoefficient;
 
     public Faction Owner;
 
