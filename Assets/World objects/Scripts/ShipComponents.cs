@@ -520,10 +520,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         }
         else if (_nextBrake)
         {
-            if (OnToggle != null)
-            {
-                OnToggle(true);
-            }
+            OnToggle?.Invoke(true);
             _nextDeactivate = true;
         }
         else

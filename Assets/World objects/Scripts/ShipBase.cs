@@ -80,8 +80,9 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         }
         else
         {
-            _rigidBody.velocity = targetVelocity;
-            transform.position += targetVelocity * Time.deltaTime;
+            //_rigidBody.velocity = targetVelocity;
+            //_rigidBody.position += targetVelocity * Time.deltaTime;
+            _rigidBody.AddForce((targetVelocity - rbVelocity), ForceMode.Impulse);
         }
         if (_autoHeading && ShipControllable)
         {
@@ -224,6 +225,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     public override void StartManeuver(Maneuver m)
     {
+        _rigidBody.isKinematic = true;
         _rigidBody.velocity = Vector3.zero;
         base.StartManeuver(m);
         m.OnManeuverFinish += delegate (Maneuver mm)
@@ -242,6 +244,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
                 _movementDirection = ShipDirection.Stopped;
             }
             _speed = mm.Velocity.magnitude;
+            _rigidBody.isKinematic = false;
             _rigidBody.velocity = mm.Velocity;
         };
     }
