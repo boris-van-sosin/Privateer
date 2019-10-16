@@ -1090,7 +1090,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.00001
+      value: 100.00002
       objectReference: {fileID: 0}
     - target: {fileID: 224619660156623418, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -3951,6 +3951,8 @@ MonoBehaviour:
     Mtl: {fileID: 2100000, guid: 2baa277e935288948967f12f2b96b1fc, type: 2}
   - Key: ShipRingSurrenderMtl
     Mtl: {fileID: 2100000, guid: 85c7728fbb3b9b14cac9d9f377353e0c, type: 2}
+  NavGuide: {fileID: 1869077230419552563, guid: 391673ac8b7a0df42813ffe202bd7537,
+    type: 3}
   BoardingStatusCanvas: {fileID: 223708177522948386, guid: d7732c5d13a81d441b7d04c25a00644b,
     type: 3}
   SelectionBoxCanvas: {fileID: 2048076210}

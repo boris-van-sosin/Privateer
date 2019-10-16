@@ -156,11 +156,13 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             UserInput input = FindObjectOfType<UserInput>();
             input.ControlledShip = s;
-            s.SetManualControl(true);
+            ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
+            AIController.ManualControl = true;
         }
         else
         {
-            s.gameObject.AddComponent<ShipAIController>();
+            ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
+            AIController.ManualControl = false;
         }
 
         s.DisplayName =

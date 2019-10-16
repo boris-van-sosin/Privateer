@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class FormationBase : MovementBase
 {
-    protected override void Start()
+    protected virtual void Start()
     {
-        base.Start();
         ComputeDiameter();
     }
 
@@ -147,6 +146,8 @@ public class FormationBase : MovementBase
     }
 
     public float Diameter { get; private set; }
+
+    public override float ObjectSize => Diameter;
 
     private static readonly Color[] colors = new Color[] { Color.red, Color.blue, Color.green, Color.magenta };
 

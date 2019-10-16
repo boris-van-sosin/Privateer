@@ -6,16 +6,20 @@ using UnityEngine.AI;
 
 public class ShipAIController : MonoBehaviour
 {
-	// Use this for initialization
-	protected virtual void Start ()
+    // Use this for initialization
+    protected virtual void Start ()
     {
         _controlledShip = GetComponent<ShipBase>();
         CurrActivity = ShipActivity.ControllingPosition;
-        StartCoroutine(AcquireTargetPulse());
+        if (!ManualControl)
+        {
+            StartCoroutine(AcquireTargetPulse());
+        }
         _bug0Alg = GenBug0Algorithm();
         TargetShip = null;
-
-        _navAgent = GetComponent<NavMeshAgent>();
+        _navGuide = ObjectFactory.CreateNavGuide(transform.position, transform.forward);
+        _navGuide.Attach(_controlledShip);
+        _navGuide.ManualControl = ManualControl;
         // temporary default:
         _currAttackBehavior = ShipAttackPattern.Aggressive;
     }
@@ -23,7 +27,7 @@ public class ShipAIController : MonoBehaviour
 	// Update is called once per frame
 	protected virtual void Update ()
     {
-        if (!_controlledShip.ShipControllable)
+        if (ManualControl || !_controlledShip.ShipControllable)
         {
             return;
         }
@@ -292,9 +296,9 @@ public class ShipAIController : MonoBehaviour
         Vector3 vecToTarget;
         if (!GetCurrMovementTarget(out vecToTarget))
         {
-            if (_navAgent != null)
+            if (_navGuide != null)
             {
-                _navAgent.isStopped = true;
+                _navGuide.Halt();
             }
             else
             {
@@ -303,7 +307,7 @@ public class ShipAIController : MonoBehaviour
             return;
         }
 
-        if (_navAgent != null)
+        if (_navGuide != null)
         {
         }
         else
@@ -353,9 +357,9 @@ public class ShipAIController : MonoBehaviour
         _navTarget = target;
         _doNavigate = true;
         _orderCallback = onCompleteNavigation;
-        if (_navAgent != null && !_controlledShip.ShipImmobilized)
+        if (_navGuide != null && !_controlledShip.ShipImmobilized)
         {
-            _navAgent.SetDestination(_navTarget);
+            _navGuide.SetDestination(_navTarget);
         }
     }
 
@@ -521,11 +525,13 @@ public class ShipAIController : MonoBehaviour
         _bug0Alg.DrawDebugLines();
     }
 
+    public bool ManualControl { get; set; }
+
     public delegate void OrderCompleteDlg();
 
     protected ShipBase _controlledShip;
     protected Bug0 _bug0Alg;
-    protected NavMeshAgent _navAgent;
+    protected NavigationGuide _navGuide;
 
     protected static readonly int _numAttackAngles = 12;
     protected static readonly int _numAttackDistances = 3;

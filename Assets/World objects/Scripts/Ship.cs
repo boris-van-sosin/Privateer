@@ -378,20 +378,6 @@ public class Ship : ShipBase
         }
 	}
 
-    public void SetManualControl(bool manual)
-    {
-        if (_currControlMode == ControlType.NavAgent && manual)
-        {
-            _currControlMode = ControlType.Manual;
-            //_navAgent.enabled = false;
-        }
-        else if(_currControlMode == ControlType.Manual && !manual)
-        {
-            _currControlMode = ControlType.NavAgent;
-            //_navAgent.enabled = true;
-        }
-    }
-
     protected void RevertRotation()
     {
         transform.rotation = _prevRot;

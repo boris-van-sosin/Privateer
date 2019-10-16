@@ -11,7 +11,6 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         base.Awake();
         HullHitPoints = MaxHullHitPoints;
         ComputeLength();
-        _navAgent.radius = Mathf.Max(ShipWidth, ShipLength) / 2;
         WeaponGroups = null;
         TowingByHarpax = null;
         TowedByHarpax = null;
@@ -83,9 +82,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         }
         else
         {
-            //_rigidBody.velocity = targetVelocity;
-            //_rigidBody.position += targetVelocity * Time.deltaTime;
-            _rigidBody.AddForce((targetVelocity - rbVelocity), ForceMode.Impulse);
+            _rigidBody.AddForce((targetVelocity - rbVelocity), ForceMode.VelocityChange);
         }
         if (_autoHeading && ShipControllable)
         {
@@ -197,51 +194,27 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             return;
         }
-        bool thisLeft = _nextTurnLeft;
-        _nextTurnLeft = _nextTurnRight = false;
+        bool thisLeft = _nextTurnLeft, thisTurnToDir = _nextTurnToDir;
+        _nextTurnLeft = _nextTurnRight = _nextTurnToDir = false;
+
         if (!CanDoTurning())
             return;
 
-        float turnFactor = 1.0f;
-        if (thisLeft)
+        if (thisTurnToDir)
         {
-            turnFactor = -1.0f;
-        }
-        Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * _turnCoefficient * Time.deltaTime, Vector3.up);
-        transform.rotation = deltaRot * transform.rotation;
-    }
-
-    protected override void ApplyMovementNavAgent()
-    {
-        if (_navAgent.isStopped)
-        {
-            return;
-        }
-        if (!CanDoAcceleration())
-        {
-            _navAgent.velocity = _rigidBody.velocity = ActualVelocity;
-            return;
-        }
-
-        float angleLimit = _navAgent.angularSpeed * Time.deltaTime;
-        float requiredTurningAngle = Vector3.Angle(transform.forward, _navAgent.desiredVelocity);
-        if (requiredTurningAngle > Mathf.Epsilon)
-        {
-            _navAgent.speed = MaxSpeedWBuf * _speedOnTurningCoefficient;
+            Vector3 newHeading = Vector3.RotateTowards(transform.forward, _nextTurnTarget, TurnRate * Time.deltaTime * Mathf.Deg2Rad, 0f);
+            transform.rotation = Quaternion.LookRotation(newHeading, Vector3.up);
         }
         else
         {
-            _navAgent.speed = MaxSpeedWBuf;
+            float turnFactor = 1.0f;
+            if (thisLeft)
+            {
+                turnFactor = -1.0f;
+            }
+            Quaternion deltaRot = Quaternion.AngleAxis(turnFactor * TurnRate * Time.deltaTime, Vector3.up);
+            transform.rotation = deltaRot * transform.rotation;
         }
-        if (requiredTurningAngle > angleLimit)
-        {
-            Vector3 vTarget = _navAgent.desiredVelocity;
-            Vector3 vForward = transform.forward * vTarget.magnitude;
-            Vector3 vFixed = Vector3.RotateTowards(vForward, vTarget, Mathf.Deg2Rad * angleLimit, 0f);
-            transform.rotation = Quaternion.LookRotation(vFixed, Vector3.up);
-            _navAgent.velocity = vFixed;
-        }
-        ActualVelocity = _navAgent.velocity;
     }
 
     protected virtual bool CanDoAcceleration()
@@ -306,6 +279,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             ShipLength = ShipWidth = 0f;
         }
     }
+
+    public override float ObjectSize => Mathf.Max(ShipWidth, ShipLength);
 
     private void InitCircle()
     {

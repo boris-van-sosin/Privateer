@@ -307,6 +307,11 @@ public class ObjectPrototypes : MonoBehaviour
         }
     }
 
+    public NavigationGuide CreateNavGuide(Vector3 pos, Vector3 forward)
+    {
+        return Instantiate(NavGuide, pos, Quaternion.LookRotation(forward));
+    }
+
     public ValueTuple<Canvas, BoardingProgressPanel> CreateBoardingProgressPanel()
     {
         Canvas boardibfCanvas = Instantiate(BoardingStatusCanvas);
@@ -348,6 +353,8 @@ public class ObjectPrototypes : MonoBehaviour
     public SprikeKeyValue[] Sprites;
 
     public MaterialKeyValue[] Materials;
+
+    public NavigationGuide NavGuide;
 
     public Canvas BoardingStatusCanvas;
 

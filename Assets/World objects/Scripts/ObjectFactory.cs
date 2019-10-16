@@ -367,6 +367,10 @@ public static class ObjectFactory
         return _prototypes.GetMaterial(key);
     }
 
+    public static NavigationGuide CreateNavGuide(Vector3 pos, Vector3 forward)
+    {
+        return _prototypes.CreateNavGuide(pos, forward);
+    }
 
     public static StatusSubsystem CreateStatusSubsytem(IShipActiveComponent comp)
     {
