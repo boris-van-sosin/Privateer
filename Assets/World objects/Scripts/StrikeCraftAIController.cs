@@ -43,14 +43,11 @@ public class StrikeCraftAIController : ShipAIController
         Vector3 vecToTarget;
         if (!GetCurrMovementTarget(out vecToTarget))
         {
-            _bug0Alg.HasNavTarget = false;
+            _navGuide.Halt();
             return;
         }
 
-        _bug0Alg.NavTarget = transform.position + vecToTarget;
-
-        _bug0Alg.Step();
-        //_controlledShip.TargetSpeed = _controlledShip.MaxSpeed;
+        //_bug0Alg.NavTarget = transform.position + vecToTarget;
     }
 
     protected override Vector3 AttackPosition(ShipBase enemyShip)
@@ -139,7 +136,13 @@ public class StrikeCraftAIController : ShipAIController
 
     protected override void NavigateWithoutTarget()
     {
-        if (_formationAI.DoMaintainFormation())
+        if (_doFollow)
+        {
+            Vector3 followTarget;
+            GetCurrMovementTarget(out followTarget);
+            NavigateTo(followTarget);
+        }
+        else if (_formationAI.DoMaintainFormation())
         {
             Vector3 navTarget;
             if (_controlledCraft.AheadOfPositionInFormation())
@@ -160,9 +163,9 @@ public class StrikeCraftAIController : ShipAIController
         return new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth, true);
     }
 
-    void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
-        _bug0Alg.DrawDebugLines();
+        base.OnDrawGizmos();
     }
 
     public void OrderStartNavigatenToHost()
@@ -255,6 +258,11 @@ public class StrikeCraftAIController : ShipAIController
     private Vector3 ForceY(Vector3 v, float y)
     {
         return new Vector3(v.x, y, v.z);
+    }
+
+    void OnDestroy()
+    {
+        Destroy(_navGuide.gameObject);
     }
 
     private static readonly float _strikeCraftAngleEps = 5f;

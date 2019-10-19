@@ -27,7 +27,7 @@ public class Maneuver
     {
         _ship = s;
         _currSeg = 0;
-        Velocity = _ship.transform.up * forceSpeed;
+        Velocity = _ship.transform.forward * forceSpeed;
         StartSegment(forceSpeed);
     }
 
@@ -134,17 +134,17 @@ public class Maneuver
             {
                 if (conditionSeg.AccelerationBehavior.Accelerate)
                 {
-                    newVelocity += _ship.transform.up * (_ship.Thrust * timeInterval);
+                    newVelocity += _ship.transform.forward * (_ship.Thrust * timeInterval);
                 }
                 else
                 {
-                    newVelocity += _ship.transform.up * (-_ship.Braking * timeInterval);
+                    newVelocity += _ship.transform.forward * (-_ship.Braking * timeInterval);
 
                 }
 
                 if (newVelocity.sqrMagnitude > _ship.MaxSpeed * _ship.MaxSpeed)
                 {
-                    newVelocity = _ship.transform.up * _ship.MaxSpeed;
+                    newVelocity = _ship.transform.forward * _ship.MaxSpeed;
                 }
             }
             _ship.transform.position += newVelocity * timeInterval;
@@ -199,7 +199,7 @@ public class Maneuver
                 _t = nextT;
                 nextPos = pathSeg.Path.EvalPointAndOrientation(_t);
             }
-            _ship.transform.SetPositionAndRotation(nextPos.Item1, Quaternion.LookRotation(nextPos.Item3, nextPos.Item2));
+            _ship.transform.SetPositionAndRotation(nextPos.Item1, Quaternion.LookRotation(nextPos.Item2, nextPos.Item3));
             if (tOvershoot > 0)
             {
                 Velocity = nextPos.Item2 * (targetSpeed + tOvershoot / paramSpeed);

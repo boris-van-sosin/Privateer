@@ -27,7 +27,7 @@ public class FormationBase : MovementBase
         float currX = 0, currXAbs = 0, currY = 0;
         while (posIdx < Positions.Length)
         {
-            Positions[posIdx].localPosition = new Vector3(currX, currY, 0);
+            Positions[posIdx].localPosition = new Vector3(currX, 0f, currY);
             switch (f)
             {
                 case FormationType.LineAhead:

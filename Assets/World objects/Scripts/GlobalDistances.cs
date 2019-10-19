@@ -21,7 +21,7 @@ public static class GlobalDistances
     public static readonly float StrikeCraftAIAheadOfFormationNavDist = 1.0f;
     public static readonly float StrikeCraftAIBehindFormationNavDist = 0.2f;
     public static readonly float StrikeCraftAIFormationRecoveryTargetDist = 1.25f;
-    public static readonly float StrikeCraftAIRecoveryDist = 2.5f;
+    public static readonly float StrikeCraftAIRecoveryDist = 4.5f;
     public static readonly float StrikeCraftAIRecoveryPathFixSize = 1.25f;
     public static readonly float StrikeCraftAIFormationPositionTolerance = 0.1f;
     public static readonly float StrikeCraftAIFormationEscortDist = 6f;

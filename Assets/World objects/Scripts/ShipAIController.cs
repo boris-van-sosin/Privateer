@@ -296,31 +296,8 @@ public class ShipAIController : MonoBehaviour
         Vector3 vecToTarget;
         if (!GetCurrMovementTarget(out vecToTarget))
         {
-            if (_navGuide != null)
-            {
-                _navGuide.Halt();
-            }
-            else
-            {
-                _bug0Alg.HasNavTarget = false;
-            }
+            _navGuide.Halt();
             return;
-        }
-
-        if (_navGuide != null)
-        {
-        }
-        else
-        {
-
-            _bug0Alg.NavTarget = _navTarget;
-
-            _bug0Alg.Step();
-
-            if (_bug0Alg.AtDestination)
-            {
-                _doNavigate = false;
-            }
         }
     }
 
@@ -352,12 +329,9 @@ public class ShipAIController : MonoBehaviour
 
     protected void NavigateTo(Vector3 target, OrderCompleteDlg onCompleteNavigation)
     {
-        _doFollow = false;
-
         _navTarget = target;
-        _doNavigate = true;
         _orderCallback = onCompleteNavigation;
-        if (_navGuide != null && !_controlledShip.ShipImmobilized)
+        if (!_controlledShip.ShipImmobilized)
         {
             _navGuide.SetDestination(_navTarget);
         }
@@ -459,6 +433,18 @@ public class ShipAIController : MonoBehaviour
             {
                 yield break;
             }
+            else
+            {
+                if (_cyclesToRecomputePath == 0)
+                {
+                    NavigateWithoutTarget();
+                    _cyclesToRecomputePath = Random.Range(3, 7);
+                }
+                else
+                {
+                    --_cyclesToRecomputePath;
+                }
+            }
 
             yield return _targetAcquirePulseDelay;
         }
@@ -499,17 +485,23 @@ public class ShipAIController : MonoBehaviour
     protected void NormalAttackBehavior()
     {
         Vector3 attackPos = AttackPosition(TargetShip);
+        _doNavigate = true;
+        _doFollow = false;
         NavigateTo(attackPos);
     }
 
     protected void ArtilleryAttackBehavior()
     {
         Vector3 attackPos = NavigationDest(TargetShip);
+        _doNavigate = true;
+        _doFollow = false;
         NavigateTo(attackPos);
     }
 
     protected void HitAndRunBehavior()
     {
+        _doNavigate = true;
+        _doFollow = false;
         NavigateTo(HitAndRunDest(TargetShip));
     }
 
@@ -518,11 +510,11 @@ public class ShipAIController : MonoBehaviour
         return new Bug0(_controlledShip, _controlledShip.ShipLength, _controlledShip.ShipWidth, false);
     }
 
-    void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, _navTarget);
-        _bug0Alg.DrawDebugLines();
+        //_bug0Alg.DrawDebugLines();
     }
 
     public bool ManualControl { get; set; }

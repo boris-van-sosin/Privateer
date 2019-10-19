@@ -32,7 +32,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             for (int i = 0; i < _numToSpawn; ++i)
             {
-                Vector3 offset = new Vector3(friendly ? -(i % 4) : (i % 4), -(i / 4), 0) * 6;
+                Vector3 offset = new Vector3(friendly ? -(i % 4) : (i % 4), 0f, -(i / 4)) * 6;
                 CreateShipInner(shipKey, friendly, userShip && (i == 0), offset);
             }
         }
