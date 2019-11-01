@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 public class StrikeCraftFormationAIController : MonoBehaviour
 {
@@ -10,6 +11,10 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     void Start()
     {
         _controlledFormation = GetComponent<StrikeCraftFormation>();
+        _navGuide = ObjectFactory.CreateNavGuide(transform.position, transform.forward);
+        _navGuide.Attach(_controlledFormation);
+        _navGuide.ManualControl = false;
+        _innerNavAgent = _navGuide.GetComponent<NavMeshAgent>();
         StartCoroutine(AcquireTargetPulse());
         _currState = FormationState.Idle;
     }
@@ -103,34 +108,25 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         else if (_doFollow)
         {
-            vecToTarget = _followTarget.transform.position - transform.position;
-            Vector3 dirToTarget = vecToTarget.normalized;
-            vecToTarget -= dirToTarget * _followDist;
+            Vector3 followPos = GetFollowPosition(_followTarget);
+            vecToTarget = followPos - transform.position;
+            if (Time.time >= _nextUpdateFollowTime)
+            {
+                _navGuide.SetDestination(followPos);
+                _nextUpdateFollowTime = Time.time + UnityEngine.Random.Range(1f, 2f);
+            }
+            else
+            {
+                if (_innerNavAgent.isOnNavMesh && _innerNavAgent.remainingDistance < 0.1f)
+                {
+                    _followPosIdx = 1 - _followPosIdx;
+                    _nextUpdateFollowTime = Time.time;
+                }
+            }
         }
         else
         {
             return;
-        }
-
-        Vector3 heading = transform.up;
-        Quaternion qToTarget = Quaternion.LookRotation(vecToTarget, transform.forward);
-        Quaternion qHeading = Quaternion.LookRotation(heading, transform.forward);
-        float angleToTarget = Vector3.SignedAngle(heading, vecToTarget, Vector3.up);
-        bool atRequiredHeaing = false;
-        if (angleToTarget > _angleEps)
-        {
-            _controlledFormation.ApplyTurning(false);
-            //Debug.Log("Strike craft turning right");
-        }
-        else if (angleToTarget < -_angleEps)
-        {
-            _controlledFormation.ApplyTurning(true);
-            //Debug.Log("Strike craft turning left");
-        }
-        else
-        {
-            atRequiredHeaing = true;
-            //Debug.Log("Strike craft going straight");
         }
 
         if (_targetShip != null && vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIAttackDist * GlobalDistances.StrikeCraftAIAttackDist))
@@ -140,12 +136,13 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         else if (vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
         {
             _controlledFormation.ApplyBraking();
-            if (_controlledFormation.ActualVelocity.sqrMagnitude < (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps) && atRequiredHeaing)
+            if (_controlledFormation.ActualVelocity.sqrMagnitude < (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
             {
                 if (_doNavigate)
                 {
                     _doNavigate = false;
                     _orderCallback?.Invoke();
+                    Debug.LogWarningFormat("Strike craft formation stopped at destination. This is highly unlikely.");
                 }
             }
         }
@@ -165,6 +162,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         _followTarget = null;
         _doFollow = false;
 
+        _navGuide.SetDestination(target);
         _navTarget = target;
         _doNavigate = true;
         _orderCallback = onCompleteNavigation;
@@ -177,87 +175,10 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         _followTarget = followTarget;
         _followDist = dist;
         _doFollow = true;
+        _nextUpdateFollowTime = Time.time;
+        _followPosIdx = 0;
     }
-
-    private Vector3? BypassObstacle(Vector3 direction)
-    {
-        Vector3 directionNormalized = direction.normalized;
-        Vector3 rightVec = Quaternion.AngleAxis(90, Vector3.up) * directionNormalized;
-        float projectFactor = _controlledFormation.Diameter * 4;
-        Vector3 projectedPath = directionNormalized * projectFactor;
-        RaycastHit[] hits = Physics.SphereCastAll(transform.position, _controlledFormation.Diameter * 3.0f, directionNormalized, projectFactor, ObjectFactory.AllTargetableLayerMask);
-        bool obstruction = false;
-        List<float> dotToCorners = new List<float>(4 * hits.Length);
-        float dotMin = -1;
-        foreach (RaycastHit h in hits)
-        {
-            if (h.collider.gameObject == this.gameObject)
-            {
-                continue;
-            }
-            Ship other = h.collider.GetComponent<Ship>();
-            if (other != null)
-            {
-                obstruction = true;
-                _dbgDrawObstacleBox = obstruction;
-                Vector3 obstructionLocation = h.point;
-                obstructionLocation.y = 0;
-                float obstructionLength = other.ShipLength * 1.1f;
-                float obstructionWidth = other.ShipLength * 1.1f;
-                Vector3[] otherShipCorners = new Vector3[]
-                {
-                    other.transform.position + (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
-                    other.transform.position + (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
-                    other.transform.position - (other.transform.up * obstructionLength) + (other.transform.right * obstructionWidth),
-                    other.transform.position - (other.transform.up * obstructionLength) - (other.transform.right * obstructionWidth),
-                };
-                _dbgObstacleCorners[0] = other.transform.position;
-                for (int i = 0; i < otherShipCorners.Length; ++i)
-                {
-                    _dbgObstacleCorners[i + 1] = otherShipCorners[i];
-                    dotToCorners.Add(Vector3.Dot(otherShipCorners[i] - transform.position, rightVec));
-                    if (dotMin < 0 || Mathf.Abs(dotToCorners[i]) < dotMin)
-                    {
-                        dotMin = Mathf.Abs(dotToCorners[i]);
-                    }
-                }
-            }
-        }
-        if (obstruction)
-        {
-            int maxRight = -1;
-            int maxLeft = -1;
-            for (int i = 0; i < dotToCorners.Count; ++i)
-            {
-                if (dotToCorners[i] > 0 && (maxRight == -1 || dotToCorners[i] > dotToCorners[maxRight]))
-                {
-                    maxRight = i;
-                }
-                else if (dotToCorners[i] < 0 && (maxLeft == -1 || dotToCorners[i] < dotToCorners[maxLeft]))
-                {
-                    maxLeft = i;
-                }
-            }
-            if (maxLeft == -1)
-            {
-                return (transform.position - (rightVec * dotMin * 2f));
-            }
-            else if (maxRight == -1)
-            {
-                return (transform.position + (rightVec * dotMin * 2f));
-            }
-            else if (-dotToCorners[maxLeft] >= dotToCorners[maxRight])
-            {
-                return (transform.position + (rightVec * dotToCorners[maxRight] * 2f));
-            }
-            else if (-dotToCorners[maxLeft] < dotToCorners[maxRight])
-            {
-                return (transform.position + (rightVec * dotToCorners[maxLeft] * 2f));
-            }
-        }
-        return null;
-    }
-
+    
     private IEnumerator AcquireTargetPulse()
     {
         yield return _targetAcquirePulseDelay;
@@ -284,15 +205,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
                     continue;
                 }
                 Vector3 attackPos = AttackPosition(_targetShip);
-                Vector3? bypassVec = BypassObstacle(attackPos);
-                if (bypassVec == null)
-                {
-                    NavigateTo(attackPos);
-                }
-                else
-                {
-                    NavigateTo(bypassVec.Value);
-                }
+                NavigateTo(attackPos);
             }
             yield return _targetAcquirePulseDelay;
         }
@@ -302,7 +215,8 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     {
         if (_controlledFormation.AllInFormation())
         {
-            _controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed;
+            //_controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed;
+            _navGuide.SetTargetSpeed(_controlledFormation.MaxSpeed);
             foreach (StrikeCraft s in _controlledFormation.AllStrikeCraft())
             {
                 s.TargetSpeed = s.MaxSpeed;
@@ -310,7 +224,8 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         else
         {
-            _controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient;
+            //_controlledFormation.TargetSpeed = _controlledFormation.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient;
+            _navGuide.SetTargetSpeed(_controlledFormation.MaxSpeed * _controlledFormation.MaintainFormationSpeedCoefficient);
             foreach (ValueTuple<StrikeCraft, bool> s in _controlledFormation.InFormationStatus())
             {
                 if (s.Item2)
@@ -383,6 +298,26 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         SetFollowTarget(s.transform, GlobalDistances.StrikeCraftAIFormationEscortDist);
     }
 
+    private Vector3 GetFollowPosition(Transform followTarget)
+    {
+        if (_followPosIdx == 0)
+        {
+            return followTarget.position + (followTarget.right * _followDist);
+        }
+        else
+        {
+            return followTarget.position - (followTarget.right * _followDist);
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (_navGuide != null)
+        {
+            Destroy(_navGuide.gameObject);
+        }
+    }
+
     protected StrikeCraftFormation _controlledFormation;
 
     protected ShipBase _targetShip = null;
@@ -390,27 +325,20 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     private Vector3 _targetHeading;
     protected Transform _followTarget = null;
     protected float _followDist;
+    protected float _nextUpdateFollowTime;
+    protected int _followPosIdx;
     protected ShipAIController.OrderCompleteDlg _orderCallback = null;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
+    protected NavigationGuide _navGuide;
+    protected NavMeshAgent _innerNavAgent;
     private FormationState _currState;
     private static readonly float _angleEps = 0.1f;
 
     // Visual debug:
     private Vector3[] _dbgObstacleCorners = new Vector3[5];
-    private bool _dbgDrawObstacleBox;
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, _navTarget);
-        if (_dbgDrawObstacleBox)
-        {
-            Gizmos.color = Color.cyan;
-            for (int i = 1; i < _dbgObstacleCorners.Length; ++i)
-            {
-                Gizmos.DrawLine(_dbgObstacleCorners[0], _dbgObstacleCorners[i]);
-            }
-        }
     }
 
     private static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);

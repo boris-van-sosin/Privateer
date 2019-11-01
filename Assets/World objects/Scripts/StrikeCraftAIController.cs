@@ -53,7 +53,7 @@ public class StrikeCraftAIController : ShipAIController
     protected override Vector3 AttackPosition(ShipBase enemyShip)
     {
         float minRange = _controlledShip.Turrets.Select(x => x.GetMaxRange).Min();
-        Vector3 Front = enemyShip.transform.up;
+        Vector3 Front = enemyShip.transform.forward;
 
         if (enemyShip is StrikeCraft)
         {
@@ -262,7 +262,10 @@ public class StrikeCraftAIController : ShipAIController
 
     void OnDestroy()
     {
-        Destroy(_navGuide.gameObject);
+        if (_navGuide != null)
+        {
+            Destroy(_navGuide.gameObject);
+        }
     }
 
     private static readonly float _strikeCraftAngleEps = 5f;

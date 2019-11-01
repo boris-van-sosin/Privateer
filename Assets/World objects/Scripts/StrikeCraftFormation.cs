@@ -15,6 +15,64 @@ public class StrikeCraftFormation : FormationBase
     {
     }
 
+    // The strike craft formation is controlled by a NavMeshAgent.
+    // Override all movement related methods to do nothing
+    /*
+    protected override void Update()
+    {
+        // Do nothing
+    }
+
+    public override void ApplyBraking()
+    {
+        // Do nothing
+    }
+
+    protected override void ApplyBrakingInner()
+    {
+        // Do nothing
+    }
+
+    protected override void ApplyMovementManual()
+    {
+        // Do nothing
+    }
+
+    protected override void ApplyThrust()
+    {
+        // Do nothing
+    }
+
+    public override void ApplyTurning(bool left)
+    {
+        // Do nothing
+    }
+
+    public override void ApplyTurningToward(Vector3 vec)
+    {
+        // Do nothing
+    }
+
+    protected override void ApplyUpdateAcceleration()
+    {
+        // Do nothing
+    }
+
+    protected override void ApplyUpdateTurning()
+    {
+        // Do nothing
+    }
+
+    public override void MoveForward()
+    {
+        // Do nothing
+    }
+
+    public override void MoveBackward()
+    {
+        // Do nothing
+    }*/
+
     public bool AddStrikeCraft(StrikeCraft s)
     {
         if (_ships.Count >= Positions.Length || s.Owner != Owner || _ships.Contains(s))

@@ -30,6 +30,11 @@ public class NavigationGuide : MonoBehaviour
         return _navAgent.SetDestination(dest);
     }
 
+    public void SetTargetSpeed(float speed)
+    {
+        _baseSpeed = speed;
+    }
+
     public void Halt()
     {
         _navAgent.isStopped = true;
@@ -52,7 +57,7 @@ public class NavigationGuide : MonoBehaviour
         {
             SetPositionToAttached();
         }
-        else
+        else if (_navAgent.isOnNavMesh)
         {
             Vector3 vecToGuide = transform.position - _attachedObject.transform.position;
 

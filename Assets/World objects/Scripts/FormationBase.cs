@@ -7,7 +7,6 @@ public class FormationBase : MovementBase
 {
     protected virtual void Start()
     {
-        ComputeDiameter();
     }
 
     public void CreatePositions(int n)
@@ -69,6 +68,7 @@ public class FormationBase : MovementBase
             }
             ++posIdx;
         }
+        ComputeDiameter();
     }
 
     private void ComputeDiameter()
