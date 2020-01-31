@@ -142,7 +142,7 @@ public abstract class DirectionalTurret : TurretBase
         else
         {
             float currInaccuracy = UnityEngine.Random.Range(-computedInaccuracy, computedInaccuracy);
-            Quaternion q = Quaternion.AngleAxis(currInaccuracy, _containingShip.transform.forward);
+            Quaternion q = Quaternion.AngleAxis(currInaccuracy, _containingShip.transform.up);
             return q * preciseVec;
         }
     }
