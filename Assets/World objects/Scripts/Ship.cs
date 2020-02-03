@@ -630,18 +630,17 @@ public class Ship : ShipBase
                 {
                     IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
                     comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
-                    // Crew casualties:
-                    if (comp.ComponentHitPoints <= 0)
+                }
+                // Crew casualties:
+                LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
+                if (casualtiesQueue.Count > 0)
+                {
+                    foreach (ShipCharacter character in casualtiesQueue.Take(Combat.CrewHit))
                     {
-                        LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
-                        if (casualtiesQueue.Count > 0)
+                        if (UnityEngine.Random.value < mitigationFactor * w.AntiPersonnel)
                         {
-                            int NumCasualties = UnityEngine.Random.Range(0, Mathf.Min(casualtiesQueue.Count, 5));
-                            foreach (ShipCharacter character in casualtiesQueue.Take(NumCasualties))
-                            {
-                                tookCasualties = true;
-                                character.Status = ShipCharacter.CharacterStaus.Incapacitated;
-                            }
+                            tookCasualties = true;
+                            character.Status = ShipCharacter.CharacterStaus.Incapacitated;
                         }
                     }
                 }

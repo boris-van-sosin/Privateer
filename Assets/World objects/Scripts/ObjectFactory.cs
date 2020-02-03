@@ -755,6 +755,7 @@ public static class ObjectFactory
                 WarheadData.HeatGenerated.ToString(),
                 WarheadData.HitMultiplicity.ToString(),
                 WarheadData.BlastRadius.ToString(),
+                WarheadData.AntiPersonnel.ToString(),
                 WarheadData.WeaponEffectScale.ToString()
             };
             return string.Join(",", elements);
@@ -768,7 +769,7 @@ public static class ObjectFactory
                 int i = 1;
                 return new WarheadDataEntry3()
                 {
-                    LaunchWeaponSize = (WeaponSize) System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
+                    LaunchWeaponSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
                     LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
                     Ammo = (AmmoType)System.Enum.Parse(typeof(AmmoType), elements[i++].Trim(), true),
                     WarheadData = new Warhead()
@@ -782,6 +783,7 @@ public static class ObjectFactory
                         HitMultiplicity = int.Parse(elements[i++].Trim()),
                         BlastRadius = float.Parse(elements[i++].Trim()),
                         EffectVsStrikeCraft = float.Parse(elements[i++].Trim()),
+                        AntiPersonnel = float.Parse(elements[i++].Trim()),
                         WeaponEffectScale = float.Parse(elements[i++].Trim())
                     }
                 };
@@ -813,6 +815,7 @@ public static class ObjectFactory
                 WarheadData.HullDamage.ToString(),
                 WarheadData.HeatGenerated.ToString(),
                 WarheadData.HitMultiplicity.ToString(),
+                WarheadData.AntiPersonnel.ToString(),
                 WarheadData.WeaponEffectScale.ToString()
 
             };
@@ -824,20 +827,22 @@ public static class ObjectFactory
             string[] elements = s.Trim().Split(',');
             if (elements[0].Trim() == "2")
             {
+                int i = 1;
                 return new WarheadDataEntry2()
                 {
-                    LaunchWeaponSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[1].Trim(), true),
-                    LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[2].Trim(), true),
+                    LaunchWeaponSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
+                    LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
                     WarheadData = new Warhead()
                     {
-                        ShieldDamage = int.Parse(elements[3].Trim()),
-                        ArmourPenetration = int.Parse(elements[4].Trim()),
-                        ArmourDamage = int.Parse(elements[5].Trim()),
-                        SystemDamage = int.Parse(elements[6].Trim()),
-                        HullDamage = int.Parse(elements[7].Trim()),
-                        HeatGenerated = int.Parse(elements[8].Trim()),
-                        HitMultiplicity = int.Parse(elements[9].Trim()),
-                        WeaponEffectScale = float.Parse(elements[10].Trim())
+                        ShieldDamage = int.Parse(elements[i++].Trim()),
+                        ArmourPenetration = int.Parse(elements[i++].Trim()),
+                        ArmourDamage = int.Parse(elements[i++].Trim()),
+                        SystemDamage = int.Parse(elements[i++].Trim()),
+                        HullDamage = int.Parse(elements[i++].Trim()),
+                        HeatGenerated = int.Parse(elements[i++].Trim()),
+                        HitMultiplicity = int.Parse(elements[i++].Trim()),
+                        AntiPersonnel = float.Parse(elements[i++].Trim()),
+                        WeaponEffectScale = float.Parse(elements[i++].Trim())
                     }
                 };
             }
@@ -871,6 +876,7 @@ public static class ObjectFactory
                 WarheadData.HullDamage.ToString(),
                 WarheadData.HeatGenerated.ToString(),
                 WarheadData.HitMultiplicity.ToString(),
+                WarheadData.AntiPersonnel.ToString(),
                 WarheadData.WeaponEffectScale.ToString(),
                 ProjectileScale.ToString()
             };
@@ -882,23 +888,25 @@ public static class ObjectFactory
             string[] elements = s.Trim().Split(',');
             if (elements[0].Trim() == "4")
             {
+                int i = 1;
                 return new WarheadDataEntry4()
                 {
-                    LaunchTorpedoType = (TorpedoType)System.Enum.Parse(typeof(TorpedoType), elements[1].Trim(), true),
-                    SpeardSize = int.Parse(elements[2].Trim()),
-                    MaxRange = float.Parse(elements[3].Trim()),
+                    LaunchTorpedoType = (TorpedoType)System.Enum.Parse(typeof(TorpedoType), elements[i++].Trim(), true),
+                    SpeardSize = int.Parse(elements[i++].Trim()),
+                    MaxRange = float.Parse(elements[i++].Trim()),
                     WarheadData = new Warhead()
                     {
-                        ShieldDamage = int.Parse(elements[4].Trim()),
-                        ArmourPenetration = int.Parse(elements[5].Trim()),
-                        ArmourDamage = int.Parse(elements[6].Trim()),
-                        SystemDamage = int.Parse(elements[7].Trim()),
-                        HullDamage = int.Parse(elements[8].Trim()),
-                        HeatGenerated = int.Parse(elements[9].Trim()),
-                        HitMultiplicity = int.Parse(elements[10].Trim()),
-                        WeaponEffectScale = float.Parse(elements[11].Trim())
+                        ShieldDamage = int.Parse(elements[i++].Trim()),
+                        ArmourPenetration = int.Parse(elements[i++].Trim()),
+                        ArmourDamage = int.Parse(elements[i++].Trim()),
+                        SystemDamage = int.Parse(elements[i++].Trim()),
+                        HullDamage = int.Parse(elements[i++].Trim()),
+                        HeatGenerated = int.Parse(elements[i++].Trim()),
+                        HitMultiplicity = int.Parse(elements[i++].Trim()),
+                        AntiPersonnel = float.Parse(elements[i++].Trim()),
+                        WeaponEffectScale = float.Parse(elements[i++].Trim())
                     },
-                    ProjectileScale = float.Parse(elements[12].Trim())
+                    ProjectileScale = float.Parse(elements[i++].Trim())
                 };
             }
             else

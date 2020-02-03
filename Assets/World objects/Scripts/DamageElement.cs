@@ -16,6 +16,7 @@ public struct Warhead
     public int HitMultiplicity { get; set; }
     public float BlastRadius { get; set; }
     public float EffectVsStrikeCraft { get; set; }
+    public float AntiPersonnel { get; set; }
     public float WeaponEffectScale { get; set; }
 }
 
@@ -195,6 +196,7 @@ public static class Combat
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
     private static readonly WaitForSeconds _boardingPreCombatDelay = new WaitForSeconds(0.1f);
     private static readonly WaitForSeconds _boardingCombatPulseDelay = new WaitForSeconds(1f);
+    public static readonly int CrewHit = 5;
 }
 
 public class ArmourPenetrationTable
