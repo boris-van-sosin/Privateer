@@ -212,6 +212,10 @@ public abstract class MovementBase : MonoBehaviour
 
     public virtual void StartManeuver(Maneuver m)
     {
+        if (_currManeuver != null)
+        {
+            Debug.LogWarning("Already in maneuver. Why?");
+        }
         _currManeuver = m;
         _prevControlMode = _currControlMode;
         _currControlMode = ControlType.Maneuver;
@@ -220,6 +224,10 @@ public abstract class MovementBase : MonoBehaviour
 
     public virtual void StartManeuver(Maneuver m, float forceSpeed)
     {
+        if (_currManeuver != null)
+        {
+            Debug.LogWarning("Already in maneuver. Why?");
+        }
         _currManeuver = m;
         _prevControlMode = _currControlMode;
         _currControlMode = ControlType.Maneuver;

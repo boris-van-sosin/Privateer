@@ -15,6 +15,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             _minRotation = parentHardpoint.MinRotation;
             _maxRotation = parentHardpoint.MaxRotation;
             _deadZoneAngleStrings = parentHardpoint.DeadZoneAngles.ToArray();
+            _treatAsFixed = parentHardpoint.TreatAsFixed;
             if (parentHardpoint.transform.lossyScale.x < 0)
             {
                 _flippedX = true;
@@ -304,7 +305,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected virtual bool IsAimedAtTarget()
     {
-        return Mathf.Abs(AngleToTargetShip - CurrAngle) <= MaxAngleToTarget;
+        return Mathf.Abs(AngleToTargetShip - CurrAngle) <= AIMaxAngleToTarget;
     }
 
     public bool HasGrapplingTool()
@@ -548,21 +549,21 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             }
         }
         // Prefer targets within the firing arc of the weapon:
-        if (TargetInFiringArc(target.EntityLocation, _firingArcTolerance))
+        if (TargetInFiringArc(target.EntityLocation, _AIFiringArcTolerance))
         {
-            score += _firingArcScoreBonus;
+            score += _AIFiringArcScoreBonus;
         }
 
         // Prefer the "main target" for this ship (according to the ship AI), if applicable:
         if (ContainingShip != null && ContainingShip.PreferredTarget != null && ContainingShip.PreferredTarget == target)
         {
-            score += _preferredTargetScoreBonus;
+            score += _AIPreferredTargetScoreBonus;
         }
 
         // If the weapon already has a target, prefer it:
         if (_targetShip != null && _targetShip == target)
         {
-            score += _currTargetScoreBonus;
+            score += _AICurrTargetScoreBonus;
         }
         return score;
     }
@@ -671,6 +672,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     // Rotation behavior variables:
     protected float _minRotation, _maxRotation, _rotationSpan;
     protected ValueTuple<float, float>[] _rotationAllowedRanges;
+    protected bool _treatAsFixed = false;
     private bool _fixed = false;
     public float RotationSpeed;
     protected float _targetAngle;
@@ -818,11 +820,14 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    protected virtual float MaxAngleToTarget => 2.0f;
-    protected static readonly float _firingArcTolerance = 10.0f;
-    protected static readonly int _firingArcScoreBonus = 2;
-    protected static readonly int _preferredTargetScoreBonus = 1;
-    protected static readonly int _currTargetScoreBonus = 1;
+    protected static readonly float _targetingFiringArcToleranceSmall = 5.0f;
+    protected static readonly float _targetingFiringArcToleranceLarge = 15.0f;
+
+    protected virtual float AIMaxAngleToTarget => 2.0f;
+    protected static readonly float _AIFiringArcTolerance = 10.0f;
+    protected static readonly int _AIFiringArcScoreBonus = 2;
+    protected static readonly int _AIPreferredTargetScoreBonus = 1;
+    protected static readonly int _AICurrTargetScoreBonus = 1;
 
     private float _retargetTime = 0f;
 

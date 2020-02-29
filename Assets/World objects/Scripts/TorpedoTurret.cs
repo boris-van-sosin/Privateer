@@ -189,7 +189,7 @@ public class TorpedoTurret : TurretBase
     private float MaxTargetAngle { get { return _maxRotation; } }
     private bool TorpedoDoorsOpen { get; set; }
 
-    protected override float MaxAngleToTarget => _rotationSpan;
+    protected override float AIMaxAngleToTarget => _rotationSpan;
 
     private int _torpedoesInSpread;
     public ObjectFactory.TorpedoType LoadedTorpedoType;
