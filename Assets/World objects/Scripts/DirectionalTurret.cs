@@ -25,6 +25,7 @@ public abstract class DirectionalTurret : TurretBase
     {
         if (!_initialized || !CanRotate)
         {
+            // Do something smarted with the legal angle?
             return;
         }
 
@@ -32,18 +33,19 @@ public abstract class DirectionalTurret : TurretBase
         Vector3 flatVec = new Vector3(_vectorToTarget.x, 0, _vectorToTarget.z);
         float relativeAngle = GlobalDirToShipHeading(flatVec);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
-        _isLegalAngle = false;
+        _isLegalFireAngle = _isLegalAimAngle = false;
         float angleTol = _treatAsFixed ? _targetingFiringArcToleranceLarge : _targetingFiringArcToleranceSmall;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
         foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 - angleTol <= relativeAngle && relativeAngle <= r.Item2 + angleTol)
             {
-                _isLegalAngle = true;
+                _isLegalAimAngle = true;
             }
             if (r.Item1 <= relativeAngle && relativeAngle <= r.Item2)
             {
                 _targetAngle = relativeAngle;
+                _isLegalFireAngle = true;
                 break;
             }
             else
@@ -61,7 +63,7 @@ public abstract class DirectionalTurret : TurretBase
                 }
             }
         }
-        if (!_isLegalAngle)
+        if (!_isLegalFireAngle)
         {
             _targetAngle = closestLegalAngle;
         }

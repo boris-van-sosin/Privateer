@@ -67,12 +67,12 @@ public class BomberTorpedoLauncher : TurretBase
         }
         float relativeAngle = GlobalDirToShipHeading(flatVec);
         Debug.Log(string.Format("Torpedo bomber angle to target: {0}", relativeAngle));
-        _isLegalAngle = false;
+        _isLegalAimAngle = false;
         foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
         {
             if (r.Item1 < relativeAngle && relativeAngle < r.Item2)
             {
-                _isLegalAngle = true;
+                _isLegalAimAngle = true;
                 _targetAngle = relativeAngle;
                 break;
             }
@@ -107,7 +107,7 @@ public class BomberTorpedoLauncher : TurretBase
 
     protected override bool IsAimedAtTarget()
     {
-        return _isLegalAngle;
+        return _isLegalAimAngle;
     }
 
     protected override void FireInner(Vector3 firingVector, int barrelIdx)

@@ -83,7 +83,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         else
         {
             _fixed = true;
-            _isLegalAngle = true;
+            _isLegalFireAngle = _isLegalAimAngle = true;
         }
     }
 
@@ -177,7 +177,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             return false;
         }
-        if (!_isLegalAngle && Mode == TurretMode.Manual)
+        if (!_isLegalAimAngle && Mode == TurretMode.Manual)
         {
             return false;
         }
@@ -682,7 +682,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     private string[] _deadZoneAngleStrings;
     private ValueTuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
-    protected bool _isLegalAngle = false;
+    protected bool _isLegalFireAngle = false;
+    protected bool _isLegalAimAngle = false;
     protected bool CanRotate { get { return (!_fixed) && _status != ComponentStatus.HeavilyDamaged && _status != ComponentStatus.KnockedOut && _status != ComponentStatus.Destroyed; } }
 
     // Barrels, muzzles, and muzzleFx data:
