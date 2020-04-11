@@ -138,7 +138,7 @@ public class StrikeCraft : ShipBase
         {
             Vector3 pos = _hangerElevator.TransformPoint(_hangerElevatorLocalOffset);
             transform.position = pos;
-            transform.rotation = _hangerElevatorRotationOffset * _hangerElevator.rotation;
+            transform.rotation = _hangerElevator.rotation * _hangerElevatorRotationOffset;
             return;
         }
         float recAdvance = Time.deltaTime * _recoverySpeed;
@@ -189,7 +189,7 @@ public class StrikeCraft : ShipBase
     {
         _hangerElevator = elevator;
         _hangerElevatorLocalOffset = elevator.InverseTransformPoint(transform.position);
-        _hangerElevatorRotationOffset = transform.rotation * Quaternion.Inverse(elevator.rotation);
+        _hangerElevatorRotationOffset = Quaternion.Inverse(elevator.rotation) * transform.rotation;
         _attachedToHangerElevator = true;
         if (_trail != null)
         {

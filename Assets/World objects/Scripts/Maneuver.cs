@@ -179,10 +179,12 @@ public class Maneuver
             {
                 float segTargetSpeed = _ship.MaxSpeed * fracAccelerate.TargetSpeedFrac;
                 targetSpeed = Mathf.Lerp(_segStartSpeed, targetSpeed, _t);
-                if (targetSpeed < 0.01f)
-                {
-                    targetSpeed = 0.01f;
-                }
+            }
+
+            float minSpeed = _ship.Thrust * Time.deltaTime;
+            if (targetSpeed < minSpeed)
+            {
+                targetSpeed = minSpeed;
             }
 
             ValueTuple<Vector3, Vector3, Vector3> nextPos;
