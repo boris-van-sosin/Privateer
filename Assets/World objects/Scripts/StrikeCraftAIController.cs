@@ -138,9 +138,9 @@ public class StrikeCraftAIController : ShipAIController
     {
         if (_doFollow)
         {
-            Vector3 followTarget;
-            GetCurrMovementTarget(out followTarget);
-            NavigateTo(followTarget);
+            Vector3 followVec;
+            GetCurrMovementTarget(out followVec);
+            NavigateTo(transform.position + followVec);
         }
         else if (_formationAI.DoMaintainFormation())
         {
@@ -211,12 +211,12 @@ public class StrikeCraftAIController : ShipAIController
         }
     }
 
-    private IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
+    private IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(BspPath rawPath, Transform currLaunchTr, Transform carrierRecoveryHint, float speedHint, Vector3 carrierVelocity)
     {
         int numPathPts = rawPath.Points.Length;
         Matrix4x4 ptTransform = Matrix4x4.TRS(currLaunchTr.position, currLaunchTr.rotation, Vector3.one);
 
-        float maneuverTime = (carrierRecoveryHint.position - transform.position).magnitude / _controlledCraft.CurrSpeed;
+        float maneuverTime = (carrierRecoveryHint.position - transform.position).magnitude / speedHint;
         //Matrix4x4 dirTransform = Matrix4x4.TRS(Vector3.zero, currLaunchTr.rotation, Vector3.one);
         for (int i = 0; i < numPathPts; i++)
         {
@@ -247,10 +247,18 @@ public class StrikeCraftAIController : ShipAIController
     private Maneuver CreateClimbForRecoveryManeuver(Transform currTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
     {
         BspPath launchPath = ObjectFactory.GetPath("Strike craft carrier climb");
+        float expectedTime = (carrierRecoveryHint.position - transform.position).magnitude / _controlledCraft.CurrSpeed;
+        float speedHint = _controlledCraft.CurrSpeed;
+        Maneuver.AccelerationModifier acc = null;
+        if (expectedTime > 5.0f)
+        {
+            acc = new Maneuver.AccelerateToTargetSpeedFraction() { TargetSpeedFrac = 0.75f };
+            speedHint = _controlledCraft.MaxSpeed * 0.75f;
+        }
         Maneuver.BsplinePathSegmnet seg = new Maneuver.BsplinePathSegmnet()
         {
-            AccelerationBehavior = null,
-            Path = launchPath.ExractLightweightPath(PathFixes(launchPath, currTr, carrierRecoveryHint, carrierVelocity))
+            AccelerationBehavior = acc,
+            Path = launchPath.ExractLightweightPath(PathFixes(launchPath, currTr, carrierRecoveryHint, speedHint, carrierVelocity))
         };
         return new Maneuver(seg);
     }

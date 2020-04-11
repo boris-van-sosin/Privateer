@@ -683,9 +683,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 0
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &240083008
 MeshFilter:
@@ -1167,7 +1167,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.000244
+      value: 100.00022
       objectReference: {fileID: 0}
     - target: {fileID: 1600315674048210628, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}

@@ -19,6 +19,9 @@ public class CarrierBehavior : MonoBehaviour
         _inRecovery = false;
     }
 
+    public delegate void CarrierDelegate(CarrierBehavior c);
+    public delegate void CarrierFormationDelegate(CarrierBehavior c, StrikeCraftFormation f);
+
     public void LaunchDbg()
     {
         if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
@@ -35,6 +38,10 @@ public class CarrierBehavior : MonoBehaviour
         }
 
         _inLaunch = true;
+
+        OnLaunchStart?.Invoke(this);
+        yield return new WaitForEndOfFrame();
+
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
         formation.DestroyOnEmpty = false;
         _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
@@ -120,6 +127,10 @@ public class CarrierBehavior : MonoBehaviour
         }
 
         _inLaunch = false;
+
+        yield return new WaitForEndOfFrame();
+        OnLaunchFinish?.Invoke(this);
+
         yield return null;
     }
 
@@ -132,8 +143,14 @@ public class CarrierBehavior : MonoBehaviour
             {
                 _currRecovering = null;
                 _inRecovery = false;
+                _formations.RemoveAt(i);
+                OnRecoveryFinish?.Invoke(this);
             }
-            _formations.RemoveAt(i);
+            else
+            {
+                _formations.RemoveAt(i);
+                OnFormationRemoved?.Invoke(this, f);
+            }
         }
     }
 
@@ -147,6 +164,8 @@ public class CarrierBehavior : MonoBehaviour
         _currRecovering = f;
 
         _inRecovery = true;
+        OnRecoveryStart?.Invoke(this);
+
         return true;
     }
 
@@ -240,9 +259,22 @@ public class CarrierBehavior : MonoBehaviour
     private int _lastRecoveryHanger = 0;
 
     private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
+    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormations
+    {
+        get
+        {
+            return _formations;
+        }
+    }
 
     public CarrierHangerGenericAnim[] CarrierHangerAnim;
     public int MaxFormations;
+
+    public event CarrierDelegate OnLaunchStart;
+    public event CarrierDelegate OnLaunchFinish;
+    public event CarrierDelegate OnRecoveryStart;
+    public event CarrierDelegate OnRecoveryFinish;
+    public event CarrierFormationDelegate OnFormationRemoved;
 
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
     private static readonly WaitForSeconds _hangerLaunchCycleDelay = new WaitForSeconds(0.5f);

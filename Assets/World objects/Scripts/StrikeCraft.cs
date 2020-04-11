@@ -155,7 +155,7 @@ public class StrikeCraft : ShipBase
             }
             transform.position = Vector3.MoveTowards(transform.position, recTargetFlat, recAdvance);
             Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
-            transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
+            transform.rotation = Quaternion.LookRotation(recForward, Vector3.up);
         }
         else
         {
@@ -170,7 +170,7 @@ public class StrikeCraft : ShipBase
             {
                 transform.position = Vector3.MoveTowards(transform.position, _recoveryFinalPhaseTarget.position, recAdvance);
                 Vector3 recForward = Vector3.ProjectOnPlane(_recoveryFinalPhaseTarget.position - transform.position, Vector3.up);
-                transform.rotation = Quaternion.LookRotation(Vector3.up, recForward);
+                transform.rotation = Quaternion.LookRotation(recForward, Vector3.up);
             }
         }
     }

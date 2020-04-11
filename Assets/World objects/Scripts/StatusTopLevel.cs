@@ -17,6 +17,10 @@ public class StatusTopLevel : MonoBehaviour
         _shortNameBox = transform.Find("TextShortName").GetComponent<TextMeshProUGUI>();
         _fullNameBox= transform.Find("TextFullName").GetComponent<TextMeshProUGUI>();
         _fluffBox = transform.Find("TextFluff").GetComponent<TextMeshProUGUI>();
+        _hangerPanel = transform.Find("ControlsPanel/StrikeCraftPanel");
+        _numActiveStrikeCraftBox = transform.Find("ControlsPanel/StrikeCraftPanel/ActiveNum").GetComponent<TextMeshProUGUI>();
+        _numFightersBox = transform.Find("ControlsPanel/StrikeCraftPanel/FightersPanel/FightersNum").GetComponent<TextMeshProUGUI>();
+        //_numBombersBox = transform.Find("Bombers num").GetComponent<TextMeshProUGUI>();
     }
 
     public void AttachShip(Ship s)
@@ -108,7 +112,37 @@ public class StatusTopLevel : MonoBehaviour
             _shieldBar.MaxValue = _attachedShip.ShipTotalMaxShields;
             _energyBar.MaxValue = _attachedShip.MaxEnergy;
             _heatBar.MaxValue = _attachedShip.MaxHeat;
+
+            SetStrikeCraftStatus();
         }
+        else // _attachedShip == null
+        {
+            _attachedCarrier = null;
+        }
+    }
+
+    private void SetStrikeCraftStatus()
+    {
+        _attachedCarrier = _attachedShip.GetComponent<CarrierBehavior>();
+        if (_attachedCarrier == null)
+        {
+            _hangerPanel.gameObject.SetActive(false);
+            return;
+        }
+        _hangerPanel.gameObject.SetActive(true);
+        if (_attachedCarrier.ActiveFormations != null)
+        {
+            _numActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
+        }
+        else
+        {
+            _numActiveStrikeCraftBox.text = string.Format("{0}/{1}", 0, _attachedCarrier.MaxFormations);
+        }
+        _attachedCarrier.OnLaunchStart += CarrierEventWrapper;
+        _attachedCarrier.OnLaunchFinish += CarrierEventWrapper;
+        _attachedCarrier.OnRecoveryStart += CarrierEventWrapper;
+        _attachedCarrier.OnRecoveryFinish += CarrierEventWrapper;
+        _attachedCarrier.OnFormationRemoved += CarrierFormationEventWrapper;
     }
 
     public void SetName(ShipDisplayName dn)
@@ -128,6 +162,15 @@ public class StatusTopLevel : MonoBehaviour
     public void DetachShip()
     {
         _turretProgressBars.Clear();
+        if (_attachedCarrier != null)
+        {
+            _attachedCarrier.OnLaunchStart -= CarrierEventWrapper;
+            _attachedCarrier.OnLaunchFinish -= CarrierEventWrapper;
+            _attachedCarrier.OnRecoveryStart -= CarrierEventWrapper;
+            _attachedCarrier.OnRecoveryFinish -= CarrierEventWrapper;
+            _attachedCarrier.OnFormationRemoved -= CarrierFormationEventWrapper;
+            _attachedCarrier = null;
+        }
     }
 
     public void ForceUpdateTurretModes()
@@ -156,6 +199,27 @@ public class StatusTopLevel : MonoBehaviour
         }
     }
 
+    private void ForceUpdateHangerStatus()
+    {
+        _numActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
+    }
+
+    private void CarrierEventWrapper(CarrierBehavior c)
+    {
+        if (c == _attachedCarrier)
+        {
+            ForceUpdateHangerStatus();
+        }
+        else
+        {
+            Debug.LogWarning("Got update from carrier other than the one attached. This is probably incorrect.");
+        }
+    }
+    private void CarrierFormationEventWrapper(CarrierBehavior c, StrikeCraftFormation f)
+    {
+        CarrierEventWrapper(c);
+    }
+
     void Update()
     {
         if (_attachedShip != null)
@@ -171,6 +235,7 @@ public class StatusTopLevel : MonoBehaviour
     public Ship AttachedShip { get { return _attachedShip; } }
 
     private Ship _attachedShip = null;
+    private CarrierBehavior _attachedCarrier = null;
     private Dictionary<TurretBase, StatusProgressBar> _turretProgressBars = new Dictionary<TurretBase, StatusProgressBar>();
     private GradientBar _healthBar;
     private GradientBar _shieldBar;
@@ -180,6 +245,10 @@ public class StatusTopLevel : MonoBehaviour
     private TextMeshProUGUI _shortNameBox;
     private TextMeshProUGUI _fullNameBox;
     private TextMeshProUGUI _fluffBox;
+    private TextMeshProUGUI _numActiveStrikeCraftBox;
+    private TextMeshProUGUI _numFightersBox;
+    private TextMeshProUGUI _numBombersBox;
+    private Transform _hangerPanel;
     private static readonly Color _autoTurretColor = new Color(83f / 255f, 198f / 255f, 255f / 255f);
     private static readonly Color _manualTurretColor = new Color(0f / 255f, 0f / 255f, 120f / 255f);
     private static readonly Color _offTurretColor = Color.black;
