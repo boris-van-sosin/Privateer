@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4376362533453686}
   - component: {fileID: 114275050688803318}
-  - component: {fileID: 64735919067507818}
   - component: {fileID: 54430829964750734}
+  - component: {fileID: 4028772266552720060}
   m_Layer: 12
   m_Name: Fed - fighter
   m_TagString: Untagged
@@ -58,20 +58,6 @@ MonoBehaviour:
   MaxHullHitPoints: 20
   Owner: {fileID: 0}
   TeamColorComponents: []
---- !u!64 &64735919067507818
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1080825588676972}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: -2120270355090030408, guid: 71218874d3bc52b4782a48c4c145da8d, type: 3}
 --- !u!54 &54430829964750734
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -88,6 +74,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!136 &4028772266552720060
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1080825588676972}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.035
+  m_Height: 0.12
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1521517036799494
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +135,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
+  TreatAsFixed: 0
   AllowedWeaponTypes: 14000000
   LocationOnShip: 0
   WeaponAIHint: 0
@@ -186,6 +187,7 @@ MonoBehaviour:
   MinRotation: 0
   MaxRotation: 0
   DeadZoneAngles: []
+  TreatAsFixed: 0
   AllowedWeaponTypes: 13000000
   LocationOnShip: 0
   WeaponAIHint: 0
@@ -260,7 +262,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7891329709872166703}
-  m_Mesh: {fileID: 3684907699902543657, guid: 4775ee5bda6b8a741bb5aef199706849, type: 3}
+  m_Mesh: {fileID: 7515952581866962117, guid: d930a42c44ab66249b6d9cfebfac6916, type: 3}
 --- !u!23 &7914134250255447949
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -275,10 +277,11 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 586645097001841572, guid: 4775ee5bda6b8a741bb5aef199706849, type: 3}
+  - {fileID: 586645097001841572, guid: d930a42c44ab66249b6d9cfebfac6916, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -314,6 +317,7 @@ TrailRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
