@@ -516,7 +516,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                     {
                         _targetShip = AcquireTarget();
                         _retargetTime = Time.time + UnityEngine.Random.Range(1f, 2f);
-
                     }
                     if (_targetShip != null)
                     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public abstract class DirectionalTurret : TurretBase
@@ -31,6 +32,12 @@ public abstract class DirectionalTurret : TurretBase
 
         _vectorToTarget = target - transform.position;
         Vector3 flatVec = new Vector3(_vectorToTarget.x, 0, _vectorToTarget.z);
+
+        if (Vector3.Angle(-transform.forward, flatVec) < 0.01f)
+        {
+            return;
+        }
+
         float relativeAngle = GlobalDirToShipHeading(flatVec);
         //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
         _isLegalFireAngle = _isLegalAimAngle = false;
