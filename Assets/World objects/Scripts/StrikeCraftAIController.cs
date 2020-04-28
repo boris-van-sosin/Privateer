@@ -191,7 +191,7 @@ public class StrikeCraftAIController : ShipAIController
         else
         {
             Vector3 dirToRecovery = vecToRecovery / m;
-            SetFollowTarget(recoveryPositions.RecoveryStart, GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAICarrierFollowDistFactor);
+            SetFollowTransform(recoveryPositions.RecoveryStart, GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAICarrierFollowDistFactor);
         }
     }
 
@@ -276,7 +276,6 @@ public class StrikeCraftAIController : ShipAIController
         }
     }
 
-    private static readonly float _strikeCraftAngleEps = 5f;
     private StrikeCraft _controlledCraft;
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;

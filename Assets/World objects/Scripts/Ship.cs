@@ -473,14 +473,14 @@ public class Ship : ShipBase
         {
             _engine.ComponentActive = true;
         }
-        _thrustCoefficient = 1.0f;
+        _thrustCoefficient = GlobalOtherConstants.ShipEngineUndamagedThrustCoeff;
         if (_engine.Status == ComponentStatus.LightlyDamaged)
         {
-            _thrustCoefficient = 0.9f;
+            _thrustCoefficient = GlobalOtherConstants.ShipEngineLightDamageThrustCoeff;
         }
         else if (_engine.Status == ComponentStatus.HeavilyDamaged)
         {
-            _thrustCoefficient = 0.75f;
+            _thrustCoefficient = GlobalOtherConstants.ShipEngineHeavyDamageThrustCoeff;
         }
         base.ApplyThrust();
     }
@@ -509,17 +509,17 @@ public class Ship : ShipBase
                 return;
             }
         }
-        _turnCoefficient = 1.0f;
+        _turnCoefficient = GlobalOtherConstants.ShipEngineUndamagedTurnCoeff;
         if (_engine.Status == ComponentStatus.LightlyDamaged)
         {
-            _turnCoefficient = 0.9f;
+            _turnCoefficient = GlobalOtherConstants.ShipEngineLightDamageTurnCoeff;
         }
         else if (_engine.Status == ComponentStatus.HeavilyDamaged)
         {
-            _turnCoefficient = 0.75f;
+            _turnCoefficient = GlobalOtherConstants.ShipEngineHeavyDamageTurnCoeff;
         }
         ApplyBrakingInner();
-        ApplyBrakingCoefficients(0.5f, 0.5f);
+        ApplyBrakingCoefficients(GlobalOtherConstants.ShipTurnBrakeFactor, GlobalOtherConstants.ShipTurnTargetSpeedFactor);
         base.ApplyTurning(left);
     }
 

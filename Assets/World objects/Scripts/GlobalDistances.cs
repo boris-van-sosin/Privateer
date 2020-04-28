@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public static class GlobalDistances
@@ -57,9 +58,31 @@ public static class GlobalDistances
     public static readonly float StrikeCraftAICarrierFollowDistFactor = 0.95f;
 
     public static readonly float TurretTargetAcquisitionRangeFactor = 1.05f;
+
+    public static readonly float ShipFormationHalfSpacingFactor = 1.0f;
 }
 
 public static class GlobalTimes
 {
 
+}
+
+public static class GlobalOtherConstants
+{
+    public static readonly float StrikeCraftFormtionMaxSpeedFactor = 1.1f;
+    public static readonly float StrikeCraftFormtionTurnRateFactor = 0.5f;
+
+    public static readonly float NavGuideAngleEps = 2f;
+
+    public static readonly float TurretAngleEps = 0.01f;
+
+    public static readonly float ShipEngineUndamagedThrustCoeff = 1.0f;
+    public static readonly float ShipEngineLightDamageThrustCoeff = 0.9f;
+    public static readonly float ShipEngineHeavyDamageThrustCoeff = 0.75f;
+    public static readonly float ShipEngineUndamagedTurnCoeff = 1.0f;
+    public static readonly float ShipEngineLightDamageTurnCoeff = 0.9f;
+    public static readonly float ShipEngineHeavyDamageTurnCoeff = 0.75f;
+
+    public static readonly float ShipTurnBrakeFactor = 0.5f;
+    public static readonly float ShipTurnTargetSpeedFactor = 0.5f;
 }

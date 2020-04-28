@@ -308,9 +308,16 @@ public class ShipAIController : MonoBehaviour
             vecToTarget = _navTarget - transform.position;
             return true;
         }
-        else if (_doFollow)
+        else if (_doFollow && CurrActivity == ShipActivity.Following)
         {
             vecToTarget = _followTarget.transform.position - transform.position;
+            Vector3 dirToTarget = vecToTarget.normalized;
+            vecToTarget -= dirToTarget * _followDist;
+            return true;
+        }
+        else if (_doFollow && CurrActivity != ShipActivity.Following)
+        {
+            vecToTarget = _followTransform.position - transform.position;
             Vector3 dirToTarget = vecToTarget.normalized;
             vecToTarget -= dirToTarget * _followDist;
             return true;
@@ -327,6 +334,12 @@ public class ShipAIController : MonoBehaviour
         NavigateTo(target, null);
     }
 
+    public void UserNavigateTo(Vector3 target)
+    {
+        CurrActivity = ShipActivity.ControllingPosition;
+        NavigateTo(target, null);
+    }
+
     protected void NavigateTo(Vector3 target, OrderCompleteDlg onCompleteNavigation)
     {
         _navTarget = target;
@@ -337,13 +350,36 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
-    protected void SetFollowTarget(Transform followTarget, float dist)
+    public virtual void Follow(ShipBase followTarget)
+    {
+        if (followTarget == _controlledShip)
+        {
+            return;
+        }
+        SetFollowTarget(followTarget, ShipBase.FormationHalfSpacing(_controlledShip) + ShipBase.FormationHalfSpacing(followTarget));
+        CurrActivity = ShipActivity.Following;
+    }
+
+    protected void SetFollowTarget(ShipBase followTarget, float dist)
     {
         // Cancel navigate order, if there is one:
         _doNavigate = false;
         _orderCallback = null;
 
         _followTarget = followTarget;
+        _followTransform = null;
+        _followDist = dist;
+        _doFollow = true;
+    }
+
+    protected void SetFollowTransform(Transform followTr, float dist)
+    {
+        // Cancel navigate order, if there is one:
+        _doNavigate = false;
+        _orderCallback = null;
+
+        _followTarget = null;
+        _followTransform = followTr;
         _followDist = dist;
         _doFollow = true;
     }
@@ -437,7 +473,14 @@ public class ShipAIController : MonoBehaviour
             {
                 if (_cyclesToRecomputePath == 0)
                 {
-                    NavigateWithoutTarget();
+                    if (CurrActivity == ShipActivity.Following)
+                    {
+                        NavigateInFormation();
+                    }
+                    else
+                    {
+                        NavigateWithoutTarget();
+                    }
                     _cyclesToRecomputePath = Random.Range(3, 7);
                 }
                 else
@@ -459,6 +502,36 @@ public class ShipAIController : MonoBehaviour
     {
     }
 
+    protected virtual void NavigateInFormation()
+    {
+        if (_followTarget == null)
+        {
+            _doFollow = false;
+            CurrActivity = ShipActivity.ControllingPosition;
+        }
+        else if (!_followTarget.ShipActiveInCombat)
+        {
+            ShipBase nextFollowTarget = null;
+            ShipAIController nextAIController = _followTarget.GetComponent<ShipAIController>();
+            if (nextAIController != null && nextAIController.CurrActivity == ShipActivity.Following)
+            {
+                nextFollowTarget = nextAIController._followTarget;
+            }
+            _followTarget = nextFollowTarget;
+            if (_followTarget == null)
+            {
+                _doFollow = false;
+                CurrActivity = ShipActivity.ControllingPosition;
+            }
+        }
+        else
+        {
+            Vector3 vecToFollowTarget = (_followTarget.transform.position - transform.position).normalized * _followDist;
+            _navGuide.SetDestination(_followTarget.transform.position - vecToFollowTarget);
+        }
+        AcquireTarget();
+    }
+
     public bool DoSeekTargets
     {
         get
@@ -469,6 +542,7 @@ public class ShipAIController : MonoBehaviour
                 case ShipActivity.ControllingPosition:
                 case ShipActivity.Defending:
                     return true;
+                case ShipActivity.ForceMoving:
                 case ShipActivity.Attacking:
                 case ShipActivity.Following:
                 case ShipActivity.Launching:
@@ -513,7 +587,25 @@ public class ShipAIController : MonoBehaviour
     protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, _navTarget);
+        switch (CurrActivity)
+        {
+            case ShipActivity.Idle:
+            case ShipActivity.ControllingPosition:
+            case ShipActivity.ForceMoving:
+            case ShipActivity.Defending:
+            case ShipActivity.Launching:
+            case ShipActivity.NavigatingToRecovery:
+            case ShipActivity.StartingRecovery:
+            case ShipActivity.Recovering:
+            case ShipActivity.Attacking:
+                Gizmos.DrawLine(transform.position, _navTarget);
+                break;
+            case ShipActivity.Following:
+                Gizmos.DrawLine(transform.position, _followTarget.transform.position);
+                break;
+            default:
+                break;
+        }
         //_bug0Alg.DrawDebugLines();
     }
 
@@ -533,10 +625,10 @@ public class ShipAIController : MonoBehaviour
     public ShipBase TargetShip { get; protected set; }
     protected Vector3 _navTarget;
     private Vector3 _targetHeading;
-    protected Transform _followTarget = null;
+    protected ShipBase _followTarget = null;
+    protected Transform _followTransform = null;
     protected float _followDist;
     protected OrderCompleteDlg _orderCallback = null;
-    private static readonly float _angleEps = 0.1f;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
     protected ShipAttackPattern _currAttackBehavior;
@@ -547,6 +639,7 @@ public class ShipAIController : MonoBehaviour
         Idle,
         ControllingPosition,
         Attacking,
+        ForceMoving,
         Following,
         Defending,
         Launching,

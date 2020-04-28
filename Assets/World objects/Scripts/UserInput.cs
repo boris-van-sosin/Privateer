@@ -238,7 +238,15 @@ public class UserInput : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(1))
             {
-                _selectionHandler.ClickOrder(clickPt.Value);
+                ShipBase clickTarget = colliderHit != null ? ShipBase.FromCollider(colliderHit) : null;
+                if (clickTarget != null)
+                {
+                    _selectionHandler.ClickOrder(clickTarget, SelectionHandler.OrderType.Follow);
+                }
+                else
+                {
+                    _selectionHandler.ClickOrder(clickPt.Value);
+                }
             }
         }
     }

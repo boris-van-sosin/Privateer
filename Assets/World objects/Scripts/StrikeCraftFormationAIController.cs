@@ -333,7 +333,6 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     protected NavigationGuide _navGuide;
     protected NavMeshAgent _innerNavAgent;
     private FormationState _currState;
-    private static readonly float _angleEps = 0.1f;
 
     // Visual debug:
     private Vector3[] _dbgObstacleCorners = new Vector3[5];

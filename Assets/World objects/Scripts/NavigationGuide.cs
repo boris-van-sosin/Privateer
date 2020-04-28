@@ -111,7 +111,7 @@ public class NavigationGuide : MonoBehaviour
     {
         Vector3 heading = _attachedObject.transform.forward;
         float angleToTarget = Vector3.Angle(heading, targetHeading);
-        if (angleToTarget > _angleEps)
+        if (angleToTarget > GlobalOtherConstants.NavGuideAngleEps)
         {
             _attachedObject.ApplyTurningToward(targetHeading);
         }
@@ -144,6 +144,5 @@ public class NavigationGuide : MonoBehaviour
     private NavMeshAgent _navAgent;
     private MovementBase _attachedObject;
     private float _baseSpeed;
-    private static readonly float _angleEps = 2f;
 }
 

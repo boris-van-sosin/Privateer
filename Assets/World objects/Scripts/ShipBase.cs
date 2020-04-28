@@ -646,6 +646,11 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         return null;
     }
 
+    public static float FormationHalfSpacing(ShipBase s)
+    {
+        return s.ObjectSize * GlobalDistances.ShipFormationHalfSpacingFactor;
+    }
+
     // Getting hit:
     public abstract void TakeHit(Warhead w, Vector3 location);
 

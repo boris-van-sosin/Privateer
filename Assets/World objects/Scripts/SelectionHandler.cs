@@ -7,6 +7,13 @@ using UnityEngine;
 
 public class SelectionHandler
 {
+    public enum OrderType
+    {
+        Follow,
+        Defend,
+        Attack
+    }
+
     public void ClickSelect(Collider colliderHit)
     {
         if (colliderHit != null)
@@ -47,12 +54,27 @@ public class SelectionHandler
 
     public void ClickOrder(Vector3 target)
     {
-        foreach (Ship s2 in _fleetSelectedShips)
+        foreach (ValueTuple<ShipBase, ShipAIController> s2 in ControllableShips())
         {
-            ShipAIController controller = s2.GetComponent<ShipAIController>();
-            if (controller != null && !s2.ShipDisabled && !s2.ShipSurrendered)
+            s2.Item2.UserNavigateTo(target);
+        }
+    }
+    public void ClickOrder(ShipBase targetShip, OrderType order)
+    {
+        if (true && order == OrderType.Follow)
+        {
+            ShipBase prevShip = null;
+            foreach (ValueTuple<ShipBase, ShipAIController> s2 in ControllableShips())
             {
-                controller.NavigateTo(target);
+                if (prevShip == null)
+                {
+                    s2.Item2.Follow(targetShip);
+                }
+                else
+                {
+                    s2.Item2.Follow(prevShip);
+                }
+                prevShip = s2.Item1;
             }
         }
     }
@@ -64,6 +86,18 @@ public class SelectionHandler
             sb.SetCircleSelectStatus(false);
         }
         _fleetSelectedShips.Clear();
+    }
+
+    private IEnumerable<ValueTuple<ShipBase, ShipAIController>> ControllableShips()
+    {
+        foreach (Ship s2 in _fleetSelectedShips)
+        {
+            ShipAIController controller = s2.GetComponent<ShipAIController>();
+            if (controller != null && !s2.ShipDisabled && !s2.ShipSurrendered)
+            {
+                yield return new ValueTuple<ShipBase, ShipAIController>(s2, controller);
+            }
+        }
     }
 
     private List<ShipBase> _fleetSelectedShips = new List<ShipBase>();

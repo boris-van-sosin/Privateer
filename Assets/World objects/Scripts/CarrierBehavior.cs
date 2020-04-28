@@ -68,8 +68,8 @@ public class CarrierBehavior : MonoBehaviour
                 s.AddToFormation(formation);
                 s.Activate();
                 s.AttachToHangerElevator(_elevatorBed[i]);
-                formation.MaxSpeed = s.MaxSpeed * 1.1f;
-                formation.TurnRate = s.TurnRate * 0.5f;
+                formation.MaxSpeed = s.MaxSpeed * GlobalOtherConstants.StrikeCraftFormtionMaxSpeedFactor;
+                formation.TurnRate = s.TurnRate * GlobalOtherConstants.StrikeCraftFormtionTurnRateFactor;
                 currLaunchingStrikeCraft[i] = s;
                 CarrierHangerAnim[i].Open();
                 ++numCreated;
