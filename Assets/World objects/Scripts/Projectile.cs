@@ -159,7 +159,7 @@ public class Projectile : MonoBehaviour
 
     private bool IsHit(Torpedo t)
     {
-        float roll = Random.Range(0, 1);
+        float roll = Random.Range(0f, 1f);
         return (roll <= ProjectileWarhead.EffectVsStrikeCraft);
     }
 
