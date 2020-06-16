@@ -1,5 +1,5 @@
 ﻿Name: Terran
-# Top names: Lictor, Superbia, Dreadnought, Götterdämmerung, Dies Irae
+# Top names: Lictor, Superbia, Dreadnought, Götterdämmerung, Dies Irae. Funny: Insufferable 
 Subcultures:
 - Name: British
   Prefix: HMS
@@ -860,8 +860,8 @@ Sloops:
     Fluff: ''
     Subcultures:
     - Pirate
-  - ShortName: En passant
-    FullName: En passant
+  - ShortName: En Passant
+    FullName: En Passant
     Fluff: ''
     Subcultures:
     - Pirate
@@ -877,6 +877,16 @@ Sloops:
     - Pirate
   - ShortName: Drop Bear
     FullName: Drop Bear
+    Fluff: ''
+    Subcultures:
+    - Pirate
+  - ShortName: Sybaris
+    FullName: Sybaris
+    Fluff: ''
+    Subcultures:
+    - Pirate
+  - ShortName: Cable Street
+    FullName: Cable Street
     Fluff: ''
     Subcultures:
     - Pirate
@@ -2286,6 +2296,11 @@ Frigates:
     Fluff: ''
     Subcultures:
     - British
+  - ShortName: Birmingham
+    FullName: Birmingham
+    Fluff: ''
+    Subcultures:
+    - British
   - ShortName: Nikopolis
     FullName: Nikopolis
     Fluff: ''
@@ -3461,6 +3476,10 @@ Cruisers:
     Fluff: ''
     Subcultures:
     - German
+  - ShortName: Belisarius
+    FullName: Belisarius
+    Fluff: ''
+    Subcultures: []
 - ClassName: Admiral
   ShipNames:
   - ShortName: Nelson
@@ -4277,6 +4296,16 @@ CapitalShips:
     - Russian
   - ShortName: Timoshenko
     FullName: Semyon Timoshenko
+    Fluff: ''
+    Subcultures:
+    - Russian
+  - ShortName: Suvorov
+    FullName: Alexander Suvorov
+    Fluff: ''
+    Subcultures:
+    - Russian
+  - ShortName: Kutuzov
+    FullName: Mikhail Kutuzov
     Fluff: ''
     Subcultures:
     - Russian
