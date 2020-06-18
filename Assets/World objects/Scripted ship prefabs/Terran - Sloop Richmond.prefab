@@ -47331,7 +47331,7 @@ MonoBehaviour:
   - {fileID: 8024053771434078093}
   ShipSize: 0
   CenterComponentSlots: 01000000010000000100000001000000
-  ForeComponentSlots: 
+  ForeComponentSlots: 00000000
   AftComponentSlots: 19000000
   LeftComponentSlots: 00000000
   RightComponentSlots: 00000000
@@ -47375,9 +47375,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 6762942446525106158, guid: 97000f975d2b3354392472170e54d320, type: 3}
 --- !u!1 &1523710320501636
 GameObject:

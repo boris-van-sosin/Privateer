@@ -68,6 +68,8 @@ public interface ITurret : IShipActiveComponent
 public interface IPeriodicActionComponent : IShipComponent
 {
     void PeriodicAction();
+    int EnergyPerTick { get; }
+    int HeatPerTick { get; }
 }
 
 public interface IUserActivatedComponent : IShipComponent
@@ -85,6 +87,11 @@ public interface IUserToggledComponent : IShipComponent
 public interface IEnergyCapacityComponent
 {
     int EnergyCapacity { get; }
+}
+
+public interface IHeatCapacityComponent
+{
+    int HeatCapacity { get; }
 }
 
 public interface IShieldComponent : IShipComponent, IUserToggledComponent

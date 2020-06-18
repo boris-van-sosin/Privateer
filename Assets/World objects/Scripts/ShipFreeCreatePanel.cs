@@ -50,14 +50,22 @@ public class ShipFreeCreatePanel : MonoBehaviour
         s.PlaceComponent(Ship.ShipSection.Right, DamageControlNode.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Center, HeatSink.DefaultComponent(s));
+        s.PlaceComponent(Ship.ShipSection.Fore, HeatExchange.DefaultComponent(s));
         s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s.ShipSize, s));
-        if (s.ShipSize == ObjectFactory.ShipSize.Cruiser || s.ShipSize == ObjectFactory.ShipSize.Destroyer)
+        if (s.ShipSize == ObjectFactory.ShipSize.Destroyer)
         {
-            s.PlaceComponent(Ship.ShipSection.Fore, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Left, HeatExchange.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Right, HeatSink.DefaultComponent(s));
+        }
+        else if (s.ShipSize == ObjectFactory.ShipSize.Cruiser)
+        {
+            s.PlaceComponent(Ship.ShipSection.Left, HeatExchange.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Right, HeatSink.DefaultComponent(s));
         }
         else if (s.ShipSize == ObjectFactory.ShipSize.CapitalShip)
         {
@@ -67,9 +75,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.PlaceComponent(Ship.ShipSection.Fore, ShieldGenerator.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Fore, CapacitorBank.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Left, CapacitorBank.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Right, CapacitorBank.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Aft, FireControlGeneral.DefaultComponent(s.ShipSize, s));
+            s.PlaceComponent(Ship.ShipSection.Left, HeatSink.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Right, HeatSink.DefaultComponent(s));
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {

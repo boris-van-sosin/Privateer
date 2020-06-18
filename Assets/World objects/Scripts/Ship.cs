@@ -11,7 +11,7 @@ public class Ship : ShipBase
         base.Awake();
         Energy = 0;
         Heat = 0;
-        MaxHeat = 100;
+        //MaxHeat = 100;
         InitComponentSlots();
         InitCrew();
         InitDamageEffects();
@@ -34,13 +34,15 @@ public class Ship : ShipBase
         _manualTurrets = new HashSet<ITurret>(_turrets);
         ApplyHitPointBuffs();
         _shipAI = GetComponent<ShipAIController>();
+        SetMinEergyToAct();
+        SetMaxEnergyAndHeat();
     }
 
     protected override void FindTurrets()
     {
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
         List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
-        _minEnergyPerShot = -1;
+        _minEnergyForActive = -1;
         foreach (List<Tuple<ComponentSlotType, IShipComponent>> l in _turretSlotsOccupied.Values)
         {
             l.Clear();
@@ -50,19 +52,52 @@ public class Ship : ShipBase
             TurretBase turret = hp.GetComponentInChildren<TurretBase>();
             if (turret != null)
             {
-                if (_minEnergyPerShot < 0)
-                {
-                    _minEnergyPerShot = turret.EnergyToFire;
-                }
-                else
-                {
-                    _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, turret.EnergyToFire);
-                }
                 turrets.Add(turret);
                 _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<ComponentSlotType, IShipComponent>(turret.TurretType, turret));
             }
         }
         _turrets = turrets.ToArray();
+    }
+
+    private void SetMinEergyToAct()
+    {
+        _minEnergyForActive = -1;
+        foreach (TurretBase t in _turrets.OfType<TurretBase>().Where(a => a.ComponentIsWorking))
+        {
+            if (_minEnergyForActive < 0)
+            {
+                _minEnergyForActive = t.EnergyToFire;
+            }
+            else
+            {
+                _minEnergyForActive = System.Math.Min(_minEnergyForActive, t.EnergyToFire);
+            }
+        }
+        foreach (DamageControlNode comp in _updateComponents.OfType<DamageControlNode>().Where(c => c.ComponentIsWorking))
+        {
+            if (_minEnergyForActive < 0)
+            {
+                _minEnergyForActive = comp.EnergyPerTick;
+            }
+            else
+            {
+                _minEnergyForActive = System.Math.Min(_minEnergyForActive, comp.EnergyPerTick);
+            }
+        }
+    }
+
+    private void SetMaxEnergyAndHeat()
+    {
+        MaxEnergy = 0;
+        foreach (var c in _energyCapacityComps)
+        {
+            MaxEnergy += c.EnergyCapacity;
+        }
+        MaxHeat = 0;
+        foreach (var c in _heatCapacityComps)
+        {
+            MaxHeat += c.HeatCapacity;
+        }
     }
 
     private void InitComponentSlots()
@@ -108,6 +143,7 @@ public class Ship : ShipBase
         _componentSlotsOccupied[ShipSection.Hidden][0] = new Tuple<ComponentSlotType, IShipComponent>(ComponentSlotType.Hidden, _electromagneticClamps);
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
+        _heatCapacityComps = AllComponents.Where(x => x is IHeatCapacityComponent).Select(y => y as IHeatCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
         _combatDetachments = AllComponents.Where(x => x is CombatDetachment).Select(y => y as CombatDetachment).ToArray();
@@ -180,13 +216,13 @@ public class Ship : ShipBase
             return false;
         }
 
-        if (_minEnergyPerShot < 0)
+        if (_minEnergyForActive < 0)
         {
-            _minEnergyPerShot = t.EnergyToFire;
+            _minEnergyForActive = t.EnergyToFire;
         }
         else
         {
-            _minEnergyPerShot = System.Math.Min(_minEnergyPerShot, t.EnergyToFire);
+            _minEnergyForActive = System.Math.Min(_minEnergyForActive, t.EnergyToFire);
         }
         _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<ComponentSlotType, IShipComponent>(t.TurretType, t));
         return true;
@@ -385,12 +421,12 @@ public class Ship : ShipBase
 
     private IEnumerator ContinuousComponents()
     {
-        int newMaxEnergy = 0;
-        foreach (IEnergyCapacityComponent comp in _energyCapacityComps)
-        {
-            newMaxEnergy += comp.EnergyCapacity;
-        }
-        MaxEnergy = newMaxEnergy;
+        //int newMaxEnergy = 0;
+        //foreach (IEnergyCapacityComponent comp in _energyCapacityComps)
+        //{
+        //    newMaxEnergy += comp.EnergyCapacity;
+        //}
+        //MaxEnergy = newMaxEnergy;
         yield return new WaitForSeconds(UnityEngine.Random.Range(0f, 0.25f));
         while (true)
         {
@@ -598,6 +634,7 @@ public class Ship : ShipBase
 
         // armour penetration
         int armourAtLocation = _armour[sec];
+        bool recheckMinEnergyToAct = false;
         for (int i = 0; i < w.HitMultiplicity; ++i)
         {
             if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
@@ -630,6 +667,10 @@ public class Ship : ShipBase
                 {
                     IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
                     comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
+                    if (!comp.ComponentIsWorking && comp is TurretBase)
+                    {
+                        recheckMinEnergyToAct = true;
+                    }
                 }
                 // Crew casualties:
                 LinkedList<ShipCharacter> casualtiesQueue = new LinkedList<ShipCharacter>(AllCrew.Where(x => x.Status == ShipCharacter.CharacterStaus.Active).OrderBy(x => x.CombatPriority));
@@ -650,6 +691,10 @@ public class Ship : ShipBase
         if (tookCasualties)
         {
             SetCrewNumBuff();
+        }
+        if (recheckMinEnergyToAct)
+        {
+            SetMinEergyToAct();
         }
         CheckCriticalDamage();
     }
@@ -691,6 +736,7 @@ public class Ship : ShipBase
     private void CheckCriticalDamage()
     {
         bool critical = false;
+        bool noPower = true;
         if (HullHitPoints == 0)
         {
             foreach (IShipActiveComponent comp in AllComponents.Where(c => c is IShipActiveComponent))
@@ -724,17 +770,17 @@ public class Ship : ShipBase
         else
         {
             // no power
-            bool noPower = true;
-            foreach (IPeriodicActionComponent comp in _updateComponents)
-            {
-                PowerPlant p = comp as PowerPlant;
-                if (p != null && p.ComponentIsWorking)
-                {
-                    noPower = false;
-                    break;
-                }
-            }
-            critical = noPower && Energy < _minEnergyPerShot;
+            //foreach (IPeriodicActionComponent comp in _updateComponents)
+            //{
+            //    PowerPlant p = comp as PowerPlant;
+            //    if (p != null && p.ComponentIsWorking)
+            //    {
+            //        noPower = false;
+            //        break;
+            //    }
+            //}
+            noPower = !_updateComponents.OfType<PowerPlant>().Any(p => p.ComponentIsWorking);
+            critical = noPower && Energy < _minEnergyForActive;
 
             if (!critical)
             {
@@ -757,7 +803,7 @@ public class Ship : ShipBase
             }
             ShipDisabled = true;
         }
-        if (!_engine.ComponentIsWorking)
+        if (!_engine.ComponentIsWorking || (noPower && Energy < _engine.EnergyPerTick))
         {
             ShipImmobilized = true;
             _speed = Mathf.Min(_speed, MaxSpeed / 2f);
@@ -1035,7 +1081,7 @@ public class Ship : ShipBase
 
     public ObjectFactory.ShipSize ShipSize;
 
-    private int _minEnergyPerShot;
+    private int _minEnergyForActive;
 
     public int Energy { get; private set; }
     public int MaxEnergy { get; private set; }
@@ -1205,6 +1251,7 @@ public class Ship : ShipBase
     }
 
     private IEnergyCapacityComponent[] _energyCapacityComps;
+    private IHeatCapacityComponent[] _heatCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
     private CombatDetachment[] _combatDetachments;

@@ -77,6 +77,9 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
         ContainingShip.TryChangeEnergyAndHeat(PowerOutput, HeatOutput);
     }
 
+    public int EnergyPerTick => -1;
+    public int HeatPerTick => HeatOutput;
+
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Power plant"; } }
@@ -194,6 +197,27 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
     private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
 }
 
+public class HeatSink : ShipComponentBase, IHeatCapacityComponent
+{
+    public int Capacity;
+
+    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+
+    public int HeatCapacity => Capacity;
+
+    public static HeatSink DefaultComponent(Ship containingShip)
+    {
+        return new HeatSink()
+        {
+            Capacity = 50,
+            _containingShip = containingShip,
+            MinShipSize = ObjectFactory.ShipSize.Sloop,
+            MaxShipSize = ObjectFactory.ShipSize.CapitalShip
+        };
+    }
+
+    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+}
 public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent, IShieldComponent
 {
     public int MaxShieldPoints { get; private set; }
@@ -217,6 +241,9 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
             }
         }
     }
+
+    public int EnergyPerTick => PowerPerShieldRegeneration;
+    public int HeatPerTick => HeatGenerationPerShieldRegeneration;
 
     public int MaxShieldPointRegeneration;
     public int PowerUsage;
@@ -349,6 +376,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     public int ArmorMaxPointRegeneration;
     public float TimeOutOfCombatToRepair;
 
+    
     public void PeriodicAction()
     {
         if (!ComponentIsWorking)
@@ -399,6 +427,9 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Damage control"; } }
+
+    public int EnergyPerTick => PowerUsage;
+    public int HeatPerTick => 0;
 
     public static DamageControlNode DefaultComponent(Ship containingShip)
     {
@@ -457,6 +488,9 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
     }
 
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+
+    public int EnergyPerTick => 0;
+    public int HeatPerTick => -1;
 
     public static HeatExchange DefaultComponent(Ship containingShip)
     {
@@ -563,6 +597,9 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public override string SpriteKey { get { return "Engine"; } }
 
+    public int EnergyPerTick => EnergyPerThrust;
+    public int HeatPerTick => HeatPerThrust;
+
     public static ShipEngine DefaultComponent(Ship containingShip)
     {
         return new ShipEngine()
@@ -654,6 +691,9 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Electromagentic Clamps"; } }
+
+    public int EnergyPerTick => EnergyPerPulse;
+    public int HeatPerTick => HeatPerPulse;
 
     public static ElectromagneticClamps DefaultComponent(Ship containingShip)
     {
@@ -758,6 +798,9 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Fire control general"; } }
+
+    public int EnergyPerTick => PowerUsage;
+    public int HeatPerTick => 0;
 
     public static FireControlGeneral DefaultComponent(Ship containingShip)
     {
