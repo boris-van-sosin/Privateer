@@ -56,6 +56,10 @@ public class SelectionHandler
     {
         foreach (ValueTuple<ShipBase, ShipAIController> s2 in ControllableShips())
         {
+            if (s2.Item2.ControlType == ShipAIController.ShipControlType.Manual)
+            {
+                s2.Item2.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+            }
             s2.Item2.UserNavigateTo(target);
         }
     }
@@ -66,6 +70,10 @@ public class SelectionHandler
             ShipBase prevShip = null;
             foreach (ValueTuple<ShipBase, ShipAIController> s2 in ControllableShips())
             {
+                if (s2.Item2.ControlType == ShipAIController.ShipControlType.Manual)
+                {
+                    s2.Item2.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+                }
                 if (prevShip == null)
                 {
                     s2.Item2.Follow(targetShip);

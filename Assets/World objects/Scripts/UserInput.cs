@@ -45,14 +45,14 @@ public class UserInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ControlledShip == null)
+        if (_controlledShip == null)
         {
             return;
         }
         if (_statusTopLevelDisplay == null)
         {
-            _statusTopLevelDisplay = ObjectFactory.CreateStatusPanel(ControlledShip, ShipStatusPanel);
-            _statusTopLevelDisplay.SetName(ControlledShip.DisplayName);
+            _statusTopLevelDisplay = ObjectFactory.CreateStatusPanel(_controlledShip, ShipStatusPanel);
+            _statusTopLevelDisplay.SetName(_controlledShip.DisplayName);
         }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -105,76 +105,103 @@ public class UserInput : MonoBehaviour
             FleetCommandMode(hitFlat, colliderHit);
         }
 
-        _userCamera.transform.position = ControlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
+        _userCamera.transform.position = _controlledShip.transform.position + (_cameraOffsetFactor * _cameraOffset);
     }
 
     private void ShipControlMode(Vector3? clickPt, Collider colliderHit)
     {
         if (clickPt.HasValue)
         {
-            ControlledShip.ManualTarget(clickPt.Value);
+            _controlledShip.ManualTarget(clickPt.Value);
             if (Input.GetMouseButton(0))
             {
                 if (!_grapplingMode)
                 {
-                    ControlledShip.FireManual(clickPt.Value);
+                    _controlledShip.FireManual(clickPt.Value);
                 }
                 else
                 {
-                    ControlledShip.FireHarpaxManual(clickPt.Value);
+                    _controlledShip.FireHarpaxManual(clickPt.Value);
                 }
             }
             if (Input.GetMouseButtonDown(1))
             {
-                ControlledShip.SetRequiredHeading(clickPt.Value);
+                if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.Manual)
+                {
+                    _controlledShipAI.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+                }
+                if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+                {
+                    _controlledShipAI.UserNavigateTo(clickPt.Value);
+                }
             }
         }
 
         if (Input.GetKey(_keyMapping[UserOperation.Forward]))
         {
-            ControlledShip.MoveForward();
+            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            {
+                _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
+            }
+            _controlledShip.MoveForward();
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Backward]))
         {
-            ControlledShip.MoveBackward();
+            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            {
+                _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
+            }
+            _controlledShip.MoveBackward();
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Break]))
         {
-            ControlledShip.ApplyBraking();
+            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            {
+                _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
+            }
+            _controlledShip.ApplyBraking();
         }
 
         if (Input.GetKey(_keyMapping[UserOperation.Left]))
         {
-            ControlledShip.ApplyTurning(true);
+            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            {
+                _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
+            }
+            _controlledShip.ApplyTurning(true);
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Right]))
         {
-            ControlledShip.ApplyTurning(false);
+            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            {
+                _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
+            }
+            _controlledShip.ApplyTurning(false);
         }
 
         if (Input.GetKeyDown(_keyMapping[UserOperation.MagneticClamps]))
         {
-            ControlledShip.ToggleElectromagneticClamps();
+            _controlledShip.ToggleElectromagneticClamps();
         }
         else if (Input.GetKeyDown(_keyMapping[UserOperation.Shields]))
         {
-            ControlledShip.ToggleShields();
+            _controlledShip.ToggleShields();
         }
         else if (Input.GetKeyDown(_keyMapping[UserOperation.GrapplingTool]))
         {
-            if (ControlledShip.TowingByHarpax == null)
+            if (_controlledShip.TowingByHarpax == null)
             {
-                ControlledShip.GrapplingMode = !ControlledShip.GrapplingMode;
+                _controlledShip.GrapplingMode = !_controlledShip.GrapplingMode;
             }
             else
             {
-                ControlledShip.DisconnectHarpaxTowing();
+                _controlledShip.DisconnectHarpaxTowing();
             }
         }
         else if (Input.GetKeyDown(_keyMapping[UserOperation.StrikeCraftLaunch]))
         {
             CarrierBehavior c;
-            if ((c = ControlledShip.GetComponent<CarrierBehavior>()) != null)
+            if ((c = _controlledShip.GetComponent<CarrierBehavior>()) != null)
             {
                 c.LaunchDbg();
             }
@@ -193,11 +220,11 @@ public class UserInput : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
-                    ControlledShip.WeaponGroups.ToggleGroupAuto(cg.Item2);
+                    _controlledShip.WeaponGroups.ToggleGroupAuto(cg.Item2);
                 }
                 else
                 {
-                    ControlledShip.WeaponGroups.SetGroupToMode(cg.Item2, TurretBase.TurretMode.Manual);
+                    _controlledShip.WeaponGroups.SetGroupToMode(cg.Item2, TurretBase.TurretMode.Manual);
                 }
                 _statusTopLevelDisplay.ForceUpdateTurretModes();
             }
@@ -251,7 +278,23 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    public Ship ControlledShip; // temporary
+    public Ship ControlledShip
+    {
+        get
+        {
+            return _controlledShip;
+        }
+        set
+        {
+            _controlledShip = value;
+            if (_controlledShip != null)
+                _controlledShipAI = _controlledShip.GetComponent<ShipAIController>();
+            else
+                _controlledShipAI = null;
+        }
+    }
+    private Ship _controlledShip;
+    private ShipAIController _controlledShipAI;
     private bool _grapplingMode = false; // temporary
     private StatusTopLevel _statusTopLevelDisplay = null;
     public Transform ShipStatusPanel;

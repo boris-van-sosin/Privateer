@@ -162,17 +162,20 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.transform.Translate(30, 0, 0);
         }
         s.SetCircleToFactionColor();
+        ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
         if (friendly && userShip)
         {
             UserInput input = FindObjectOfType<UserInput>();
             input.ControlledShip = s;
-            ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
-            AIController.ManualControl = true;
+            AIController.ControlType = ShipAIController.ShipControlType.Manual;
+        }
+        else if (friendly)
+        {
+            AIController.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
         }
         else
         {
-            ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
-            AIController.ManualControl = false;
+            AIController.ControlType = ShipAIController.ShipControlType.Autonomous;
         }
 
         s.DisplayName =

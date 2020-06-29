@@ -7,27 +7,26 @@ using UnityEngine.AI;
 public class ShipAIController : MonoBehaviour
 {
     // Use this for initialization
-    protected virtual void Start ()
+    protected virtual void Start()
     {
         _controlledShip = GetComponent<ShipBase>();
         CurrActivity = ShipActivity.ControllingPosition;
-        if (!ManualControl)
+        if (_controlType == ShipControlType.Autonomous)
         {
             StartCoroutine(AcquireTargetPulse());
         }
-        _bug0Alg = GenBug0Algorithm();
         TargetShip = null;
         _navGuide = ObjectFactory.CreateNavGuide(transform.position, transform.forward);
         _navGuide.Attach(_controlledShip);
-        _navGuide.ManualControl = ManualControl;
+        _navGuide.ManualControl = _controlType == ShipControlType.Manual;
         // temporary default:
         _currAttackBehavior = ShipAttackPattern.Aggressive;
     }
 	
 	// Update is called once per frame
-	protected virtual void Update ()
+	protected virtual void Update()
     {
-        if (ManualControl || !_controlledShip.ShipControllable)
+        if (ControlType == ShipControlType.Manual || !_controlledShip.ShipControllable)
         {
             return;
         }
@@ -337,6 +336,8 @@ public class ShipAIController : MonoBehaviour
     public void UserNavigateTo(Vector3 target)
     {
         CurrActivity = ShipActivity.ControllingPosition;
+        _doFollow = false;
+        _doNavigate = true;
         NavigateTo(target, null);
     }
 
@@ -493,6 +494,36 @@ public class ShipAIController : MonoBehaviour
         }
     }
 
+    private IEnumerator SemiAutonomousBehaviorPulse()
+    {
+        yield return _targetAcquirePulseDelay;
+        foreach (ITurret t in _controlledShip.Turrets)
+        {
+            t.SetTurretBehavior(TurretBase.TurretMode.Auto);
+        }
+        while (true)
+        {
+            if (!_controlledShip.ShipActiveInCombat)
+            {
+                yield break;
+            }
+
+            if (_cyclesToRecomputePath == 0)
+            {
+                if (CurrActivity == ShipActivity.Following)
+                {
+                    NavigateInFormation();
+                }
+                _cyclesToRecomputePath = Random.Range(3, 7);
+            }
+            else
+            {
+                --_cyclesToRecomputePath;
+            }
+
+            yield return _targetAcquirePulseDelay;
+        }
+    }
     protected virtual Vector3 NavigationDest(ShipBase targetShip)
     {
         return AttackPosition(TargetShip);
@@ -609,13 +640,43 @@ public class ShipAIController : MonoBehaviour
         //_bug0Alg.DrawDebugLines();
     }
 
-    public bool ManualControl { get; set; }
+    public ShipControlType ControlType
+    {
+        get
+        {
+            return _controlType;
+        }
+        set
+        {
+            bool changeControlType = _controlType != value;
+            _controlType = value;
+            if (_navGuide != null)
+                _navGuide.ManualControl = _controlType == ShipControlType.Manual;
+
+            if (changeControlType)
+            {
+                if (_controlType == ShipControlType.Manual)
+                {
+                    StopCoroutine(SemiAutonomousBehaviorPulse());
+                    StopCoroutine(AcquireTargetPulse());
+                }
+                else
+                {
+                    if (_controlType == ShipControlType.SemiAutonomous)
+                        StartCoroutine(SemiAutonomousBehaviorPulse());
+                    else
+                        StartCoroutine(AcquireTargetPulse());
+
+                }
+            }
+        }
+    }
+    private ShipControlType _controlType;
 
     public delegate void OrderCompleteDlg();
 
     protected ShipBase _controlledShip;
-    protected Bug0 _bug0Alg;
-    protected NavigationGuide _navGuide;
+    protected NavigationGuide _navGuide = null;
 
     protected static readonly int _numAttackAngles = 12;
     protected static readonly int _numAttackDistances = 3;
@@ -654,6 +715,13 @@ public class ShipAIController : MonoBehaviour
         Aggressive,
         Artillery,
         HitAndRun
+    }
+
+    public enum ShipControlType
+    {
+        Manual,
+        SemiAutonomous,
+        Autonomous
     }
 
     public ShipActivity CurrActivity { get; protected set; }
