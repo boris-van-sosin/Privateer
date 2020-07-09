@@ -7,22 +7,6 @@ using System;
 
 public class StatusTopLevel : MonoBehaviour
 {
-    void Awake()
-    {
-        _compsPanel = transform.Find("CompsPanel").GetComponent<RectTransform>();
-        _healthBar = transform.Find("HitPointBar").GetComponent<GradientBar>();
-        _shieldBar = transform.Find("ShieldBar").GetComponent<GradientBar>();
-        _energyBar = transform.Find("EnergyBar").GetComponent<GradientBar>();
-        _heatBar  = transform.Find("HeatBar").GetComponent<GradientBar>();
-        _shortNameBox = transform.Find("TextShortName").GetComponent<TextMeshProUGUI>();
-        _fullNameBox= transform.Find("TextFullName").GetComponent<TextMeshProUGUI>();
-        _fluffBox = transform.Find("TextFluff").GetComponent<TextMeshProUGUI>();
-        _hangerPanel = transform.Find("ControlsPanel/StrikeCraftPanel");
-        _numActiveStrikeCraftBox = transform.Find("ControlsPanel/StrikeCraftPanel/ActiveNum").GetComponent<TextMeshProUGUI>();
-        _numFightersBox = transform.Find("ControlsPanel/StrikeCraftPanel/FightersPanel/FightersNum").GetComponent<TextMeshProUGUI>();
-        //_numBombersBox = transform.Find("Bombers num").GetComponent<TextMeshProUGUI>();
-    }
-
     public void AttachShip(Ship s)
     {
         if (_attachedShip != null)
@@ -33,7 +17,7 @@ public class StatusTopLevel : MonoBehaviour
         if (_attachedShip != null)
         {
             // Take a snapshot of the ship
-            UnityEngine.UI.Image ImgObj = transform.Find("Image").GetComponent<UnityEngine.UI.Image>();
+            //UnityEngine.UI.Image ImgObj = ShipPhoto;
             int ImgH = 512, ImgW = 512;
             float scaleFactor = 1.2f;
             float requiredSize = scaleFactor * Mathf.Max(_attachedShip.ShipLength, _attachedShip.ShipWidth);
@@ -57,9 +41,9 @@ public class StatusTopLevel : MonoBehaviour
             shipImg.Apply();
 
             Sprite sp = Sprite.Create(shipImg, new Rect(0, 0, ImgW, ImgH), new Vector2(0, 0));
-            ImgObj.sprite = sp;
+            ShipPhoto.sprite = sp;
 
-            RectTransform panelRect = GetComponent<RectTransform>();
+            RectTransform panelRect = ShipPhoto.GetComponent<RectTransform>();
             foreach (TurretHardpoint hp in _attachedShip.WeaponHardpoints)
             {
                 Vector3 hpPos = cam.WorldToViewportPoint(hp.transform.position);
@@ -105,13 +89,13 @@ public class StatusTopLevel : MonoBehaviour
             {
                 StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(comp);
                 RectTransform compRT = compStatus.GetComponent<RectTransform>();
-                compRT.SetParent(_compsPanel);
+                compRT.SetParent(CompsPanel);
             }
 
-            _healthBar.MaxValue = _attachedShip.MaxHullHitPoints;
-            _shieldBar.MaxValue = _attachedShip.ShipTotalMaxShields;
-            _energyBar.MaxValue = _attachedShip.MaxEnergy;
-            _heatBar.MaxValue = _attachedShip.MaxHeat;
+            HealthBar.MaxValue = _attachedShip.MaxHullHitPoints;
+            ShieldBar.MaxValue = _attachedShip.ShipTotalMaxShields;
+            EnergyBar.MaxValue = _attachedShip.MaxEnergy;
+            HeatBar.MaxValue = _attachedShip.MaxHeat;
 
             SetStrikeCraftStatus();
         }
@@ -126,17 +110,17 @@ public class StatusTopLevel : MonoBehaviour
         _attachedCarrier = _attachedShip.GetComponent<CarrierBehavior>();
         if (_attachedCarrier == null)
         {
-            _hangerPanel.gameObject.SetActive(false);
+            HangerPanel.gameObject.SetActive(false);
             return;
         }
-        _hangerPanel.gameObject.SetActive(true);
+        HangerPanel.gameObject.SetActive(true);
         if (_attachedCarrier.ActiveFormations != null)
         {
-            _numActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
+            NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
         }
         else
         {
-            _numActiveStrikeCraftBox.text = string.Format("{0}/{1}", 0, _attachedCarrier.MaxFormations);
+            NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", 0, _attachedCarrier.MaxFormations);
         }
         _attachedCarrier.OnLaunchStart += CarrierEventWrapper;
         _attachedCarrier.OnLaunchFinish += CarrierEventWrapper;
@@ -147,9 +131,9 @@ public class StatusTopLevel : MonoBehaviour
 
     public void SetName(ShipDisplayName dn)
     {
-        _shortNameBox.text = dn.ShortName;
-        _fullNameBox.text = dn.FullName;
-        _fluffBox.text = dn.Fluff;
+        ShortNameBox.text = dn.ShortName;
+        FullNameBox.text = dn.FullName;
+        FluffBox.text = dn.Fluff;
     }
 
     private static float ShipLenCenter(ShipBase sb)
@@ -201,7 +185,7 @@ public class StatusTopLevel : MonoBehaviour
 
     private void ForceUpdateHangerStatus()
     {
-        _numActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
+        NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
     }
 
     private void CarrierEventWrapper(CarrierBehavior c)
@@ -224,10 +208,10 @@ public class StatusTopLevel : MonoBehaviour
     {
         if (_attachedShip != null)
         {
-            _healthBar.Value = _attachedShip.HullHitPoints;
-            _shieldBar.Value = _attachedShip.ShipTotalShields;
-            _energyBar.Value = _attachedShip.Energy;
-            _heatBar.Value = _attachedShip.Heat;
+            HealthBar.Value = _attachedShip.HullHitPoints;
+            ShieldBar.Value = _attachedShip.ShipTotalShields;
+            EnergyBar.Value = _attachedShip.Energy;
+            HeatBar.Value = _attachedShip.Heat;
         }
     }
 
@@ -237,18 +221,19 @@ public class StatusTopLevel : MonoBehaviour
     private Ship _attachedShip = null;
     private CarrierBehavior _attachedCarrier = null;
     private Dictionary<TurretBase, StatusProgressBar> _turretProgressBars = new Dictionary<TurretBase, StatusProgressBar>();
-    private GradientBar _healthBar;
-    private GradientBar _shieldBar;
-    private GradientBar _energyBar;
-    private GradientBar _heatBar;
-    private RectTransform _compsPanel;
-    private TextMeshProUGUI _shortNameBox;
-    private TextMeshProUGUI _fullNameBox;
-    private TextMeshProUGUI _fluffBox;
-    private TextMeshProUGUI _numActiveStrikeCraftBox;
-    private TextMeshProUGUI _numFightersBox;
-    private TextMeshProUGUI _numBombersBox;
-    private Transform _hangerPanel;
+    public UnityEngine.UI.Image ShipPhoto;
+    public GradientBar HealthBar;
+    public GradientBar ShieldBar;
+    public GradientBar EnergyBar;
+    public GradientBar HeatBar;
+    public RectTransform CompsPanel;
+    public TextMeshProUGUI ShortNameBox;
+    public TextMeshProUGUI FullNameBox;
+    public TextMeshProUGUI FluffBox;
+    public TextMeshProUGUI NumActiveStrikeCraftBox;
+    public TextMeshProUGUI NumFightersBox;
+    public TextMeshProUGUI NumBombersBox;
+    public Transform HangerPanel;
     private static readonly Color _autoTurretColor = new Color(83f / 255f, 198f / 255f, 255f / 255f);
     private static readonly Color _manualTurretColor = new Color(0f / 255f, 0f / 255f, 120f / 255f);
     private static readonly Color _offTurretColor = Color.black;
