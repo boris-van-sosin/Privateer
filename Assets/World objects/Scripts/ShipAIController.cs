@@ -13,7 +13,7 @@ public class ShipAIController : MonoBehaviour
         CurrActivity = ShipActivity.ControllingPosition;
         if (_controlType == ShipControlType.Autonomous)
         {
-            StartCoroutine(AcquireTargetPulse());
+            _autoBehaviorCoroutine = StartCoroutine(AcquireTargetPulse());
         }
         TargetShip = null;
         _navGuide = ObjectFactory.CreateNavGuide(transform.position, transform.forward);
@@ -657,15 +657,17 @@ public class ShipAIController : MonoBehaviour
             {
                 if (_controlType == ShipControlType.Manual)
                 {
-                    StopCoroutine(SemiAutonomousBehaviorPulse());
-                    StopCoroutine(AcquireTargetPulse());
+                    if (_semiAutoBehaviorCoroutine != null)
+                        StopCoroutine(_semiAutoBehaviorCoroutine);
+                    if (_autoBehaviorCoroutine != null)
+                        StopCoroutine(_autoBehaviorCoroutine);
                 }
                 else
                 {
                     if (_controlType == ShipControlType.SemiAutonomous)
-                        StartCoroutine(SemiAutonomousBehaviorPulse());
+                        _semiAutoBehaviorCoroutine = StartCoroutine(SemiAutonomousBehaviorPulse());
                     else
-                        StartCoroutine(AcquireTargetPulse());
+                        _autoBehaviorCoroutine = StartCoroutine(AcquireTargetPulse());
 
                 }
             }
@@ -694,6 +696,8 @@ public class ShipAIController : MonoBehaviour
     protected bool _doFollow = false;
     protected ShipAttackPattern _currAttackBehavior;
     protected int _cyclesToRecomputePath = 0;
+
+    private Coroutine _autoBehaviorCoroutine = null, _semiAutoBehaviorCoroutine = null;
 
     public enum ShipActivity
     {

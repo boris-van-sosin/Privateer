@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UserInput : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class UserInput : MonoBehaviour
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Weapons"), true);
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Effects"), true);
         */
+        _selectionHandler.SelectedShipPanel = SelectedShipPanel;
     }
 
     // Update is called once per frame
@@ -66,7 +68,7 @@ public class UserInput : MonoBehaviour
             if (DisplayContextMenu && s != null && s is Ship && ContextMenu != null)
             {
                 ContextMenu.gameObject.SetActive(true);
-                ContextMenu.transform.position = _userCamera.WorldToScreenPoint(hitFlat.Value) + new Vector3(70, 5, 0);
+                ContextMenu.transform.position = _userCamera.WorldToScreenPoint(ray.origin) + new Vector3(70, -10, 0);
                 if (ContextMenu.DisplayedShip != s)
                 {
                     ContextMenu.DisplayedShip = (Ship)s;
@@ -113,7 +115,7 @@ public class UserInput : MonoBehaviour
         if (clickPt.HasValue)
         {
             _controlledShip.ManualTarget(clickPt.Value);
-            if (Input.GetMouseButton(0))
+            if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(0))
             {
                 if (!_grapplingMode)
                 {
@@ -124,7 +126,7 @@ public class UserInput : MonoBehaviour
                     _controlledShip.FireHarpaxManual(clickPt.Value);
                 }
             }
-            if (Input.GetMouseButtonDown(1))
+            if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(1))
             {
                 if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.Manual)
                 {
@@ -139,7 +141,7 @@ public class UserInput : MonoBehaviour
 
         if (Input.GetKey(_keyMapping[UserOperation.Forward]))
         {
-            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            if (_controlledShipAI.ControlType != ShipAIController.ShipControlType.Manual)
             {
                 _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
             }
@@ -147,7 +149,7 @@ public class UserInput : MonoBehaviour
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Backward]))
         {
-            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            if (_controlledShipAI.ControlType != ShipAIController.ShipControlType.Manual)
             {
                 _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
             }
@@ -155,7 +157,7 @@ public class UserInput : MonoBehaviour
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Break]))
         {
-            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            if (_controlledShipAI.ControlType != ShipAIController.ShipControlType.Manual)
             {
                 _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
             }
@@ -164,7 +166,7 @@ public class UserInput : MonoBehaviour
 
         if (Input.GetKey(_keyMapping[UserOperation.Left]))
         {
-            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            if (_controlledShipAI.ControlType != ShipAIController.ShipControlType.Manual)
             {
                 _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
             }
@@ -172,7 +174,7 @@ public class UserInput : MonoBehaviour
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Right]))
         {
-            if (_controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            if (_controlledShipAI.ControlType != ShipAIController.ShipControlType.Manual)
             {
                 _controlledShipAI.ControlType = ShipAIController.ShipControlType.Manual;
             }
@@ -235,44 +237,47 @@ public class UserInput : MonoBehaviour
     {
         if (clickPt.HasValue)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                _selectionHandler.ClickSelect(colliderHit);
-                _dragOrigin = clickPt.Value;
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                if (!_displaySelectBox)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    _displaySelectBox = true;
-                    _selectBox.gameObject.SetActive(true);
+                    _selectionHandler.ClickSelect(colliderHit);
+                    _dragOrigin = clickPt.Value;
                 }
-                //Vector3 corner1 = _userCamera.WorldToScreenPoint(_dragOrigin);
-                //Vector3 corner2 = _userCamera.WorldToScreenPoint(clickPt.Value);
-                Vector3 corner1 = _dragOrigin;
-                Vector3 corner2 = clickPt.Value;
-                Vector3 cornerMaxMin = new Vector3(Mathf.Max(_dragOrigin.x, clickPt.Value.x), 0, Mathf.Min(_dragOrigin.z, clickPt.Value.z));
-                _selectBox.transform.position = cornerMaxMin;
-                _selectBoxRect.sizeDelta = new Vector2(Mathf.Abs(corner2.x - corner1.x), Mathf.Abs(corner2.z - corner1.z));
-                _dragDest = corner2;
-            }
-            else if (Input.GetMouseButtonUp(0))
-            {
-                _selectionHandler.BoxSelect(_dragOrigin, _dragDest);
-                _displaySelectBox = false;
-                _selectBox.gameObject.SetActive(false);
+                else if (Input.GetMouseButton(0))
+                {
+                    if (!_displaySelectBox)
+                    {
+                        _displaySelectBox = true;
+                        _selectBox.gameObject.SetActive(true);
+                    }
+                    //Vector3 corner1 = _userCamera.WorldToScreenPoint(_dragOrigin);
+                    //Vector3 corner2 = _userCamera.WorldToScreenPoint(clickPt.Value);
+                    Vector3 corner1 = _dragOrigin;
+                    Vector3 corner2 = clickPt.Value;
+                    Vector3 cornerMaxMin = new Vector3(Mathf.Max(_dragOrigin.x, clickPt.Value.x), 0, Mathf.Min(_dragOrigin.z, clickPt.Value.z));
+                    _selectBox.transform.position = cornerMaxMin;
+                    _selectBoxRect.sizeDelta = new Vector2(Mathf.Abs(corner2.x - corner1.x), Mathf.Abs(corner2.z - corner1.z));
+                    _dragDest = corner2;
+                }
+                else if (Input.GetMouseButtonUp(0))
+                {
+                    _selectionHandler.BoxSelect(_dragOrigin, _dragDest);
+                    _displaySelectBox = false;
+                    _selectBox.gameObject.SetActive(false);
 
-            }
-            if (Input.GetMouseButtonDown(1))
-            {
-                ShipBase clickTarget = colliderHit != null ? ShipBase.FromCollider(colliderHit) : null;
-                if (clickTarget != null)
-                {
-                    _selectionHandler.ClickOrder(clickTarget, SelectionHandler.OrderType.Follow);
                 }
-                else
+                if (Input.GetMouseButtonDown(1))
                 {
-                    _selectionHandler.ClickOrder(clickPt.Value);
+                    ShipBase clickTarget = colliderHit != null ? ShipBase.FromCollider(colliderHit) : null;
+                    if (clickTarget != null)
+                    {
+                        _selectionHandler.ClickOrder(clickTarget, SelectionHandler.OrderType.Follow);
+                    }
+                    else
+                    {
+                        _selectionHandler.ClickOrder(clickPt.Value);
+                    }
                 }
             }
         }
@@ -297,9 +302,12 @@ public class UserInput : MonoBehaviour
     private ShipAIController _controlledShipAI;
     private bool _grapplingMode = false; // temporary
     private StatusTopLevel _statusTopLevelDisplay = null;
+
     public Transform ShipStatusPanel;
     public ShipContextMenu ContextMenu;
     public bool DisplayContextMenu;
+    public RectTransform SelectedShipPanel;
+
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;

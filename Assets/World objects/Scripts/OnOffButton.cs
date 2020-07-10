@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,14 +24,27 @@ public class OnOffButton : MonoBehaviour
         }
         set
         {
+            bool prevValue = _value;
             _value = value;
-            if (_value)
+            if (_containerImg != null)
             {
-                _containerImg.color = OnColor;
+                if (_value)
+                {
+                    _containerImg.color = OnColor;
+                }
+                else
+                {
+                    _containerImg.color = OffColor;
+                }
             }
             else
             {
-                _containerImg.color = OffColor;
+                InitialValue = value;
+            }
+
+            if (_value != prevValue)
+            {
+                onValueChanged?.Invoke(_value);
             }
         }
     }
@@ -38,6 +52,7 @@ public class OnOffButton : MonoBehaviour
     private void Toggle()
     {
         Value = !Value;
+        onValueChangedViaClick?.Invoke(Value);
     }
 
     public Image ButtonImage;
@@ -47,4 +62,6 @@ public class OnOffButton : MonoBehaviour
     public bool InitialValue;
     private Button _innerBtn;
     private Image _containerImg;
+    public event Action<bool> onValueChanged;
+    public event Action<bool> onValueChangedViaClick;
 }

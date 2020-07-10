@@ -23,12 +23,27 @@ public class SelectionHandler
             {
                 ClearSelection();
                 _fleetSelectedShips.Add(s2);
+                AddSelectedShipCard((Ship)s2);
                 s2.SetCircleSelectStatus(true);
             }
         }
         else
         {
             ClearSelection();
+        }
+    }
+
+    private void AddSelectedShipCard(Ship s)
+    {
+        if (SelectedShipPanel != null)
+        {
+            SelectedShipCard card = ObjectFactory.AcquireShipCard(s);
+            card.transform.SetParent(SelectedShipPanel);
+            RectTransform cardRT = card.GetComponent<RectTransform>();
+            float height = cardRT.rect.height;
+            float pivotOffset = (1f - cardRT.pivot.y) * height;
+            cardRT.anchoredPosition = new Vector2(cardRT.anchoredPosition.x, -pivotOffset);
+            _selectedShipCards.Add(card);
         }
     }
 
@@ -47,6 +62,7 @@ public class SelectionHandler
             if (s2 != null && s2 is Ship)
             {
                 _fleetSelectedShips.Add(s2);
+                AddSelectedShipCard((Ship)s2);
                 s2.SetCircleSelectStatus(true);
             }
         }
@@ -93,6 +109,15 @@ public class SelectionHandler
         {
             sb.SetCircleSelectStatus(false);
         }
+        if (SelectedShipPanel != null)
+        {
+            foreach (SelectedShipCard card in _selectedShipCards)
+            {
+                ObjectFactory.ReleaseShipCard(card);
+                card.transform.SetParent(null);
+            }
+            _selectedShipCards.Clear();
+        }
         _fleetSelectedShips.Clear();
     }
 
@@ -109,4 +134,7 @@ public class SelectionHandler
     }
 
     private List<ShipBase> _fleetSelectedShips = new List<ShipBase>();
+    private List<SelectedShipCard> _selectedShipCards = new List<SelectedShipCard>();
+
+    public RectTransform SelectedShipPanel { get; set; }
 }

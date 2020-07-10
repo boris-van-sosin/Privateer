@@ -470,6 +470,30 @@ public static class ObjectFactory
         return null;
     }
 
+    public static SelectedShipCard AcquireShipCard(Ship s)
+    {
+        SelectedShipCard res;
+        if (_objCache.ShipCards.Count > 0)
+        {
+            res = _objCache.ShipCards.Acquire();
+        }
+        else
+        {
+            res = _prototypes.CreateShipCard();
+            RectTransform cardRT = res.GetComponent<RectTransform>();
+            cardRT.anchorMin = new Vector2(0f, 1f);
+            cardRT.anchorMax = new Vector2(0f, 1f);
+        }
+        res.AttachShip(s);
+        res.gameObject.SetActive(true);
+        return res;
+    }
+    public static void ReleaseShipCard(SelectedShipCard c)
+    {
+        _objCache.ShipCards.Release(c);
+    }
+    private static ObjectCache _objCache = new ObjectCache();
+
     public static int AllTargetableLayerMask { get { return _allTargetableLayerMask; } }
     public static int AllShipsLayerMask { get { return _allShipsLayerMask; } }
     public static int AllStikeCraftLayerMask { get { return _allStrikeCraftLayerMask; } }

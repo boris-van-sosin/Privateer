@@ -11,6 +11,7 @@ public class StrikeCraftAIController : ShipAIController
         _controlledCraft = _controlledShip.GetComponent<StrikeCraft>();
         _formation = (StrikeCraftFormation)(_controlledCraft.ContainingFormation);
         _formationAI = _formation.GetComponent<StrikeCraftFormationAIController>();
+        ControlType = ShipControlType.Autonomous;
     }
 
     protected override void Update()

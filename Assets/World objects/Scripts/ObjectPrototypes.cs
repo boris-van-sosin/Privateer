@@ -328,6 +328,11 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate(WeaponCtrlCfgLinePrototype);
     }
 
+    public SelectedShipCard CreateShipCard()
+    {
+        return Instantiate(ShipCard);
+    }
+
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
@@ -361,6 +366,8 @@ public class ObjectPrototypes : MonoBehaviour
     public Canvas SelectionBoxCanvas;
 
     public Camera ShipStatusPanelCamera;
+
+    public SelectedShipCard ShipCard;
 
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, StrikeCraft> _strikeCraftPrototypeDictionary = new Dictionary<string, StrikeCraft>();
