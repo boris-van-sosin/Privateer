@@ -233,9 +233,7 @@ public class Maneuver
 
     public Vector3 Velocity { get; private set; }
 
-    public delegate void ManeuverFinishedDlg(Maneuver m);
-
-    public event ManeuverFinishedDlg OnManeuverFinish;
+    public event Action<Maneuver> OnManeuverFinish;
 
     private MovementBase _ship;
     private int _currSeg;

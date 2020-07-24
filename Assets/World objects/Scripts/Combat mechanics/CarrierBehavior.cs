@@ -23,9 +23,6 @@ public class CarrierBehavior : MonoBehaviour
         _inRecovery = false;
     }
 
-    public delegate void CarrierDelegate(CarrierBehavior c);
-    public delegate void CarrierFormationDelegate(CarrierBehavior c, StrikeCraftFormation f);
-
     public void LaunchDbg()
     {
         if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
@@ -70,7 +67,7 @@ public class CarrierBehavior : MonoBehaviour
         int numCreated = 0;
         while (numLaunched < formation.Positions.Length)
         {
-            if (numCreated < formation.Positions.Length && CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Closed)
+            if (numCreated < formation.Positions.Length && CarrierHangerAnim[i].ComponentState == GenericOpenCloseAnim.State.Closed)
             {
                 StrikeCraft s = ObjectFactory.CreateStrikeCraftAndFitOut(strikeCraftKey);
                 s.IgnoreHits = true;
@@ -86,7 +83,7 @@ public class CarrierBehavior : MonoBehaviour
                 CarrierHangerAnim[i].Open();
                 ++numCreated;
             }
-            else if (CarrierHangerAnim[i].HangerState == CarrierHangerGenericAnim.State.Open)
+            else if (CarrierHangerAnim[i].ComponentState == GenericOpenCloseAnim.State.Open)
             {
                 currLaunchingStrikeCraft[i].DetachHangerElevator();
                 Maneuver m = CreateLaunchManeuver(_launchTransform[i]);
@@ -191,9 +188,9 @@ public class CarrierBehavior : MonoBehaviour
         return true;
     }
 
-    public bool RecoveryTryStartSingle(StrikeCraft s, int hangerIdx, GenericEmptyDelegate onReadyToLand)
+    public bool RecoveryTryStartSingle(StrikeCraft s, int hangerIdx, Action onReadyToLand)
     {
-        if (CarrierHangerAnim[hangerIdx].HangerState == CarrierHangerGenericAnim.State.Closed)
+        if (CarrierHangerAnim[hangerIdx].ComponentState == GenericOpenCloseAnim.State.Closed)
         {
             CarrierHangerAnim[hangerIdx].Open(onReadyToLand);
             return true;
@@ -201,9 +198,9 @@ public class CarrierBehavior : MonoBehaviour
         return false;
     }
 
-    public bool RecoveryTryLand(StrikeCraft s, int hangerIdx, GenericEmptyDelegate onFinishLanding)
+    public bool RecoveryTryLand(StrikeCraft s, int hangerIdx, Action onFinishLanding)
     {
-        if (CarrierHangerAnim[hangerIdx].HangerState == CarrierHangerGenericAnim.State.Open)
+        if (CarrierHangerAnim[hangerIdx].ComponentState == GenericOpenCloseAnim.State.Open)
         {
             s.AttachToHangerElevator(_elevatorBed[hangerIdx]);
             CarrierHangerAnim[hangerIdx].Close(onFinishLanding);
@@ -293,17 +290,17 @@ public class CarrierBehavior : MonoBehaviour
     private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
     public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormations => _formations;
 
-    public CarrierHangerGenericAnim[] CarrierHangerAnim;
+    public GenericOpenCloseAnim[] CarrierHangerAnim;
     public int MaxFormations;
 
     public IReadOnlyDictionary<string, int> AvailableCraft => _availableCraft;
     private Dictionary<string, int> _availableCraft = new Dictionary<string, int>();
 
-    public event CarrierDelegate OnLaunchStart;
-    public event CarrierDelegate OnLaunchFinish;
-    public event CarrierDelegate OnRecoveryStart;
-    public event CarrierDelegate OnRecoveryFinish;
-    public event CarrierFormationDelegate OnFormationRemoved;
+    public event Action<CarrierBehavior> OnLaunchStart;
+    public event Action<CarrierBehavior> OnLaunchFinish;
+    public event Action<CarrierBehavior> OnRecoveryStart;
+    public event Action<CarrierBehavior> OnRecoveryFinish;
+    public event Action<CarrierBehavior, StrikeCraftFormation> OnFormationRemoved;
 
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
     private static readonly WaitForSeconds _hangerLaunchCycleDelay = new WaitForSeconds(0.5f);

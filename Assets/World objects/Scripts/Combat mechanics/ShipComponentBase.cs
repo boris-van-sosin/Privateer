@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -110,7 +111,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
 
     public abstract string SpriteKey { get; }
 
-    public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
+    public event Action OnHitpointsChanged;
 
     protected int _componentMaxHitPoints;
     protected int _componentCurrHitPoints;

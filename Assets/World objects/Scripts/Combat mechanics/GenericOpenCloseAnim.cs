@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
-public class CarrierHangerGenericAnim : MonoBehaviour
+public class GenericOpenCloseAnim : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        HangerState = State.Closed;
+        ComponentState = State.Closed;
         if (AnimWaypoints != null)
         {
             _phases = EndPoints(false).Concat(AnimWaypoints).Concat(EndPoints(true)).ToArray();
@@ -24,9 +25,9 @@ public class CarrierHangerGenericAnim : MonoBehaviour
         Open(null);
     }
 
-    public void Open(GenericEmptyDelegate onFinish)
+    public void Open(Action onFinish)
     {
-        if (HangerState != State.Closed)
+        if (ComponentState != State.Closed)
         {
             return;
         }
@@ -34,9 +35,9 @@ public class CarrierHangerGenericAnim : MonoBehaviour
         StartCoroutine(AnimateOpen(onFinish));
     }
 
-    public void Close(GenericEmptyDelegate onFinish)
+    public void Close(Action onFinish)
     {
-        if (HangerState != State.Open)
+        if (ComponentState != State.Open)
         {
             return;
         }
@@ -49,22 +50,22 @@ public class CarrierHangerGenericAnim : MonoBehaviour
         Close(null);
     }
 
-    private IEnumerator AnimateOpen(GenericEmptyDelegate onFinish)
+    private IEnumerator AnimateOpen(Action onFinish)
     {
         int phase = 1;
         float timeStarted = Time.time;
         AnimState prev = _phases[phase - 1];
         AnimState curr = _phases[phase];
-        HangerState = State.Opening;
+        ComponentState = State.Opening;
         while (true)
         {
             float phaseProgress = (Time.time - timeStarted) / curr.Duration;
             if (Mathf.Approximately(curr.Duration, 0) || phaseProgress >= 1)
             {
-                for (int i = 0; i < HangerComponents.Length; ++i)
+                for (int i = 0; i < AnimComponents.Length; ++i)
                 {
-                    HangerComponents[i].localPosition = curr.Positions[i];
-                    HangerComponents[i].localRotation = Quaternion.Euler(curr.Rotations[i]);
+                    AnimComponents[i].localPosition = curr.Positions[i];
+                    AnimComponents[i].localRotation = Quaternion.Euler(curr.Rotations[i]);
                 }
                 ++phase;
                 if (phase >= _phases.Length)
@@ -80,35 +81,35 @@ public class CarrierHangerGenericAnim : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < HangerComponents.Length; ++i)
+                for (int i = 0; i < AnimComponents.Length; ++i)
                 {
-                    HangerComponents[i].localPosition = Vector3.Lerp(prev.Positions[i], curr.Positions[i], phaseProgress);
-                    HangerComponents[i].localRotation = Quaternion.Slerp(Quaternion.Euler(prev.Rotations[i]), Quaternion.Euler(curr.Rotations[i]), phaseProgress);
+                    AnimComponents[i].localPosition = Vector3.Lerp(prev.Positions[i], curr.Positions[i], phaseProgress);
+                    AnimComponents[i].localRotation = Quaternion.Slerp(Quaternion.Euler(prev.Rotations[i]), Quaternion.Euler(curr.Rotations[i]), phaseProgress);
                 }
             }
             yield return _endOfFrameWait;
         }
-        HangerState = State.Open;
+        ComponentState = State.Open;
         onFinish?.Invoke();
         yield return null;
     }
 
-    private IEnumerator AnimateClose(GenericEmptyDelegate onFinish)
+    private IEnumerator AnimateClose(Action onFinish)
     {
         int phase = _phases.Length - 2;
         float timeStarted = Time.time;
         AnimState prev = _phases[phase + 1];
         AnimState curr = _phases[phase];
-        HangerState = State.Closing;
+        ComponentState = State.Closing;
         while (true)
         {
             float phaseProgress = (Time.time - timeStarted) / prev.Duration;
             if (Mathf.Approximately(prev.Duration, 0) || phaseProgress >= 1)
             {
-                for (int i = 0; i < HangerComponents.Length; ++i)
+                for (int i = 0; i < AnimComponents.Length; ++i)
                 {
-                    HangerComponents[i].localPosition = curr.Positions[i];
-                    HangerComponents[i].localRotation = Quaternion.Euler(curr.Rotations[i]);
+                    AnimComponents[i].localPosition = curr.Positions[i];
+                    AnimComponents[i].localRotation = Quaternion.Euler(curr.Rotations[i]);
                 }
                 --phase;
                 if (phase < 0)
@@ -124,22 +125,22 @@ public class CarrierHangerGenericAnim : MonoBehaviour
             }
             else
             {
-                for (int i = 0; i < HangerComponents.Length; ++i)
+                for (int i = 0; i < AnimComponents.Length; ++i)
                 {
-                    HangerComponents[i].localPosition = Vector3.Lerp(prev.Positions[i], curr.Positions[i], phaseProgress);
-                    HangerComponents[i].localRotation = Quaternion.Slerp(Quaternion.Euler(prev.Rotations[i]), Quaternion.Euler(curr.Rotations[i]), phaseProgress);
+                    AnimComponents[i].localPosition = Vector3.Lerp(prev.Positions[i], curr.Positions[i], phaseProgress);
+                    AnimComponents[i].localRotation = Quaternion.Slerp(Quaternion.Euler(prev.Rotations[i]), Quaternion.Euler(curr.Rotations[i]), phaseProgress);
                 }
             }
             yield return _endOfFrameWait;
         }
-        HangerState = State.Closed;
+        ComponentState = State.Closed;
         onFinish?.Invoke();
         yield return null;
     }
 
     public enum State { Closed, Closing, Open, Opening };
 
-    public State HangerState { get; private set; }
+    public State ComponentState { get; private set; }
 
     [System.Serializable]
     public struct AnimState
@@ -157,7 +158,7 @@ public class CarrierHangerGenericAnim : MonoBehaviour
             yield return ClosedState;
     }
 
-    public Transform[] HangerComponents;
+    public Transform[] AnimComponents;
     public AnimState ClosedState;
     public AnimState OpenState;
     public AnimState[] AnimWaypoints;

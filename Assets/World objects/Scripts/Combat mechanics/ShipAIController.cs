@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
+using System;
 
 public class ShipAIController : MonoBehaviour
 {
@@ -341,7 +342,7 @@ public class ShipAIController : MonoBehaviour
         NavigateTo(target, null);
     }
 
-    protected void NavigateTo(Vector3 target, OrderCompleteDlg onCompleteNavigation)
+    protected void NavigateTo(Vector3 target, Action onCompleteNavigation)
     {
         _navTarget = target;
         _orderCallback = onCompleteNavigation;
@@ -446,7 +447,7 @@ public class ShipAIController : MonoBehaviour
                             default:
                                 break;
                         }
-                        _cyclesToRecomputePath = Random.Range(3, 7);
+                        _cyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
                     }
                     else
                     {
@@ -458,7 +459,7 @@ public class ShipAIController : MonoBehaviour
                     if (_cyclesToRecomputePath == 0)
                     {
                         NavigateWithoutTarget();
-                        _cyclesToRecomputePath = Random.Range(3, 7);
+                        _cyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
                     }
                     else
                     {
@@ -482,7 +483,7 @@ public class ShipAIController : MonoBehaviour
                     {
                         NavigateWithoutTarget();
                     }
-                    _cyclesToRecomputePath = Random.Range(3, 7);
+                    _cyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
                 }
                 else
                 {
@@ -514,7 +515,7 @@ public class ShipAIController : MonoBehaviour
                 {
                     NavigateInFormation();
                 }
-                _cyclesToRecomputePath = Random.Range(3, 7);
+                _cyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
             }
             else
             {
@@ -675,8 +676,6 @@ public class ShipAIController : MonoBehaviour
     }
     private ShipControlType _controlType;
 
-    public delegate void OrderCompleteDlg();
-
     protected ShipBase _controlledShip;
     protected NavigationGuide _navGuide = null;
 
@@ -691,7 +690,7 @@ public class ShipAIController : MonoBehaviour
     protected ShipBase _followTarget = null;
     protected Transform _followTransform = null;
     protected float _followDist;
-    protected OrderCompleteDlg _orderCallback = null;
+    protected Action _orderCallback = null;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
     protected ShipAttackPattern _currAttackBehavior;

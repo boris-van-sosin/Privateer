@@ -189,7 +189,7 @@ public class StrikeCraft : ShipBase
     {
         _hangerElevator = elevator;
         _hangerElevatorLocalOffset = elevator.InverseTransformPoint(transform.position);
-        _hangerElevatorRotationOffset = Quaternion.Inverse(elevator.rotation) * transform.rotation;
+        _hangerElevatorRotationOffset = Quaternion.FromToRotation(elevator.forward, transform.forward);// Quaternion.Inverse(elevator.rotation) * transform.rotation;
         _attachedToHangerElevator = true;
         if (_trail != null)
         {

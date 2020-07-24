@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,9 +25,6 @@ public enum ComponentSlotType
 
 public enum ComponentStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
 
-public delegate void ComponentHitpointsChangedDelegate();
-public delegate void ComponentToggledDelegate(bool active);
-
 public interface IShipComponent
 {
     ShipBase ContainingShip { get; }
@@ -44,7 +42,7 @@ public interface IShipActiveComponent : IShipComponent
     ComponentStatus Status { get; }
     string SpriteKey { get; }
     void ApplyHitPointBuff(Buff b);
-    event ComponentHitpointsChangedDelegate OnHitpointsChanged;
+    event Action OnHitpointsChanged;
 }
 
 public interface ITurret : IShipActiveComponent
@@ -81,7 +79,7 @@ public interface IUserActivatedComponent : IShipComponent
 public interface IUserToggledComponent : IShipComponent
 {
     bool ComponentActive { get; set; }
-    event ComponentToggledDelegate OnToggle;
+    event Action<bool> OnToggle;
 }
 
 public interface IEnergyCapacityComponent

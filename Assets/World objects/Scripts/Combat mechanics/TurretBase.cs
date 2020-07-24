@@ -734,7 +734,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected static readonly string BarrelString = "Barrel";
     protected static readonly string MuzzleString = "Muzzle";
 
-    public event ComponentHitpointsChangedDelegate OnHitpointsChanged;
+    public event Action OnHitpointsChanged;
 
     // Hit point stuff:
     public virtual int ComponentMaxHitPoints

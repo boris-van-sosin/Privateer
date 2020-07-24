@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 /*
 public class TurretComponent : ITurret
@@ -258,7 +259,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
     private int _ticksSinceInactive = 0;
     private int _currShieldPoints;
 
-    public event ComponentToggledDelegate OnToggle;
+    public event Action<bool> OnToggle;
 
     public void PeriodicAction()
     {
@@ -591,7 +592,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     private bool _nextDeactivate = false;
     private bool _nextBrake = false;
 
-    public event ComponentToggledDelegate OnToggle;
+    public event Action<bool> OnToggle;
 
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
@@ -686,7 +687,7 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
         }
     }
 
-    public event ComponentToggledDelegate OnToggle;
+    public event Action<bool> OnToggle;
 
     public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 

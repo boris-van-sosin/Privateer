@@ -157,7 +157,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         NavigateTo(target, null);
     }
 
-    private void NavigateTo(Vector3 target, ShipAIController.OrderCompleteDlg onCompleteNavigation)
+    private void NavigateTo(Vector3 target, Action onCompleteNavigation)
     {
         _followTarget = null;
         _doFollow = false;
@@ -327,7 +327,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     protected float _followDist;
     protected float _nextUpdateFollowTime;
     protected int _followPosIdx;
-    protected ShipAIController.OrderCompleteDlg _orderCallback = null;
+    protected Action _orderCallback = null;
     protected bool _doNavigate = false;
     protected bool _doFollow = false;
     protected NavigationGuide _navGuide;
