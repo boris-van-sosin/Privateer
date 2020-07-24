@@ -15,6 +15,10 @@ public class CarrierBehavior : MonoBehaviour
         _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
         _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
         _formations = new List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>>(MaxFormations);
+        foreach (string prodKey in ObjectFactory.GetAllStrikeCraftTypes())
+        {
+            _availableCraft[prodKey] = 99;
+        }
         _inLaunch = false;
         _inRecovery = false;
     }
@@ -30,6 +34,14 @@ public class CarrierBehavior : MonoBehaviour
         }
     }
 
+    public void LaunchFormationOfType(string key)
+    {
+        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
+        {
+            StartCoroutine(LaunchSequence(key));
+        }
+    }
+
     private IEnumerator LaunchSequence(string strikeCraftKey)
     {
         if (CarrierHangerAnim.Length == 0)
@@ -42,7 +54,7 @@ public class CarrierBehavior : MonoBehaviour
         OnLaunchStart?.Invoke(this);
         yield return new WaitForEndOfFrame();
 
-        StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
+        StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation(strikeCraftKey);
         formation.DestroyOnEmpty = false;
         _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
 
@@ -154,6 +166,16 @@ public class CarrierBehavior : MonoBehaviour
         }
     }
 
+    public void StartRecallFormation(string strikeCraftType)
+    {
+        StrikeCraftFormationAIController c =
+            _formations.Where(f1 => f1.Item1.AllStrikeCraft().First().ProductionKey == strikeCraftType).Select(f2 => f2.Item2).FirstOrDefault();
+        if (c != null)
+        {
+            c.OrderReturnToHost();
+        }
+    }
+
     public bool RecoveryTryStart(StrikeCraftFormation f)
     {
         if (_inLaunch && _inRecovery)
@@ -245,6 +267,16 @@ public class CarrierBehavior : MonoBehaviour
         };
     }
 
+    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormationsOfType(string strikeCraftKey)
+    {
+        return _formations.Where(f => f.Item1.AllStrikeCraft().First().ProductionKey == strikeCraftKey);
+    }
+
+    public int NumActiveFormationsOfType(string strikeCraftKey)
+    {
+        return ActiveFormationsOfType(strikeCraftKey).Count();
+    }
+
     public Vector3 Velocity => _ship.ActualVelocity;
 
     private Transform[] _launchTransform;
@@ -259,16 +291,13 @@ public class CarrierBehavior : MonoBehaviour
     private int _lastRecoveryHanger = 0;
 
     private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
-    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormations
-    {
-        get
-        {
-            return _formations;
-        }
-    }
+    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormations => _formations;
 
     public CarrierHangerGenericAnim[] CarrierHangerAnim;
     public int MaxFormations;
+
+    public IReadOnlyDictionary<string, int> AvailableCraft => _availableCraft;
+    private Dictionary<string, int> _availableCraft = new Dictionary<string, int>();
 
     public event CarrierDelegate OnLaunchStart;
     public event CarrierDelegate OnLaunchFinish;

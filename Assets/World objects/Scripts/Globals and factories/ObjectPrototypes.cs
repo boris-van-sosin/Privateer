@@ -154,22 +154,31 @@ public class ObjectPrototypes : MonoBehaviour
 
     public StrikeCraft CreateStrikeCraft(string prodKey)
     {
-        StrikeCraft res;
+        StrikeCraftWithFormationSize res = FindStrikeCraftPrototype(prodKey);
+        if (res.CraftType != null)
+            return Instantiate(res.CraftType);
+        else
+            return null;
+    }
+
+    private StrikeCraftWithFormationSize FindStrikeCraftPrototype(string prodKey)
+    {
+        StrikeCraftWithFormationSize res;
         if (_strikeCraftPrototypeDictionary.TryGetValue(prodKey, out res))
         {
-            return Instantiate(res);
+            return res;
         }
-        foreach (StrikeCraft s in StrikeCraftPrototypes)
+        foreach (StrikeCraftWithFormationSize s in StrikeCraftPrototypes)
         {
-            _strikeCraftPrototypeDictionary[s.ProductionKey] = s;
+            _strikeCraftPrototypeDictionary[s.CraftType.ProductionKey] = s;
         }
         if (_strikeCraftPrototypeDictionary.TryGetValue(prodKey, out res))
         {
-            return Instantiate(res);
+            return res;
         }
         else
         {
-            return null;
+            return new StrikeCraftWithFormationSize() { CraftType = null, FormationSize = 0 };
         }
     }
 
@@ -177,45 +186,23 @@ public class ObjectPrototypes : MonoBehaviour
     {
         if (_strikeCraftPrototypeDictionary.Count == 0)
         {
-            foreach (StrikeCraft s in StrikeCraftPrototypes)
+            foreach (StrikeCraftWithFormationSize s in StrikeCraftPrototypes)
             {
-                _strikeCraftPrototypeDictionary[s.ProductionKey] = s;
+                _strikeCraftPrototypeDictionary[s.CraftType.ProductionKey] = s;
             }
         }
         return _strikeCraftPrototypeDictionary.Keys.ToArray();
     }
 
-    public StrikeCraftFormation CreateStrikeCraftFormation(string prodKey)
+    public StrikeCraftFormation CreateStrikeCraftFormation(string strikeCraftKey)
     {
-        StrikeCraftFormation res;
-        if (_strikeCraftFormationPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        foreach (StrikeCraftFormation s in StrikeCraftFormationPrototypes)
-        {
-            _strikeCraftFormationPrototypeDictionary[s.ProductionKey] = s;
-        }
-        if (_strikeCraftFormationPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        else
-        {
+        StrikeCraftWithFormationSize proto = FindStrikeCraftPrototype(strikeCraftKey);
+        if (proto.CraftType == null)
             return null;
-        }
-    }
 
-    public string[] GetAllStrikeCraftFormationTypes()
-    {
-        if (_strikeCraftFormationPrototypeDictionary.Count == 0)
-        {
-            foreach (StrikeCraftFormation s in StrikeCraftFormationPrototypes)
-            {
-                _strikeCraftFormationPrototypeDictionary[s.ProductionKey] = s;
-            }
-        }
-        return _strikeCraftFormationPrototypeDictionary.Keys.ToArray();
+        StrikeCraftFormation formation = Instantiate(StrikeCraftFormationPrototype);
+        formation.CreatePositions(proto.FormationSize);
+        return formation;
     }
 
     public StatusTopLevel CreateStatusPanel()
@@ -345,8 +332,8 @@ public class ObjectPrototypes : MonoBehaviour
     public ParticleSystem PlasmsExplosion;
     public ParticleSystem DamageElectricSparks;
     public Ship[] ShipPrototypes;
-    public StrikeCraft[] StrikeCraftPrototypes;
-    public StrikeCraftFormation[] StrikeCraftFormationPrototypes;
+    public StrikeCraftWithFormationSize[] StrikeCraftPrototypes;
+    public StrikeCraftFormation StrikeCraftFormationPrototype;
     public TurretBase[] TurretPrototypes;
     public StatusTopLevel StatusPanelPrototype;
     public WeaponCtrlCfgLine WeaponCtrlCfgLinePrototype;
@@ -370,8 +357,7 @@ public class ObjectPrototypes : MonoBehaviour
     public SelectedShipCard ShipCard;
 
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
-    private Dictionary<string, StrikeCraft> _strikeCraftPrototypeDictionary = new Dictionary<string, StrikeCraft>();
-    private Dictionary<string, StrikeCraftFormation> _strikeCraftFormationPrototypeDictionary = new Dictionary<string, StrikeCraftFormation>();
+    private Dictionary<string, StrikeCraftWithFormationSize> _strikeCraftPrototypeDictionary = new Dictionary<string, StrikeCraftWithFormationSize>();
     private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
     private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
@@ -390,5 +376,12 @@ public class ObjectPrototypes : MonoBehaviour
     {
         public string Key;
         public Material Mtl;
+    }
+
+    [Serializable]
+    public struct StrikeCraftWithFormationSize
+    {
+        public StrikeCraft CraftType;
+        public int FormationSize;
     }
 }

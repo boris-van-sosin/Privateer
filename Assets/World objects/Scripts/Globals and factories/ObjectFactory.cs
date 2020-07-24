@@ -351,7 +351,6 @@ public static class ObjectFactory
     public static StrikeCraftFormation CreateStrikeCraftFormation(string prodKey)
     {
         StrikeCraftFormation res = _prototypes.CreateStrikeCraftFormation(prodKey);
-        res.CreatePositions(4);
         res.SetFormationType(FormationBase.FormationType.Vee);
         res.gameObject.AddComponent<StrikeCraftFormationAIController>();
         return res;
@@ -518,7 +517,7 @@ public static class ObjectFactory
     public static int AllShipsNoShieldsNoStikeCraftLayerMask { get { return _allShipsNoStrikeCraftNoShieldsLayerMask; } }
     public static int NavBoxesLayerMask { get { return _navBoxesLayerMask; } }
     public static int NavBoxesStrikeCraftLayerMask { get { return _navBoxesStrikeCraftLayerMask; } }
-    public static int NavBoxesAllLayerMask { get { return _navBoxesAllLayerMask; } }
+    public static int NavBoxesAllLayerMask => _navBoxesAllLayerMask;
 
     private static void LoadWarheads()
     {

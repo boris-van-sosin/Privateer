@@ -895,6 +895,26 @@ Sloops:
     Fluff: ''
     Subcultures:
     - Pirate
+  - ShortName: Orphnaeus
+    FullName: Orphnaeus
+    Fluff: ''
+    Subcultures:
+    - Pirate
+  - ShortName: Aethon
+    FullName: Aethon
+    Fluff: ''
+    Subcultures:
+    - Pirate
+  - ShortName: Nycteus
+    FullName: Nycteus
+    Fluff: ''
+    Subcultures:
+    - Pirate
+  - ShortName: Alastor
+    FullName: Alastor
+    Fluff: ''
+    Subcultures:
+    - Pirate
 - ClassName: ''
   ShipNames:
   - ShortName: Harpy
@@ -2485,6 +2505,21 @@ Frigates:
     Fluff: ''
     Subcultures:
     - German
+  - ShortName: Wuppertal
+    FullName: Wuppertal
+    Fluff: ''
+    Subcultures:
+    - German
+  - ShortName: Halberstadt
+    FullName: Halberstadt
+    Fluff: ''
+    Subcultures:
+    - German
+  - ShortName: Schwerin
+    FullName: Schwerin
+    Fluff: ''
+    Subcultures:
+    - German
   - ShortName: Toledo
     FullName: Toledo
     Fluff: ''
@@ -3162,11 +3197,6 @@ Destroyers:
     Fluff: ''
     Subcultures:
     - German
-  - ShortName: Braunschweig
-    FullName: Braunschweig
-    Fluff: ''
-    Subcultures:
-    - German
   - ShortName: Hessen
     FullName: Hessen
     Fluff: ''
@@ -3222,8 +3252,18 @@ Destroyers:
     Fluff: ''
     Subcultures:
     - German
-  - ShortName: Mecklenburg-Schwerin
-    FullName: Mecklenburg-Schwerin
+  - ShortName: Mecklenburg
+    FullName: Mecklenburg
+    Fluff: ''
+    Subcultures:
+    - German
+  - ShortName: Pommern
+    FullName: Pommern
+    Fluff: ''
+    Subcultures:
+    - German
+  - ShortName: Kurpfalz
+    FullName: Kurpfalz
     Fluff: ''
     Subcultures:
     - German
@@ -3485,6 +3525,11 @@ Cruisers:
     FullName: Belisarius
     Fluff: ''
     Subcultures: []
+  - ShortName: Princess Olga
+    FullName: Princess Olga
+    Fluff: ''
+    Subcultures:
+    - Russian
 - ClassName: Admiral
   ShipNames:
   - ShortName: Nelson
@@ -4360,96 +4405,101 @@ CapitalShips:
     Fluff: ''
     Subcultures:
     - Russian
-- ClassName: Capital
-  ShipNames:
-  - ShortName: Washington
-    FullName: Washington
-    Fluff: ''
-    Subcultures: []
-  - ShortName: London
-    FullName: London
-    Fluff: ''
-    Subcultures:
-    - British
-  - ShortName: Berlin
-    FullName: Berlin
-    Fluff: ''
-    Subcultures:
-    - German
-  - ShortName: Rome
-    FullName: Rome
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Moscow
-    FullName: Moscow
+  - ShortName: Bagration
+    FullName: Pyotr Bagration
     Fluff: ''
     Subcultures:
     - Russian
-  - ShortName: Santiago de Chile
-    FullName: Santiago de Chile
-    Fluff: 'Por la razón o la fuerza'
-    Subcultures:
-    - Chilean
-  - ShortName: Beijing
-    FullName: Beijing
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Tokyo
-    FullName: Tokyo
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Paris
-    FullName: Paris
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Madrid
-    FullName: Madrid
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Amsterdam
-    FullName: Amsterdam
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Vienna
-    FullName: Vienna
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Budapest
-    FullName: Budapest
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Athens
-    FullName: Athens
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Prague
-    FullName: Prague
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Buenos Aires
-    FullName: Buenos Aires
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Hanoi
-    FullName: Hanoi
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Havana
-    FullName: Havana
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Lisbon
-    FullName: Lisbon
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Cairo
-    FullName: Cairo
-    Fluff: ''
-    Subcultures: []
-  - ShortName: Seoul
-    FullName: Seoul
-    Fluff: ''
-    Subcultures: []
+#- ClassName: Capital
+#  ShipNames:
+#  - ShortName: Washington
+#    FullName: Washington
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: London
+#    FullName: London
+#    Fluff: ''
+#    Subcultures:
+#    - British
+#  - ShortName: Berlin
+#    FullName: Berlin
+#    Fluff: ''
+#    Subcultures:
+#    - German
+#  - ShortName: Rome
+#    FullName: Rome
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Moscow
+#    FullName: Moscow
+#    Fluff: ''
+#    Subcultures:
+#    - Russian
+#  - ShortName: Santiago de Chile
+#    FullName: Santiago de Chile
+#    Fluff: 'Por la razón o la fuerza'
+#    Subcultures:
+#    - Chilean
+#  - ShortName: Beijing
+#    FullName: Beijing
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Tokyo
+#    FullName: Tokyo
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Paris
+#    FullName: Paris
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Madrid
+#    FullName: Madrid
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Amsterdam
+#    FullName: Amsterdam
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Vienna
+#    FullName: Vienna
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Budapest
+#    FullName: Budapest
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Athens
+#    FullName: Athens
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Prague
+#    FullName: Prague
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Buenos Aires
+#    FullName: Buenos Aires
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Hanoi
+#    FullName: Hanoi
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Havana
+#    FullName: Havana
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Lisbon
+#    FullName: Lisbon
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Cairo
+#    FullName: Cairo
+#    Fluff: ''
+#    Subcultures: []
+#  - ShortName: Seoul
+#    FullName: Seoul
+#    Fluff: ''
+#    Subcultures: []
 - ClassName: ''
   ShipNames:
   - ShortName: Britainnia

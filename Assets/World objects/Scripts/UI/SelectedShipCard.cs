@@ -78,6 +78,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
         {
             _openWidth += FighterPanel.GetComponent<RectTransform>().sizeDelta.x;
             _openWidth += BomberPanel.GetComponent<RectTransform>().sizeDelta.x;
+            FighterPanel.Attach(_controlledCarrierModule, "Fed Fighter");
+            BomberPanel.Attach(_controlledCarrierModule, "Fed Torpedo Bomber");
         }
         _fighterPanelEnabled = _bomberPanelEnabled = (_controlledCarrierModule != null);
 
