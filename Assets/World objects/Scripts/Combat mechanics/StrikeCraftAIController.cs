@@ -248,10 +248,10 @@ public class StrikeCraftAIController : ShipAIController
     private Maneuver CreateClimbForRecoveryManeuver(Transform currTr, Transform carrierRecoveryHint, Vector3 carrierVelocity)
     {
         BspPath launchPath = ObjectFactory.GetPath("Strike craft carrier climb");
-        float expectedTime = (carrierRecoveryHint.position - transform.position).magnitude / _controlledCraft.CurrSpeed;
+        //float expectedTime = (carrierRecoveryHint.position - transform.position).magnitude / _controlledCraft.CurrSpeed;
         float speedHint = _controlledCraft.CurrSpeed;
         Maneuver.AccelerationModifier acc = null;
-        if (expectedTime > 5.0f)
+        if (_controlledCraft.CurrSpeed < _controlledCraft.MaxSpeed * 0.75f)
         {
             acc = new Maneuver.AccelerateToTargetSpeedFraction() { TargetSpeedFrac = 0.75f };
             speedHint = _controlledCraft.MaxSpeed * 0.75f;

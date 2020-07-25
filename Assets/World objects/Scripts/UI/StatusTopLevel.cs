@@ -97,11 +97,11 @@ public class StatusTopLevel : MonoBehaviour
         {
             NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", 0, _attachedCarrier.MaxFormations);
         }
-        _attachedCarrier.OnLaunchStart += CarrierEventWrapper;
-        _attachedCarrier.OnLaunchFinish += CarrierEventWrapper;
-        _attachedCarrier.OnRecoveryStart += CarrierEventWrapper;
-        _attachedCarrier.OnRecoveryFinish += CarrierEventWrapper;
-        _attachedCarrier.OnFormationRemoved += CarrierFormationEventWrapper;
+        _attachedCarrier.onLaunchStart += CarrierEventWrapper;
+        _attachedCarrier.onLaunchFinish += CarrierEventWrapper;
+        _attachedCarrier.onRecoveryStart += CarrierEventWrapper;
+        _attachedCarrier.onRecoveryFinish += CarrierEventWrapper;
+        _attachedCarrier.onFormationRemoved += CarrierFormationEventWrapper;
     }
 
     public void SetName(ShipDisplayName dn)
@@ -116,11 +116,11 @@ public class StatusTopLevel : MonoBehaviour
         _turretProgressBars.Clear();
         if (_attachedCarrier != null)
         {
-            _attachedCarrier.OnLaunchStart -= CarrierEventWrapper;
-            _attachedCarrier.OnLaunchFinish -= CarrierEventWrapper;
-            _attachedCarrier.OnRecoveryStart -= CarrierEventWrapper;
-            _attachedCarrier.OnRecoveryFinish -= CarrierEventWrapper;
-            _attachedCarrier.OnFormationRemoved -= CarrierFormationEventWrapper;
+            _attachedCarrier.onLaunchStart -= CarrierEventWrapper;
+            _attachedCarrier.onLaunchFinish -= CarrierEventWrapper;
+            _attachedCarrier.onRecoveryStart -= CarrierEventWrapper;
+            _attachedCarrier.onRecoveryFinish -= CarrierEventWrapper;
+            _attachedCarrier.onFormationRemoved -= CarrierFormationEventWrapper;
             _attachedCarrier = null;
         }
     }

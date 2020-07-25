@@ -14,10 +14,12 @@ public class CarrierBehavior : MonoBehaviour
         _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
         _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
         _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
-        _formations = new List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>>(MaxFormations);
+        _formations = new List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>>(MaxFormations);
+        _actionQueue = new LinkedList<(string, bool)>();
         foreach (string prodKey in ObjectFactory.GetAllStrikeCraftTypes())
         {
             _availableCraft[prodKey] = 99;
+            _lockFormationNum[prodKey] = -1;
         }
         _inLaunch = false;
         _inRecovery = false;
@@ -31,12 +33,55 @@ public class CarrierBehavior : MonoBehaviour
         }
     }
 
-    public void LaunchFormationOfType(string key)
+    public bool LaunchFormationOfType(string key)
     {
         if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
         {
             StartCoroutine(LaunchSequence(key));
+            return true;
         }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void QueueLaunchFormationOfType(string key)
+    {
+        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
+        {
+            LaunchFormationOfType(key);
+        }
+        else if (_inLaunch || _inRecovery)
+        {
+            EnqueueActionInner(key, true);
+        }
+    }
+
+    private bool EnqueueActionInner(string strikeCraftKey, bool launch, bool negateOnly)
+    {
+        bool negated = false;
+        LinkedList<ValueTuple<string, bool>>.Enumerator idx = _actionQueue.GetEnumerator();
+        while (idx.MoveNext())
+        {
+            if (idx.Current.Item1 == strikeCraftKey && idx.Current.Item2 == !launch)
+            {
+                _actionQueue.Remove(idx.Current);
+                negated = true;
+                break;
+            }
+        }
+        if (!negateOnly && !negated)
+        {
+            _actionQueue.AddLast((strikeCraftKey, launch));
+            return true;
+        }
+        return negated;
+    }
+
+    private bool EnqueueActionInner(string strikeCraftKey, bool launch)
+    {
+        return EnqueueActionInner(strikeCraftKey, launch, false);
     }
 
     private IEnumerator LaunchSequence(string strikeCraftKey)
@@ -48,12 +93,14 @@ public class CarrierBehavior : MonoBehaviour
 
         _inLaunch = true;
 
-        OnLaunchStart?.Invoke(this);
         yield return new WaitForEndOfFrame();
 
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation(strikeCraftKey);
         formation.DestroyOnEmpty = false;
-        _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>(formation, formation.GetComponent<StrikeCraftFormationAIController>()));
+        _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>(formation, formation.GetComponent<StrikeCraftFormationAIController>(), strikeCraftKey));
+
+        onLaunchStart?.Invoke(this);
+        yield return new WaitForEndOfFrame();
 
         StrikeCraft[] currLaunchingStrikeCraft = new StrikeCraft[CarrierHangerAnim.Length];
 
@@ -138,7 +185,8 @@ public class CarrierBehavior : MonoBehaviour
         _inLaunch = false;
 
         yield return new WaitForEndOfFrame();
-        OnLaunchFinish?.Invoke(this);
+        onLaunchFinish?.Invoke(this);
+        PostLaunchAndRecovery();
 
         yield return null;
     }
@@ -153,23 +201,45 @@ public class CarrierBehavior : MonoBehaviour
                 _currRecovering = null;
                 _inRecovery = false;
                 _formations.RemoveAt(i);
-                OnRecoveryFinish?.Invoke(this);
+                PostLaunchAndRecovery();
+                onRecoveryFinish?.Invoke(this);
             }
             else
             {
                 _formations.RemoveAt(i);
-                OnFormationRemoved?.Invoke(this, f);
+                onFormationRemoved?.Invoke(this, f);
             }
+            MaintainLockedFormationsNum();
         }
     }
 
-    public void StartRecallFormation(string strikeCraftType)
+    public bool StartRecallFormation(string strikeCraftType)
     {
         StrikeCraftFormationAIController c =
-            _formations.Where(f1 => f1.Item1.AllStrikeCraft().First().ProductionKey == strikeCraftType).Select(f2 => f2.Item2).FirstOrDefault();
+            _formations.Where(f1 => f1.Item3 == strikeCraftType).Select(f2 => f2.Item2).FirstOrDefault();
         if (c != null)
         {
             c.OrderReturnToHost();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void QueueRecallFormationOfType(string key)
+    {
+        if (!EnqueueActionInner(key, false, true))
+        {
+            if (!_inLaunch && !_inRecovery)
+            {
+                StartRecallFormation(key);
+            }
+            else
+            {
+                _actionQueue.AddLast((key, false));
+            }
         }
     }
 
@@ -183,7 +253,7 @@ public class CarrierBehavior : MonoBehaviour
         _currRecovering = f;
 
         _inRecovery = true;
-        OnRecoveryStart?.Invoke(this);
+        onRecoveryStart?.Invoke(this);
 
         return true;
     }
@@ -264,14 +334,67 @@ public class CarrierBehavior : MonoBehaviour
         };
     }
 
-    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormationsOfType(string strikeCraftKey)
+    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>> ActiveFormationsOfType(string strikeCraftKey)
     {
-        return _formations.Where(f => f.Item1.AllStrikeCraft().First().ProductionKey == strikeCraftKey);
+        return _formations.Where(f => f.Item3 == strikeCraftKey);
     }
 
     public int NumActiveFormationsOfType(string strikeCraftKey)
     {
         return ActiveFormationsOfType(strikeCraftKey).Count();
+    }
+
+    public void LockFormationNumSet(string strikeCraftKey, bool doLock)
+    {
+        if (doLock)
+        {
+            _lockFormationNum[strikeCraftKey] = NumActiveFormationsOfType(strikeCraftKey);
+        }
+        else
+        {
+            _lockFormationNum[strikeCraftKey] = -1;
+        }
+    }
+
+    public bool LockFormationNumGet(string strikeCraftKey)
+    {
+        return _lockFormationNum[strikeCraftKey] != -1;
+    }
+
+    private bool MaintainLockedFormationsNum()
+    {
+        bool changed = false;
+        foreach (KeyValuePair<string, int> f in _lockFormationNum)
+        {
+            if (f.Value >= 0 && NumActiveFormationsOfType(f.Key) < f.Value)
+            {
+                LaunchFormationOfType(f.Key);
+                changed = true;
+            }
+            else if (f.Value >= 0 && NumActiveFormationsOfType(f.Key) > f.Value)
+            {
+                StartRecallFormation(f.Key);
+                changed = true;
+            }
+        }
+        return changed;
+    }
+
+    private void PostLaunchAndRecovery()
+    {
+        bool doneAutoAction = MaintainLockedFormationsNum();
+        while (!doneAutoAction && _actionQueue.Count > 0)
+        {
+            if (_actionQueue.First.Value.Item2)
+            {
+                doneAutoAction = LaunchFormationOfType(_actionQueue.First.Value.Item1);
+            }
+            else
+            {
+                doneAutoAction = StartRecallFormation(_actionQueue.First.Value.Item1);
+            }
+            _actionQueue.RemoveFirst();
+        }
     }
 
     public Vector3 Velocity => _ship.ActualVelocity;
@@ -287,8 +410,11 @@ public class CarrierBehavior : MonoBehaviour
     private StrikeCraftFormation _currRecovering = null;
     private int _lastRecoveryHanger = 0;
 
-    private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> _formations;
-    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController>> ActiveFormations => _formations;
+    private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>> _formations;
+    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>> ActiveFormations => _formations;
+    private Dictionary<string, int> _lockFormationNum = new Dictionary<string, int>();
+
+    private LinkedList<ValueTuple<string, bool>> _actionQueue = new LinkedList<(string, bool)>();
 
     public GenericOpenCloseAnim[] CarrierHangerAnim;
     public int MaxFormations;
@@ -296,11 +422,11 @@ public class CarrierBehavior : MonoBehaviour
     public IReadOnlyDictionary<string, int> AvailableCraft => _availableCraft;
     private Dictionary<string, int> _availableCraft = new Dictionary<string, int>();
 
-    public event Action<CarrierBehavior> OnLaunchStart;
-    public event Action<CarrierBehavior> OnLaunchFinish;
-    public event Action<CarrierBehavior> OnRecoveryStart;
-    public event Action<CarrierBehavior> OnRecoveryFinish;
-    public event Action<CarrierBehavior, StrikeCraftFormation> OnFormationRemoved;
+    public event Action<CarrierBehavior> onLaunchStart;
+    public event Action<CarrierBehavior> onLaunchFinish;
+    public event Action<CarrierBehavior> onRecoveryStart;
+    public event Action<CarrierBehavior> onRecoveryFinish;
+    public event Action<CarrierBehavior, StrikeCraftFormation> onFormationRemoved;
 
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
     private static readonly WaitForSeconds _hangerLaunchCycleDelay = new WaitForSeconds(0.5f);

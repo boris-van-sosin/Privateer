@@ -20,11 +20,14 @@ public class StrikeCraftCommandPanel : MonoBehaviour
 
         if (_attachedCarrier != null)
         {
-            _attachedCarrier.OnLaunchStart += CarrierEventWrapper;
-            _attachedCarrier.OnLaunchFinish += CarrierEventWrapper;
-            _attachedCarrier.OnRecoveryStart += CarrierEventWrapper;
-            _attachedCarrier.OnRecoveryFinish += CarrierEventWrapper;
-            _attachedCarrier.OnFormationRemoved += CarrierFormationEventWrapper;
+            _attachedCarrier.onLaunchStart += CarrierEventWrapper;
+            _attachedCarrier.onLaunchFinish += CarrierEventWrapper;
+            _attachedCarrier.onRecoveryStart += CarrierEventWrapper;
+            _attachedCarrier.onRecoveryFinish += CarrierEventWrapper;
+            _attachedCarrier.onFormationRemoved += CarrierFormationEventWrapper;
+            LockButton.onValueChangedViaClick += ToggleLock;
+            LockButton.Value = _attachedCarrier.LockFormationNumGet(strikeCraftType);
+            UpdateCount();
         }
     }
 
@@ -41,7 +44,7 @@ public class StrikeCraftCommandPanel : MonoBehaviour
     private void UpdateCount()
     {
         NumText.text = string.Format(
-            "{0}/{1}/{2}",
+            "{0}/{1}\n{2}",
             _attachedCarrier.NumActiveFormationsOfType(_strikeCraftType),
             _attachedCarrier.MaxFormations,
             _attachedCarrier.AvailableCraft[_strikeCraftType]);
@@ -49,18 +52,22 @@ public class StrikeCraftCommandPanel : MonoBehaviour
 
     private void IncreaseFormations()
     {
-        if (_attachedCarrier != null)
-            _attachedCarrier.LaunchFormationOfType(_strikeCraftType);
+        _attachedCarrier?.QueueLaunchFormationOfType(_strikeCraftType);
     }
 
     private void DecreaseFormations()
     {
-        if (_attachedCarrier != null)
-            _attachedCarrier.StartRecallFormation(_strikeCraftType);
+        _attachedCarrier?.QueueRecallFormationOfType(_strikeCraftType);
+    }
+
+    private void ToggleLock(bool val)
+    {
+        _attachedCarrier?.LockFormationNumSet(_strikeCraftType, val);
     }
 
     public Button UpButton;
     public Button DownButton;
+    public OnOffButton LockButton;
     public TextMeshProUGUI NumText;
 
     private CarrierBehavior _attachedCarrier;
