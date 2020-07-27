@@ -52,7 +52,7 @@ public static class NamingSystem
 
     public static CultureNames Load()
     {
-        string nameListText = File.ReadAllText(Path.Combine("TextData", "ShipNamesTerran.txt"), System.Text.Encoding.UTF8);
+        //string nameListText = File.ReadAllText(Path.Combine("TextData", "ShipNamesTerran.txt"), System.Text.Encoding.UTF8);
         using (StreamReader sr = new StreamReader(Path.Combine("TextData", "ShipNamesTerran.txt"), System.Text.Encoding.UTF8))
         {
             YamlDotNet.Serialization.Deserializer ds = new YamlDotNet.Serialization.Deserializer();

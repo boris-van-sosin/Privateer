@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System.Text;
 using System;
+using System.IO;
 
 public static class ObjectFactory
 {
@@ -178,6 +179,7 @@ public static class ObjectFactory
 
     public static Ship CreateShip(string prodKey)
     {
+        //CreateTurret2(); // for debugging purposes. Will eventually replace CreateTurret.
         return _prototypes.CreateShip(prodKey);
     }
 
@@ -268,6 +270,15 @@ public static class ObjectFactory
                 break;
         }
         return t;
+    }
+
+    public static GameObject CreateTurret2()
+    {
+        using (StreamReader sr = new StreamReader(Path.Combine("TextData", "Turrets", "MedTurretDualHowitzer.yml"), Encoding.UTF8))
+        {
+            HierarchyNode root = HierarchySerializer.LoadHierarchy(sr);
+            return HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes);
+        }
     }
 
     public static TurretBase CreateStrikeCraftTurret(ComponentSlotType turretType, WeaponType weaponType)

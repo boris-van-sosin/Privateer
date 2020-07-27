@@ -320,6 +320,22 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate(ShipCard);
     }
 
+    public GameObject CreateObjectByPath(string assetBundlePath, string assetPath, string objPath)
+    {
+        GameObject res;
+        if (!_objCache.TryGetValue((assetBundlePath, assetPath, objPath), out res))
+        {
+            res = AssetBundleUtil.LoadSingleObject<GameObject>(assetBundlePath, assetPath, objPath, true);
+            _objCache[(assetBundlePath, assetPath, objPath)] = res;
+        }
+        return Instantiate(res);
+    }
+
+    public GameObject CreateObjectEmpty()
+    {
+        return new GameObject();
+    }
+
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
@@ -363,6 +379,8 @@ public class ObjectPrototypes : MonoBehaviour
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
     private Dictionary<string, BspPath> _paths = new Dictionary<string, BspPath>();
     private Dictionary<string, Material> _materials = new Dictionary<string, Material>();
+
+    private Dictionary<(string, string, string), GameObject> _objCache = new Dictionary<(string, string, string), GameObject>();
 
     [Serializable]
     public struct SprikeKeyValue
