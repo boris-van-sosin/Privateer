@@ -20,6 +20,10 @@ public static class HierarchyConstructionUtil
         {
             resObj = proto.CreateObjectByPath(obj.NodeMesh.AssetBundlePath, obj.NodeMesh.AssetPath, obj.NodeMesh.MeshPath);
         }
+        else if (obj.NodeParticleSystem != null)
+        {
+            resObj = proto.CreateObjectByPath(obj.NodeParticleSystem.AssetBundlePath, obj.NodeParticleSystem.AssetPath, obj.NodeParticleSystem.ParticleSystemPath);
+        }
         else
         {
             resObj = proto.CreateObjectEmpty();

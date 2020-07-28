@@ -1,79 +1,67 @@
-Name: Med turret howitzer
-Position:
-  x: 0
-  y: 0
-  z: 0
-Rotation:
-  x: 0
-  y: 0
-  z: 0
-Scale:
-  x: 1
-  y: 1
-  z: 1
-NodeMesh: 
-SubNodes:
-- Name: Turret
+Geometry:
+  Name: Med turret howitzer
   Position:
     x: 0
     y: 0
     z: 0
   Rotation:
-    x: 270
+    x: 0
     y: 0
     z: 0
   Scale:
     x: 1
     y: 1
     z: 1
-  NodeMesh:
-    AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
-    AssetPath: 'guns new'
-    MeshPath: 'Medium turret'
-    DoCombine: true
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
   SubNodes:
-  - Name: Sleeve1
+  - Name: Turret
     Position:
-      x: 0.0021949925
-      y: 0.00715447543
-      z: 0.0035
-    Rotation:
       x: 0
       y: 0
       z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
     Scale:
-      x: 1.33333337
-      y: 1.33333397
-      z: 1.33333397
+      x: 1
+      y: 1
+      z: 1
     NodeMesh:
       AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
       AssetPath: 'guns new'
-      MeshPath: 'Howitzer sleeve L'
+      MeshPath: Medium turret
       DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
     SubNodes:
-    - Name: Barrel1
+    - Name: Sleeve1
       Position:
-        x: 0
-        y: -0.0005
-        z: 0
+        x: 0.0021949925
+        y: 0.00715447543
+        z: 0.0035
       Rotation:
         x: 0
         y: 0
         z: 0
       Scale:
-        x: 1
-        y: 1
-        z: 1
+        x: 1.33333337
+        y: 1.33333397
+        z: 1.33333397
       NodeMesh:
         AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
         AssetPath: 'guns new'
-        MeshPath: 'Howitzer barrel L'
+        MeshPath: Howitzer sleeve L
         DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
       SubNodes:
-      - Name: Muzzle1
+      - Name: Barrel1
         Position:
           x: 0
-          y: 0.00462913606
+          y: -0.0005
           z: 0
         Rotation:
           x: 0
@@ -83,65 +71,76 @@ SubNodes:
           x: 1
           y: 1
           z: 1
-        NodeMesh: 
+        NodeMesh:
+          AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+          AssetPath: 'guns new'
+          MeshPath: Howitzer barrel L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
         SubNodes:
-        - Name: MuzzleFlashEffect
+        - Name: Muzzle1
           Position:
             x: 0
-            y: 0.0023
+            y: 0.00462913606
             z: 0
           Rotation:
             x: 0
             y: 0
-            z: 90
+            z: 0
           Scale:
-            x: 0.1
-            y: 0.1
-            z: 0.1
+            x: 1
+            y: 1
+            z: 1
           NodeMesh: 
-          SubNodes: []
-  - Name: Sleeve2
-    Position:
-      x: -0.002194962
-      y: 0.00715447543
-      z: 0.0035
-    Rotation:
-      x: 0
-      y: 0
-      z: 0
-    Scale:
-      x: 1.33333337
-      y: 1.33333397
-      z: 1.33333397
-    NodeMesh:
-      AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
-      AssetPath: 'guns new'
-      MeshPath: 'Howitzer sleeve R'
-      DoCombine: true
-    SubNodes:
-    - Name: Barrel2
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: MuzzleFlashEffect
+            Position:
+              x: 0
+              y: 0.0023
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 90
+            Scale:
+              x: 0.1
+              y: 0.1
+              z: 0.1
+            NodeMesh: 
+            NodeParticleSystem:
+              AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'
+              AssetPath: 'MuzzleFlashMediumEffect'
+              ParticleSystemPath: ''
+            OpenCloseData: 
+            SubNodes: []
+    - Name: Sleeve2
       Position:
-        x: 0
-        y: -0.0005
-        z: 0
+        x: -0.002194962
+        y: 0.00715447543
+        z: 0.0035
       Rotation:
         x: 0
         y: 0
         z: 0
       Scale:
-        x: 1
-        y: 1
-        z: 1
+        x: 1.33333337
+        y: 1.33333397
+        z: 1.33333397
       NodeMesh:
         AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
         AssetPath: 'guns new'
-        MeshPath: 'Howitzer barrel R'
+        MeshPath: Howitzer sleeve R
         DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
       SubNodes:
-      - Name: Muzzle2
+      - Name: Barrel2
         Position:
           x: 0
-          y: 0.00462913699
+          y: -0.0005
           z: 0
         Rotation:
           x: 0
@@ -151,20 +150,52 @@ SubNodes:
           x: 1
           y: 1
           z: 1
-        NodeMesh: 
+        NodeMesh:
+          AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+          AssetPath: 'guns new'
+          MeshPath: Howitzer barrel R
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
         SubNodes:
-        - Name: MuzzleFlashEffect
+        - Name: Muzzle2
           Position:
             x: 0
-            y: 0.0023
+            y: 0.00462913699
             z: 0
           Rotation:
             x: 0
             y: 0
-            z: 90
+            z: 0
           Scale:
-            x: 0.1
-            y: 0.1
-            z: 0.1
+            x: 1
+            y: 1
+            z: 1
           NodeMesh: 
-          SubNodes: []
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: MuzzleFlashEffect
+            Position:
+              x: 0
+              y: 0.0023
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 90
+            Scale:
+              x: 0.1
+              y: 0.1
+              z: 0.1
+            NodeMesh: 
+            NodeParticleSystem:
+              AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'
+              AssetPath: 'MuzzleFlashMediumEffect'
+              ParticleSystemPath: ''
+            OpenCloseData: 
+            SubNodes: []
+TurretAxis: YAxis
+TurretType: MediumTurret
+WeaponSize: Medium
+WeaponType: Howitzer

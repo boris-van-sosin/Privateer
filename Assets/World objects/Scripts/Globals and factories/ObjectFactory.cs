@@ -272,12 +272,16 @@ public static class ObjectFactory
         return t;
     }
 
-    public static GameObject CreateTurret2()
+    public static TurretBase CreateTurret2()
     {
         using (StreamReader sr = new StreamReader(Path.Combine("TextData", "Turrets", "MedTurretDualHowitzer.yml"), Encoding.UTF8))
         {
-            HierarchyNode root = HierarchySerializer.LoadHierarchy(sr);
-            return HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes);
+            TurretDefinition turretDef = HierarchySerializer.LoadHierarchy<TurretDefinition>(sr);
+            HierarchyNode root = turretDef.Geometry;
+            GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes);
+            GunTurret resTurret = resObj.AddComponent<GunTurret>();
+            // TODO: lots of stuff
+            return resTurret;
         }
     }
 

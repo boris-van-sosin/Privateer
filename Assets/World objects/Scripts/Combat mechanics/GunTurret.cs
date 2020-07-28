@@ -71,7 +71,7 @@ public class GunTurret : DirectionalTurret
 
     public ValueTuple<float, float, float> DebugGetDPS()
     {
-        int numBarrels = FindBarrels(transform).Count();
+        int numBarrels = FindMuzzles(transform).Count();
         float fireRate = numBarrels / FiringInterval;
         Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
         return new ValueTuple<float, float, float>(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);

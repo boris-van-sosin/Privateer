@@ -10,7 +10,29 @@ public static class HierarchySerializer
 {
     static public string SerializeObject(Transform root)
     {
-        HierarchyNode hierarchy = root.ToSerializableHierarchy();
+        System.Object toSerialize = null;
+        Type targetType = null;
+
+        HierarchyNode hierarchy = null;
+        TurretBase turret;
+        ShipBase ship;
+        if ((turret = root.GetComponent<TurretBase>()) != null)
+        {
+            TurretDefinition turretDef = new TurretDefinition()
+            {
+                Geometry = root.ToSerializableHierarchy(),
+                TurretAxis = turret.TurretAxis,
+                TurretType = turret.TurretType,
+                WeaponSize = turret.TurretSize,
+                WeaponType = turret.TurretWeaponType
+            };
+            toSerialize = turretDef;
+            targetType = typeof(TurretDefinition);
+        }
+        else
+        {
+            hierarchy = root.ToSerializableHierarchy();
+        }
 
         DynamicTypeResolver tr = new DynamicTypeResolver();
 
@@ -22,14 +44,14 @@ public static class HierarchySerializer
         YamlDotNet.Serialization.Serializer s = builder.Build();
 
         System.IO.StringWriter tw = new System.IO.StringWriter();
-        s.Serialize(tw, hierarchy, typeof(HierarchyNode));
+        s.Serialize(tw, toSerialize, targetType);
         return tw.ToString();
     }
 
-    static public HierarchyNode LoadHierarchy(TextReader reader)
+    static public T LoadHierarchy<T>(TextReader reader)
     {
         YamlDotNet.Serialization.Deserializer ds = new YamlDotNet.Serialization.Deserializer();
-        return ds.Deserialize<HierarchyNode>(reader);
+        return ds.Deserialize<T>(reader);
     }
 }
 
@@ -47,24 +69,46 @@ public static class HierarchySerializationExtensions
             Name = t.name,
             Position = SerializableVector3.ToSerializable(t.localPosition),
             Rotation = SerializableVector3.ToSerializable(t.localRotation),
-            Scale = SerializableVector3.ToSerializable(t.localScale)
+            Scale = SerializableVector3.ToSerializable(t.localScale),
+            NodeMesh = null,
+            NodeParticleSystem = null,
+            OpenCloseData = null
         };
+
         MeshFilter meshFilter;
+        ParticleSystem particleSys;
+        GenericOpenCloseAnim openClose;
         if ((meshFilter = t.GetComponent<MeshFilter>()) != null)
         {
-            res.NodeMesh = new MeshData();
-            res.NodeMesh.DoCombine = true;
-            res.NodeMesh.AssetBundlePath = "";
-            res.NodeMesh.AssetPath = "";
-            res.NodeMesh.MeshPath = meshFilter.sharedMesh.name;
+            res.NodeMesh = new MeshData()
+            {
+                DoCombine = true,
+                AssetBundlePath = "",
+                AssetPath = "",
+                MeshPath = meshFilter.sharedMesh.name
+            };
             if (res.NodeMesh.MeshPath.EndsWith(" Instance"))
             {
                 res.NodeMesh.MeshPath = res.NodeMesh.MeshPath.Substring(0, res.NodeMesh.MeshPath.IndexOf(" Instance"));
             }
         }
-        else
+        else if ((particleSys = t.GetComponent<ParticleSystem>()) != null)
         {
-            res.NodeMesh = null;
+            res.NodeParticleSystem = new ParticleSystemData()
+            {
+                AssetBundlePath = "",
+                AssetPath = "",
+                ParticleSystemPath = particleSys.name
+            };
+        }
+        else if ((openClose = t.GetComponent<GenericOpenCloseAnim>()) != null)
+        {
+            res.OpenCloseData = new OpenCloseComponentData();
+            res.OpenCloseData.ClosedState = openClose.ClosedState;
+            res.OpenCloseData.OpenState = openClose.OpenState;
+            res.OpenCloseData.AnimWaypoints = new GenericOpenCloseAnim.AnimState[openClose.AnimWaypoints.Length];
+            openClose.AnimWaypoints.CopyTo(res.OpenCloseData.AnimWaypoints, 0);
+            res.OpenCloseData.AnimComponentPaths = openClose.AnimComponents.Select(c => TransformPath(c, t)).ToArray();
         }
 
         res.Name = t.name;
@@ -81,6 +125,16 @@ public static class HierarchySerializationExtensions
 
         return res;
     }
+
+    static private string TransformPath(Transform t, Transform upTo)
+    {
+        if (t == null)
+            return string.Empty;
+        else if (t.parent == null || t.parent == upTo)
+            return t.name;
+        else
+            return string.Format("{0}/{1}", TransformPath(t.parent, upTo), t.name);
+    }
 }
 
 [Serializable]
@@ -94,6 +148,8 @@ public class HierarchyNode
     [YamlIgnore]
     public Matrix4x4 Mat => Matrix4x4.TRS(Position.Vector3FromSerializable(), Rotation.QuaternionFromSerializable(), Scale.Vector3FromSerializable());
     public MeshData NodeMesh { get; set; }
+    public ParticleSystemData NodeParticleSystem { get; set; }
+    public OpenCloseComponentData OpenCloseData { get; set; }
     public HierarchyNode[] SubNodes { get; set; }
 }
 
@@ -120,4 +176,21 @@ public class MeshData
     public string AssetPath { get; set; }
     public string MeshPath { get; set; }
     public bool DoCombine { get; set; }
+}
+
+[Serializable]
+public class ParticleSystemData
+{
+    public string AssetBundlePath { get; set; }
+    public string AssetPath { get; set; }
+    public string ParticleSystemPath { get; set; }
+}
+
+[Serializable]
+public class OpenCloseComponentData
+{
+    public string[] AnimComponentPaths { get; set; }
+    public GenericOpenCloseAnim.AnimState OpenState { get; set; }
+    public GenericOpenCloseAnim.AnimState ClosedState { get; set; }
+    public GenericOpenCloseAnim.AnimState[] AnimWaypoints { get; set; }
 }

@@ -89,40 +89,38 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected virtual void ParseMuzzles()
     {
-        List<ValueTuple<Transform, Transform>> barrelsFound = FindBarrels(transform).ToList();
-        Barrels = new Transform[barrelsFound.Count];
-        Muzzles = new Transform[barrelsFound.Count];
+        List<Transform> muzzlesFound = FindMuzzles(transform).ToList();
+        //Barrels = new Transform[barrelsFound.Count];
+        Muzzles = new Transform[muzzlesFound.Count];
         if (AlternatingFire)
         {
-            ActualFiringInterval = FiringInterval / Barrels.Length;
+            ActualFiringInterval = FiringInterval / Muzzles.Length;
         }
         else
         {
             ActualFiringInterval = FiringInterval;
         }
-        MuzzleFx = new ParticleSystem[barrelsFound.Count];
-        for (int i = 0; i < barrelsFound.Count; ++i)
+        MuzzleFx = new ParticleSystem[muzzlesFound.Count];
+        for (int i = 0; i < muzzlesFound.Count; ++i)
         {
-            Barrels[i] = barrelsFound[i].Item1;
-            Muzzles[i] = barrelsFound[i].Item2;
-            MuzzleFx[i] = barrelsFound[i].Item2.GetComponentInChildren<ParticleSystem>();
+            //Barrels[i] = barrelsFound[i].Item1;
+            Muzzles[i] = muzzlesFound[i];
+            MuzzleFx[i] = muzzlesFound[i].GetComponentInChildren<ParticleSystem>();
         }
     }
 
-    protected static IEnumerable<ValueTuple<Transform, Transform>> FindBarrels(Transform root)
+    protected static IEnumerable<Transform> FindMuzzles(Transform root)
     {
-        if (root.name.StartsWith(BarrelString))
+        if (root.name.StartsWith(MuzzleString))
         {
-            string suffix = root.name.Substring(BarrelString.Length);
-            Transform muzzle = root.Find(MuzzleString + suffix);
-            yield return new ValueTuple<Transform, Transform>(root, muzzle);
+            yield return root;
         }
         else
         {
             for (int i = 0; i < root.childCount; ++i)
             {
-                IEnumerable<ValueTuple<Transform, Transform>> resInChildren = FindBarrels(root.GetChild(i));
-                foreach (ValueTuple<Transform, Transform> r in resInChildren)
+                IEnumerable<Transform> resInChildren = FindMuzzles(root.GetChild(i));
+                foreach (Transform r in resInChildren)
                 {
                     yield return r;
                 }
@@ -686,7 +684,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected bool CanRotate { get { return (!_fixed) && _status != ComponentStatus.HeavilyDamaged && _status != ComponentStatus.KnockedOut && _status != ComponentStatus.Destroyed; } }
 
     // Barrels, muzzles, and muzzleFx data:
-    protected Transform[] Barrels;
+    //protected Transform[] Barrels;
     protected Transform[] Muzzles;
     protected ParticleSystem[] MuzzleFx;
     protected int _nextBarrel = 0;
@@ -731,7 +729,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public enum TurretMode { Off, Manual, Auto };
     public enum RotationAxis { XAxis, YAxis, ZAxis };
 
-    protected static readonly string BarrelString = "Barrel";
+    //protected static readonly string BarrelString = "Barrel";
     protected static readonly string MuzzleString = "Muzzle";
 
     public event Action OnHitpointsChanged;

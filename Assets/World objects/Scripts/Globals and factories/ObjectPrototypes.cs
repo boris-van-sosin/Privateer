@@ -326,6 +326,10 @@ public class ObjectPrototypes : MonoBehaviour
         if (!_objCache.TryGetValue((assetBundlePath, assetPath, objPath), out res))
         {
             res = AssetBundleUtil.LoadSingleObject<GameObject>(assetBundlePath, assetPath, objPath, true);
+            if (res == null)
+            {
+                return null;
+            }
             _objCache[(assetBundlePath, assetPath, objPath)] = res;
         }
         return Instantiate(res);
