@@ -1,0 +1,243 @@
+Geometry:
+  Name: Small barbette dual small howitzer
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Base
+    Position:
+      x: 0
+      y: 0.0002
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+      AssetPath: 'guns new'
+      MeshPath: Small barbette
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Carriage1
+      Position:
+        x: 0.0018
+        y: -0.00254709623
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+        AssetPath: 'guns new'
+        MeshPath: Barbette carriage L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Sleeve1
+        Position:
+          x: 0
+          y: 0.005
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+          AssetPath: 'guns new'
+          MeshPath: Howitzer barbette sleeve L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Barrel1
+          Position:
+            x: 0
+            y: -0.003
+            z: 0.002
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh:
+            AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+            AssetPath: 'guns new'
+            MeshPath: Howitzer barrel L
+            DoCombine: true
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: Muzzle1
+            Position:
+              x: 0
+              y: 0.00469699223
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 0
+            Scale:
+              x: 1
+              y: 1
+              z: 1
+            NodeMesh: 
+            NodeParticleSystem: 
+            OpenCloseData: 
+            SubNodes:
+            - Name: MuzzleFlashEffect
+              Position:
+                x: 0
+                y: 0.0023
+                z: 0
+              Rotation:
+                x: 0
+                y: 0
+                z: 90
+              Scale:
+                x: 0.1
+                y: 0.1
+                z: 0.1
+              NodeMesh: 
+              NodeParticleSystem:
+                AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'
+                AssetPath: 'MuzzleFlashSmallEffect'
+                ParticleSystemPath: ''
+              OpenCloseData: 
+              SubNodes: []
+    - Name: Carriage2
+      Position:
+        x: -0.0018
+        y: -0.00254709623
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+        AssetPath: 'guns new'
+        MeshPath: Barbette carriage R
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Sleeve2
+        Position:
+          x: 0
+          y: 0.005
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+          AssetPath: 'guns new'
+          MeshPath: Howitzer barbette sleeve R
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Barrel2
+          Position:
+            x: 0
+            y: -0.003
+            z: 0.002
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh:
+            AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+            AssetPath: 'guns new'
+            MeshPath: Howitzer barrel R
+            DoCombine: true
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: Muzzle2
+            Position:
+              x: 0
+              y: 0.00469699316
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 0
+            Scale:
+              x: 1
+              y: 1
+              z: 1
+            NodeMesh: 
+            NodeParticleSystem: 
+            OpenCloseData: 
+            SubNodes:
+            - Name: MuzzleFlashEffect
+              Position:
+                x: 0
+                y: 0.0023
+                z: 0
+              Rotation:
+                x: 0
+                y: 0
+                z: 90
+              Scale:
+                x: 0.1
+                y: 0.1
+                z: 0.1
+              NodeMesh: 
+              NodeParticleSystem:
+                AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'
+                AssetPath: 'MuzzleFlashSmallEffect'
+                ParticleSystemPath: ''
+              OpenCloseData: 
+              SubNodes: []
+TurretAxis: YAxis
+TurretType: SmallBarbetteDual
+WeaponSize: Light
+WeaponType: Howitzer

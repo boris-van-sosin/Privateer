@@ -197,6 +197,9 @@ public static class ObjectFactory
 
     public static TurretBase CreateTurret(ComponentSlotType turretType, WeaponType weaponType)
     {
+        //
+        return CreateTurret2(turretType, weaponType);
+        //
         string prodKey = turretType.ToString() + weaponType.ToString();
         TurretBase t = _prototypes.CreateTurret(prodKey);
         TurretMountDataEntry md = _weaponMounts[SlotTypeToMountKey(turretType)];
@@ -272,17 +275,145 @@ public static class ObjectFactory
         return t;
     }
 
-    public static TurretBase CreateTurret2()
+    public static TurretBase CreateTurret2(ComponentSlotType turretType, WeaponType weaponType)
     {
-        using (StreamReader sr = new StreamReader(Path.Combine("TextData", "Turrets", "MedTurretDualHowitzer.yml"), Encoding.UTF8))
+        if (_turretDefinitions == null)
         {
-            TurretDefinition turretDef = HierarchySerializer.LoadHierarchy<TurretDefinition>(sr);
-            HierarchyNode root = turretDef.Geometry;
-            GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes);
-            GunTurret resTurret = resObj.AddComponent<GunTurret>();
-            // TODO: lots of stuff
-            return resTurret;
+            LoadTurretDefinitions();
         }
+        TurretDefinition turretDef;
+        if (!_turretDefinitions.TryGetValue((turretType, weaponType), out turretDef))
+        {
+            return null;
+        }
+
+        HierarchyNode root = turretDef.Geometry;
+        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes);
+        TurretBase resTurret;
+        switch (turretDef.WeaponType)
+        {
+            case WeaponType.Autocannon:
+            case WeaponType.Howitzer:
+            case WeaponType.HVGun:
+                resTurret = SetGunTurretData(turretDef, resObj);
+                break;
+            case WeaponType.Lance:
+                resTurret = SetBeamTurretData(turretDef, resObj);
+                break;
+            case WeaponType.Laser:
+                resTurret = SetContinuousBeamTurretData(turretDef, resObj);
+                break;
+            case WeaponType.PlasmaCannon:
+                resTurret = SetSpecialProjectileTurretData(turretDef, resObj);
+                break;
+            case WeaponType.TorpedoTube:
+                resTurret = SetTorpedoTurretData(turretDef, resObj);
+                break;
+            default:
+                resTurret = null;
+                break;
+        }
+
+        TurretMountDataEntry md = _weaponMounts[SlotTypeToMountKey(turretType)];
+        resTurret.MaxHitpoints = md.HitPoints;
+        resTurret.ComponentHitPoints = md.HitPoints;
+        resTurret.RotationSpeed = md.RotationSpeed;
+        resTurret.ComponentHitPoints = resTurret.ComponentMaxHitPoints;
+
+        return resTurret;
+    }
+
+    private static GunTurret SetGunTurretData(TurretDefinition turretDef, GameObject turretObj)
+    {
+        GunTurret resTurret = turretObj.AddComponent<GunTurret>();
+        resTurret.TurretAxis = turretDef.TurretAxis;
+        resTurret.TurretType = turretDef.TurretType;
+        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponType = turretDef.WeaponType;
+
+        WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        resTurret.ProjectileScale = wpd.ProjectileScale;
+        resTurret.MaxRange = wpd.MaxRange;
+        resTurret.MuzzleVelocity = wpd.MuzzleVelocity;
+        resTurret.FiringInterval = wpd.FiringInterval;
+        resTurret.Inaccuracy = wpd.MaxSpread;
+        resTurret.EnergyToFire = wpd.EnergyToFire;
+        resTurret.HeatToFire = wpd.HeatToFire;
+        resTurret.DefaultAlternatingFire = (turretDef.WeaponType == WeaponType.Autocannon);
+        return resTurret;
+    }
+
+    private static BeamTurret SetBeamTurretData(TurretDefinition turretDef, GameObject turretObj)
+    {
+        BeamTurret resTurret = turretObj.AddComponent<BeamTurret>();
+        resTurret.TurretAxis = turretDef.TurretAxis;
+        resTurret.TurretType = turretDef.TurretType;
+        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponType = turretDef.WeaponType;
+
+        WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        resTurret.MaxRange = wbd.MaxRange;
+        resTurret.FiringInterval = wbd.FiringInterval;
+        resTurret.BeamDuration = wbd.BeamDuration;
+        resTurret.Inaccuracy = 0f;
+        resTurret.EnergyToFire = wbd.EnergyToFire;
+        resTurret.HeatToFire = wbd.HeatToFire;
+
+        return resTurret;
+    }
+
+    private static ContinuousBeamTurret SetContinuousBeamTurretData(TurretDefinition turretDef, GameObject turretObj)
+    {
+        ContinuousBeamTurret resTurret = turretObj.AddComponent<ContinuousBeamTurret>();
+        resTurret.TurretAxis = turretDef.TurretAxis;
+        resTurret.TurretType = turretDef.TurretType;
+        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponType = turretDef.WeaponType;
+
+        WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        resTurret.MaxRange = wbd.MaxRange;
+        resTurret.FiringInterval = wbd.FiringInterval;
+        resTurret.BeamDuration = wbd.BeamDuration;
+        resTurret.Inaccuracy = 0f;
+        resTurret.EnergyToFire = wbd.EnergyToFire;
+        resTurret.HeatToFire = wbd.HeatToFire;
+
+        return resTurret;
+    }
+
+    private static SpecialProjectileTurret SetSpecialProjectileTurretData(TurretDefinition turretDef, GameObject turretObj)
+    {
+        SpecialProjectileTurret resTurret = turretObj.AddComponent<SpecialProjectileTurret>();
+        resTurret.TurretAxis = turretDef.TurretAxis;
+        resTurret.TurretType = turretDef.TurretType;
+        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponType = turretDef.WeaponType;
+
+        WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        resTurret.MaxRange = wpd.MaxRange;
+        resTurret.MuzzleVelocity = wpd.MuzzleVelocity;
+        resTurret.FiringInterval = wpd.FiringInterval;
+        resTurret.Inaccuracy = wpd.MaxSpread;
+        resTurret.EnergyToFire = wpd.EnergyToFire;
+        resTurret.HeatToFire = wpd.HeatToFire;
+
+        return resTurret;
+    }
+
+    private static TorpedoTurret SetTorpedoTurretData(TurretDefinition turretDef, GameObject turretObj)
+    {
+        TorpedoTurret resTurret = turretObj.AddComponent<TorpedoTurret>();
+        resTurret.TurretAxis = turretDef.TurretAxis;
+        resTurret.TurretType = turretDef.TurretType;
+        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponType = turretDef.WeaponType;
+
+        WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
+        resTurret.FiringInterval = tordpedoData.FiringInterval;
+        resTurret.EnergyToFire = tordpedoData.EnergyToFire;
+        resTurret.HeatToFire = tordpedoData.HeatToFire;
+
+        return resTurret;
     }
 
     public static TurretBase CreateStrikeCraftTurret(ComponentSlotType turretType, WeaponType weaponType)
@@ -316,6 +447,20 @@ public static class ObjectFactory
         t.EnergyToFire = 0;
         t.HeatToFire = 0;
         return t;
+    }
+
+    private static void LoadTurretDefinitions()
+    {
+        _turretDefinitions = new Dictionary<(ComponentSlotType, WeaponType), TurretDefinition>();
+        string searchPath = Path.Combine("TextData", "Turrets");
+        foreach (string turretFile in Directory.EnumerateFiles(searchPath, "*.yml", SearchOption.TopDirectoryOnly))
+        {
+            using (StreamReader sr = new StreamReader(turretFile, Encoding.UTF8))
+            {
+                TurretDefinition turretDef = HierarchySerializer.LoadHierarchy<TurretDefinition>(sr);
+                _turretDefinitions.Add((turretDef.TurretType, turretDef.WeaponType), turretDef);
+            }
+        }
     }
 
     public static string[] GetAllStrikeCraftTypes()
@@ -778,6 +923,7 @@ public static class ObjectFactory
     private static ArmourPenetrationTable _penetrationTable = null;
     private static Dictionary<string, CultureNames> _cultureNamingLists = null;
     private static Dictionary<ValueTuple<WeaponType, WeaponSize>, List<TacMapEntityType>> _defaultPriorityLists = null;
+    private static Dictionary<(ComponentSlotType, WeaponType), TurretDefinition> _turretDefinitions = null;
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
     private static readonly int _allStrikeCraftLayerMask = LayerMask.GetMask("Strike Craft");

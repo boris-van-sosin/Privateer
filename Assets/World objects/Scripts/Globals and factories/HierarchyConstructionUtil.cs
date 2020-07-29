@@ -46,9 +46,9 @@ public static class HierarchyConstructionUtil
 
     private static void FixTransformsRecursive(Transform currObj, HierarchyNode currData)
     {
-        currObj.localPosition = currData.Position.Vector3FromSerializable();
-        currObj.localRotation = currData.Rotation.QuaternionFromSerializable();
-        currObj.localScale = currData.Scale.Vector3FromSerializable();
+        currObj.localPosition = currData.Position.ToVector3();
+        currObj.localRotation = currData.Rotation.ToQuaternion();
+        currObj.localScale = currData.Scale.ToVector3();
         for (int i = 0; i < currObj.childCount; ++i)
         {
             FixTransformsRecursive(currObj.GetChild(i), currData.SubNodes[i]);
@@ -72,17 +72,16 @@ public static class HierarchyConstructionUtil
 
     private static (Transform, IReadOnlyCollection<CombineInstance>, IReadOnlyCollection<Transform>) CombineMeshesRecursiveInner(Transform currObj, HierarchyNode currData, Matrix4x4 mat, Transform rootObj, HierarchyNode rootData)
     {
-        Matrix4x4 localMat = currData.Mat;
+        bool isTopLevel = currObj == rootObj;
+        Matrix4x4 localMat = isTopLevel ? Matrix4x4.identity : currData.Mat;
         List<CombineInstance> toCombine = null;
         List<Transform> toDelete = null;
         bool mergeCurr = currData.NodeMesh != null && currData.NodeMesh.DoCombine;
         if (mergeCurr)
         {
             toCombine = new List<CombineInstance>();
-            toCombine.Add(new CombineInstance() { mesh = currObj.GetComponent<MeshFilter>().sharedMesh, transform = mat });
+            toCombine.Add(new CombineInstance() { mesh = currObj.GetComponent<MeshFilter>().sharedMesh, transform = mat * localMat });
         }
-
-        bool isTopLevel = currObj == rootObj;
 
         Matrix4x4 nextMat = (!isTopLevel && mergeCurr) ? mat * localMat : Matrix4x4.identity;
 

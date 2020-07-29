@@ -13,7 +13,7 @@ public class GunTurretExportHelper : Editor
         TurretBase turret = (TurretBase)target;
         if (GUILayout.Button("Serialize"))
         {
-            string yaml = HierarchySerializer.SerializeObject(turret.transform);
+            string yaml = HierarchySerializer.SerializeObject(turret);
             SerializationDisplayWindow window = EditorWindow.CreateWindow<SerializationDisplayWindow>();
             window.SetText(yaml);
         }

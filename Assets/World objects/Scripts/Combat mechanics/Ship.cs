@@ -156,22 +156,9 @@ public class Ship : ShipBase
 
     private void InitArmour()
     {
-        _maxMitigationArmour.Add(ShipSection.Fore, DefaultMitigationArmourFront);
-        _currMitigationArmour.Add(ShipSection.Fore, DefaultMitigationArmourFront);
-
-        _maxMitigationArmour.Add(ShipSection.Aft, DefaultMitigationArmourAft);
-        _currMitigationArmour.Add(ShipSection.Aft, DefaultMitigationArmourAft);
-
-        _maxMitigationArmour.Add(ShipSection.Left, DefaultMitigationArmourLeft);
-        _currMitigationArmour.Add(ShipSection.Left, DefaultMitigationArmourLeft);
-
-        _maxMitigationArmour.Add(ShipSection.Right, DefaultMitigationArmourRight);
-        _currMitigationArmour.Add(ShipSection.Right, DefaultMitigationArmourRight);
-
-        _armour.Add(ShipSection.Fore, ArmorFront);
-        _armour.Add(ShipSection.Aft, ArmorAft);
-        _armour.Add(ShipSection.Left, ArmorLeft);
-        _armour.Add(ShipSection.Right, ArmorRight);
+        _maxMitigationArmour = DefaultMitigationArmour.ToDict();
+        _currMitigationArmour = DefaultMitigationArmour.ToDict();
+        _armour = Armour.ToDict();
         foreach (ShipSection section in _componentSlotsOccupied.Keys)
         {
             foreach (IShipComponent comp in AllComponentsInSection(section, false))
@@ -1263,18 +1250,13 @@ public class Ship : ShipBase
 
     public float Mass;
 
-    public int ArmorFront;
-    public int ArmorAft;
-    public int ArmorLeft;
-    public int ArmorRight;
+    public ShipHullFourSidesValues Armour;
+    public ShipHullFourSidesValues ReducedArmour;
+    public ShipHullFourSidesValues DefaultMitigationArmour;
     public float ArmourMitigation;
-    public int DefaultMitigationArmourFront;
-    public int DefaultMitigationArmourAft;
-    public int DefaultMitigationArmourLeft;
-    public int DefaultMitigationArmourRight;
-    private Dictionary<ShipSection, int> _armour = new Dictionary<ShipSection, int>();
-    private Dictionary<ShipSection, int> _maxMitigationArmour = new Dictionary<ShipSection, int>();
-    private Dictionary<ShipSection, int> _currMitigationArmour = new Dictionary<ShipSection, int>();
+    private IDictionary<ShipSection, int> _armour;
+    private IDictionary<ShipSection, int> _maxMitigationArmour;
+    private IDictionary<ShipSection, int> _currMitigationArmour;
     public bool ShipSurrendered { get; private set; }
     public bool InBoarding { get; private set; }
 
@@ -1305,4 +1287,22 @@ public class Ship : ShipBase
     private Buff _crewExperienceBuff;
 
     private static readonly WaitForSeconds _componentPulseDelay = new WaitForSeconds(0.25f);
+}
+
+[Serializable]
+public struct ShipHullFourSidesValues
+{
+    public int Fore;
+    public int Aft;
+    public int Left;
+    public int Right;
+    public IDictionary<Ship.ShipSection, int> ToDict()
+    {
+        IDictionary<Ship.ShipSection, int> res = new Dictionary<Ship.ShipSection, int>();
+        res[Ship.ShipSection.Fore] = Fore;
+        res[Ship.ShipSection.Aft] = Aft;
+        res[Ship.ShipSection.Left] = Left;
+        res[Ship.ShipSection.Right] = Right;
+        return res;
+    }
 }
