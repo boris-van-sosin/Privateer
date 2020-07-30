@@ -1,0 +1,122 @@
+Geometry:
+  Name: Small turret howitzer
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Turret
+    Position:
+      x: 0
+      y: 0
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+      AssetPath: guns new
+      MeshPath: Small turret
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Sleeve1
+      Position:
+        x: 0
+        y: 0.00360823632
+        z: 0.0025
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Howitzer sleeve L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Barrel1
+        Position:
+          x: 0
+          y: -0.0005
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+          AssetPath: guns new
+          MeshPath: Howitzer barrel L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Muzzle1
+          Position:
+            x: 0
+            y: 0.00474176742
+            z: 0
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh: 
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: MuzzleFlashEffect
+            Position:
+              x: 0
+              y: 0.002
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 90
+            Scale:
+              x: 0.1
+              y: 0.1
+              z: 0.1
+            NodeMesh: 
+            NodeParticleSystem:
+              AssetBundlePath: AssetBundles\StandaloneWindows\effects
+              AssetPath: MuzzleFlashSmallEffect
+              ParticleSystemPath: ''
+            OpenCloseData: 
+            SubNodes: []
+TurretAxis: YAxis
+TurretType: SmallTurret
+WeaponSize: Light
+WeaponType: Howitzer

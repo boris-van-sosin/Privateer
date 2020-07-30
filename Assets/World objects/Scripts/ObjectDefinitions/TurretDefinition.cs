@@ -13,9 +13,14 @@ public class TurretDefinition
 
     public static TurretDefinition FromTurret(TurretBase t)
     {
+        return FromTurret(t, "", "", "", "");
+    }
+
+    public static TurretDefinition FromTurret(TurretBase t, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
         return new TurretDefinition()
         {
-            Geometry = t.transform.ToSerializableHierarchy(),
+            Geometry = t.transform.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
             TurretAxis = t.TurretAxis,
             TurretType = t.TurretType,
             WeaponSize = t.TurretSize,

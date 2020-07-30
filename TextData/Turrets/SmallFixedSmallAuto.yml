@@ -1,0 +1,122 @@
+Geometry:
+  Name: Small fixed auto
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Carriage1
+    Position:
+      x: 0
+      y: 0.0002
+      z: 0.0017
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+      AssetPath: guns new
+      MeshPath: Barbette carriage L
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Sleeve1
+      Position:
+        x: 0
+        y: 0
+        z: 0.0005
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Autocannon barbette sleeve L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Barrel1
+        Position:
+          x: 0
+          y: 0.00433361577
+          z: 0.000375
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+          AssetPath: guns new
+          MeshPath: Autocannon L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Muzzle1
+          Position:
+            x: 0
+            y: 0.002
+            z: 0.0007
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh: 
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: MuzzleFlashEffect
+            Position:
+              x: 0
+              y: 0.0005
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 90
+            Scale:
+              x: 0.05
+              y: 0.05
+              z: 0.05
+            NodeMesh: 
+            NodeParticleSystem:
+              AssetBundlePath: AssetBundles\StandaloneWindows\effects
+              AssetPath: MuzzleFlashSmallEffect
+              ParticleSystemPath: MuzzleFlashEffect
+            OpenCloseData: 
+            SubNodes: []
+TurretAxis: YAxis
+TurretType: SmallFixed
+WeaponSize: Light
+WeaponType: Autocannon

@@ -28,10 +28,15 @@ public class ShipHullDefinition
 
     public static ShipHullDefinition FromShip(Ship s)
     {
+        return FromShip(s, "", "", "", "");
+    }
+
+    public static ShipHullDefinition FromShip(Ship s, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
         ShipHullDefinition res = new ShipHullDefinition()
         {
             HullName = s.name,
-            Geometry = s.HullObject.ToSerializableHierarchy(),
+            Geometry = s.HullObject.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
             MovementData = ShipHullMovementData.FromShip(s),
             TeamColorComponents = s.TeamColorComponents.Select(tc => tc.transform.ToSerializableHierarchy()).ToArray(),
             WeaponHardpoints = s.GetComponentsInChildren<TurretHardpoint>().Select(hp => WeaponHardpointDefinition.FromHardpoint(hp)).ToArray(),

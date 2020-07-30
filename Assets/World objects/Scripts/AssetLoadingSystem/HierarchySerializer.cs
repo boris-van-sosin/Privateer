@@ -11,19 +11,34 @@ public static class HierarchySerializer
 {
     static public string SerializeObject(TurretBase turret)
     {
-        TurretDefinition turretDef = TurretDefinition.FromTurret(turret);
-        return SerializeObjectInner(turretDef, typeof(TurretDefinition));
+        return SerializeObject(turret, "", "", "", "");
     }
 
     static public string SerializeObject(Ship ship)
     {
-        ShipHullDefinition shipHullDef = ShipHullDefinition.FromShip(ship);
-        return SerializeObjectInner(shipHullDef, typeof(ShipHullDefinition));
+        return SerializeObject(ship, "", "", "", "");
     }
 
     static public string SerializeObject(Transform root)
     {
-        HierarchyNode hierarchy = root.ToSerializableHierarchy();
+        return SerializeObject(root, "", "", "", "");
+    }
+
+    static public string SerializeObject(TurretBase turret, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
+        TurretDefinition turretDef = TurretDefinition.FromTurret(turret, meshABPath, meshAssetPath, partSysABPath, partSysAssetPath);
+        return SerializeObjectInner(turretDef, typeof(TurretDefinition));
+    }
+
+    static public string SerializeObject(Ship ship, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
+        ShipHullDefinition shipHullDef = ShipHullDefinition.FromShip(ship, meshABPath, meshAssetPath, partSysABPath, partSysAssetPath);
+        return SerializeObjectInner(shipHullDef, typeof(ShipHullDefinition));
+    }
+
+    static public string SerializeObject(Transform root, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
+        HierarchyNode hierarchy = root.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath);
         return SerializeObjectInner(hierarchy, typeof(HierarchyNode));
     }
 
@@ -64,6 +79,11 @@ public static class HierarchySerializationExtensions
 {
     static public HierarchyNode ToSerializableHierarchy(this Transform t)
     {
+        return ToSerializableHierarchy(t, "", "", "", "");
+    }
+
+    static public HierarchyNode ToSerializableHierarchy(this Transform t, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
         if (t == null)
         {
             return null;
@@ -88,8 +108,8 @@ public static class HierarchySerializationExtensions
             res.NodeMesh = new MeshData()
             {
                 DoCombine = true,
-                AssetBundlePath = "",
-                AssetPath = "",
+                AssetBundlePath = meshABPath,
+                AssetPath = meshAssetPath,
                 MeshPath = meshFilter.sharedMesh.name
             };
             if (res.NodeMesh.MeshPath.EndsWith(" Instance"))
@@ -101,8 +121,8 @@ public static class HierarchySerializationExtensions
         {
             res.NodeParticleSystem = new ParticleSystemData()
             {
-                AssetBundlePath = "",
-                AssetPath = "",
+                AssetBundlePath = partSysABPath,
+                AssetPath = partSysAssetPath,
                 ParticleSystemPath = particleSys.name
             };
         }
@@ -119,7 +139,7 @@ public static class HierarchySerializationExtensions
         List<HierarchyNode> subNodes = new List<HierarchyNode>();
         for (int i = 0; i < t.childCount; i++)
         {
-            subNodes.Add(t.GetChild(i).ToSerializableHierarchy());
+            subNodes.Add(t.GetChild(i).ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath));
         }
         res.SubNodes = subNodes.Where(n => n != null).ToArray();
 
