@@ -1,0 +1,104 @@
+Geometry:
+  Name: Torpedo Tube
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData:
+    AnimComponentPaths:
+    - instance_1/instance_0
+    ClosedState:
+      Positions:
+      - x: 0
+        y: -0.0055
+        z: 0.0001
+      Rotations:
+      - x: 0
+        y: 0
+        z: 0
+      Duration: 0
+    OpenState:
+      Positions:
+      - x: 0
+        y: -0.0055
+        z: 0.0001
+      Rotations:
+      - x: 20
+        y: 0
+        z: 0
+      Duration: 0.5
+    AnimWaypoints: []
+  SubNodes:
+  - Name: instance_1
+    Position:
+      x: 0
+      y: 0
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+      AssetPath: guns new
+      MeshPath: Torpedo launcher frame
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: instance_0
+      Position:
+        x: 0
+        y: -0.0055
+        z: 0.0001
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Torpedo launcher tube
+        DoCombine: false
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Muzzle1
+        Position:
+          x: 0
+          y: 0.011
+          z: -0.000904490007
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh: 
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes: []
+TurretAxis: YAxis
+TurretType: TorpedoTube
+WeaponSize: TorpedoTube
+WeaponType: TorpedoTube

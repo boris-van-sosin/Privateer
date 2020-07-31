@@ -9,6 +9,7 @@ public static class HierarchyConstructionUtil
     {
         GameObject res = ConstructHierarchyRecursive(root, true, proto);
         FixTransformsRecursive(res.transform, root);
+        SetOpenCloseAnims(res.transform, root);
         CombineMeshes(res.transform, root);
         return res;
     }
@@ -189,5 +190,20 @@ public static class HierarchyConstructionUtil
         }
 
         return (false, false);
+    }
+
+    private static void SetOpenCloseAnims(Transform currObj, HierarchyNode currData)
+    {
+        if (currData.OpenCloseData != null)
+        {
+            GenericOpenCloseAnim openClose = currObj.gameObject.AddComponent<GenericOpenCloseAnim>();
+            currData.OpenCloseData.SetOpenCloseAnim(openClose);
+            openClose.AnimComponents = currData.OpenCloseData.AnimComponentPaths.Select(p => currObj.Find(p)).ToArray();
+        }
+
+        for (int i = 0; i < currObj.childCount; ++i)
+        {
+            SetOpenCloseAnims(currObj.GetChild(i), currData.SubNodes[i]);
+        }
     }
 }

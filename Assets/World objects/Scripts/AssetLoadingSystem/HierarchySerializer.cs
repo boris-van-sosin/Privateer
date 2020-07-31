@@ -214,6 +214,13 @@ public class OpenCloseComponentData
             AnimComponentPaths = openClose.AnimComponents.Select(c => HierarchySerializer.TransformPath(c, openClose.transform)).ToArray()
         };
     }
+
+    public void SetOpenCloseAnim(GenericOpenCloseAnim openClose)
+    {
+        openClose.ClosedState = ClosedState.ToAnimState();
+        openClose.OpenState = OpenState.ToAnimState();
+        openClose.AnimWaypoints = AnimWaypoints.Select(a => a.ToAnimState()).ToArray();
+    }
 }
 
 [Serializable]
@@ -233,5 +240,15 @@ public class SerializableAnimState
         };
 
         return res;
+    }
+
+    public GenericOpenCloseAnim.AnimState ToAnimState()
+    {
+        return new GenericOpenCloseAnim.AnimState()
+        {
+            Positions = Positions.Select(p => p.ToVector3()).ToArray(),
+            Rotations = Rotations.Select(r => r.ToVector3()).ToArray(),
+            Duration = Duration
+        };
     }
 }

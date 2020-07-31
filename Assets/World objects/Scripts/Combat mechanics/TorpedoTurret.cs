@@ -19,7 +19,7 @@ public class TorpedoTurret : TurretBase
         {
             _launchDirection = new Vector3(0, 1, 0);
         }
-        _torpedoTubeDoorsAnim = GetComponent<Animator>();
+        _torpedoTubeDoorsAnim = GetComponent<GenericOpenCloseAnim>();
         ValueTuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
         _torpedoesInSpread = launchData.Item1;
@@ -39,7 +39,7 @@ public class TorpedoTurret : TurretBase
 
     private Transform FindTorpedoBarrel()
     {
-        return transform.Find("Muzzle1");
+        return FindMuzzles(transform).FirstOrDefault();
     }
 
     public override void ManualTarget(Vector3 target)
@@ -104,9 +104,9 @@ public class TorpedoTurret : TurretBase
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
         _torpedoTarget = Muzzles[barrelIdx].position + firingVector;
-        if (_torpedoTubeDoorsAnim)
+        if (_torpedoTubeDoorsAnim != null)
         {
-            _torpedoTubeDoorsAnim.SetBool("DoorsOpen", true);
+            _torpedoTubeDoorsAnim.Open(NotifyTorpedoTubeOpenClose);
         }
         else
         {
@@ -163,9 +163,9 @@ public class TorpedoTurret : TurretBase
         return foundTarget;
     }
 
-    public void NotifyTorpedoTubeOpened(bool opened)
+    public void NotifyTorpedoTubeOpenClose()
     {
-        TorpedoDoorsOpen = opened;
+        TorpedoDoorsOpen = _torpedoTubeDoorsAnim.ComponentState == GenericOpenCloseAnim.State.Open;
     }
 
     private IEnumerator LaunchSpread()
@@ -179,7 +179,14 @@ public class TorpedoTurret : TurretBase
             t.transform.position = Muzzles[_nextBarrel].position;
             yield return _spreadDelay;
         }
-        _torpedoTubeDoorsAnim.SetBool("DoorsOpen", false);
+        if (_torpedoTubeDoorsAnim != null)
+        {
+            _torpedoTubeDoorsAnim.Close(NotifyTorpedoTubeOpenClose);
+        }
+        else
+        {
+            TorpedoDoorsOpen = false;
+        }
         yield return null;
     }
 
@@ -196,7 +203,7 @@ public class TorpedoTurret : TurretBase
     private Vector3 _launchDirection;
     private Vector3 LaunchVector { get { return transform.TransformDirection(_launchDirection); } }
     private Vector3 LaunchOrientation { get { return -transform.forward; } }
-    private Animator _torpedoTubeDoorsAnim;
+    private GenericOpenCloseAnim _torpedoTubeDoorsAnim;
     private Vector3 _torpedoTarget;
 
     private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
