@@ -1,0 +1,264 @@
+Geometry:
+  Name: Hvy barbette hv
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Base
+    Position:
+      x: 0
+      y: 0.0002
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+      AssetPath: guns new
+      MeshPath: Heavy barbette
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Carriage1
+      Position:
+        x: 0.0047027776
+        y: -0.00307496986
+        z: -0.000270157441
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 2
+        y: 2
+        z: 2
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Barbette carriage L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Sleeve1
+        Position:
+          x: 0
+          y: 0
+          z: 0.00049874984
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+          AssetPath: guns new
+          MeshPath: HV gun barbette sleeve L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Barrel1
+          Position:
+            x: 0
+            y: 0.00162606209
+            z: 0.00112218852
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh:
+            AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+            AssetPath: guns new
+            MeshPath: HV gun barrel L
+            DoCombine: true
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: Muzzle1
+            Position:
+              x: 0
+              y: 0.006625
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 0
+            Scale:
+              x: 1
+              y: 1
+              z: 1
+            NodeMesh: 
+            NodeParticleSystem: 
+            OpenCloseData: 
+            SubNodes:
+            - Name: MuzzleFlashLargeEffect
+              Position:
+                x: 0
+                y: 0.0087
+                z: 0
+              Rotation:
+                x: 0
+                y: 0
+                z: 90
+              Scale:
+                x: 0.8
+                y: 0.4
+                z: 0.4
+              NodeMesh: 
+              NodeParticleSystem:
+                AssetBundlePath: AssetBundles\StandaloneWindows\effects
+                AssetPath: MuzzleFlashLargeEffect
+                ParticleSystemPath: ''
+              OpenCloseData: 
+              SubNodes: []
+    - Name: Carriage2
+      Position:
+        x: -0.00397923449
+        y: -0.00307496986
+        z: -0.000270157441
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 2
+        y: 2
+        z: 2
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Barbette carriage R
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Sleeve2
+        Position:
+          x: 0
+          y: 0
+          z: 0.00049874984
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+          AssetPath: guns new
+          MeshPath: HV gun barbette sleeve R
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Barrel2
+          Position:
+            x: 0
+            y: 0.00162606221
+            z: 0.00112218852
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh:
+            AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+            AssetPath: guns new
+            MeshPath: HV gun barrel R
+            DoCombine: true
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: Muzzle2
+            Position:
+              x: 0
+              y: 0.006625
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 0
+            Scale:
+              x: 1
+              y: 1
+              z: 1
+            NodeMesh: 
+            NodeParticleSystem: 
+            OpenCloseData: 
+            SubNodes:
+            - Name: MuzzleFlashLargeEffect
+              Position:
+                x: 0
+                y: 0.0087
+                z: 0
+              Rotation:
+                x: 0
+                y: 0
+                z: 90
+              Scale:
+                x: 0.8
+                y: 0.4
+                z: 0.4
+              NodeMesh: 
+              NodeParticleSystem:
+                AssetBundlePath: AssetBundles\StandaloneWindows\effects
+                AssetPath: MuzzleFlashLargeEffect
+                ParticleSystemPath: ''
+              OpenCloseData: 
+              SubNodes: []
+    - Name: Shield
+      Position:
+        x: 0
+        y: 0.0036
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1.37
+        y: 1.37
+        z: 1.37
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: HV gun shield
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+TurretAxis: YAxis
+TurretType: LargeBarbette
+WeaponSize: Heavy
+WeaponType: HVGun

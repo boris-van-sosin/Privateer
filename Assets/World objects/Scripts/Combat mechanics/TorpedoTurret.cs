@@ -12,8 +12,8 @@ public class TorpedoTurret : TurretBase
         TorpedoHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TorpedoHardpoint>()) != null)
         {
-            Vector3 dirInHPSystem = parentHardpoint.transform.TransformDirection(parentHardpoint.LaunchVector);
-            _launchDirection = transform.InverseTransformDirection(dirInHPSystem);
+            //Vector3 dirInHPSystem = parentHardpoint.transform.TransformDirection(parentHardpoint.LaunchVector);
+            _launchDirection = parentHardpoint.LaunchVector;
         }
         else
         {
@@ -201,8 +201,8 @@ public class TorpedoTurret : TurretBase
     private int _torpedoesInSpread;
     public ObjectFactory.TorpedoType LoadedTorpedoType;
     private Vector3 _launchDirection;
-    private Vector3 LaunchVector { get { return transform.TransformDirection(_launchDirection); } }
-    private Vector3 LaunchOrientation { get { return -transform.forward; } }
+    private Vector3 LaunchVector { get { return Muzzles[0].TransformDirection(_launchDirection); } }
+    private Vector3 LaunchOrientation => Muzzles[0].up;
     private GenericOpenCloseAnim _torpedoTubeDoorsAnim;
     private Vector3 _torpedoTarget;
 
