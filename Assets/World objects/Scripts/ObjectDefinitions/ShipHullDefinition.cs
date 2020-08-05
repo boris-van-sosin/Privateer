@@ -12,7 +12,7 @@ public class ShipHullDefinition
     public ShipHullMovementData MovementData { get; set; }
     public HierarchyNode[] TeamColorComponents { get; set; }
     public WeaponHardpointDefinition[] WeaponHardpoints { get; set; }
-    public ShipHullProtectionData HullProtection {get; set;}
+    public ShipHullProtectionData HullProtection { get; set; }
     public float Mass { get; set; }
     public int SkeletonCrew { get; set; }
     public int OperationalCrew { get; set; }
@@ -25,6 +25,7 @@ public class ShipHullDefinition
     public HierarchyNode[] EngineExhaustIdle { get; set; }
     public HierarchyNode[] EngineExhaustBrake { get; set; }
     public HierarchyNode StatusRing { get; set; }
+    public ShipCarrierModuleData CarrierModuleData { get; set; }
 
     public static ShipHullDefinition FromShip(Ship s)
     {
@@ -54,6 +55,12 @@ public class ShipHullDefinition
             EngineExhaustBrake = FindEngineExhausts(s, "Engine exhaust brake"),
             StatusRing = s.GetComponentInChildren<LineRenderer>().transform.ToSerializableHierarchy()
         };
+
+        CarrierBehavior carrier;
+        if ((carrier = s.GetComponent<CarrierBehavior>()) != null)
+        {
+            res.CarrierModuleData = ShipCarrierModuleData.FromCarrierModule(carrier);
+        }
 
         res.Shield.NodeMesh = null;
 
@@ -249,5 +256,22 @@ public struct ShipHullProtectionData
         s.ReducedArmour = ReducedArmour;
         s.DefaultMitigationArmour = MitigationArmour;
         s.ArmourMitigation = ArmourMitigation;
+    }
+}
+
+[Serializable]
+public class ShipCarrierModuleData
+{
+    public int MaxFormations { get; set; }
+    public HierarchyNode[] HangerRootNodes { get; set; }
+
+    public static ShipCarrierModuleData FromCarrierModule(CarrierBehavior c)
+    {
+        ShipCarrierModuleData res = new ShipCarrierModuleData()
+        {
+            MaxFormations = c.MaxFormations,
+            HangerRootNodes = c.CarrierHangerAnim.Select(openClose => openClose.transform.ToSerializableHierarchy()).ToArray()
+        };
+        return res;
     }
 }
