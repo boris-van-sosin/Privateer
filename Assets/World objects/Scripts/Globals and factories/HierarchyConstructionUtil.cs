@@ -7,27 +7,36 @@ public static class HierarchyConstructionUtil
 {
     public static GameObject ConstructHierarchy(HierarchyNode root, ObjectPrototypes proto)
     {
-        GameObject res = ConstructHierarchyRecursive(root, true, proto);
+        int layer = ObjectFactory.DefaultLayerMask;
+        return ConstructHierarchy(root, proto, layer, layer, layer);
+    }
+
+    public static GameObject ConstructHierarchy(HierarchyNode root, ObjectPrototypes proto, int generalLayer, int meshLayer, int particleSysLayer)
+    {
+        GameObject res = ConstructHierarchyRecursive(root, true, proto, generalLayer, meshLayer, particleSysLayer);
         FixTransformsRecursive(res.transform, root);
         SetOpenCloseAnims(res.transform, root);
         CombineMeshes(res.transform, root);
         return res;
     }
 
-    private static GameObject ConstructHierarchyRecursive(HierarchyNode obj, bool setName, ObjectPrototypes proto)
+    private static GameObject ConstructHierarchyRecursive(HierarchyNode obj, bool setName, ObjectPrototypes proto, int generalLayer, int meshLayer, int particleSysLayer)
     {
         GameObject resObj;
         if (obj.NodeMesh != null)
         {
             resObj = proto.CreateObjectByPath(obj.NodeMesh.AssetBundlePath, obj.NodeMesh.AssetPath, obj.NodeMesh.MeshPath);
+            resObj.layer = meshLayer;
         }
         else if (obj.NodeParticleSystem != null)
         {
             resObj = proto.CreateObjectByPath(obj.NodeParticleSystem.AssetBundlePath, obj.NodeParticleSystem.AssetPath, obj.NodeParticleSystem.ParticleSystemPath);
+            resObj.layer = particleSysLayer;
         }
         else
         {
             resObj = proto.CreateObjectEmpty();
+            resObj.layer = generalLayer;
         }
 
         if (setName)
@@ -38,7 +47,7 @@ public static class HierarchyConstructionUtil
         Transform tr = resObj.transform;
         foreach (HierarchyNode subNode in obj.SubNodes)
         {
-            Transform subTr = ConstructHierarchyRecursive(subNode, true, proto).transform;
+            Transform subTr = ConstructHierarchyRecursive(subNode, true, proto, generalLayer, meshLayer, particleSysLayer).transform;
             subTr.SetParent(tr);
         }
 

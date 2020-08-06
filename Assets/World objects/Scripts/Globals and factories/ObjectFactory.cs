@@ -288,7 +288,7 @@ public static class ObjectFactory
         }
 
         HierarchyNode root = turretDef.Geometry;
-        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes);
+        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes, WeaponsLayerMask, WeaponsLayerMask, EffectsLayerMask);
         TurretBase resTurret;
         switch (turretDef.WeaponType)
         {
@@ -669,15 +669,18 @@ public static class ObjectFactory
     }
     private static Dictionary<Ship, Sprite> _shipPhotos = new Dictionary<Ship, Sprite>();
 
-    public static int AllTargetableLayerMask { get { return _allTargetableLayerMask; } }
-    public static int AllShipsLayerMask { get { return _allShipsLayerMask; } }
-    public static int AllStikeCraftLayerMask { get { return _allStrikeCraftLayerMask; } }
-    public static int AllShipsNoStikeCraftLayerMask { get { return _allShipsNoStikeCraftLayerMask; } }
-    public static int AllShipsNoShieldsLayerMask { get { return _allShipsNoShieldsLayerMask; } }
-    public static int AllShipsNoShieldsNoStikeCraftLayerMask { get { return _allShipsNoStrikeCraftNoShieldsLayerMask; } }
-    public static int NavBoxesLayerMask { get { return _navBoxesLayerMask; } }
-    public static int NavBoxesStrikeCraftLayerMask { get { return _navBoxesStrikeCraftLayerMask; } }
+    public static int DefaultLayerMask => _defaultLayerMask;
+    public static int AllTargetableLayerMask => _allTargetableLayerMask;
+    public static int AllShipsLayerMask => _allShipsLayerMask;
+    public static int AllStikeCraftLayerMask => _allStrikeCraftLayerMask;
+    public static int AllShipsNoStikeCraftLayerMask => _allShipsNoStikeCraftLayerMask;
+    public static int AllShipsNoShieldsLayerMask => _allShipsNoShieldsLayerMask;
+    public static int AllShipsNoShieldsNoStikeCraftLayerMask => _allShipsNoStrikeCraftNoShieldsLayerMask;
+    public static int NavBoxesLayerMask => _navBoxesLayerMask;
+    public static int NavBoxesStrikeCraftLayerMask => _navBoxesStrikeCraftLayerMask;
     public static int NavBoxesAllLayerMask => _navBoxesAllLayerMask;
+    public static int WeaponsLayerMask => _weaponsLayerMask;
+    public static int EffectsLayerMask => _effectsLayerMask;
 
     private static void LoadWarheads()
     {
@@ -924,6 +927,7 @@ public static class ObjectFactory
     private static Dictionary<string, CultureNames> _cultureNamingLists = null;
     private static Dictionary<ValueTuple<WeaponType, WeaponSize>, List<TacMapEntityType>> _defaultPriorityLists = null;
     private static Dictionary<(ComponentSlotType, WeaponType), TurretDefinition> _turretDefinitions = null;
+    private static readonly int  _defaultLayerMask = LayerMask.NameToLayer("Default");
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
     private static readonly int _allStrikeCraftLayerMask = LayerMask.GetMask("Strike Craft");
@@ -933,6 +937,8 @@ public static class ObjectFactory
     private static readonly int _navBoxesLayerMask = LayerMask.GetMask("NavColliders");
     private static readonly int _navBoxesStrikeCraftLayerMask = LayerMask.GetMask("NavCollidersStrikeCraft");
     private static readonly int _navBoxesAllLayerMask = LayerMask.GetMask("NavColliders", "NavCollidersStrikeCraft", "NavCollidersTorpedoes");
+    private static readonly int _weaponsLayerMask = LayerMask.NameToLayer("Weapons");
+    private static readonly int _effectsLayerMask = LayerMask.NameToLayer("Effects");
 
     public class WarheadDataEntry3
     {
