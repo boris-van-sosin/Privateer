@@ -47,5 +47,5 @@ public class SpecialCharacter : ShipCharacter
 {
     public string Name { get; set; }
     public string Title { get; set; }
-    public Buff CharacterBuff;
+    public DynamicBuff CharacterBuff;
 }

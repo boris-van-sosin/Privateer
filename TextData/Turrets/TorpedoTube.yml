@@ -100,5 +100,7 @@ Geometry:
         SubNodes: []
 TurretAxis: YAxis
 TurretType: TorpedoTube
-WeaponSize: TorpedoTube
-WeaponType: TorpedoTube
+WeaponNum: 1
+WeaponSize: ''
+WeaponType: TorpedoWeapon
+BehaviorType: Torpedo

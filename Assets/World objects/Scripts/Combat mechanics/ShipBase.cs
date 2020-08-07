@@ -28,7 +28,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         InitCircle();
         ShipDisabled = false;
         ShipImmobilized = false;
-        CombinedBuff = Buff.Default();
+        CombinedBuff = DynamicBuff.Default();
 
         Transform navBox = transform.Find("NavBox");
         if (navBox != null && HullObject != null)
@@ -383,7 +383,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     public virtual bool PlaceTurret(TurretHardpoint hp, TurretBase t)
     {
-        if (hp == null || t == null || !hp.AllowedWeaponTypes.Contains(t.TurretType))
+        if (hp == null || t == null || !hp.AllowedWeaponTypes.Contains(t.SlotType))
         {
             return false;
         }
@@ -766,7 +766,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     protected enum ShipCircleStatus { Deselected, Selected, Disabled, Surrendered, Destroyed };
 
     // Buff/debuff mechanic
-    public Buff CombinedBuff { get; protected set; }
+    public DynamicBuff CombinedBuff { get; protected set; }
     protected float MaxSpeedWBuf => Mathf.Max(MaxSpeed * 0.25f, MaxSpeed * (1f + CombinedBuff.SpeedFactor));
     protected float AccelerationWBuf => Mathf.Max(Thrust * 0.25f, Thrust * (1f + CombinedBuff.AcceleraionFactor));
 

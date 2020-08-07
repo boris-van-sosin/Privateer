@@ -196,6 +196,8 @@ Geometry:
             OpenCloseData: 
             SubNodes: []
 TurretAxis: YAxis
-TurretType: MediumTurretDualSmall
+TurretType: MediumTurret
+WeaponNum: 2
 WeaponSize: Light
 WeaponType: HVGun
+BehaviorType: Gun

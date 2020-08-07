@@ -28694,7 +28694,8 @@ MonoBehaviour:
   MaxRotation: 273.5
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes:
+  - LightBroadside1Light
   LocationOnShip: 3
   WeaponAIHint: 0
   DefaultGroup: 2
@@ -28746,7 +28747,8 @@ MonoBehaviour:
   MaxRotation: 0
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes:
+  - LightFixed1Light
   LocationOnShip: 0
   WeaponAIHint: 0
   DefaultGroup: 1
@@ -28798,7 +28800,8 @@ MonoBehaviour:
   MaxRotation: 273.5
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes:
+  - LightBroadside1Light
   LocationOnShip: 3
   WeaponAIHint: 0
   DefaultGroup: 2
@@ -43089,7 +43092,8 @@ MonoBehaviour:
   MaxRotation: 93.5
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes:
+  - LightBroadside1Light
   LocationOnShip: 2
   WeaponAIHint: 0
   DefaultGroup: 3
@@ -47920,11 +47924,19 @@ MonoBehaviour:
   TeamColorComponents:
   - {fileID: 8024053771434078093}
   ShipSize: 0
-  CenterComponentSlots: 01000000010000000100000001000000
-  ForeComponentSlots: 00000000
-  AftComponentSlots: 19000000
-  LeftComponentSlots: 00000000
-  RightComponentSlots: 00000000
+  CenterComponentSlots:
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  ForeComponentSlots:
+  - ShipSystem
+  AftComponentSlots:
+  - Engine
+  LeftComponentSlots:
+  - ShipSystem
+  RightComponentSlots:
+  - ShipSystem
   Mass: 7.5
   Armour:
     Fore: 150
@@ -52702,7 +52714,8 @@ MonoBehaviour:
   MaxRotation: 93.5
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes:
+  - LightBroadside1Light
   LocationOnShip: 2
   WeaponAIHint: 0
   DefaultGroup: 3
@@ -76664,7 +76677,8 @@ MonoBehaviour:
   MaxRotation: 273.5
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes:
+  - LightBroadside1Light
   LocationOnShip: 3
   WeaponAIHint: 0
   DefaultGroup: 2
@@ -76716,7 +76730,8 @@ MonoBehaviour:
   MaxRotation: 93.5
   DeadZoneAngles: []
   TreatAsFixed: 1
-  AllowedWeaponTypes: 03000000
+  AllowedWeaponTypes:
+  - LightBroadside1Light
   LocationOnShip: 2
   WeaponAIHint: 0
   DefaultGroup: 3

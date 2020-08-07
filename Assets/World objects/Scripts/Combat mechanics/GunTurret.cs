@@ -8,26 +8,11 @@ public class GunTurret : DirectionalTurret
 {
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
+        Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, AmmoType);
         warhead.EffectVsStrikeCraft = Mathf.Clamp(warhead.EffectVsStrikeCraft + _vsStrikeCraftModifier, 0.05f, 0.95f);
         Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
-        switch (AmmoType)
-        {
-            case ObjectFactory.AmmoType.KineticPenetrator:
-                p.WeaponEffectKey = ObjectFactory.WeaponEffect.KineticImpactSparks;
-                p.ProximityProjectile = false;
-                break;
-            case ObjectFactory.AmmoType.ShapedCharge:
-                p.WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
-                p.ProximityProjectile = false;
-                break;
-            case ObjectFactory.AmmoType.ShrapnelRound:
-                p.WeaponEffectKey = ObjectFactory.WeaponEffect.FlakBurst;
-                p.ProximityProjectile = true;
-                break;
-            default:
-                break;
-        }
+        p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize, AmmoType);
+        p.ProximityProjectile = warhead.BlastRadius > 0f;
         p.transform.position = Muzzles[barrelIdx].position;
         if (MuzzleFx[barrelIdx] != null)
         {
@@ -62,7 +47,7 @@ public class GunTurret : DirectionalTurret
         }
     }
 
-    public override void ApplyBuff(Buff b)
+    public override void ApplyBuff(DynamicBuff b)
     {
         base.ApplyBuff(b);
         _inaccuracyCoeff = Mathf.Max(1f - b.WeaponAccuracyFactor, 0.05f);
@@ -73,11 +58,13 @@ public class GunTurret : DirectionalTurret
     {
         int numBarrels = FindMuzzles(transform).Count();
         float fireRate = numBarrels / FiringInterval;
-        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretSize, AmmoType);
+        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, AmmoType);
         return new ValueTuple<float, float, float>(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);
     }
 
+    public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Gun;
+
     public float ProjectileScale;
     public float MuzzleVelocity;
-    public ObjectFactory.AmmoType AmmoType;
+    public string AmmoType;
 }

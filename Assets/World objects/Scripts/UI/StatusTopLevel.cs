@@ -37,20 +37,18 @@ public class StatusTopLevel : MonoBehaviour
                     StatusProgressBar compProgressRing = ObjectFactory.CreateSubsytemProgressRing(currTurret);
                     compProgressRing.transform.SetParent(panelRect);
                     compProgressRing.transform.localPosition = new Vector2(hpPos.x * panelRect.rect.width + panelRect.rect.xMin, hpPos.y * panelRect.rect.height + panelRect.rect.yMin);
-                    switch (currTurret.TurretSize)
+                    switch (currTurret.TurretWeaponSize)
                     {
-                        case ObjectFactory.WeaponSize.Light:
+                        case "Light":
                             break;
-                        case ObjectFactory.WeaponSize.Medium:
+                        case "Medium":
                             compStatus.transform.localScale = compStatus.transform.localScale * 1.25f;
                             break;
-                        case ObjectFactory.WeaponSize.Heavy:
+                        case "Heavy":
                             compStatus.transform.localScale = compStatus.transform.localScale * 1.5f;
                             break;
-                        case ObjectFactory.WeaponSize.TorpedoTube:
+                        case "TorpedoTube":
                             compStatus.transform.localScale = compStatus.transform.localScale * 1.5f;
-                            break;
-                        case ObjectFactory.WeaponSize.StrikeCraft:
                             break;
                         default:
                             break;
@@ -60,7 +58,7 @@ public class StatusTopLevel : MonoBehaviour
                 }
             }
 
-            foreach (IShipActiveComponent comp in _attachedShip.AllComponents.Where(x => x is IShipActiveComponent && !(x is TurretBase) && x.AllowedSlotTypes.All(y => y != ComponentSlotType.Hidden)).Select(z => z as IShipActiveComponent))
+            foreach (IShipActiveComponent comp in _attachedShip.AllComponents.Where(x => x is IShipActiveComponent && !(x is TurretBase) && x.AllowedSlotTypes.All(y => y != "Hidden")).Select(z => z as IShipActiveComponent))
             {
                 StatusSubsystem compStatus = ObjectFactory.CreateStatusSubsytem(comp);
                 RectTransform compRT = compStatus.GetComponent<RectTransform>();

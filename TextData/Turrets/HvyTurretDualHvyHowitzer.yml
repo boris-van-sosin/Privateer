@@ -196,6 +196,8 @@ Geometry:
             OpenCloseData: 
             SubNodes: []
 TurretAxis: YAxis
-TurretType: LargeTurret
+TurretType: HeavyTurret
+WeaponNum: 2
 WeaponSize: Heavy
 WeaponType: Howitzer
+BehaviorType: Gun

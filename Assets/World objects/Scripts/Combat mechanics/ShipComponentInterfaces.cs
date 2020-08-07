@@ -3,35 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ComponentSlotType
-{
-    // Generic:
-    ShipSystem, ShipSystemCenter,
-    // Weapons:
-    SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
-    MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
-    LargeBroadside, LargeBarbetteSingle, LargeBarbette, LargeTurret,
-    TorpedoTube, SpecialWeapon,
-    FighterCannon, FighterAutogun, BomberAutogun, BomberTorpedoTube,
-    // Boarding tool
-    BoardingTool,
-    // Boarding / anti-boarding forces
-    BoardingForce,
-    // Engine
-    Engine,
-    // Special
-    Hidden
-};
+//public enum ComponentSlotType
+//{
+//    // Generic:
+//    ShipSystem, ShipSystemCenter,
+//    // Weapons:
+//    SmallFixed, SmallBroadside, SmallBarbette, SmallTurret, SmallBarbetteDual, SmallTurretDual,
+//    MediumBroadside, MediumBarbette, MediumTurret, MediumBarbetteDualSmall, MediumTurretDualSmall,
+//    LargeBroadside, LargeBarbetteSingle, LargeBarbette, LargeTurret,
+//    TorpedoTube, SpecialWeapon,
+//    FighterCannon, FighterAutogun, BomberAutogun, BomberTorpedoTube,
+//    // Boarding tool
+//    BoardingTool,
+//    // Boarding / anti-boarding forces
+//    BoardingForce,
+//    // Engine
+//    Engine,
+//    // Special
+//    Hidden
+//};
 
 public enum ComponentStatus { Undamaged, LightlyDamaged, HeavilyDamaged, KnockedOut, Destroyed };
 
 public interface IShipComponent
 {
     ShipBase ContainingShip { get; }
-    IEnumerable<ComponentSlotType> AllowedSlotTypes { get; }
+    IEnumerable<string> AllowedSlotTypes { get; }
     ObjectFactory.ShipSize MinShipSize { get; }
     ObjectFactory.ShipSize MaxShipSize { get; }
-    Buff ComponentBuff { get; }
+    DynamicBuff ComponentBuff { get; }
 }
 
 public interface IShipActiveComponent : IShipComponent
@@ -41,7 +41,7 @@ public interface IShipActiveComponent : IShipComponent
     bool ComponentIsWorking { get; }
     ComponentStatus Status { get; }
     string SpriteKey { get; }
-    void ApplyHitPointBuff(Buff b);
+    void ApplyHitPointBuff(StaticBuff.HitPointBuff b);
     event Action OnHitpointsChanged;
 }
 
@@ -58,7 +58,7 @@ public interface ITurret : IShipActiveComponent
     float GetMaxRange { get; }
     bool IsOutOfAmmo { get; }
     bool ReadyToFire();
-    void ApplyBuff(Buff b);
+    void ApplyBuff(DynamicBuff b);
     IList<ObjectFactory.TacMapEntityType> TargetPriorityList { get; }
     TurretAIHint HardpointAIHint { get; }
 }

@@ -84,35 +84,37 @@ public class ShipFreeCreatePanel : MonoBehaviour
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
             TurretBase t;
-            if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.SmallBarbette) ||
-                hp.AllowedWeaponTypes.Contains(ComponentSlotType.SmallBarbetteDual))
+            if (hp.AllowedWeaponTypes.Contains("LightBarbette1Light") ||
+                hp.AllowedWeaponTypes.Contains("LightBarbette2Light"))
             {
-                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Autocannon);
+                (string, string, string) currBest = BestWeapon(hp.AllowedWeaponTypes);
+                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "Autocannon");
             }
-            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.TorpedoTube))
+            else if (hp.AllowedWeaponTypes.Contains("TorpedoTube"))
             {
-                t = ObjectFactory.CreateTurret(ComponentSlotType.TorpedoTube, ObjectFactory.WeaponType.TorpedoTube);
-                (t as TorpedoTurret).LoadedTorpedoType = ObjectFactory.TorpedoType.Tracking;
+                t = ObjectFactory.CreateTurret("TorpedoTube", "1", "TorpedoTube", "");
+                (t as TorpedoTurret).LoadedTorpedoType = "Tracking";
             }
             else
             {
-                t = ObjectFactory.CreateTurret(BestWeapon(hp.AllowedWeaponTypes), ObjectFactory.WeaponType.Howitzer);
+                (string, string, string) currBest = BestWeapon(hp.AllowedWeaponTypes);
+                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "Howitzer");
             }
-            t.TargetPriorityList = ObjectFactory.GetDefaultTargetPriorityList(t.TurretWeaponType, t.TurretSize);
+            t.TargetPriorityList = ObjectFactory.GetDefaultTargetPriorityList(t.TurretWeaponType, t.TurretWeaponSize);
             GunTurret gt = t as GunTurret;
             if (gt != null)
             {
-                if (gt.TurretSize == ObjectFactory.WeaponSize.Light && gt.TurretWeaponType == ObjectFactory.WeaponType.Autocannon)
+                if (gt.TurretWeaponSize == "Light" && gt.TurretWeaponType == "Autocannon")
                 {
-                    gt.AmmoType = ObjectFactory.AmmoType.ShrapnelRound;
+                    gt.AmmoType = "ShrapnelRound";
                 }
-                else if (gt.TurretWeaponType == ObjectFactory.WeaponType.HVGun)
+                else if (gt.TurretWeaponType == "HVGun")
                 {
-                    gt.AmmoType = ObjectFactory.AmmoType.KineticPenetrator;
+                    gt.AmmoType = "KineticPenetrator";
                 }
                 else
                 {
-                    gt.AmmoType = ObjectFactory.AmmoType.ShapedCharge;
+                    gt.AmmoType = "ShapedCharge";
                 }
                 t.InstalledTurretMod = TurretMod.Harpax;
             }
@@ -219,21 +221,20 @@ public class ShipFreeCreatePanel : MonoBehaviour
 
     private void TestWeapons()
     {
-        ComponentSlotType[] slotTypes = new ComponentSlotType[] { ComponentSlotType.SmallBarbetteDual, ComponentSlotType.MediumBarbette, ComponentSlotType.LargeBarbette };
-        ObjectFactory.WeaponType[] weaponTypes = new ObjectFactory.WeaponType[] { ObjectFactory.WeaponType.Autocannon, ObjectFactory.WeaponType.Howitzer, ObjectFactory.WeaponType.HVGun };
-        ObjectFactory.AmmoType[] ammoTypes = new ObjectFactory.AmmoType[] { ObjectFactory.AmmoType.KineticPenetrator, ObjectFactory.AmmoType.ShapedCharge, ObjectFactory.AmmoType.ShrapnelRound };
-        foreach (ComponentSlotType cst in slotTypes)
+        string[] slotTypes = ObjectFactory.GetAllTurretMounts().ToArray();
+        (string, string, string)[] weaponTypes = ObjectFactory.GetAllProjectileWarheads().ToArray();
+        foreach (string cst in slotTypes)
         {
-            foreach (ObjectFactory.WeaponType wt in weaponTypes)
+            foreach ((string, string, string) wt in weaponTypes)
             {
-                GunTurret tb = ObjectFactory.CreateTurret(ComponentSlotType.SmallBarbetteDual, ObjectFactory.WeaponType.Autocannon) as GunTurret;
-                foreach (ObjectFactory.AmmoType at in ammoTypes)
+                GunTurret tb = ObjectFactory.CreateTurret(cst, "1", wt.Item1, wt.Item2) as GunTurret;
+                if (tb != null)
                 {
-                    tb.AmmoType = at;
+                    tb.AmmoType = wt.Item3;
                     ValueTuple<float, float, float> dps = tb.DebugGetDPS();
-                    Debug.Log(string.Format("Weapon: {0} {1}, {2}: SH={3} SY={4} HL={5}", cst, wt, at, dps.Item1, dps.Item2, dps.Item3));
+                    Debug.Log(string.Format("Weapon: {0} {1}: SH={2} SY={3} HL={4}", cst, wt, dps.Item1, dps.Item2, dps.Item3));
+                    Destroy(tb);
                 }
-                Destroy(tb);
             }
         }
     }
@@ -262,37 +263,39 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
     }
 
-    private ComponentSlotType BestWeapon(IEnumerable<ComponentSlotType> slotTypes)
+    private (string, string ,string) BestWeapon(IEnumerable<string> slotTypes)
     {
-        Dictionary<ComponentSlotType, int> strength = new Dictionary<ComponentSlotType, int>()
+        Dictionary<(string, string, string), int> strength = new Dictionary<(string, string, string), int>()
         {
-            { ComponentSlotType.SmallBarbette, 1 },
-            { ComponentSlotType.SmallTurret, 1 },
-            { ComponentSlotType.SmallFixed, 1 },
-            { ComponentSlotType.SmallBroadside, 1 },
-            { ComponentSlotType.SmallBarbetteDual, 2 },
-            { ComponentSlotType.MediumBarbetteDualSmall, 3 },
-            { ComponentSlotType.MediumTurretDualSmall, 3 },
-            { ComponentSlotType.MediumBroadside, 4 },
-            { ComponentSlotType.MediumBarbette, 5 },
-            { ComponentSlotType.MediumTurret, 5 },
-            { ComponentSlotType.LargeBarbette, 6 },
-            { ComponentSlotType.LargeTurret, 6 },
+            { ("LightBarbette", "1", "Light"), 1 },
+            { ("LightTurret", "1", "Light"), 1 },
+            { ("LightFixed", "1", "Light"), 1 },
+            { ("LightBroadside", "1", "Light"), 1 },
+            { ("LightBarbette", "2", "Light"), 2 },
+            { ("MediumTurret", "2", "Light"), 3 },
+            { ("MediumBroadside", "1", "Medium"), 4 },
+            { ("MediumBarbette", "2", "Medium"), 5 },
+            { ("MediumTurret", "2", "Medium"), 5 },
+            { ("HeavyBroadside", "2", "Heavy"), 6 },
+            { ("HeavyBarbette", "2", "Heavy"), 7 },
+            { ("HeavyTurret", "2", "Heavy"), 7 },
         };
 
-        IEnumerator<ComponentSlotType> iter = slotTypes.GetEnumerator();
-        iter.MoveNext();
-        ComponentSlotType res = iter.Current;
+        IEnumerator<string> iter = slotTypes.GetEnumerator();
+        (string, string, string) res = ("", "", "");
+        int bestStrength = 0;
         while (iter.MoveNext())
         {
-            if (!strength.ContainsKey(res))
+            string curr = iter.Current;
+            foreach (KeyValuePair<(string, string, string), int> w in strength)
             {
-                res = iter.Current;
-            }
-            else if (strength.ContainsKey(res) && strength.ContainsKey(iter.Current) &&
-                strength[iter.Current] > strength[res])
-            {
-                res = iter.Current;
+                string currCandidate = w.Key.Item1 + w.Key.Item2 + w.Key.Item3;
+                if (curr == currCandidate && w.Value > bestStrength)
+                {
+                    res = w.Key;
+                    bestStrength = w.Value;
+                    break;
+                }
             }
         }
         return res;

@@ -117,6 +117,8 @@ Geometry:
             OpenCloseData: 
             SubNodes: []
 TurretAxis: YAxis
-TurretType: MediumBroadside
+TurretType: Medium,Broadside
+WeaponNum: 1
 WeaponSize: Medium
 WeaponType: Howitzer
+BehaviorType: Gun

@@ -23837,7 +23837,8 @@ MonoBehaviour:
   MaxRotation: 180
   DeadZoneAngles: []
   TreatAsFixed: 0
-  AllowedWeaponTypes: 02000000
+  AllowedWeaponTypes:
+  - LightFixed1Light
   LocationOnShip: 0
   WeaponAIHint: 0
   DefaultGroup: 2
@@ -52662,11 +52663,19 @@ MonoBehaviour:
   TeamColorComponents:
   - {fileID: 8031718632983132727}
   ShipSize: 0
-  CenterComponentSlots: 01000000010000000100000001000000
-  ForeComponentSlots: 00000000
-  AftComponentSlots: 19000000
-  LeftComponentSlots: 00000000
-  RightComponentSlots: 00000000
+  CenterComponentSlots:
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  ForeComponentSlots:
+  - ShipSystem
+  AftComponentSlots:
+  - Engine
+  LeftComponentSlots:
+  - ShipSystem
+  RightComponentSlots:
+  - ShipSystem
   Mass: 6
   Armour:
     Fore: 150
@@ -114563,7 +114572,8 @@ MonoBehaviour:
   - 0,25
   - 335,360
   TreatAsFixed: 0
-  AllowedWeaponTypes: 0c000000
+  AllowedWeaponTypes:
+  - MediumTurret2Light
   LocationOnShip: 0
   WeaponAIHint: 0
   DefaultGroup: 1

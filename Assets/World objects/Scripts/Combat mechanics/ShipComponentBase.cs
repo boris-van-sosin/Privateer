@@ -7,12 +7,12 @@ public abstract class ShipComponentBase : IShipComponent
 {
     public ShipBase ContainingShip { get { return _containingShip; } }
 
-    public abstract IEnumerable<ComponentSlotType> AllowedSlotTypes { get; }
+    public abstract IEnumerable<string> AllowedSlotTypes { get; }
 
     protected Ship _containingShip;
 
-    private static Buff _dummyBuff = Buff.Default();
-    public virtual Buff ComponentBuff => _dummyBuff;
+    private static DynamicBuff _dummyBuff = DynamicBuff.Default();
+    public virtual DynamicBuff ComponentBuff => _dummyBuff;
 
     public ObjectFactory.ShipSize MinShipSize { get; protected set; }
     public ObjectFactory.ShipSize MaxShipSize { get; protected set; }
@@ -100,12 +100,11 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
         }
     }
 
-    public void ApplyHitPointBuff(Buff b)
+    public void ApplyHitPointBuff(StaticBuff.HitPointBuff b)
     {
-        ComponentMaxHitPoints += b.HitPointModifiers.Component;
         if (ComponentHitPoints > 0)
         {
-            ComponentHitPoints += b.HitPointModifiers.Component;
+            ComponentMaxHitPoints += b.Component;
         }
     }
 

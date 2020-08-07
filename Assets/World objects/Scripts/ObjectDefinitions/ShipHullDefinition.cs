@@ -96,7 +96,7 @@ public class TurretHardpointDefinition
     public float MaxRotation { get; set; }
     public string[] DeadZoneAngles { get; set; }
     public bool TreatAsFixed { get; set; }
-    public ComponentSlotType[] AllowedWeaponTypes { get; set; }
+    public string[] AllowedWeaponTypes { get; set; }
     public Ship.ShipSection LocationOnShip { get; set; }
     public TurretAIHint WeaponAIHint { get; set; }
     public int DefaultGroup { get; set; }
@@ -110,7 +110,7 @@ public class TurretHardpointDefinition
             MaxRotation = hp.MaxRotation,
             DeadZoneAngles = new string[hp.DeadZoneAngles.Length],
             TreatAsFixed = hp.TreatAsFixed,
-            AllowedWeaponTypes = new ComponentSlotType[hp.AllowedWeaponTypes.Length],
+            AllowedWeaponTypes = new string[hp.AllowedWeaponTypes.Length],
             LocationOnShip = hp.LocationOnShip,
             WeaponAIHint = hp.WeaponAIHint,
             DefaultGroup = hp.DefaultGroup
@@ -127,7 +127,7 @@ public class TurretHardpointDefinition
         hp.MaxRotation = MaxRotation;
         hp.DeadZoneAngles = new string[DeadZoneAngles.Length];
         hp.TreatAsFixed = TreatAsFixed;
-        hp.AllowedWeaponTypes = new ComponentSlotType[AllowedWeaponTypes.Length];
+        hp.AllowedWeaponTypes = new string[AllowedWeaponTypes.Length];
         hp.LocationOnShip = LocationOnShip;
         hp.WeaponAIHint = WeaponAIHint;
         hp.DefaultGroup = DefaultGroup;
@@ -152,7 +152,7 @@ public class TorpedoHardpointDefinition
             MaxRotation = hp.MaxRotation,
             DeadZoneAngles = new string[hp.DeadZoneAngles.Length],
             TreatAsFixed = hp.TreatAsFixed,
-            AllowedWeaponTypes = new ComponentSlotType[hp.AllowedWeaponTypes.Length],
+            AllowedWeaponTypes = new string[hp.AllowedWeaponTypes.Length],
             LocationOnShip = hp.LocationOnShip,
             WeaponAIHint = hp.WeaponAIHint,
             DefaultGroup = hp.DefaultGroup,

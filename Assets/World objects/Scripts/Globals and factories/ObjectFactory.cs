@@ -69,6 +69,26 @@ public static class ObjectFactory
         }
     }
 
+    public static (string, string) GetEffectKey(string weaponType, string weaponSize, string ammo)
+    {
+        WarheadDataEntry3 w3 = _gunWarheads[(weaponType, weaponSize, ammo)];
+        return (w3.EffectAssetBundle, w3.EffectAsset);
+    }
+
+    public static (string, string) GetEffectKey(string weaponType, string weaponSize)
+    {
+        WarheadDataEntry2 w2 = _otherWarheads[(weaponType, weaponSize)];
+        return (w2.EffectAssetBundle, w2.EffectAsset);
+    }
+
+
+    public static (string, string) GetEffectKey(string torpType)
+    {
+        WarheadDataEntry4 w4 = _torpedoWarheads[torpType];
+        return (w4.EffectAssetBundle, w4.EffectAsset);
+    }
+
+
     public static HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
     {
         if (_prototypes != null)
@@ -110,12 +130,12 @@ public static class ObjectFactory
         }
     }
 
-    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, TorpedoType tt, ShipBase origShip)
+    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, string torpType, ShipBase origShip)
     {
         if (_prototypes != null)
         {
-            WarheadDataEntry4 torpData = _torpedoWarheads[tt];
-            Torpedo t = CreateTorpedo(launchVector, launchOrientation, target, torpData.MaxRange, CreateWarhead(tt), origShip);
+            WarheadDataEntry4 torpData = _torpedoWarheads[torpType];
+            Torpedo t = CreateTorpedo(launchVector, launchOrientation, target, torpData.MaxRange, CreateWarhead(torpType), origShip);
             t.transform.localScale = Vector3.one * torpData.ProjectileScale;
             return t;
         }
@@ -141,6 +161,50 @@ public static class ObjectFactory
         }
     }
 
+    public static ParticleSystem AcquireParticleSystem(string assetBundleSource, string asset, Vector3 position)
+    {
+        if (_prototypes != null)
+        {
+            ObjectCache.SpecificCache<ParticleSystem> currCache;
+            if (!_objCache.ParticleSystems.TryGetValue((assetBundleSource, asset), out currCache))
+            {
+                _objCache.ParticleSystems.Add((assetBundleSource, asset), currCache = new ObjectCache.SpecificCache<ParticleSystem>());
+            }
+            if (currCache.Count > 0)
+            {
+                return currCache.Acquire();
+            }
+            else
+            {
+                GameObject resObj = _prototypes.CreateObjectByPath(assetBundleSource, asset, "");
+                ParticleSystem res = resObj.GetComponent<ParticleSystem>();
+                if (res != null)
+                {
+                    res.transform.position = position;
+                    return res;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static void ReleaseParticleSystem(string assetBundleSource, string asset, ParticleSystem ps)
+    {
+        ObjectCache.SpecificCache<ParticleSystem> currCache;
+        if (!_objCache.ParticleSystems.TryGetValue((assetBundleSource, asset), out currCache))
+        {
+            _objCache.ParticleSystems.Add((assetBundleSource, asset), currCache = new ObjectCache.SpecificCache<ParticleSystem>());
+        }
+        currCache.Release(ps);
+    }
+
     public static T GetRandom<T>(IEnumerable<T> lst)
     {
         int numElems = lst.Count();
@@ -151,25 +215,45 @@ public static class ObjectFactory
         return lst.ElementAt(UnityEngine.Random.Range(0, numElems));
     }
 
-    public static Warhead CreateWarhead(WeaponType w, WeaponSize sz, AmmoType a)
+    public static Warhead CreateWarhead(string weaponType, string size, string ammo)
     {
-        return _gunWarheads[new ValueTuple<WeaponType, WeaponSize, AmmoType>(w, sz, a)];
+        return _gunWarheads[(weaponType, size, ammo)].WarheadData;
     }
 
-    public static Warhead CreateWarhead(WeaponType w, WeaponSize sz)
+    public static Warhead CreateWarhead(string weaponType, string size)
     {
-        return _otherWarheads[new ValueTuple<WeaponType, WeaponSize>(w, sz)];
+        return _otherWarheads[(weaponType, size)].WarheadData;
     }
 
-    public static Warhead CreateWarhead(TorpedoType tt)
+    public static Warhead CreateWarhead(string torpType)
     {
-        return _torpedoWarheads[tt].WarheadData;
+        return _torpedoWarheads[torpType].WarheadData;
     }
 
-    public static ValueTuple<int, float> TorpedoLaunchDataFromTorpedoType(TorpedoType tt)
+    public static ValueTuple<int, float> TorpedoLaunchDataFromTorpedoType(string torpType)
     {
-        WarheadDataEntry4 tropData = _torpedoWarheads[tt];
+        WarheadDataEntry4 tropData = _torpedoWarheads[torpType];
         return new ValueTuple<int, float>(tropData.SpeardSize, tropData.MaxRange);
+    }
+
+    public static IEnumerable<string> GetAllTurretMounts()
+    {
+        return _weaponMounts.Keys;
+    }
+
+    public static IEnumerable<(string, string, string)> GetAllProjectileWarheads()
+    {
+        return _gunWarheads.Keys;
+    }
+
+    public static IEnumerable<string> GetAllTorpedoWarheads()
+    {
+        return _torpedoWarheads.Keys;
+    }
+
+    public static IEnumerable<(string, string)> GetAllOtherWarheads()
+    {
+        return _otherWarheads.Keys;
     }
 
     public static string[] GetAllShipTypes()
@@ -181,6 +265,11 @@ public static class ObjectFactory
     {
         //CreateTurret2(); // for debugging purposes. Will eventually replace CreateTurret.
         return _prototypes.CreateShip(prodKey);
+    }
+
+    public static Ship CreateShip2(string prodKey)
+    {
+        return null;
     }
 
     public static Ship GetShipTemplate(string prodKey)
@@ -195,94 +284,14 @@ public static class ObjectFactory
         return null;
     }
 
-    public static TurretBase CreateTurret(ComponentSlotType turretType, WeaponType weaponType)
-    {
-        //
-        return CreateTurret2(turretType, weaponType);
-        //
-        string prodKey = turretType.ToString() + weaponType.ToString();
-        TurretBase t = _prototypes.CreateTurret(prodKey);
-        TurretMountDataEntry md = _weaponMounts[SlotTypeToMountKey(turretType)];
-        t.MaxHitpoints = md.HitPoints;
-        t.ComponentHitPoints = md.HitPoints;
-        t.RotationSpeed = md.RotationSpeed;
-        switch (weaponType)
-        {
-            case WeaponType.Autocannon:
-            case WeaponType.Howitzer:
-            case WeaponType.HVGun:
-                {
-                    WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
-                    GunTurret gt = t as GunTurret;
-                    gt.ProjectileScale = wpd.ProjectileScale;
-                    gt.MaxRange = wpd.MaxRange;
-                    gt.MuzzleVelocity = wpd.MuzzleVelocity;
-                    gt.FiringInterval = wpd.FiringInterval;
-                    gt.Inaccuracy = wpd.MaxSpread;
-                    gt.EnergyToFire = wpd.EnergyToFire;
-                    gt.HeatToFire = wpd.HeatToFire;
-                    gt.DefaultAlternatingFire = (weaponType == WeaponType.Autocannon);
-                }
-                break;
-            case WeaponType.Lance:
-                {
-                    WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretType, weaponType)];
-                    BeamTurret bt = t as BeamTurret;
-                    bt.MaxRange = wbd.MaxRange;
-                    bt.FiringInterval = wbd.FiringInterval;
-                    bt.BeamDuration = wbd.BeamDuration;
-                    bt.Inaccuracy = 0f;
-                    bt.EnergyToFire = wbd.EnergyToFire;
-                    bt.HeatToFire = wbd.HeatToFire;
-                }
-                break;
-            case WeaponType.Laser:
-                {
-                    WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretType, weaponType)];
-                    ContinuousBeamTurret cbt = t as ContinuousBeamTurret;
-                    cbt.MaxRange = wbd.MaxRange;
-                    cbt.FiringInterval = wbd.FiringInterval;
-                    cbt.BeamDuration = wbd.BeamDuration;
-                    cbt.Inaccuracy = 0f;
-                    cbt.EnergyToFire = wbd.EnergyToFire;
-                    cbt.HeatToFire = wbd.HeatToFire;
-                }
-                break;
-            case WeaponType.PlasmaCannon:
-                {
-                    WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
-                    SpecialProjectileTurret st = t as SpecialProjectileTurret;
-                    st.MaxRange = wpd.MaxRange;
-                    st.MuzzleVelocity = wpd.MuzzleVelocity;
-                    st.FiringInterval = wpd.FiringInterval;
-                    st.Inaccuracy = wpd.MaxSpread;
-                    st.EnergyToFire = wpd.EnergyToFire;
-                    st.HeatToFire = wpd.HeatToFire;
-                }
-                break;
-            case WeaponType.TorpedoTube:
-                {
-                    WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
-                    TorpedoTurret tt = t as TorpedoTurret;
-                    tt.FiringInterval = tordpedoData.FiringInterval;
-                    tt.EnergyToFire = tordpedoData.EnergyToFire;
-                    tt.HeatToFire = tordpedoData.HeatToFire;
-                }
-                break;
-            default:
-                break;
-        }
-        return t;
-    }
-
-    public static TurretBase CreateTurret2(ComponentSlotType turretType, WeaponType weaponType)
+    public static TurretBase CreateTurret(string turretMountType, string weaponNum, string weaponSize, string weaponType)
     {
         if (_turretDefinitions == null)
         {
             LoadTurretDefinitions();
         }
         TurretDefinition turretDef;
-        if (!_turretDefinitions.TryGetValue((turretType, weaponType), out turretDef))
+        if (!_turretDefinitions.TryGetValue((turretMountType, weaponNum, weaponSize, weaponType), out turretDef))
         {
             return null;
         }
@@ -290,23 +299,21 @@ public static class ObjectFactory
         HierarchyNode root = turretDef.Geometry;
         GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes, WeaponsLayerMask, WeaponsLayerMask, EffectsLayerMask);
         TurretBase resTurret;
-        switch (turretDef.WeaponType)
+        switch (turretDef.BehaviorType)
         {
-            case WeaponType.Autocannon:
-            case WeaponType.Howitzer:
-            case WeaponType.HVGun:
+            case WeaponBehaviorType.Gun:
                 resTurret = SetGunTurretData(turretDef, resObj);
                 break;
-            case WeaponType.Lance:
+            case WeaponBehaviorType.Beam:
                 resTurret = SetBeamTurretData(turretDef, resObj);
                 break;
-            case WeaponType.Laser:
+            case WeaponBehaviorType.ContinuousBeam:
                 resTurret = SetContinuousBeamTurretData(turretDef, resObj);
                 break;
-            case WeaponType.PlasmaCannon:
+            case WeaponBehaviorType.Special:
                 resTurret = SetSpecialProjectileTurretData(turretDef, resObj);
                 break;
-            case WeaponType.TorpedoTube:
+            case WeaponBehaviorType.Torpedo:
                 resTurret = SetTorpedoTurretData(turretDef, resObj);
                 break;
             default:
@@ -314,11 +321,12 @@ public static class ObjectFactory
                 break;
         }
 
-        TurretMountDataEntry md = _weaponMounts[SlotTypeToMountKey(turretType)];
+        TurretMountDataEntry md = _weaponMounts[turretDef.TurretType];
         resTurret.MaxHitpoints = md.HitPoints;
         resTurret.ComponentHitPoints = md.HitPoints;
         resTurret.RotationSpeed = md.RotationSpeed;
         resTurret.ComponentHitPoints = resTurret.ComponentMaxHitPoints;
+        resTurret.Init(turretMountType + weaponNum + weaponSize);
 
         return resTurret;
     }
@@ -328,10 +336,10 @@ public static class ObjectFactory
         GunTurret resTurret = turretObj.AddComponent<GunTurret>();
         resTurret.TurretAxis = turretDef.TurretAxis;
         resTurret.TurretType = turretDef.TurretType;
-        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponSize = turretDef.WeaponSize;
         resTurret.TurretWeaponType = turretDef.WeaponType;
 
-        WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        WeaponProjectileDataEntry wpd = _weapons_projectile[(turretDef.WeaponSize, turretDef.WeaponType)];
         resTurret.ProjectileScale = wpd.ProjectileScale;
         resTurret.MaxRange = wpd.MaxRange;
         resTurret.MuzzleVelocity = wpd.MuzzleVelocity;
@@ -339,7 +347,7 @@ public static class ObjectFactory
         resTurret.Inaccuracy = wpd.MaxSpread;
         resTurret.EnergyToFire = wpd.EnergyToFire;
         resTurret.HeatToFire = wpd.HeatToFire;
-        resTurret.DefaultAlternatingFire = (turretDef.WeaponType == WeaponType.Autocannon);
+        resTurret.DefaultAlternatingFire = (turretDef.WeaponType == "Autocannon");
         return resTurret;
     }
 
@@ -348,10 +356,10 @@ public static class ObjectFactory
         BeamTurret resTurret = turretObj.AddComponent<BeamTurret>();
         resTurret.TurretAxis = turretDef.TurretAxis;
         resTurret.TurretType = turretDef.TurretType;
-        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponSize = turretDef.WeaponSize;
         resTurret.TurretWeaponType = turretDef.WeaponType;
 
-        WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        WeaponBeamDataEntry wbd = _weapons_beam[(turretDef.WeaponSize, turretDef.WeaponType)];
         resTurret.MaxRange = wbd.MaxRange;
         resTurret.FiringInterval = wbd.FiringInterval;
         resTurret.BeamDuration = wbd.BeamDuration;
@@ -367,10 +375,10 @@ public static class ObjectFactory
         ContinuousBeamTurret resTurret = turretObj.AddComponent<ContinuousBeamTurret>();
         resTurret.TurretAxis = turretDef.TurretAxis;
         resTurret.TurretType = turretDef.TurretType;
-        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponSize = turretDef.WeaponSize;
         resTurret.TurretWeaponType = turretDef.WeaponType;
 
-        WeaponBeamDataEntry wbd = _weapons_beam[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        WeaponBeamDataEntry wbd = _weapons_beam[(turretDef.WeaponSize, turretDef.WeaponType)];
         resTurret.MaxRange = wbd.MaxRange;
         resTurret.FiringInterval = wbd.FiringInterval;
         resTurret.BeamDuration = wbd.BeamDuration;
@@ -386,10 +394,10 @@ public static class ObjectFactory
         SpecialProjectileTurret resTurret = turretObj.AddComponent<SpecialProjectileTurret>();
         resTurret.TurretAxis = turretDef.TurretAxis;
         resTurret.TurretType = turretDef.TurretType;
-        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponSize = turretDef.WeaponSize;
         resTurret.TurretWeaponType = turretDef.WeaponType;
 
-        WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretDef.TurretType, turretDef.WeaponType)];
+        WeaponProjectileDataEntry wpd = _weapons_projectile[(turretDef.WeaponSize, turretDef.WeaponType)];
         resTurret.MaxRange = wpd.MaxRange;
         resTurret.MuzzleVelocity = wpd.MuzzleVelocity;
         resTurret.FiringInterval = wpd.FiringInterval;
@@ -405,7 +413,7 @@ public static class ObjectFactory
         TorpedoTurret resTurret = turretObj.AddComponent<TorpedoTurret>();
         resTurret.TurretAxis = turretDef.TurretAxis;
         resTurret.TurretType = turretDef.TurretType;
-        resTurret.TurretSize = turretDef.WeaponSize;
+        resTurret.TurretWeaponSize = turretDef.WeaponSize;
         resTurret.TurretWeaponType = turretDef.WeaponType;
 
         WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
@@ -416,34 +424,27 @@ public static class ObjectFactory
         return resTurret;
     }
 
-    public static TurretBase CreateStrikeCraftTurret(ComponentSlotType turretType, WeaponType weaponType)
+    public static TurretBase CreateStrikeCraftTurret(string turretType, string weaponType)
     {
         string prodKey = turretType.ToString() + weaponType.ToString();
         TurretBase t = _prototypes.CreateTurret(prodKey);
-        switch (weaponType)
+        if (weaponType == "1")
         {
-            case WeaponType.FighterCannon:
-            case WeaponType.FighterAutoannon:
-                {
-                    WeaponProjectileDataEntry wpd = _weapons_projectile[SlotAndWeaponToWeaponKey(turretType, weaponType)];
-                    GunTurret gt = t as GunTurret;
-                    gt.ProjectileScale = wpd.ProjectileScale;
-                    gt.MaxRange = wpd.MaxRange;
-                    gt.MuzzleVelocity = wpd.MuzzleVelocity;
-                    gt.FiringInterval = wpd.FiringInterval;
-                    gt.DefaultAlternatingFire = (weaponType == WeaponType.FighterAutoannon);
-                }
-                break;
-            case WeaponType.TorpedoTube:
-                {
-                    WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
-                    BomberTorpedoLauncher tt = t as BomberTorpedoLauncher;
-                    tt.FiringInterval = tordpedoData.FiringInterval;
-                }
-                break;
-            default:
-                break;
+            WeaponProjectileDataEntry wpd = _weapons_projectile[(turretType, weaponType)];
+            GunTurret gt = t as GunTurret;
+            gt.ProjectileScale = wpd.ProjectileScale;
+            gt.MaxRange = wpd.MaxRange;
+            gt.MuzzleVelocity = wpd.MuzzleVelocity;
+            gt.FiringInterval = wpd.FiringInterval;
+            gt.DefaultAlternatingFire = (weaponType == "FighterAutoannon");
         }
+        else if (weaponType == "2")
+        {
+            WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
+            BomberTorpedoLauncher tt = t as BomberTorpedoLauncher;
+            tt.FiringInterval = tordpedoData.FiringInterval;
+        }
+
         t.EnergyToFire = 0;
         t.HeatToFire = 0;
         return t;
@@ -451,14 +452,28 @@ public static class ObjectFactory
 
     private static void LoadTurretDefinitions()
     {
-        _turretDefinitions = new Dictionary<(ComponentSlotType, WeaponType), TurretDefinition>();
+        _turretDefinitions = new Dictionary<(string, string, string, string), TurretDefinition>();
         string searchPath = Path.Combine("TextData", "Turrets");
         foreach (string turretFile in Directory.EnumerateFiles(searchPath, "*.yml", SearchOption.TopDirectoryOnly))
         {
             using (StreamReader sr = new StreamReader(turretFile, Encoding.UTF8))
             {
                 TurretDefinition turretDef = HierarchySerializer.LoadHierarchy<TurretDefinition>(sr);
-                _turretDefinitions.Add((turretDef.TurretType, turretDef.WeaponType), turretDef);
+                _turretDefinitions[(turretDef.TurretType, turretDef.WeaponNum, turretDef.WeaponSize, turretDef.WeaponType)] = turretDef;
+            }
+        }
+    }
+
+    private static void LoadShipHullDefinitions()
+    {
+        _shipHullDefinitions = new Dictionary<string, ShipHullDefinition>();
+        string searchPath = Path.Combine("TextData", "ShipHulls");
+        foreach (string shipFile in Directory.EnumerateFiles(searchPath, "*.yml", SearchOption.TopDirectoryOnly))
+        {
+            using (StreamReader sr = new StreamReader(shipFile, Encoding.UTF8))
+            {
+                ShipHullDefinition shipHullDef = HierarchySerializer.LoadHierarchy<ShipHullDefinition>(sr);
+                _shipHullDefinitions[shipHullDef.HullName] = shipHullDef;
             }
         }
     }
@@ -483,24 +498,24 @@ public static class ObjectFactory
             {
                 continue;
             }
-            if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.FighterCannon))
+            if (hp.AllowedWeaponTypes.Contains("FighterCannon"))
             {
-                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.FighterCannon, WeaponType.FighterCannon);
+                TurretBase t = CreateStrikeCraftTurret("StrikeCraft", "FighterCannon");
                 s.PlaceTurret(hp, t);
             }
-            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.FighterAutogun))
+            else if (hp.AllowedWeaponTypes.Contains("FighterAutogun"))
             {
-                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.FighterAutogun, WeaponType.FighterAutoannon);
+                TurretBase t = CreateStrikeCraftTurret("StrikeCraft", "FighterAutoannon");
                 s.PlaceTurret(hp, t);
             }
-            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.BomberAutogun))
+            else if (hp.AllowedWeaponTypes.Contains("BomberAutogun"))
             {
-                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.BomberAutogun, WeaponType.FighterAutoannon);
+                TurretBase t = CreateStrikeCraftTurret("StrikeCraft", "FighterAutoannon");
                 s.PlaceTurret(hp, t);
             }
-            else if (hp.AllowedWeaponTypes.Contains(ComponentSlotType.BomberTorpedoTube))
+            else if (hp.AllowedWeaponTypes.Contains("BomberTorpedoTube"))
             {
-                TurretBase t = CreateStrikeCraftTurret(ComponentSlotType.BomberTorpedoTube, WeaponType.TorpedoTube);
+                TurretBase t = CreateStrikeCraftTurret("StrikeCraft", "Torpedo");
                 s.PlaceTurret(hp, t);
             }
         }
@@ -619,10 +634,10 @@ public static class ObjectFactory
         return _prototypes.GetPath(key);
     }
 
-    public static List<TacMapEntityType> GetDefaultTargetPriorityList(WeaponType weaponType, WeaponSize sz)
+    public static List<TacMapEntityType> GetDefaultTargetPriorityList(string weaponType, string sz)
     {
         List<TacMapEntityType> res;
-        if (_defaultPriorityLists.TryGetValue(new ValueTuple<WeaponType, WeaponSize>(weaponType, sz), out res))
+        if (_defaultPriorityLists.TryGetValue((weaponType, sz), out res))
         {
             return new List<TacMapEntityType>(res);
         }
@@ -684,22 +699,22 @@ public static class ObjectFactory
 
     private static void LoadWarheads()
     {
-        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.txt"));
-        _gunWarheads = new Dictionary<ValueTuple<WeaponType, WeaponSize, AmmoType>, Warhead>();
-        _torpedoWarheads = new Dictionary<TorpedoType, WarheadDataEntry4>();
-        _otherWarheads = new Dictionary<ValueTuple<WeaponType, WeaponSize>, Warhead>();
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Warheads.csv"));
+        _gunWarheads = new Dictionary<(string, string, string), WarheadDataEntry3>();
+        _torpedoWarheads = new Dictionary<string, WarheadDataEntry4>();
+        _otherWarheads = new Dictionary<(string, string), WarheadDataEntry2>();
+
         foreach (string l in lines)
         {
             if (l.Trim().StartsWith("3"))
             {
                 WarheadDataEntry3 d3 = WarheadDataEntry3.FromString(l);
-
-                _gunWarheads.Add(new ValueTuple<WeaponType, WeaponSize, AmmoType>(d3.LaunchWeaponType, d3.LaunchWeaponSize, d3.Ammo), d3.WarheadData);
+                _gunWarheads.Add((d3.LaunchWeaponType, d3.LaunchWeaponSize, d3.Ammo), d3);
             }
             else if (l.Trim().StartsWith("2"))
             {
                 WarheadDataEntry2 d2 = WarheadDataEntry2.FromString(l);
-                _otherWarheads.Add(new ValueTuple<WeaponType, WeaponSize>(d2.LaunchWeaponType, d2.LaunchWeaponSize), d2.WarheadData);
+                _otherWarheads.Add((d2.LaunchWeaponType, d2.LaunchWeaponSize), d2);
             }
             else if (l.Trim().StartsWith("4"))
             {
@@ -709,92 +724,92 @@ public static class ObjectFactory
         }
     }
 
-    private static ValueTuple<WeaponSize, TurretMountType> SlotTypeToMountKey(ComponentSlotType t)
-    {
-        switch (t)
-        {
-            case ComponentSlotType.SmallFixed:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Fixed);
-            case ComponentSlotType.SmallBroadside:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Broadside);
-            case ComponentSlotType.SmallBarbette:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Barbette);
-            case ComponentSlotType.SmallTurret:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Turret);
-            case ComponentSlotType.SmallBarbetteDual:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Barbette);
-            case ComponentSlotType.SmallTurretDual:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Turret);
-            case ComponentSlotType.MediumBroadside:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
-            case ComponentSlotType.MediumBarbette:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
-            case ComponentSlotType.MediumTurret:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Turret);
-            case ComponentSlotType.MediumBarbetteDualSmall:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
-            case ComponentSlotType.MediumTurretDualSmall:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Turret);
-            case ComponentSlotType.LargeBarbette:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Heavy, TurretMountType.Barbette);
-            case ComponentSlotType.LargeTurret:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Heavy, TurretMountType.Turret);
-            case ComponentSlotType.TorpedoTube:
-                return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.TorpedoTube, TurretMountType.TorpedoTube);
-            default:
-                throw new Exception("Weapon mount not found");
-        }
-    }
+    //private static ValueTuple<WeaponSize, TurretMountType> SlotTypeToMountKey(ComponentSlotType t)
+    //{
+    //    switch (t)
+    //    {
+    //        case ComponentSlotType.SmallFixed:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Fixed);
+    //        case ComponentSlotType.SmallBroadside:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Broadside);
+    //        case ComponentSlotType.SmallBarbette:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Barbette);
+    //        case ComponentSlotType.SmallTurret:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Turret);
+    //        case ComponentSlotType.SmallBarbetteDual:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Barbette);
+    //        case ComponentSlotType.SmallTurretDual:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Light, TurretMountType.Turret);
+    //        case ComponentSlotType.MediumBroadside:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
+    //        case ComponentSlotType.MediumBarbette:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
+    //        case ComponentSlotType.MediumTurret:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Turret);
+    //        case ComponentSlotType.MediumBarbetteDualSmall:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Barbette);
+    //        case ComponentSlotType.MediumTurretDualSmall:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Medium, TurretMountType.Turret);
+    //        case ComponentSlotType.LargeBarbette:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Heavy, TurretMountType.Barbette);
+    //        case ComponentSlotType.LargeTurret:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.Heavy, TurretMountType.Turret);
+    //        case ComponentSlotType.TorpedoTube:
+    //            return new ValueTuple<WeaponSize, TurretMountType>(WeaponSize.TorpedoTube, TurretMountType.TorpedoTube);
+    //        default:
+    //            throw new Exception("Weapon mount not found");
+    //    }
+    //}
 
-    private static ValueTuple<WeaponSize, WeaponType> SlotAndWeaponToWeaponKey(ComponentSlotType t, WeaponType w)
-    {
-        switch (t)
-        {
-            case ComponentSlotType.SmallFixed:
-            case ComponentSlotType.SmallBroadside:
-            case ComponentSlotType.SmallBarbette:
-            case ComponentSlotType.SmallTurret:
-            case ComponentSlotType.SmallBarbetteDual:
-            case ComponentSlotType.SmallTurretDual:
-            case ComponentSlotType.MediumBarbetteDualSmall:
-            case ComponentSlotType.MediumTurretDualSmall:
-                return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.Light, w);
-            case ComponentSlotType.MediumBroadside:
-            case ComponentSlotType.MediumBarbette:
-            case ComponentSlotType.MediumTurret:
-                return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.Medium, w);
-            case ComponentSlotType.LargeBarbette:
-            case ComponentSlotType.LargeTurret:
-                return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.Heavy, w);
-            case ComponentSlotType.FighterCannon:
-            case ComponentSlotType.FighterAutogun:
-            case ComponentSlotType.BomberAutogun:
-                return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.StrikeCraft, w);
-            default:
-                throw new Exception("Weapon not found");
-        }
-    }
+    //private static ValueTuple<WeaponSize, WeaponType> SlotAndWeaponToWeaponKey(ComponentSlotType t, WeaponType w)
+    //{
+    //    switch (t)
+    //    {
+    //        case ComponentSlotType.SmallFixed:
+    //        case ComponentSlotType.SmallBroadside:
+    //        case ComponentSlotType.SmallBarbette:
+    //        case ComponentSlotType.SmallTurret:
+    //        case ComponentSlotType.SmallBarbetteDual:
+    //        case ComponentSlotType.SmallTurretDual:
+    //        case ComponentSlotType.MediumBarbetteDualSmall:
+    //        case ComponentSlotType.MediumTurretDualSmall:
+    //            return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.Light, w);
+    //        case ComponentSlotType.MediumBroadside:
+    //        case ComponentSlotType.MediumBarbette:
+    //        case ComponentSlotType.MediumTurret:
+    //            return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.Medium, w);
+    //        case ComponentSlotType.LargeBarbette:
+    //        case ComponentSlotType.LargeTurret:
+    //            return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.Heavy, w);
+    //        case ComponentSlotType.FighterCannon:
+    //        case ComponentSlotType.FighterAutogun:
+    //        case ComponentSlotType.BomberAutogun:
+    //            return new ValueTuple<WeaponSize, WeaponType>(WeaponSize.StrikeCraft, w);
+    //        default:
+    //            throw new Exception("Weapon not found");
+    //    }
+    //}
 
     private static void LoadDefaultPriorityLists()
     {
-        _defaultPriorityLists = new Dictionary<(WeaponType, WeaponSize), List<TacMapEntityType>>();
+        _defaultPriorityLists = new Dictionary<(string, string), List<TacMapEntityType>>();
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "DefaultPriorities.csv"));
         int idx = 0;
         while (!lines[idx].Trim().StartsWith("x"))
         {
             ++idx;
         }
-        WeaponType[] typesOrder = lines[idx].Split(',').Skip(1).Select(s => (WeaponType) Enum.Parse(typeof(WeaponType), s)).ToArray();
+        string[] typesOrder = lines[idx].Split(',').Skip(1).ToArray();
         foreach (string line in lines.Skip(idx + 1))
         {
             string[] items = line.Split(',');
-            WeaponSize sz = (WeaponSize) Enum.Parse(typeof(WeaponSize), items[0]);
+            string sz = items[0];
             for (int i = 0; i < items.Length - 1; ++i)
             {
                 if (items[i + 1] != string.Empty)
                 {
                     _defaultPriorityLists.Add(
-                        new ValueTuple<WeaponType, WeaponSize>(typesOrder[i], sz),
+                        (typesOrder[i], sz),
                         items[i + 1].Split(':').Select(s => (TacMapEntityType)Enum.Parse(typeof(TacMapEntityType), s)).ToList());
                 }
             }
@@ -804,13 +819,13 @@ public static class ObjectFactory
     private static void LoadWeaponMounts()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "WeaponMounts.txt"));
-        _weaponMounts = new Dictionary<ValueTuple<WeaponSize, TurretMountType>, TurretMountDataEntry>();
+        _weaponMounts = new Dictionary<string, TurretMountDataEntry>();
         foreach (string l in lines)
         {
             if (l.Trim().StartsWith("WeaponMount"))
             {
                 TurretMountDataEntry tm = TurretMountDataEntry.FromString(l);
-                _weaponMounts.Add(new ValueTuple<WeaponSize, TurretMountType>(tm.MountSize, tm.Mount), tm);
+                _weaponMounts.Add(tm.MountSize + tm.Mount, tm);
             }
         }
     }
@@ -844,19 +859,19 @@ public static class ObjectFactory
     private static void LoadWeapons()
     {
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
-        _weapons_projectile = new Dictionary<ValueTuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry>();
-        _weapons_beam = new Dictionary<ValueTuple<WeaponSize, WeaponType>, WeaponBeamDataEntry>();
+        _weapons_projectile = new Dictionary<(string, string), WeaponProjectileDataEntry>();
+        _weapons_beam = new Dictionary<(string, string), WeaponBeamDataEntry>();
         foreach (string l in lines)
         {
             if (l.Trim().StartsWith("ProjectileWeapon"))
             {
                 WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
-                _weapons_projectile.Add(new ValueTuple<WeaponSize, WeaponType>(w.MountSize, w.Weapon), w);
+                _weapons_projectile.Add((w.WeaponSize, w.Weapon), w);
             }
             else if (l.Trim().StartsWith("BeamWeapon"))
             {
                 WeaponBeamDataEntry w = WeaponBeamDataEntry.FromString(l);
-                _weapons_beam.Add(new ValueTuple<WeaponSize, WeaponType>(w.MountSize, w.Weapon), w);
+                _weapons_beam.Add((w.WeaponSize, w.Weapon), w);
             }
             else if (l.Trim().StartsWith("TorpedoWeapon"))
             {
@@ -884,13 +899,13 @@ public static class ObjectFactory
         };
         WarheadDataEntry3[] d3 = new WarheadDataEntry3[]
         {
-            new WarheadDataEntry3 { LaunchWeaponSize = WeaponSize.Light, LaunchWeaponType = WeaponType.Autocannon, Ammo = AmmoType.KineticPenetrator, WarheadData = dummyWarhead },
-            new WarheadDataEntry3 { LaunchWeaponSize = WeaponSize.Light, LaunchWeaponType = WeaponType.Autocannon, Ammo = AmmoType.ShapedCharge, WarheadData = dummyWarhead },
+            new WarheadDataEntry3 { LaunchWeaponSize = "Light", LaunchWeaponType = "Autocannon", Ammo = "KineticPenetrator", WarheadData = dummyWarhead },
+            new WarheadDataEntry3 { LaunchWeaponSize = "Light", LaunchWeaponType = "Autocannon", Ammo = "ShapedCharge", WarheadData = dummyWarhead },
         };
         WarheadDataEntry2[] d2 = new WarheadDataEntry2[]
         {
-            new WarheadDataEntry2 { LaunchWeaponSize = WeaponSize.Light, LaunchWeaponType = WeaponType.Lance, WarheadData = dummyWarhead },
-            new WarheadDataEntry2 { LaunchWeaponSize = WeaponSize.Light, LaunchWeaponType = WeaponType.Laser, WarheadData = dummyWarhead },
+            new WarheadDataEntry2 { LaunchWeaponSize = "Light", LaunchWeaponType = "Lance", WarheadData = dummyWarhead },
+            new WarheadDataEntry2 { LaunchWeaponSize = "Light", LaunchWeaponType = "Laser", WarheadData = dummyWarhead },
         };
 
         StringBuilder sb = new StringBuilder();
@@ -907,26 +922,35 @@ public static class ObjectFactory
         System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","Warheads.txt"), sb.ToString());
     }
 
-    public enum TurretMountType { Fixed, Broadside, Barbette, Turret, TorpedoTube }
-    public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon, TorpedoTube, FighterCannon, FighterAutoannon }
-    public enum WeaponSize { Light, Medium, Heavy, TorpedoTube, StrikeCraft }
-    public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
-    public enum TorpedoType { LongRange, Heavy, Tracking }
+    //public enum TurretMountType { Fixed, Broadside, Barbette, Turret, TorpedoTube }
+    //public enum WeaponType { Autocannon, Howitzer, HVGun, Lance, Laser, PlasmaCannon, TorpedoTube, FighterCannon, FighterAutoannon }
+    public enum WeaponBehaviorType { Unknown, Gun, Beam, ContinuousBeam, Torpedo, Special }
+    //public enum WeaponSize { Light, Medium, Heavy, TorpedoTube, StrikeCraft }
+    //public enum AmmoType { KineticPenetrator, ShapedCharge, ShrapnelRound }
+    //public enum TorpedoType { LongRange, Heavy, Tracking }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
     public enum TacMapEntityType { Torpedo, SrikeCraft, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, StaticDefence }
 
-    private static Dictionary<ValueTuple<WeaponType, WeaponSize, AmmoType>, Warhead> _gunWarheads = null;
-    private static Dictionary<ValueTuple<WeaponType, WeaponSize>, Warhead> _otherWarheads = null;
-    private static Dictionary<TorpedoType, WarheadDataEntry4> _torpedoWarheads = null;
-    private static Dictionary<ValueTuple<WeaponSize, TurretMountType>, TurretMountDataEntry> _weaponMounts = null;
-    private static Dictionary<ValueTuple<WeaponSize, WeaponType>, WeaponProjectileDataEntry> _weapons_projectile = null;
-    private static Dictionary<ValueTuple<WeaponSize, WeaponType>, WeaponBeamDataEntry> _weapons_beam = null;
+    private static Dictionary<(string, string, string), WarheadDataEntry3> _gunWarheads = null;
+    private static Dictionary<(string, string), WarheadDataEntry2> _otherWarheads = null;
+    private static Dictionary<string, WarheadDataEntry4> _torpedoWarheads = null;
+
+    //private static Dictionary<(string, string, string), (string, string)> _gunHitEffects = null;
+    //private static Dictionary<(string, string), (string, string)> _otherHitEffects = null;
+    //private static Dictionary<string, (string, string)> _torpedoHitEffects = null;
+
+
+    private static Dictionary<string, TurretMountDataEntry> _weaponMounts = null; // Key: MountType
+    private static Dictionary<(string, string), WeaponProjectileDataEntry> _weapons_projectile = null; // Key: WeaponSize, WeaponType
+    private static Dictionary<(string, string), WeaponBeamDataEntry> _weapons_beam = null;
+
     private static WeaponTorpedoDataEntry _weapons_torpedo = null;
     private static ArmourPenetrationTable _penetrationTable = null;
     private static Dictionary<string, CultureNames> _cultureNamingLists = null;
-    private static Dictionary<ValueTuple<WeaponType, WeaponSize>, List<TacMapEntityType>> _defaultPriorityLists = null;
-    private static Dictionary<(ComponentSlotType, WeaponType), TurretDefinition> _turretDefinitions = null;
+    private static Dictionary<(string, string), List<TacMapEntityType>> _defaultPriorityLists = null;
+    private static Dictionary<(string, string, string, string), TurretDefinition> _turretDefinitions = null; // Key: MountType, WeaponNum, WeaponSize, WeaponType
+    private static Dictionary<string, ShipHullDefinition> _shipHullDefinitions = null;
     private static readonly int  _defaultLayerMask = LayerMask.NameToLayer("Default");
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
@@ -942,19 +966,21 @@ public static class ObjectFactory
 
     public class WarheadDataEntry3
     {
-        public WeaponType LaunchWeaponType;
-        public WeaponSize LaunchWeaponSize;
-        public AmmoType Ammo;
+        public string LaunchWeaponType;
+        public string LaunchWeaponSize;
+        public string Ammo;
         public Warhead WarheadData;
+        public string EffectAssetBundle;
+        public string EffectAsset;
 
         public string ToTextLine()
         {
             string[] elements = new string[]
             {
                 "3",
-                LaunchWeaponSize.ToString(),
-                LaunchWeaponType.ToString(),
-                Ammo.ToString(),
+                LaunchWeaponSize,
+                LaunchWeaponType,
+                Ammo,
                 WarheadData.ShieldDamage.ToString(),
                 WarheadData.ArmourPenetration.ToString(),
                 WarheadData.ArmourDamage.ToString(),
@@ -964,7 +990,9 @@ public static class ObjectFactory
                 WarheadData.HitMultiplicity.ToString(),
                 WarheadData.BlastRadius.ToString(),
                 WarheadData.AntiPersonnel.ToString(),
-                WarheadData.WeaponEffectScale.ToString()
+                WarheadData.WeaponEffectScale.ToString(),
+                EffectAssetBundle,
+                EffectAsset
             };
             return string.Join(",", elements);
         }
@@ -977,9 +1005,9 @@ public static class ObjectFactory
                 int i = 1;
                 return new WarheadDataEntry3()
                 {
-                    LaunchWeaponSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
-                    LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
-                    Ammo = (AmmoType)System.Enum.Parse(typeof(AmmoType), elements[i++].Trim(), true),
+                    LaunchWeaponSize = elements[i++].Trim(),
+                    LaunchWeaponType = elements[i++].Trim(),
+                    Ammo = elements[i++].Trim(),
                     WarheadData = new Warhead()
                     {
                         ShieldDamage = int.Parse(elements[i++].Trim()),
@@ -993,7 +1021,9 @@ public static class ObjectFactory
                         EffectVsStrikeCraft = float.Parse(elements[i++].Trim()),
                         AntiPersonnel = float.Parse(elements[i++].Trim()),
                         WeaponEffectScale = float.Parse(elements[i++].Trim())
-                    }
+                    },
+                    EffectAssetBundle = elements[i++].Trim(),
+                    EffectAsset = elements[i++].Trim()
                 };
             }
             else
@@ -1005,17 +1035,19 @@ public static class ObjectFactory
 
     public class WarheadDataEntry2
     {
-        public WeaponType LaunchWeaponType;
-        public WeaponSize LaunchWeaponSize;
+        public string LaunchWeaponType;
+        public string LaunchWeaponSize;
         public Warhead WarheadData;
+        public string EffectAssetBundle;
+        public string EffectAsset;
 
         public string ToTextLine()
         {
             string[] elements = new string[]
             {
                 "2",
-                LaunchWeaponSize.ToString(),
-                LaunchWeaponType.ToString(),
+                LaunchWeaponSize,
+                LaunchWeaponType,
                 WarheadData.ShieldDamage.ToString(),
                 WarheadData.ArmourPenetration.ToString(),
                 WarheadData.ArmourDamage.ToString(),
@@ -1024,8 +1056,9 @@ public static class ObjectFactory
                 WarheadData.HeatGenerated.ToString(),
                 WarheadData.HitMultiplicity.ToString(),
                 WarheadData.AntiPersonnel.ToString(),
-                WarheadData.WeaponEffectScale.ToString()
-
+                WarheadData.WeaponEffectScale.ToString(),
+                EffectAssetBundle,
+                EffectAsset
             };
             return string.Join(",", elements);
         }
@@ -1038,8 +1071,8 @@ public static class ObjectFactory
                 int i = 1;
                 return new WarheadDataEntry2()
                 {
-                    LaunchWeaponSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
-                    LaunchWeaponType = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
+                    LaunchWeaponSize = elements[i++].Trim(),
+                    LaunchWeaponType = elements[i++].Trim(),
                     WarheadData = new Warhead()
                     {
                         ShieldDamage = int.Parse(elements[i++].Trim()),
@@ -1051,7 +1084,9 @@ public static class ObjectFactory
                         HitMultiplicity = int.Parse(elements[i++].Trim()),
                         AntiPersonnel = float.Parse(elements[i++].Trim()),
                         WeaponEffectScale = float.Parse(elements[i++].Trim())
-                    }
+                    },
+                    EffectAssetBundle = elements[i++].Trim(),
+                    EffectAsset = elements[i++].Trim()
                 };
             }
             else
@@ -1063,11 +1098,13 @@ public static class ObjectFactory
 
     public class WarheadDataEntry4
     {
-        public TorpedoType LaunchTorpedoType;
+        public string LaunchTorpedoType;
         public int SpeardSize;
         public float MaxRange;
         public Warhead WarheadData;
         public float ProjectileScale;
+        public string EffectAssetBundle;
+        public string EffectAsset;
 
         public string ToTextLine()
         {
@@ -1086,7 +1123,9 @@ public static class ObjectFactory
                 WarheadData.HitMultiplicity.ToString(),
                 WarheadData.AntiPersonnel.ToString(),
                 WarheadData.WeaponEffectScale.ToString(),
-                ProjectileScale.ToString()
+                ProjectileScale.ToString(),
+                EffectAssetBundle,
+                EffectAsset
             };
             return string.Join(",", elements);
         }
@@ -1099,7 +1138,7 @@ public static class ObjectFactory
                 int i = 1;
                 return new WarheadDataEntry4()
                 {
-                    LaunchTorpedoType = (TorpedoType)System.Enum.Parse(typeof(TorpedoType), elements[i++].Trim(), true),
+                    LaunchTorpedoType = elements[i++].Trim(),
                     SpeardSize = int.Parse(elements[i++].Trim()),
                     MaxRange = float.Parse(elements[i++].Trim()),
                     WarheadData = new Warhead()
@@ -1114,7 +1153,9 @@ public static class ObjectFactory
                         AntiPersonnel = float.Parse(elements[i++].Trim()),
                         WeaponEffectScale = float.Parse(elements[i++].Trim())
                     },
-                    ProjectileScale = float.Parse(elements[i++].Trim())
+                    ProjectileScale = float.Parse(elements[i++].Trim()),
+                    EffectAssetBundle = elements[i++].Trim(),
+                    EffectAsset = elements[i++].Trim()
                 };
             }
             else
@@ -1126,8 +1167,8 @@ public static class ObjectFactory
 
     public class TurretMountDataEntry
     {
-        public WeaponSize MountSize;
-        public TurretMountType Mount;
+        public string MountSize;
+        public string Mount;
         public int HitPoints;
         public float RotationSpeed;
 
@@ -1138,8 +1179,8 @@ public static class ObjectFactory
             {
                 return new TurretMountDataEntry()
                 {
-                    MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[1].Trim(), true),
-                    Mount = (TurretMountType)System.Enum.Parse(typeof(TurretMountType), elements[2].Trim(), true),
+                    MountSize = elements[1].Trim(),
+                    Mount = elements[2].Trim(),
                     HitPoints = int.Parse(elements[3].Trim()),
                     RotationSpeed = float.Parse(elements[4].Trim())
                 };
@@ -1153,8 +1194,8 @@ public static class ObjectFactory
 
     public class WeaponProjectileDataEntry
     {
-        public WeaponSize MountSize;
-        public WeaponType Weapon;
+        public string WeaponSize;
+        public string Weapon;
         public float MaxRange;
         public float MuzzleVelocity;
         public float FiringInterval;
@@ -1171,8 +1212,8 @@ public static class ObjectFactory
                 int i = 1;
                 return new WeaponProjectileDataEntry()
                 {
-                    MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
-                    Weapon = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
+                    WeaponSize = elements[i++].Trim(),
+                    Weapon = elements[i++].Trim(),
                     MaxRange = float.Parse(elements[i++].Trim()),
                     MuzzleVelocity = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
@@ -1191,8 +1232,8 @@ public static class ObjectFactory
 
     public class WeaponBeamDataEntry
     {
-        public WeaponSize MountSize;
-        public WeaponType Weapon;
+        public string WeaponSize;
+        public string Weapon;
         public float MaxRange;
         public float FiringInterval;
         public float BeamDuration;
@@ -1208,8 +1249,8 @@ public static class ObjectFactory
                 int i = 1;
                 return new WeaponBeamDataEntry()
                 {
-                    MountSize = (WeaponSize)System.Enum.Parse(typeof(WeaponSize), elements[i++].Trim(), true),
-                    Weapon = (WeaponType)System.Enum.Parse(typeof(WeaponType), elements[i++].Trim(), true),
+                    WeaponSize = elements[i++].Trim(),
+                    Weapon = elements[i++].Trim(),
                     MaxRange = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
                     BeamDuration = float.Parse(elements[i++].Trim()),
@@ -1262,11 +1303,11 @@ public class ShipTemplate
     public float Thrust;
     public float Braking;
     public float TurnRate;
-    public ComponentSlotType[] CenterComponentSlots;
-    public ComponentSlotType[] ForeComponentSlots;
-    public ComponentSlotType[] AftComponentSlots;
-    public ComponentSlotType[] LeftComponentSlots;
-    public ComponentSlotType[] RightComponentSlots;
+    public string[] CenterComponentSlots;
+    public string[] ForeComponentSlots;
+    public string[] AftComponentSlots;
+    public string[] LeftComponentSlots;
+    public string[] RightComponentSlots;
     public int DefaultArmorFront;
     public int DefaultArmorAft;
     public int DefaultArmorLeft;

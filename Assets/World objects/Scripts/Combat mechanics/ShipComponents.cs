@@ -81,7 +81,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
     public int EnergyPerTick => -1;
     public int HeatPerTick => HeatOutput;
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Power plant"; } }
 
@@ -167,7 +167,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
         }
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystemCenter" };
 }
 
 public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
@@ -182,7 +182,7 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
         }
     }
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public static CapacitorBank DefaultComponent(Ship containingShip)
     {
@@ -195,14 +195,14 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
         };
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }
 
 public class HeatSink : ShipComponentBase, IHeatCapacityComponent
 {
     public int Capacity;
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public int HeatCapacity => Capacity;
 
@@ -217,7 +217,7 @@ public class HeatSink : ShipComponentBase, IHeatCapacityComponent
         };
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }
 public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent, IShieldComponent
 {
@@ -312,7 +312,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         }
     }
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Shield generator"; } }
 
@@ -366,7 +366,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         return res;
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }
 
 public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionComponent
@@ -425,7 +425,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         }
     }
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Damage control"; } }
 
@@ -476,7 +476,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         return res;
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }
 
 public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
@@ -488,7 +488,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
         _containingShip.TryChangeHeat(-CoolingRate);
     }
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public int EnergyPerTick => 0;
     public int HeatPerTick => -1;
@@ -504,15 +504,15 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
         };
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }
 
 public class ExtraArmour : ShipComponentBase
 {
     public int ArmourAmount;
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem" };
 }
 
 public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -594,7 +594,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public event Action<bool> OnToggle;
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Engine"; } }
 
@@ -642,7 +642,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         return res;
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.Engine };
+    private static readonly string[] _allowedSlotTypes = new string[] { "Engine" };
 }
 
 public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -689,7 +689,7 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
 
     public event Action<bool> OnToggle;
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Electromagentic Clamps"; } }
 
@@ -709,7 +709,7 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
         };
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.Hidden };
+    private static readonly string[] _allowedSlotTypes = new string[] { "Hidden" };
 }
 
 public class CombatDetachment : ShipComponentBase
@@ -728,7 +728,7 @@ public class CombatDetachment : ShipComponentBase
             Forces.Add(c);
         }
     }
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public static CombatDetachment DefaultComponent(Ship s)
     {
@@ -769,14 +769,14 @@ public class CombatDetachment : ShipComponentBase
         return res;
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }
 
 public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionComponent
 {
     public int PowerUsage;
-    private Buff _activeBuff;
-    private static Buff _inactiveBuff = Buff.Default();
+    private DynamicBuff _activeBuff;
+    private static DynamicBuff _inactiveBuff = DynamicBuff.Default();
     private bool _nextActive;
 
     public void PeriodicAction()
@@ -794,9 +794,9 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
         _nextActive = true;
     }
 
-    public override Buff ComponentBuff => _nextActive ? _activeBuff : _inactiveBuff;
+    public override DynamicBuff ComponentBuff => _nextActive ? _activeBuff : _inactiveBuff;
 
-    public override IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public override string SpriteKey { get { return "Fire control general"; } }
 
@@ -810,7 +810,7 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
             ComponentMaxHitPoints = 400,
             ComponentHitPoints = 400,
             Status = ComponentStatus.Undamaged,
-            _activeBuff = new Buff()
+            _activeBuff = new DynamicBuff()
             {
                 WeaponAccuracyFactor = 0.1f,
 
@@ -854,5 +854,5 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
         return res;
     }
 
-    private static readonly ComponentSlotType[] _allowedSlotTypes = new ComponentSlotType[] { ComponentSlotType.ShipSystem, ComponentSlotType.ShipSystemCenter };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
 }

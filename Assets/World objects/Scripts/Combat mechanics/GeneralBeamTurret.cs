@@ -4,9 +4,9 @@ using UnityEngine;
 
 public abstract class GeneralBeamTurret : DirectionalTurret
 {
-    protected override void Awake()
+    public override void Init(string turretSlotType)
     {
-        base.Awake();
+        base.Init(turretSlotType);
         _beamRenderer = GetComponentInChildren<LineRenderer>();
         _beamRenderer.positionCount = 2;
         _beamRenderer.useWorldSpace = true;

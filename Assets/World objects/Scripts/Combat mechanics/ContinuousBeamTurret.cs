@@ -18,7 +18,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
         _beamOrigin = Muzzles[barrelIdx].position;
         if (!prevFiring)
         {
-            StartCoroutine(DoBeam(ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.Laser, TurretSize)));
+            StartCoroutine(DoBeam(ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize)));
         }
     }
 
@@ -95,6 +95,8 @@ public class ContinuousBeamTurret : GeneralBeamTurret
                 return false;
         }
     }
+
+    public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.ContinuousBeam;
 
     protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {

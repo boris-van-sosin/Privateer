@@ -196,6 +196,8 @@ Geometry:
             OpenCloseData: 
             SubNodes: []
 TurretAxis: YAxis
-TurretType: MediumTurret
+TurretType: Medium,Turret
+WeaponNum: 2
 WeaponSize: Medium
 WeaponType: Autocannon
+BehaviorType: Gun

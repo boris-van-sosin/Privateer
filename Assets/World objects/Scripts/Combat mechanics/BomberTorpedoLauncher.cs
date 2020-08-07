@@ -125,7 +125,7 @@ public class BomberTorpedoLauncher : TurretBase
             Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, w, ContainingShip);
             t.ColdLaunchDist = GlobalDistances.TorpedoBomberColdLaunchDist;
-            t.IsTracking = (LoadedTorpedoType == ObjectFactory.TorpedoType.Heavy);
+            t.IsTracking = (LoadedTorpedoType == "Tracking");
             t.transform.position = Muzzles[idx].position;
             Muzzles[idx].gameObject.SetActive(false);
             --TorpedoesLoaded;
@@ -199,8 +199,10 @@ public class BomberTorpedoLauncher : TurretBase
 
     public override bool IsOutOfAmmo => TorpedoesLoaded <= 0;
 
+    public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Torpedo;
+
     private Vector3 _launchDirection;
-    public ObjectFactory.TorpedoType LoadedTorpedoType;
+    public string LoadedTorpedoType;
     public string DummyTorpedoString;
     private int _torpedoesInSpread;
     private Vector3 _torpedoTarget;

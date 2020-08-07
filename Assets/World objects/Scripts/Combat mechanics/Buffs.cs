@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
-public struct Buff
+public struct DynamicBuff
 {
     public float WeaponAccuracyFactor;
     public float WeaponRateOfFireFactor;
@@ -11,19 +12,19 @@ public struct Buff
     public int RepairRateModifier;
     public int ShieldRechargeRateModifier;
 
-    public HitPointBuff HitPointModifiers;
+    //public HitPointBuff HitPointModifiers;
 
-    public static Buff Combine(IEnumerable<Buff> buffs)
+    public static DynamicBuff Combine(IEnumerable<DynamicBuff> buffs)
     {
-        Buff res = Buff.Default();
-        foreach (Buff b in buffs)
+        DynamicBuff res = DynamicBuff.Default();
+        foreach (DynamicBuff b in buffs)
         {
             CombineSingle(ref res, b);
         }
         return res;
     }
 
-    private static void CombineSingle(ref Buff target, Buff other)
+    private static void CombineSingle(ref DynamicBuff target, DynamicBuff other)
     {
         target.WeaponAccuracyFactor += other.WeaponAccuracyFactor;
         target.WeaponRateOfFireFactor += other.WeaponRateOfFireFactor;
@@ -32,8 +33,6 @@ public struct Buff
         target.AcceleraionFactor += other.AcceleraionFactor;
         target.RepairRateModifier += other.RepairRateModifier;
         target.ShieldRechargeRateModifier += other.ShieldRechargeRateModifier;
-
-        target.HitPointModifiers.Combine(other.HitPointModifiers);
     }
 
     public void ResetToDefault()
@@ -45,12 +44,11 @@ public struct Buff
         AcceleraionFactor = 0f;
         RepairRateModifier = 0;
         ShieldRechargeRateModifier = 0;
-        HitPointModifiers.ResetToDefault();
     }
 
-    public static Buff Default()
+    public static DynamicBuff Default()
     {
-        return new Buff()
+        return new DynamicBuff()
         {
             WeaponAccuracyFactor = 0f,
             WeaponRateOfFireFactor = 0f,
@@ -59,70 +57,88 @@ public struct Buff
             AcceleraionFactor = 0f,
             RepairRateModifier = 0,
             ShieldRechargeRateModifier = 0,
-            HitPointModifiers = HitPointBuff.Default()
+        };
+    }
+}
+
+public class StaticBuff
+{
+    public DynamicBuff DynamicData;
+    public HitPointBuff HitPointData;
+
+    public static StaticBuff Combine(IEnumerable<StaticBuff> buffs)
+    {
+        StaticBuff res = Default();
+        foreach (StaticBuff other in buffs)
+        {
+            res.CombineSingle(other);
+        }
+        return res;
+    }
+
+    private void CombineSingle(StaticBuff other)
+    {
+        DynamicData = DynamicBuff.Combine(GetDynamicBuffs().Concat(other.GetDynamicBuffs()));
+        HitPointBuff.CombineSingle(HitPointData, other.HitPointData);
+    }
+
+    private IEnumerable<DynamicBuff> GetDynamicBuffs()
+    {
+        yield return DynamicData;
+    }
+
+    public static StaticBuff Default()
+    {
+        return new StaticBuff()
+        {
+            DynamicData = DynamicBuff.Default(),
+            HitPointData = HitPointBuff.Default()
         };
     }
 
-    public struct HitPointBuff
+    public void ResetToDefault()
+    {
+        DynamicData.ResetToDefault();
+        HitPointData.ResetToDefault();
+    }
+
+    public class HitPointBuff
     {
         public int Hull;
-
         public int Component;
+        public Dictionary<(string, string), int> TurretBuffs = new Dictionary<(string, string), int>();
 
-        public int SmallBarbette;
-        public int SmallTurret;
-        public int SmallBroadside;
-
-        public int MediumBarbette;
-        public int MediumTurret;
-        public int MediumBroadside;
-
-        public int HeavyBarbette;
-        public int HeavyTurret;
-        public int HeavyBroadside;
-
-        public int TorpedoTube;
-
-        public void Combine(HitPointBuff other)
+        public static void CombineSingle(HitPointBuff target, HitPointBuff other)
         {
-            Hull += other.Hull;
+            target.Hull += other.Hull;
+            target.Component += other.Component;
 
-            Component += other.Component;
+            if (target.TurretBuffs == null)
+            {
+                target.TurretBuffs = new Dictionary<(string, string), int>();
+            }
 
-            SmallBarbette += other.SmallBarbette;
-            SmallTurret += other.SmallTurret;
-            SmallBroadside += other.SmallBroadside;
-
-            MediumBarbette += other.MediumBarbette;
-            MediumTurret += other.MediumTurret;
-            MediumBroadside += other.MediumBroadside;
-
-            HeavyBarbette += other.HeavyBarbette;
-            HeavyTurret += other.HeavyTurret;
-            HeavyBroadside += other.HeavyBroadside;
-
-            TorpedoTube += other.TorpedoTube;
+            if (other.TurretBuffs != null)
+            {
+                foreach (KeyValuePair<(string, string), int> t in other.TurretBuffs)
+                {
+                    if (target.TurretBuffs.ContainsKey(t.Key))
+                    {
+                        target.TurretBuffs[t.Key] += t.Value;
+                    }
+                    else
+                    {
+                        target.TurretBuffs[t.Key] = t.Value;
+                    }
+                }
+            }
         }
 
         public void ResetToDefault()
         {
             Hull = 0;
-
             Component = 0;
-
-            SmallBarbette = 0;
-            SmallTurret = 0;
-            SmallBroadside = 0;
-
-            MediumBarbette = 0;
-            MediumTurret = 0;
-            MediumBroadside = 0;
-
-            HeavyBarbette = 0;
-            HeavyTurret = 0;
-            HeavyBroadside = 0;
-
-            TorpedoTube = 0;
+            TurretBuffs.Clear();
         }
 
         public static HitPointBuff Default()
@@ -130,32 +146,19 @@ public struct Buff
             return new HitPointBuff()
             {
                 Hull = 0,
-
                 Component = 0,
-
-                SmallBarbette = 0,
-                SmallTurret = 0,
-                SmallBroadside = 0,
-
-                MediumBarbette = 0,
-                MediumTurret = 0,
-                MediumBroadside = 0,
-
-                HeavyBarbette = 0,
-                HeavyTurret = 0,
-                HeavyBroadside = 0,
-
-                TorpedoTube = 0
+                TurretBuffs = new Dictionary<(string, string), int>()
             };
         }
     }
 }
 
+
 public static class StandardBuffs
 {
-    public static Buff UndercrewedDebuff(int currCrew, int operationalCrew, int skeletonCrew)
+    public static DynamicBuff UndercrewedDebuff(int currCrew, int operationalCrew, int skeletonCrew)
     {
-        Buff crewNumBuf = Buff.Default();
+        DynamicBuff crewNumBuf = DynamicBuff.Default();
         if (currCrew >= operationalCrew)
         {
         }
@@ -185,13 +188,13 @@ public static class StandardBuffs
         return crewNumBuf;
     }
 
-    public static Buff CrewExperienceBuff(int Level, bool underStrength)
+    public static DynamicBuff CrewExperienceBuff(int Level, bool underStrength)
     {
         if (Level > 0 && underStrength)
         {
-            return Buff.Default();
+            return DynamicBuff.Default();
         }
-        Buff res = Buff.Default();
+        DynamicBuff res = DynamicBuff.Default();
         switch (Level)
         {
             case 0:
@@ -238,26 +241,26 @@ public static class StandardBuffs
         return res;
     }
 
-    public static Buff MediumCruiserBuff()
-    {
-        Buff res = Buff.Default();
-        res.HitPointModifiers.MediumBarbette = 75;
-        return res;
-    }
+    //public static DynamicBuff MediumCruiserBuff()
+    //{
+    //    DynamicBuff res = DynamicBuff.Default();
+    //    res.HitPointModifiers.MediumBarbette = 75;
+    //    return res;
+    //}
 
-    public static Buff DemiBattleshipBuff()
-    {
-        Buff res = Buff.Default();
-        res.HitPointModifiers.SmallBarbette = 25;
-        res.HitPointModifiers.SmallTurret = 25;
-        return res;
-    }
+    //public static DynamicBuff DemiBattleshipBuff()
+    //{
+    //    DynamicBuff res = DynamicBuff.Default();
+    //    res.HitPointModifiers.SmallBarbette = 25;
+    //    res.HitPointModifiers.SmallTurret = 25;
+    //    return res;
+    //}
 
-    public static Buff BattleshipBuff()
-    {
-        Buff res = Buff.Default();
-        res.HitPointModifiers.SmallBarbette = 50;
-        res.HitPointModifiers.SmallTurret = 50;
-        return res;
-    }
+    //public static DynamicBuff BattleshipBuff()
+    //{
+    //    DynamicBuff res = DynamicBuff.Default();
+    //    res.HitPointModifiers.SmallBarbette = 50;
+    //    res.HitPointModifiers.SmallTurret = 50;
+    //    return res;
+    //}
 }

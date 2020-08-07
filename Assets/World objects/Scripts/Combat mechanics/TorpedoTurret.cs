@@ -175,7 +175,7 @@ public class TorpedoTurret : TurretBase
         {
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, LoadedTorpedoType, ContainingShip);
-            t.IsTracking = (LoadedTorpedoType == ObjectFactory.TorpedoType.Tracking);
+            t.IsTracking = (LoadedTorpedoType == "Tracking");
             t.transform.position = Muzzles[_nextBarrel].position;
             yield return _spreadDelay;
         }
@@ -190,6 +190,8 @@ public class TorpedoTurret : TurretBase
         yield return null;
     }
 
+    public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Torpedo;
+
     public override string SpriteKey { get { return "Torpedo tube"; } }
 
     private float MinTargetAngle { get { return _minRotation; } }
@@ -199,7 +201,7 @@ public class TorpedoTurret : TurretBase
     protected override float AIMaxAngleToTarget => _rotationSpan;
 
     private int _torpedoesInSpread;
-    public ObjectFactory.TorpedoType LoadedTorpedoType;
+    public string LoadedTorpedoType;
     private Vector3 _launchDirection;
     private Vector3 LaunchVector { get { return Muzzles[0].TransformDirection(_launchDirection); } }
     private Vector3 LaunchOrientation => Muzzles[0].up;

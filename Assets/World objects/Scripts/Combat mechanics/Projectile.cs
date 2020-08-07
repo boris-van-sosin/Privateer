@@ -39,10 +39,11 @@ public class Projectile : MonoBehaviour
     protected virtual void DoHit(RaycastHit hit, ShipBase shipHit)
     {
         shipHit.TakeHit(ProjectileWarhead, hit.point);
-        ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
+        ParticleSystem ps = ObjectFactory.AcquireParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, hit.point);
         if (ps != null)
         {
             ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
+            ps.Play();
             Destroy(ps.gameObject, 5.0f);
         }
         Destroy(gameObject);
@@ -50,10 +51,11 @@ public class Projectile : MonoBehaviour
 
     protected virtual void DoHit(RaycastHit hit, Torpedo torp)
     {
-        ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
+        ParticleSystem ps = ObjectFactory.AcquireParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, hit.point);
         if (ps != null)
         {
             ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
+            ps.Play();
             Destroy(ps.gameObject, 5.0f);
         }
         Destroy(gameObject);
@@ -69,7 +71,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    bool CheckForDirectHit(Vector3 pos, Vector3 dir, float distanceToTravel)
+    private bool CheckForDirectHit(Vector3 pos, Vector3 dir, float distanceToTravel)
     {
         Ray r = new Ray(pos, dir);
         RaycastHit hit;
@@ -100,7 +102,7 @@ public class Projectile : MonoBehaviour
         return false;
     }
 
-    bool CheckForProximityHit(Vector3 pos, float blastRadius)
+    private bool CheckForProximityHit(Vector3 pos, float blastRadius)
     {
         Collider[] objsHits = Physics.OverlapSphere(pos, blastRadius, ObjectFactory.AllTargetableLayerMask);
         bool validHit = false;
@@ -133,10 +135,11 @@ public class Projectile : MonoBehaviour
         }
         if (validHit)
         {
-            ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, pos);
+            ParticleSystem ps = ObjectFactory.AcquireParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, pos);
             if (ps != null)
             {
                 ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
+                ps.Play();
                 Destroy(ps.gameObject, 5.0f);
             }
             Destroy(gameObject);
@@ -188,7 +191,7 @@ public class Projectile : MonoBehaviour
     private Vector3 Origin;
     public ShipBase OriginShip;
     public Warhead ProjectileWarhead { get; set; }
-    public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
+    public (string, string) WeaponEffectKey { get; set; }
     private TrailRenderer _trail;
     private static float _trailWidthFactor = 1.0f; // 1.0f/0.01f;
     public bool ProximityProjectile;

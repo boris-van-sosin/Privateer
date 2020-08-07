@@ -48,10 +48,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         _vsStrikeCraftModifier = 0f;
     }
 
-    protected virtual void Awake()
+    public virtual void Init(string turretSlotType)
     {
+        SlotType = turretSlotType;
         ComponentHitPoints = ComponentMaxHitPoints;
-        _allowedSlotTypes = new ComponentSlotType[] { TurretType };
+        _allowedSlotTypes = new string[] { turretSlotType };
     }
 
     private void ParseDeadZones()
@@ -606,61 +607,16 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     }
     public bool DefaultAlternatingFire;
 
-    public virtual void ApplyBuff(Buff b)
+    public virtual void ApplyBuff(DynamicBuff b)
     {
         _firingIntervalCoeff = Mathf.Clamp(1f / (1f + b.WeaponRateOfFireFactor), 0.5f, 2f);
     }
 
-    public void ApplyHitPointBuff(Buff b)
+    public void ApplyHitPointBuff(StaticBuff.HitPointBuff b)
     {
         if (ComponentHitPoints > 0)
         {
-            switch (TurretType)
-            {
-                case ComponentSlotType.SmallBroadside:
-                case ComponentSlotType.SmallBarbetteDual:
-                    ComponentMaxHitPoints += b.HitPointModifiers.SmallBroadside;
-                    ComponentHitPoints += b.HitPointModifiers.SmallBroadside;
-                    break;
-                case ComponentSlotType.SmallFixed:
-                case ComponentSlotType.SmallBarbette:
-                    ComponentMaxHitPoints += b.HitPointModifiers.SmallBarbette;
-                    ComponentHitPoints += b.HitPointModifiers.SmallBarbette;
-                    break;
-                case ComponentSlotType.SmallTurret:
-                case ComponentSlotType.SmallTurretDual:
-                    ComponentMaxHitPoints += b.HitPointModifiers.SmallTurret;
-                    ComponentHitPoints += b.HitPointModifiers.SmallTurret;
-                    break;
-                case ComponentSlotType.MediumBroadside:
-                    ComponentMaxHitPoints += b.HitPointModifiers.MediumBroadside;
-                    ComponentHitPoints += b.HitPointModifiers.MediumBroadside;
-                    break;
-                case ComponentSlotType.MediumBarbette:
-                case ComponentSlotType.MediumBarbetteDualSmall:
-                    ComponentMaxHitPoints += b.HitPointModifiers.MediumBarbette;
-                    ComponentHitPoints += b.HitPointModifiers.MediumBarbette;
-                    break;
-                case ComponentSlotType.MediumTurret:
-                case ComponentSlotType.MediumTurretDualSmall:
-                    ComponentMaxHitPoints += b.HitPointModifiers.MediumTurret;
-                    ComponentHitPoints += b.HitPointModifiers.MediumTurret;
-                    break;
-                case ComponentSlotType.LargeBarbette:
-                    ComponentMaxHitPoints += b.HitPointModifiers.HeavyBarbette;
-                    ComponentHitPoints += b.HitPointModifiers.HeavyBarbette;
-                    break;
-                case ComponentSlotType.LargeTurret:
-                    ComponentMaxHitPoints += b.HitPointModifiers.HeavyTurret;
-                    ComponentHitPoints += b.HitPointModifiers.HeavyTurret;
-                    break;
-                case ComponentSlotType.TorpedoTube:
-                    ComponentMaxHitPoints += b.HitPointModifiers.TorpedoTube;
-                    ComponentHitPoints += b.HitPointModifiers.TorpedoTube;
-                    break;
-                default:
-                    break;
-            }
+            
         }
     }
 
@@ -691,12 +647,12 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected bool _alnternatingFire;
 
     // Weapon data:
-    public ComponentSlotType TurretType;
+    public string TurretType;
     public float MaxRange;
     public float FiringInterval;
     public float ActualFiringInterval { get; protected set; }
-    public ObjectFactory.WeaponSize TurretSize;
-    public ObjectFactory.WeaponType TurretWeaponType;
+    public string TurretWeaponSize;
+    public string TurretWeaponType;
     protected float _firingIntervalCoeff;
     protected float _vsStrikeCraftModifier;
 
@@ -722,6 +678,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public TurretAIHint HardpointAIHint { get; private set; }
 
     public ShipBase ContainingShip { get { return _containingShip; } }
+
+    public string SlotType { get; private set; }
 
     // The ship containing the turret:
     protected ShipBase _containingShip;
@@ -833,17 +791,18 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     public virtual string SpriteKey { get { return "Turret"; } }
 
-    public IEnumerable<ComponentSlotType> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+    public abstract ObjectFactory.WeaponBehaviorType BehaviorType { get; }
 
     public ObjectFactory.ShipSize MinShipSize { get { return ObjectFactory.ShipSize.Sloop; } }
     public ObjectFactory.ShipSize MaxShipSize { get { return ObjectFactory.ShipSize.CapitalShip; } }
 
-    private ComponentSlotType[] _allowedSlotTypes;
+    private string[] _allowedSlotTypes;
 
     protected bool _flippedX = false;
 
-    private static Buff _defaultBuff = Buff.Default();
-    public Buff ComponentBuff => _defaultBuff;
+    private static DynamicBuff _defaultBuff = DynamicBuff.Default();
+    public DynamicBuff ComponentBuff => _defaultBuff;
 
     protected static readonly WaitForSeconds _autoBehaviorPulseDelay = new WaitForSeconds(0.1f);
     protected static readonly WaitForSeconds _fullBroadsideDelay = new WaitForSeconds(0.1f);

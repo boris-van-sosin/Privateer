@@ -14,7 +14,7 @@ public class BeamTurret : GeneralBeamTurret
     {
         yield return _endOfFrameWait;
         _beamRenderer.enabled = true;
-        Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.Lance, TurretSize);
+        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
         DoBeamHit(w);
         yield return new WaitForSeconds(BeamDuration);
         _beamRenderer.enabled = false;
@@ -48,6 +48,8 @@ public class BeamTurret : GeneralBeamTurret
     {
         // Not implemented yet
     }
+
+    public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Beam;
 
     public float BeamDuration;
 

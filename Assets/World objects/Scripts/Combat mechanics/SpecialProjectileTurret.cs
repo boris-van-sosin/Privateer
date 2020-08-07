@@ -6,9 +6,9 @@ public class SpecialProjectileTurret : DirectionalTurret
 {
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        Warhead w = ObjectFactory.CreateWarhead(ObjectFactory.WeaponType.PlasmaCannon, TurretSize);
+        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
         Projectile p = ObjectFactory.CreatePlasmaProjectile(firingVector, MuzzleVelocity, MaxRange, w, _containingShip);
-        p.WeaponEffectKey = ObjectFactory.WeaponEffect.PlasmaExplosion;
+        p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize);
         p.transform.position = Muzzles[barrelIdx].position;
     }
 
@@ -28,6 +28,8 @@ public class SpecialProjectileTurret : DirectionalTurret
                 return false;
         }
     }
+
+    public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Special;
 
     protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {

@@ -29,7 +29,7 @@ public class Ship : ShipBase
         InBoarding = false;
         LastInCombat = Time.time;
         base.Activate();
-        _crewNumBuff = Buff.Default();
+        _crewNumBuff = DynamicBuff.Default();
         SetCrewNumBuff();
         _manualTurrets = new HashSet<ITurret>(_turrets);
         ApplyHitPointBuffs();
@@ -43,7 +43,7 @@ public class Ship : ShipBase
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
         List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
         _minEnergyForActive = -1;
-        foreach (List<Tuple<ComponentSlotType, IShipComponent>> l in _turretSlotsOccupied.Values)
+        foreach (List<Tuple<string, IShipComponent>> l in _turretSlotsOccupied.Values)
         {
             l.Clear();
         }
@@ -53,7 +53,7 @@ public class Ship : ShipBase
             if (turret != null)
             {
                 turrets.Add(turret);
-                _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<ComponentSlotType, IShipComponent>(turret.TurretType, turret));
+                _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<string, IShipComponent>(turret.TurretType, turret));
             }
         }
         _turrets = turrets.ToArray();
@@ -110,15 +110,15 @@ public class Ship : ShipBase
 
         foreach (ShipSection sec in _componentsSlotTypes.Keys)
         {
-            _componentSlotsOccupied.Add(sec, new Tuple<ComponentSlotType, IShipComponent>[_componentsSlotTypes[sec].Length]);
+            _componentSlotsOccupied.Add(sec, new Tuple<string, IShipComponent>[_componentsSlotTypes[sec].Length]);
         }
         
-        _componentSlotsOccupied.Add(ShipSection.Hidden, new Tuple<ComponentSlotType, IShipComponent>[1]);
+        _componentSlotsOccupied.Add(ShipSection.Hidden, new Tuple<string, IShipComponent>[1]);
 
-        _turretSlotsOccupied.Add(ShipSection.Fore, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _turretSlotsOccupied.Add(ShipSection.Aft, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _turretSlotsOccupied.Add(ShipSection.Left, new List<Tuple<ComponentSlotType, IShipComponent>>());
-        _turretSlotsOccupied.Add(ShipSection.Right, new List<Tuple<ComponentSlotType, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Fore, new List<Tuple<string, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Aft, new List<Tuple<string, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Left, new List<Tuple<string, IShipComponent>>());
+        _turretSlotsOccupied.Add(ShipSection.Right, new List<Tuple<string, IShipComponent>>());
     }
 
     private void InitCrew()
@@ -140,7 +140,7 @@ public class Ship : ShipBase
     {
         _electromagneticClamps = ElectromagneticClamps.DefaultComponent(this);
         _electromagneticClamps.OnToggle += ElectromagneticClampsToggled;
-        _componentSlotsOccupied[ShipSection.Hidden][0] = new Tuple<ComponentSlotType, IShipComponent>(ComponentSlotType.Hidden, _electromagneticClamps);
+        _componentSlotsOccupied[ShipSection.Hidden][0] = new Tuple<string, IShipComponent>("Hidden", _electromagneticClamps);
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _heatCapacityComps = AllComponents.Where(x => x is IHeatCapacityComponent).Select(y => y as IHeatCapacityComponent).ToArray();
@@ -211,7 +211,7 @@ public class Ship : ShipBase
         {
             _minEnergyForActive = System.Math.Min(_minEnergyForActive, t.EnergyToFire);
         }
-        _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<ComponentSlotType, IShipComponent>(t.TurretType, t));
+        _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<string, IShipComponent>(t.AllowedSlotTypes.First(), t));
         return true;
     }
 
@@ -222,10 +222,10 @@ public class Ship : ShipBase
             return false;
         }
         // Only ship systems and engines are placed using this function
-        if (comp.AllowedSlotTypes.All(x => x != ComponentSlotType.ShipSystem &&
-                                      x != ComponentSlotType.ShipSystemCenter &&
-                                      x != ComponentSlotType.Engine &&
-                                      x != ComponentSlotType.BoardingForce))
+        if (comp.AllowedSlotTypes.All(x => x != "ShipSystem" &&
+                                      x != "ShipSystemCenter" &&
+                                      x != "Engine" &&
+                                      x != "BoardingForce"))
         {
             return false;
         }
@@ -245,9 +245,9 @@ public class Ship : ShipBase
         }
         if (availableSlotIdx >= 0)
         {
-            ComponentSlotType occupiedSlot = _componentsSlotTypes[sec].Intersect(comp.AllowedSlotTypes).First();
-            _componentSlotsOccupied[sec][availableSlotIdx] = new Tuple<ComponentSlotType, IShipComponent>(occupiedSlot, comp);
-            if (comp.AllowedSlotTypes.Contains(ComponentSlotType.Engine))
+            string occupiedSlot = _componentsSlotTypes[sec].Intersect(comp.AllowedSlotTypes).First();
+            _componentSlotsOccupied[sec][availableSlotIdx] = new Tuple<string, IShipComponent>(occupiedSlot, comp);
+            if (comp is ShipEngine)
             {
                 _engine = comp as ShipEngine;
                 _engine.OnToggle += SetEngineParticleSystems;
@@ -438,7 +438,7 @@ public class Ship : ShipBase
 
     private void UpdateAndApplyBuffs()
     {
-        CombinedBuff = Buff.Combine(AllBuffs);
+        CombinedBuff = DynamicBuff.Combine(AllBuffs);
         foreach (ITurret t in Turrets)
         {
             t.ApplyBuff(CombinedBuff);
@@ -447,19 +447,13 @@ public class Ship : ShipBase
 
     private void ApplyHitPointBuffs()
     {
-        CombinedBuff = Buff.Combine(AllBuffs);
-        foreach (ITurret t in Turrets)
+        if (InherentBuff != null)
         {
-            t.ApplyHitPointBuff(CombinedBuff);
-        }
-        foreach (IShipActiveComponent comp in AllComponents.Where(c => c is IShipActiveComponent))
-        {
-            comp.ApplyHitPointBuff(CombinedBuff);
-        }
-        MaxHullHitPoints += CombinedBuff.HitPointModifiers.Hull;
-        if (HullHitPoints > 0)
-        {
-            HullHitPoints += CombinedBuff.HitPointModifiers.Hull;
+            MaxHullHitPoints += InherentBuff.HitPointData.Hull;
+            foreach (IShipActiveComponent comp in AllComponents.OfType<IShipActiveComponent>())
+            {
+                comp.ApplyHitPointBuff(InherentBuff.HitPointData);
+            }
         }
     }
 
@@ -1075,20 +1069,20 @@ public class Ship : ShipBase
     public int Heat { get; private set; }
     public int MaxHeat { get; private set; }
 
-    public ComponentSlotType[] CenterComponentSlots;
-    public ComponentSlotType[] ForeComponentSlots;
-    public ComponentSlotType[] AftComponentSlots;
-    public ComponentSlotType[] LeftComponentSlots;
-    public ComponentSlotType[] RightComponentSlots;
-    private Dictionary<ShipSection, ComponentSlotType[]> _componentsSlotTypes = new Dictionary<ShipSection, ComponentSlotType[]>();
-    private Dictionary<ShipSection, Tuple<ComponentSlotType, IShipComponent>[]> _componentSlotsOccupied = new Dictionary<ShipSection, Tuple<ComponentSlotType, IShipComponent>[]>();
-    private Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>> _turretSlotsOccupied = new Dictionary<ShipSection, List<Tuple<ComponentSlotType, IShipComponent>>>();
+    public string[] CenterComponentSlots;
+    public string[] ForeComponentSlots;
+    public string[] AftComponentSlots;
+    public string[] LeftComponentSlots;
+    public string[] RightComponentSlots;
+    private Dictionary<ShipSection, string[]> _componentsSlotTypes = new Dictionary<ShipSection, string[]>();
+    private Dictionary<ShipSection, Tuple<string, IShipComponent>[]> _componentSlotsOccupied = new Dictionary<ShipSection, Tuple<string, IShipComponent>[]>();
+    private Dictionary<ShipSection, List<Tuple<string, IShipComponent>>> _turretSlotsOccupied = new Dictionary<ShipSection, List<Tuple<string, IShipComponent>>>();
 
     private IEnumerable<IShipComponent> AllComponentsInSection(ShipSection sec, bool includeTurrets)
     {
         if (_componentSlotsOccupied.ContainsKey(sec))
         {
-            foreach (Tuple<ComponentSlotType, IShipComponent> comp in _componentSlotsOccupied[sec])
+            foreach (Tuple<string, IShipComponent> comp in _componentSlotsOccupied[sec])
             {
                 if (comp != null)
                 {
@@ -1098,7 +1092,7 @@ public class Ship : ShipBase
         }
         if (includeTurrets && _turretSlotsOccupied.ContainsKey(sec))
         {
-            foreach (Tuple<ComponentSlotType, IShipComponent> comp in _turretSlotsOccupied[sec])
+            foreach (Tuple<string, IShipComponent> comp in _turretSlotsOccupied[sec])
             {
                 if (comp != null)
                 {
@@ -1112,9 +1106,9 @@ public class Ship : ShipBase
     {
         get
         {
-            foreach (IEnumerable<Tuple<ComponentSlotType, IShipComponent>> l in _componentSlotsOccupied.Values)
+            foreach (IEnumerable<Tuple<string, IShipComponent>> l in _componentSlotsOccupied.Values)
             {
-                foreach (Tuple<ComponentSlotType, IShipComponent> comp in l)
+                foreach (Tuple<string, IShipComponent> comp in l)
                 {
                     if (comp != null)
                     {
@@ -1122,9 +1116,9 @@ public class Ship : ShipBase
                     }
                 }
             }
-            foreach (IEnumerable<Tuple<ComponentSlotType, IShipComponent>> l in _turretSlotsOccupied.Values)
+            foreach (IEnumerable<Tuple<string, IShipComponent>> l in _turretSlotsOccupied.Values)
             {
-                foreach (Tuple<ComponentSlotType, IShipComponent> comp in l)
+                foreach (Tuple<string, IShipComponent> comp in l)
                 {
                     if (comp != null)
                     {
@@ -1209,11 +1203,14 @@ public class Ship : ShipBase
         _crewExperienceBuff = StandardBuffs.CrewExperienceBuff(avgLevel, numCrew < OperationalCrew);
     }
 
-    private IEnumerable<Buff> AllBuffs
+    private IEnumerable<DynamicBuff> AllBuffs
     {
         get
         {
-            yield return InherentBuff;
+            if (InherentBuff != null)
+            {
+                yield return InherentBuff.DynamicData;
+            }
             yield return _crewNumBuff;
             yield return _crewExperienceBuff;
             foreach (IShipComponent comp in AllComponents)
@@ -1282,9 +1279,9 @@ public class Ship : ShipBase
     private bool _brakingBackwards = false;
 
     // Buff/debuff mechanic
-    public Buff InherentBuff { get; set; }
-    private Buff _crewNumBuff;
-    private Buff _crewExperienceBuff;
+    public StaticBuff InherentBuff { get; set; }
+    private DynamicBuff _crewNumBuff;
+    private DynamicBuff _crewExperienceBuff;
 
     private static readonly WaitForSeconds _componentPulseDelay = new WaitForSeconds(0.25f);
 }
