@@ -724,28 +724,33 @@ public class Ship : ShipBase
             {
                 comp.ComponentHitPoints = 0;
             }
-            ParticleSystem explosion = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.BigExplosion, transform.position);
-            switch (ShipSize)
+            if (!_explosionPlayed)
             {
-                case ObjectFactory.ShipSize.Sloop:
-                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeSloop;
-                    break;
-                case ObjectFactory.ShipSize.Frigate:
-                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeSFrigate;
-                    break;
-                case ObjectFactory.ShipSize.Destroyer:
-                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeDestroyer;
-                    break;
-                case ObjectFactory.ShipSize.Cruiser:
-                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeCruiser;
-                    break;
-                case ObjectFactory.ShipSize.CapitalShip:
-                    explosion.transform.localScale = GlobalDistances.ShipExplosionSizeCapitalShip;
-                    break;
-                default:
-                    break;
+                ParticleSystem explosion = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.BigExplosion, transform.position);
+                explosion.Play();
+                switch (ShipSize)
+                {
+                    case ObjectFactory.ShipSize.Sloop:
+                        explosion.transform.localScale = GlobalDistances.ShipExplosionSizeSloop;
+                        break;
+                    case ObjectFactory.ShipSize.Frigate:
+                        explosion.transform.localScale = GlobalDistances.ShipExplosionSizeSFrigate;
+                        break;
+                    case ObjectFactory.ShipSize.Destroyer:
+                        explosion.transform.localScale = GlobalDistances.ShipExplosionSizeDestroyer;
+                        break;
+                    case ObjectFactory.ShipSize.Cruiser:
+                        explosion.transform.localScale = GlobalDistances.ShipExplosionSizeCruiser;
+                        break;
+                    case ObjectFactory.ShipSize.CapitalShip:
+                        explosion.transform.localScale = GlobalDistances.ShipExplosionSizeCapitalShip;
+                        break;
+                    default:
+                        break;
+                }
+                Destroy(explosion.gameObject, 5.0f);
+                _explosionPlayed = true;
             }
-            Destroy(explosion.gameObject, 5.0f);
             critical = true;
         }
         else
@@ -1282,6 +1287,8 @@ public class Ship : ShipBase
     public StaticBuff InherentBuff { get; set; }
     private DynamicBuff _crewNumBuff;
     private DynamicBuff _crewExperienceBuff;
+
+    private bool _explosionPlayed = false;
 
     private static readonly WaitForSeconds _componentPulseDelay = new WaitForSeconds(0.25f);
 }

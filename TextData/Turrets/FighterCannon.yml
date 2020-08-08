@@ -1,0 +1,78 @@
+Geometry:
+  Name: Fighter Cannon
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 90
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Barrel1
+    Position:
+      x: 0
+      y: 0
+      z: -0.00046
+    Rotation:
+      x: 0
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Muzzle1
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 270
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh: 
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: MuzzleFlashEffect
+        Position:
+          x: 0
+          y: 0
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 90
+        Scale:
+          x: 0.03
+          y: 0.03
+          z: 0.03
+        NodeMesh: 
+        NodeParticleSystem:
+          AssetBundlePath: AssetBundles\StandaloneWindows\effects
+          AssetPath: MuzzleFlashSmallEffect
+          ParticleSystemPath: ''
+        OpenCloseData: 
+        SubNodes: []
+TurretAxis: YAxis
+TurretType: FighterCannon
+WeaponNum: ''
+WeaponSize: StrikeCraft
+WeaponType: FighterCannon
+BehaviorType: Gun

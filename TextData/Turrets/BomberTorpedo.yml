@@ -1,0 +1,24 @@
+Geometry:
+  Name: BomberTorpedoLauncerObj
+  Position:
+    x: 5.63634729
+    y: -6.56771088
+    z: 0.150337085
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes: []
+TurretAxis: YAxis
+TurretType: BomberTorpedo
+WeaponNum: ''
+WeaponSize: StrikeCraft
+WeaponType: TorpedoWeapon
+BehaviorType: BomberTorpedo

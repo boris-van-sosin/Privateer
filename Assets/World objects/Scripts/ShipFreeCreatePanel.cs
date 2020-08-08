@@ -84,21 +84,27 @@ public class ShipFreeCreatePanel : MonoBehaviour
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
             TurretBase t;
+            (string, string, string) currBest;
             if (hp.AllowedWeaponTypes.Contains("LightBarbette1Light") ||
                 hp.AllowedWeaponTypes.Contains("LightBarbette2Light"))
             {
-                (string, string, string) currBest = BestWeapon(hp.AllowedWeaponTypes);
+                currBest = BestWeapon(hp.AllowedWeaponTypes);
                 t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "Autocannon");
             }
             else if (hp.AllowedWeaponTypes.Contains("TorpedoTube"))
             {
-                t = ObjectFactory.CreateTurret("TorpedoTube", "1", "TorpedoTube", "");
+                currBest = ("TorpedoTube", "", "");
+                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "TorpedoWeapon");
                 (t as TorpedoTurret).LoadedTorpedoType = "Tracking";
             }
             else
             {
-                (string, string, string) currBest = BestWeapon(hp.AllowedWeaponTypes);
+                currBest = BestWeapon(hp.AllowedWeaponTypes);
                 t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "Howitzer");
+            }
+            if (t == null)
+            {
+                Debug.LogErrorFormat("Failed to create turret. Ship: {0}. Hardpoint: {1}. Turret key: {2}", s.name, hp.name, currBest);
             }
             t.TargetPriorityList = ObjectFactory.GetDefaultTargetPriorityList(t.TurretWeaponType, t.TurretWeaponSize);
             GunTurret gt = t as GunTurret;

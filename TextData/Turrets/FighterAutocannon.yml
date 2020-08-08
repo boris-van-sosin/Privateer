@@ -1,0 +1,132 @@
+Geometry:
+  Name: Fighter Autocannon
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 90
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Barrel1
+    Position:
+      x: -0.00159
+      y: 0
+      z: 0.00027
+    Rotation:
+      x: 0
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Muzzle1
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 270
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh: 
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: MuzzleFlashEffect
+        Position:
+          x: 0
+          y: 0
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 90
+        Scale:
+          x: 0.02
+          y: 0.02
+          z: 0.02
+        NodeMesh: 
+        NodeParticleSystem:
+          AssetBundlePath: AssetBundles\StandaloneWindows\effects
+          AssetPath: MuzzleFlashSmallEffect
+          ParticleSystemPath: ''
+        OpenCloseData: 
+        SubNodes: []
+  - Name: Barrel2
+    Position:
+      x: 0.00159
+      y: 0
+      z: 0.00027
+    Rotation:
+      x: 0
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Muzzle2
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 270
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh: 
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: MuzzleFlashEffect
+        Position:
+          x: 0
+          y: 0
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 90
+        Scale:
+          x: 0.02
+          y: 0.02
+          z: 0.02
+        NodeMesh: 
+        NodeParticleSystem:
+          AssetBundlePath: AssetBundles\StandaloneWindows\effects
+          AssetPath: MuzzleFlashSmallEffect
+          ParticleSystemPath: ''
+        OpenCloseData: 
+        SubNodes: []
+TurretAxis: YAxis
+TurretType: FighterAutocannon
+WeaponNum: ''
+WeaponSize: StrikeCraft
+WeaponType: FighterAutocannon
+BehaviorType: Gun

@@ -223,4 +223,6 @@ public class StrikeCraft : ShipBase
     private int _recoveryFinalPhaseIdx;
     private float _recoverySpeed;
     private TrailRenderer _trail;
+
+    public string DummyTorpedoString;
 }

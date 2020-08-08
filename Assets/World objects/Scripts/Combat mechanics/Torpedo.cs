@@ -66,7 +66,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                 }
 
             }
-            if (_collider != null && !_collider.enabled && _distanceTraveled >= OriginShip.ShipWidth)
+            if (_collider != null && !_collider.enabled && _distanceTraveled >= OriginShip.ShipWidth * 0.5f)
             {
                 _collider.enabled = true;
             }
@@ -145,6 +145,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         if (ps != null)
         {
             ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
+            ps.Play();
             Destroy(ps.gameObject, 5.0f);
         }
         Destroy(gameObject);
