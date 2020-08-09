@@ -274,15 +274,15 @@ public class ShipFreeCreatePanel : MonoBehaviour
         Dictionary<(string, string, string), int> strength = new Dictionary<(string, string, string), int>()
         {
             { ("LightBarbette", "1", "Light"), 1 },
-            { ("LightTurret", "1", "Light"), 1 },
-            { ("LightFixed", "1", "Light"), 1 },
-            { ("LightBroadside", "1", "Light"), 1 },
+            { ("LightTurret", "", "Light"), 1 },
+            { ("LightFixed", "", "Light"), 1 },
+            { ("LightBroadside", "", "Light"), 1 },
             { ("LightBarbette", "2", "Light"), 2 },
             { ("MediumTurret", "2", "Light"), 3 },
-            { ("MediumBroadside", "1", "Medium"), 4 },
+            { ("MediumBroadside", "", "Medium"), 4 },
             { ("MediumBarbette", "2", "Medium"), 5 },
             { ("MediumTurret", "2", "Medium"), 5 },
-            { ("HeavyBroadside", "2", "Heavy"), 6 },
+            { ("HeavyBroadside", "", "Heavy"), 6 },
             { ("HeavyBarbette", "2", "Heavy"), 7 },
             { ("HeavyTurret", "2", "Heavy"), 7 },
         };
