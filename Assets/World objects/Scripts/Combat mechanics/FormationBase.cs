@@ -9,6 +9,10 @@ public class FormationBase : MovementBase
     {
     }
 
+    public override void PostAwake()
+    {
+    }
+
     public void CreatePositions(int n)
     {
         Positions = new Transform[n];

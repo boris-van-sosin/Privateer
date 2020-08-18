@@ -12,10 +12,15 @@ public class Ship : ShipBase
         Energy = 0;
         Heat = 0;
         //MaxHeat = 100;
-        InitComponentSlots();
-        InitCrew();
         InitDamageEffects();
         _speedOnTurningCoefficient = 0.5f;
+    }
+
+    public override void PostAwake()
+    {
+        base.PostAwake();
+        InitComponentSlots();
+        InitCrew();
     }
 
     public override void Activate()
@@ -1300,6 +1305,12 @@ public struct ShipHullFourSidesValues
     public int Aft;
     public int Left;
     public int Right;
+
+    public int ForeValue { get { return Fore; } set { Fore = value; } }
+    public int AftValue { get { return Aft; } set { Aft = value; } }
+    public int LeftValue { get { return Left; } set { Left = value; } }
+    public int RightValue { get { return Right; } set { Right = value; } }
+
     public IDictionary<Ship.ShipSection, int> ToDict()
     {
         IDictionary<Ship.ShipSection, int> res = new Dictionary<Ship.ShipSection, int>();

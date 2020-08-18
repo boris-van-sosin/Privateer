@@ -56,9 +56,7 @@ public static class HierarchyConstructionUtil
 
     private static void FixTransformsRecursive(Transform currObj, HierarchyNode currData)
     {
-        currObj.localPosition = currData.Position.ToVector3();
-        currObj.localRotation = currData.Rotation.ToQuaternion();
-        currObj.localScale = currData.Scale.ToVector3();
+        currData.ApplyToTransform(currObj, false);
         if (currData.SubNodes == null || currObj.childCount != currData.SubNodes.Length)
         {
             return;
@@ -147,6 +145,11 @@ public static class HierarchyConstructionUtil
                         }
                     }
                 }
+                else if (subRes.Item2 != null && subRes.Item2.Count == 1)
+                {
+                    MeshFilter singleMeshFilter = subRes.Item3.First().GetComponent<MeshFilter>();
+                    singleMeshFilter.mesh.UploadMeshData(true);
+                }
             }
         }
 
@@ -158,6 +161,11 @@ public static class HierarchyConstructionUtil
                 mergingFilter.mesh = new Mesh();
                 mergingFilter.mesh.CombineMeshes(toCombine.ToArray(), true, true);
                 mergingFilter.mesh.UploadMeshData(true);
+            }
+            else
+            {
+                MeshFilter singleMeshFilter = currObj.GetComponent<MeshFilter>();
+                singleMeshFilter.mesh.UploadMeshData(true);
             }
             if (toDelete != null)
             {

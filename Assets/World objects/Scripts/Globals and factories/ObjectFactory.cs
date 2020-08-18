@@ -263,8 +263,8 @@ public static class ObjectFactory
 
     public static Ship CreateShip(string prodKey)
     {
-        //CreateShip2(prodKey);
-        return _prototypes.CreateShip(prodKey);
+        return CreateShip2(prodKey);
+        //return _prototypes.CreateShip(prodKey);
     }
 
     public static Ship CreateShip2(string prodKey)
@@ -300,12 +300,11 @@ public static class ObjectFactory
         };
         GameObject[] teamColorObjs = teamColor.Select(r => HierarchyConstructionUtil.ConstructHierarchy(r, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer)).ToArray();
 
-        GameObject resObj = new GameObject();
+        GameObject resObj = _prototypes.CreateObjectEmpty();
+        resObj.layer = ShipsLayer;
+        resObj.name = hullDef.HullName + " ship";
         hullObj.transform.parent = resObj.transform;
-        hullObj.transform.localPosition = hullRoot.Position.ToVector3();
-        hullObj.transform.localRotation = hullRoot.Rotation.ToQuaternion();
-        hullObj.transform.localScale = hullRoot.Scale.ToVector3();
-
+        hullRoot.ApplyToTransform(hullObj.transform);
 
         foreach (GameObject o in teamColorObjs.Union(particleSysObjs))
         {
@@ -320,19 +319,74 @@ public static class ObjectFactory
         }
 
         GameObject shieldObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-        shieldObj.name = shield.Name;
         shieldObj.layer = ShieldsLayer;
         shieldObj.GetComponent<MeshRenderer>().sharedMaterial = _prototypes.GetMaterial("ShieldMtl");
         shieldObj.transform.parent = resObj.transform;
-        shieldObj.transform.localPosition = shield.Position.ToVector3();
-        shieldObj.transform.localRotation = shield.Rotation.ToQuaternion();
-        shieldObj.transform.localScale = shield.Scale.ToVector3();
+        shield.ApplyToTransform(shieldObj.transform);
 
+        LineRenderer lr = _prototypes.CreateSelectionRing();
+        lr.transform.parent = resObj.transform;
+        statusRing.ApplyToTransform(lr.transform);
 
-        //Ship s = resObj.AddComponent<Ship>();
+        foreach (WeaponHardpointDefinition hardpoint in hullDef.WeaponHardpoints)
+        {
+            GameObject hardPointObj = _prototypes.CreateObjectEmpty();
+            hardPointObj.layer = ShipsLayer;
+            hardPointObj.transform.parent = resObj.transform;
+            hardpoint.HardpointNode.ApplyToTransform(hardPointObj.transform);
+            if (hardpoint.TurretHardpoint != null)
+            {
+                TurretHardpoint turretHardpoint = hardPointObj.AddComponent<TurretHardpoint>();
+                hardpoint.TurretHardpoint.SetHardpointFields(turretHardpoint);
+            }
+            else if (hardpoint.TorpedoHardpoint != null)
+            {
+                TorpedoHardpoint torpHardpoint = hardPointObj.AddComponent<TorpedoHardpoint>();
+                hardpoint.TorpedoHardpoint.SetHardpointFields(torpHardpoint);
+            }
+        }
 
+        GameObject navBoxObj = _prototypes.CreateObjectEmpty();
+        navBoxObj.name = "NavBox";
+        navBoxObj.layer = NavCollidersLayer;
+        navBoxObj.transform.parent = resObj.transform;
+        navBoxObj.transform.localPosition = Vector3.zero;
+        navBoxObj.transform.localRotation = Quaternion.identity;
+        navBoxObj.transform.localScale = Vector3.one;
 
-        return null;
+        GameObject meshSrc = _prototypes.GetObjectByPath(hullDef.CollisionMesh.AssetBundlePath, hullDef.CollisionMesh.AssetPath, hullDef.CollisionMesh.MeshPath);
+        if (null != meshSrc)
+        {
+            MeshFilter mesh = meshSrc.GetComponent<MeshFilter>();
+            MeshCollider meshCollider = resObj.AddComponent<MeshCollider>();
+            meshCollider.sharedMesh = mesh.sharedMesh;
+            meshCollider.convex = true;
+        }
+
+        Rigidbody rb = resObj.AddComponent<Rigidbody>();
+        rb.useGravity = false;
+        rb.angularDrag = 0.025f;
+        rb.drag = 0.025f;
+        rb.mass = hullDef.Mass;
+        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY;
+
+        Ship s = resObj.AddComponent<Ship>();
+        s.HullObject = hullObj.transform;
+        s.TeamColorComponents = teamColorObjs.Select(c => c.GetComponent<MeshRenderer>()).Where(mr => mr != null).ToArray();
+        s.ProductionKey = prodKey;
+        hullDef.MovementData.FillShipData(s);
+        hullDef.HullProtection.FillShipData(s);
+        hullDef.ComponentSlots.FillShipData(s);
+        s.Mass = hullDef.Mass;
+        s.MaxCrew = hullDef.MaxCrew;
+        s.OperationalCrew = hullDef.OperationalCrew;
+        s.SkeletonCrew = hullDef.SkeletonCrew;
+        s.MaxSpecialCharacters = hullDef.MaxSpecialCharacters;
+        hullDef.MovementData.FillShipData(s);
+        Enum.TryParse(hullDef.ShipSize, out s.ShipSize);
+        s.PostAwake();
+
+        return s;
     }
 
     public static Ship GetShipTemplate(string prodKey)

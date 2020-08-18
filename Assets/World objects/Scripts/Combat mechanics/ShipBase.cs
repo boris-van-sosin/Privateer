@@ -9,8 +9,6 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     protected override void Awake()
     {
         base.Awake();
-        HullHitPoints = MaxHullHitPoints;
-        ComputeLength();
         WeaponGroups = null;
         TowingByHarpax = null;
         TowedByHarpax = null;
@@ -19,6 +17,12 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         UseTargetSpeed = false;
         _circleStatus = ShipCircleStatus.Deselected;
         _speedOnTurningCoefficient = 1f;
+    }
+
+    public override void PostAwake()
+    {
+        ComputeLength();
+        HullHitPoints = MaxHullHitPoints;
     }
 
     public virtual void Activate()

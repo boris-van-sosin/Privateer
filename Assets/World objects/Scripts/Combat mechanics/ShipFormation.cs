@@ -5,6 +5,8 @@ using System.Linq;
 
 public class ShipFormation : MovementBase
 {
-
+    public override void PostAwake()
+    {
+    }
 }
 

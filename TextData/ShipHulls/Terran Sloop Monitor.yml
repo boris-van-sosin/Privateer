@@ -1,4 +1,5 @@
 HullName: Monitor
+ShipSize: Sloop
 Geometry:
   Name: Hull
   Position:
@@ -22,7 +23,7 @@ Geometry:
 CollisionMesh:
   AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
   AssetPath: terran - sloop monitor collision
-  MeshPath: Monitor collision
+  MeshPath: ''
   DoCombine: false
 MovementData:
   MaxSpeed: 0.9
@@ -49,6 +50,20 @@ TeamColorComponents:
     MeshPath: MonitorTeamColor
     DoCombine: true
   SubNodes: []
+ComponentSlots:
+  CenterComponentSlots:
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  ForeComponentSlots:
+  - ShipSystem
+  AftComponentSlots:
+  - Engine
+  LeftComponentSlots:
+  - ShipSystem
+  RightComponentSlots:
+  - ShipSystem
 WeaponHardpoints:
 - HardpointNode:
     Name: Fore gun
@@ -105,10 +120,22 @@ WeaponHardpoints:
     WeaponAIHint: Main
     DefaultGroup: 1
 HullProtection:
-  HullHitpoints: 0
-  Armour: {}
-  ReducedArmour: {}
-  MitigationArmour: {}
+  HullHitpoints: 7500
+  Armour:
+    ForeValue: 150
+    AftValue: 125
+    LeftValue: 150
+    RightValue: 150
+  ReducedArmour:
+    ForeValue: 50
+    AftValue: 40
+    LeftValue: 50
+    RightValue: 50
+  MitigationArmour:
+    ForeValue: 70
+    AftValue: 50
+    LeftValue: 80
+    RightValue: 80
   ArmourMitigation: 0.2
 Mass: 6
 SkeletonCrew: 4
@@ -187,7 +214,7 @@ EngineExhaustOn:
     Position:
       x: -0.00155
       y: -0.0015
-      z: -0.00332
+      z: -0.0009
     Rotation:
       x: 90
       y: 0
@@ -205,7 +232,7 @@ EngineExhaustOn:
     Position:
       x: 0.00155
       y: -0.0015
-      z: -0.00332
+      z: -0.0009
     Rotation:
       x: 90
       y: 0
@@ -238,7 +265,7 @@ EngineExhaustIdle:
     Position:
       x: -0.00155
       y: -0.0015
-      z: -0.00332
+      z: -0.00092
     Rotation:
       x: 90
       y: 0
@@ -256,7 +283,7 @@ EngineExhaustIdle:
     Position:
       x: 0.00155
       y: -0.0015
-      z: -0.00332
+      z: -0.00092
     Rotation:
       x: 90
       y: 0

@@ -161,6 +161,22 @@ public class HierarchyNode
     public ParticleSystemData NodeParticleSystem { get; set; }
     public OpenCloseComponentData OpenCloseData { get; set; }
     public HierarchyNode[] SubNodes { get; set; }
+
+    public void ApplyToTransform(Transform t, bool name)
+    {
+        if (name)
+        {
+            t.name = Name;
+        }
+        t.localPosition = Position.ToVector3();
+        t.localRotation = Rotation.ToQuaternion();
+        t.localScale = Scale.ToVector3();
+    }
+
+    public void ApplyToTransform(Transform t)
+    {
+        ApplyToTransform(t, true);
+    }
 }
 
 [Serializable]

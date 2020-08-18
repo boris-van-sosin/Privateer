@@ -9,10 +9,12 @@ using UnityEngine.UIElements;
 public class ShipHullDefinition
 {
     public string HullName { get; set; }
+    public string ShipSize { get; set; }
     public HierarchyNode Geometry { get; set; }
     public MeshData CollisionMesh { get; set; }
     public ShipHullMovementData MovementData { get; set; }
     public HierarchyNode[] TeamColorComponents { get; set; }
+    public ComponentSlotsData ComponentSlots { get; set; }
     public WeaponHardpointDefinition[] WeaponHardpoints { get; set; }
     public ShipHullProtectionData HullProtection { get; set; }
     public float Mass { get; set; }
@@ -48,10 +50,12 @@ public class ShipHullDefinition
         ShipHullDefinition res = new ShipHullDefinition()
         {
             HullName = s.name,
+            ShipSize = s.ShipSize.ToString(),
             Geometry = s.HullObject.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
             CollisionMesh = collisionMeshData,
             MovementData = ShipHullMovementData.FromShip(s),
-            TeamColorComponents = s.TeamColorComponents.Select(tc => tc.transform.ToSerializableHierarchy()).ToArray(),
+            TeamColorComponents = s.TeamColorComponents.Select(tc => tc.transform.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath)).ToArray(),
+            ComponentSlots = ComponentSlotsData.FromShip(s),
             WeaponHardpoints = s.GetComponentsInChildren<TurretHardpoint>().Select(hp => WeaponHardpointDefinition.FromHardpoint(hp)).ToArray(),
             HullProtection = ShipHullProtectionData.FromShip(s),
             Mass = s.Mass,
@@ -60,11 +64,11 @@ public class ShipHullDefinition
             MaxCrew = s.MaxCrew,
             MaxSpecialCharacters = s.MaxSpecialCharacters,
             Shield = s.transform.Find("Shield").ToSerializableHierarchy(),
-            MagneticField = s.transform.Find("MagneticField").ToSerializableHierarchy(),
-            DamageSmoke = s.transform.Find("Damage smoke effect").ToSerializableHierarchy(),
-            EngineExhaustOn = s.transform.Find("Engine exhaust on").ToSerializableHierarchy(),
-            EngineExhaustIdle = s.transform.Find("Engine exhaust idle").ToSerializableHierarchy(),
-            EngineExhaustBrake = s.transform.Find("Engine exhaust brake").ToSerializableHierarchy(),
+            MagneticField = s.transform.Find("MagneticField").ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
+            DamageSmoke = s.transform.Find("Damage smoke effect").ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
+            EngineExhaustOn = s.transform.Find("Engine exhaust on").ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
+            EngineExhaustIdle = s.transform.Find("Engine exhaust idle").ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
+            EngineExhaustBrake = s.transform.Find("Engine exhaust brake").ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
             StatusRing = s.GetComponentInChildren<LineRenderer>().transform.ToSerializableHierarchy()
         };
 
@@ -252,7 +256,7 @@ public struct ShipHullProtectionData
     {
         return new ShipHullProtectionData()
         {
-            HullHitpoints = s.HullHitPoints,
+            HullHitpoints = s.MaxHullHitPoints,
             Armour = s.Armour,
             ReducedArmour = s.ReducedArmour,
             MitigationArmour = s.DefaultMitigationArmour,
@@ -262,11 +266,42 @@ public struct ShipHullProtectionData
 
     public void FillShipData(Ship s)
     {
-        s.HullHitPoints = HullHitpoints;
+        s.MaxHullHitPoints = HullHitpoints;
         s.Armour = Armour;
         s.ReducedArmour = ReducedArmour;
         s.DefaultMitigationArmour = MitigationArmour;
         s.ArmourMitigation = ArmourMitigation;
+    }
+}
+
+[Serializable]
+public class ComponentSlotsData
+{
+    public string[] CenterComponentSlots { get; set; }
+    public string[] ForeComponentSlots { get; set; }
+    public string[] AftComponentSlots { get; set; }
+    public string[] LeftComponentSlots { get; set; }
+    public string[] RightComponentSlots { get; set; }
+
+    public static ComponentSlotsData FromShip(Ship s)
+    {
+        return new ComponentSlotsData()
+        {
+            CenterComponentSlots = Array.ConvertAll(s.CenterComponentSlots, x => x),
+            ForeComponentSlots = Array.ConvertAll(s.ForeComponentSlots, x => x),
+            AftComponentSlots = Array.ConvertAll(s.AftComponentSlots, x => x),
+            LeftComponentSlots = Array.ConvertAll(s.LeftComponentSlots, x => x),
+            RightComponentSlots = Array.ConvertAll(s.RightComponentSlots, x => x)
+        };
+    }
+
+    public void FillShipData(Ship s)
+    {
+        s.CenterComponentSlots = Array.ConvertAll(CenterComponentSlots, x => x);
+        s.ForeComponentSlots = Array.ConvertAll(ForeComponentSlots, x => x);
+        s.AftComponentSlots = Array.ConvertAll(AftComponentSlots, x => x);
+        s.LeftComponentSlots = Array.ConvertAll(LeftComponentSlots, x => x);
+        s.RightComponentSlots = Array.ConvertAll(RightComponentSlots, x => x);
     }
 }
 

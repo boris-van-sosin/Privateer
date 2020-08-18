@@ -10,6 +10,8 @@ public abstract class MovementBase : MonoBehaviour
         _currControlMode = _prevControlMode = ControlType.Manual;
     }
 
+    public abstract void PostAwake();
+
     protected virtual void Update()
     {
         switch (_currControlMode)

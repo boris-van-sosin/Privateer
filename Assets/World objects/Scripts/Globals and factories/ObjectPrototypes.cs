@@ -320,7 +320,18 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate(ShipCard);
     }
 
+    public LineRenderer CreateSelectionRing()
+    {
+        return Instantiate(SelectionRing);
+    }
+
     public GameObject CreateObjectByPath(string assetBundlePath, string assetPath, string objPath)
+    {
+        GameObject proto = GetObjectByPath(assetBundlePath, assetPath, objPath);
+        return Instantiate(proto);
+    }
+
+    public GameObject GetObjectByPath(string assetBundlePath, string assetPath, string objPath)
     {
         GameObject res;
         if (!_objCache.TryGetValue((assetBundlePath, assetPath, objPath), out res))
@@ -332,7 +343,7 @@ public class ObjectPrototypes : MonoBehaviour
             }
             _objCache[(assetBundlePath, assetPath, objPath)] = res;
         }
-        return Instantiate(res);
+        return res;
     }
 
     public GameObject CreateObjectEmpty()
@@ -375,6 +386,8 @@ public class ObjectPrototypes : MonoBehaviour
     public Camera ShipStatusPanelCamera;
 
     public SelectedShipCard ShipCard;
+
+    public LineRenderer SelectionRing;
 
     private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, StrikeCraftWithFormationSize> _strikeCraftPrototypeDictionary = new Dictionary<string, StrikeCraftWithFormationSize>();
