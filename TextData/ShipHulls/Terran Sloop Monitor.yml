@@ -1,0 +1,339 @@
+HullName: Monitor
+Geometry:
+  Name: Hull
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - sloop monitor
+    MeshPath: MonitorHull
+    DoCombine: true
+  SubNodes: []
+CollisionMesh:
+  AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+  AssetPath: terran - sloop monitor collision
+  MeshPath: Monitor collision
+  DoCombine: false
+MovementData:
+  MaxSpeed: 0.9
+  Thrust: 0.1
+  Braking: 0.8
+  TurnRate: 30
+TeamColorComponents:
+- Name: TeamColor
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - sloop monitor
+    MeshPath: MonitorTeamColor
+    DoCombine: true
+  SubNodes: []
+WeaponHardpoints:
+- HardpointNode:
+    Name: Fore gun
+    Position:
+      x: 0
+      y: 0.0217
+      z: 0.314448208
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Fore fixed gun
+    MinRotation: 180
+    MaxRotation: 180
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightFixedLight
+    LocationOnShip: Fore
+    WeaponAIHint: Main
+    DefaultGroup: 2
+- HardpointNode:
+    Name: Turret1
+    Position:
+      x: 0
+      y: 0.0267
+      z: 0.03
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Turret
+    MinRotation: 0
+    MaxRotation: 360
+    DeadZoneAngles:
+    - 0,25
+    - 335,360
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Light
+    LocationOnShip: Fore
+    WeaponAIHint: Main
+    DefaultGroup: 1
+HullProtection:
+  HullHitpoints: 0
+  Armour: {}
+  ReducedArmour: {}
+  MitigationArmour: {}
+  ArmourMitigation: 0.2
+Mass: 6
+SkeletonCrew: 4
+OperationalCrew: 14
+MaxCrew: 40
+MaxSpecialCharacters: 3
+Shield:
+  Name: Shield
+  Position:
+    x: 0
+    y: 0.02
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.3
+    y: 0.45
+    z: 0.3
+  SubNodes: []
+MagneticField:
+  Name: MagneticField
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.1
+    y: 0.3
+    z: 0.1
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: MagneticField
+    ParticleSystemPath: ''
+  SubNodes: []
+DamageSmoke:
+  Name: Damage smoke effect
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.1
+    y: 0.3
+    z: 0.1
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: Damage smoke effect
+    ParticleSystemPath: ''
+  SubNodes: []
+EngineExhaustOn:
+  Name: Engine exhaust on
+  Position:
+    x: 0
+    y: 0
+    z: -0.453
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.00155
+      y: -0.0015
+      z: -0.00332
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.05
+      y: 0.05
+      z: 0.05
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []  
+  - Name: Engine exhaust L
+    Position:
+      x: 0.00155
+      y: -0.0015
+      z: -0.00332
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.05
+      y: 0.05
+      z: 0.05
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+EngineExhaustIdle:
+  Name: Engine exhaust idle
+  Position:
+    x: 0
+    y: 0
+    z: -0.453
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.00155
+      y: -0.0015
+      z: -0.00332
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.00155
+      y: -0.0015
+      z: -0.00332
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+EngineExhaustBrake:
+  Name: Engine exhaust brake
+  Position:
+    x: 0
+    y: 0
+    z: -0.453
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.0142
+      y: 0.0366
+      z: -0.0011
+    Rotation:
+      x: 285
+      y: 270
+      z: 270
+    Scale:
+      x: 0.05
+      y: 0.05
+      z: 0.05
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.0142
+      y: 0.0366
+      z: -0.0011
+    Rotation:
+      x: 285
+      y: 90
+      z: 90
+    Scale:
+      x: 0.05
+      y: 0.05
+      z: 0.05
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+StatusRing:
+  Name: StatusRing
+  Position:
+    x: 0
+    y: -0.15
+    z: 0.04
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes: []
+CarrierModuleData: 

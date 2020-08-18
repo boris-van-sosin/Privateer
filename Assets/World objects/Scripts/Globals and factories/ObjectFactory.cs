@@ -263,11 +263,75 @@ public static class ObjectFactory
 
     public static Ship CreateShip(string prodKey)
     {
+        //CreateShip2(prodKey);
         return _prototypes.CreateShip(prodKey);
     }
 
     public static Ship CreateShip2(string prodKey)
     {
+        if (_shipHullDefinitions == null)
+        {
+            LoadShipHullDefinitions();
+        }
+        ShipHullDefinition hullDef;
+        if (!_shipHullDefinitions.TryGetValue(prodKey, out hullDef))
+        {
+            return null;
+        }
+
+        HierarchyNode hullRoot = hullDef.Geometry;
+        HierarchyNode damageSmoke = hullDef.DamageSmoke;
+        HierarchyNode engineExhaustIdle = hullDef.EngineExhaustIdle;
+        HierarchyNode engineExhaustOn = hullDef.EngineExhaustOn;
+        HierarchyNode engineExhaustBrake = hullDef.EngineExhaustBrake;
+        HierarchyNode magneticField = hullDef.MagneticField;
+        HierarchyNode[] teamColor = hullDef.TeamColorComponents;
+        HierarchyNode shield = hullDef.Shield;
+        HierarchyNode statusRing = hullDef.StatusRing;
+
+        GameObject hullObj = HierarchyConstructionUtil.ConstructHierarchy(hullRoot, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer);
+        GameObject[] particleSysObjs = new GameObject[]
+        {
+            HierarchyConstructionUtil.ConstructHierarchy(damageSmoke, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustIdle, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustOn, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustBrake, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(magneticField, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
+        };
+        GameObject[] teamColorObjs = teamColor.Select(r => HierarchyConstructionUtil.ConstructHierarchy(r, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer)).ToArray();
+
+        GameObject resObj = new GameObject();
+        hullObj.transform.parent = resObj.transform;
+        hullObj.transform.localPosition = hullRoot.Position.ToVector3();
+        hullObj.transform.localRotation = hullRoot.Rotation.ToQuaternion();
+        hullObj.transform.localScale = hullRoot.Scale.ToVector3();
+
+
+        foreach (GameObject o in teamColorObjs.Union(particleSysObjs))
+        {
+            Vector3 pos = o.transform.position;
+            Quaternion rot = o.transform.rotation;
+            Vector3 scale = o.transform.localScale;
+
+            o.transform.parent = resObj.transform;
+            o.transform.position = pos;
+            o.transform.rotation = rot;
+            o.transform.localScale = scale;
+        }
+
+        GameObject shieldObj = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+        shieldObj.name = shield.Name;
+        shieldObj.layer = ShieldsLayer;
+        shieldObj.GetComponent<MeshRenderer>().sharedMaterial = _prototypes.GetMaterial("ShieldMtl");
+        shieldObj.transform.parent = resObj.transform;
+        shieldObj.transform.localPosition = shield.Position.ToVector3();
+        shieldObj.transform.localRotation = shield.Rotation.ToQuaternion();
+        shieldObj.transform.localScale = shield.Scale.ToVector3();
+
+
+        //Ship s = resObj.AddComponent<Ship>();
+
+
         return null;
     }
 
@@ -296,7 +360,7 @@ public static class ObjectFactory
         }
 
         HierarchyNode root = turretDef.Geometry;
-        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes, WeaponsLayerMask, WeaponsLayerMask, EffectsLayerMask);
+        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes, WeaponsLayer, WeaponsLayer, EffectsLayer);
         TurretBase resTurret;
         switch (turretDef.BehaviorType)
         {
@@ -711,7 +775,12 @@ public static class ObjectFactory
     }
     private static Dictionary<Ship, Sprite> _shipPhotos = new Dictionary<Ship, Sprite>();
 
-    public static int DefaultLayerMask => _defaultLayer;
+    public static int DefaultLayer => _defaultLayer;
+    public static int ShipsLayer => _shipsLayer;
+    public static int ShieldsLayer => _shieldsLayer;
+    public static int NavCollidersLayer => _navCollidersLayer;
+    public static int WeaponsLayer => _weaponsLayer;
+    public static int EffectsLayer => _effectsLayer;
     public static int AllTargetableLayerMask => _allTargetableLayerMask;
     public static int AllShipsLayerMask => _allShipsLayerMask;
     public static int AllStikeCraftLayerMask => _allStrikeCraftLayerMask;
@@ -721,8 +790,6 @@ public static class ObjectFactory
     public static int NavBoxesLayerMask => _navBoxesLayerMask;
     public static int NavBoxesStrikeCraftLayerMask => _navBoxesStrikeCraftLayerMask;
     public static int NavBoxesAllLayerMask => _navBoxesAllLayerMask;
-    public static int WeaponsLayerMask => _weaponsLayer;
-    public static int EffectsLayerMask => _effectsLayer;
 
     private static void LoadWarheads()
     {
@@ -916,6 +983,9 @@ public static class ObjectFactory
     private static readonly int _navBoxesAllLayerMask = LayerMask.GetMask("NavColliders", "NavCollidersStrikeCraft", "NavCollidersTorpedoes");
 
     private static readonly int _defaultLayer = LayerMask.NameToLayer("Default");
+    private static readonly int _shipsLayer = LayerMask.NameToLayer("Ships");
+    private static readonly int _shieldsLayer = LayerMask.NameToLayer("Shields");
+    private static readonly int _navCollidersLayer = LayerMask.NameToLayer("NavColliders");
     private static readonly int _weaponsLayer = LayerMask.NameToLayer("Weapons");
     private static readonly int _effectsLayer = LayerMask.NameToLayer("Effects");
 

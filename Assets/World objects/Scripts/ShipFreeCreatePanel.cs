@@ -282,6 +282,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             { ("MediumBroadside", "", "Medium"), 4 },
             { ("MediumBarbette", "2", "Medium"), 5 },
             { ("MediumTurret", "2", "Medium"), 5 },
+            { ("MediumTurret", "1", "Heavy"), 6 },
             { ("HeavyBroadside", "", "Heavy"), 6 },
             { ("HeavyBarbette", "2", "Heavy"), 7 },
             { ("HeavyTurret", "2", "Heavy"), 7 },

@@ -1302,7 +1302,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.000015
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 319994641088601665, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -3992,6 +3992,7 @@ MonoBehaviour:
   - {fileID: 114932092806717634, guid: 979aa53004b071949b979e9701ef4052, type: 3}
   - {fileID: 4453604849776833899, guid: 91c96f33a3129b5468e5029ef117edbb, type: 3}
   - {fileID: 114298267387497442, guid: 0f51071563df82746bb0d023195a867f, type: 3}
+  - {fileID: 114298267387497442, guid: 64585c44ad74345449b7491bc7ebad32, type: 3}
   - {fileID: 721809839773014396, guid: 5d4818057b195874c93ca22a2018afb8, type: 3}
   StrikeCraftPrototypes:
   - CraftType: {fileID: 114275050688803318, guid: 68ee3588e1f7eea43b7bccae32b105b2,
@@ -4109,6 +4110,8 @@ MonoBehaviour:
     Mtl: {fileID: 2100000, guid: 2baa277e935288948967f12f2b96b1fc, type: 2}
   - Key: ShipRingSurrenderMtl
     Mtl: {fileID: 2100000, guid: 85c7728fbb3b9b14cac9d9f377353e0c, type: 2}
+  - Key: ShieldMtl
+    Mtl: {fileID: 2100000, guid: 620145ae49090c14a8f80624ca16b8a3, type: 2}
   NavGuide: {fileID: 1869077230419552563, guid: 391673ac8b7a0df42813ffe202bd7537,
     type: 3}
   BoardingStatusCanvas: {fileID: 223708177522948386, guid: d7732c5d13a81d441b7d04c25a00644b,

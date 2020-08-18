@@ -7,7 +7,7 @@ public static class HierarchyConstructionUtil
 {
     public static GameObject ConstructHierarchy(HierarchyNode root, ObjectPrototypes proto)
     {
-        int layer = ObjectFactory.DefaultLayerMask;
+        int layer = ObjectFactory.DefaultLayer;
         return ConstructHierarchy(root, proto, layer, layer, layer);
     }
 
@@ -59,6 +59,10 @@ public static class HierarchyConstructionUtil
         currObj.localPosition = currData.Position.ToVector3();
         currObj.localRotation = currData.Rotation.ToQuaternion();
         currObj.localScale = currData.Scale.ToVector3();
+        if (currData.SubNodes == null || currObj.childCount != currData.SubNodes.Length)
+        {
+            return;
+        }
         for (int i = 0; i < currObj.childCount; ++i)
         {
             FixTransformsRecursive(currObj.GetChild(i), currData.SubNodes[i]);
@@ -73,6 +77,10 @@ public static class HierarchyConstructionUtil
         }
         else
         {
+            if (currData.SubNodes == null || currObj.childCount != currData.SubNodes.Length)
+            {
+                return;
+            }
             for (int i = 0; i < currObj.childCount; ++i)
             {
                 CombineMeshes(currObj.GetChild(i), currData.SubNodes[i]);
@@ -209,7 +217,10 @@ public static class HierarchyConstructionUtil
             currData.OpenCloseData.SetOpenCloseAnim(openClose);
             openClose.AnimComponents = currData.OpenCloseData.AnimComponentPaths.Select(p => currObj.Find(p)).ToArray();
         }
-
+        if (currData.SubNodes == null || currObj.childCount != currData.SubNodes.Length)
+        {
+            return;
+        }
         for (int i = 0; i < currObj.childCount; ++i)
         {
             SetOpenCloseAnims(currObj.GetChild(i), currData.SubNodes[i]);

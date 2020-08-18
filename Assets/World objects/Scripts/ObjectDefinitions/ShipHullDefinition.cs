@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [Serializable]
 public class ShipHullDefinition
 {
     public string HullName { get; set; }
     public HierarchyNode Geometry { get; set; }
+    public MeshData CollisionMesh { get; set; }
     public ShipHullMovementData MovementData { get; set; }
     public HierarchyNode[] TeamColorComponents { get; set; }
     public WeaponHardpointDefinition[] WeaponHardpoints { get; set; }
@@ -21,9 +23,9 @@ public class ShipHullDefinition
     public HierarchyNode Shield { get; set; }
     public HierarchyNode MagneticField { get; set; }
     public HierarchyNode DamageSmoke { get; set; }
-    public HierarchyNode[] EngineExhaustOn { get; set; }
-    public HierarchyNode[] EngineExhaustIdle { get; set; }
-    public HierarchyNode[] EngineExhaustBrake { get; set; }
+    public HierarchyNode EngineExhaustOn { get; set; }
+    public HierarchyNode EngineExhaustIdle { get; set; }
+    public HierarchyNode EngineExhaustBrake { get; set; }
     public HierarchyNode StatusRing { get; set; }
     public ShipCarrierModuleData CarrierModuleData { get; set; }
 
@@ -34,10 +36,20 @@ public class ShipHullDefinition
 
     public static ShipHullDefinition FromShip(Ship s, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
     {
+        MeshCollider coll = s.GetComponent<MeshCollider>();
+        MeshData collisionMeshData = new MeshData()
+        {
+            AssetBundlePath = meshABPath,
+            AssetPath = "",
+            MeshPath = coll.sharedMesh.name,
+            DoCombine = false
+        };
+
         ShipHullDefinition res = new ShipHullDefinition()
         {
             HullName = s.name,
             Geometry = s.HullObject.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath),
+            CollisionMesh = collisionMeshData,
             MovementData = ShipHullMovementData.FromShip(s),
             TeamColorComponents = s.TeamColorComponents.Select(tc => tc.transform.ToSerializableHierarchy()).ToArray(),
             WeaponHardpoints = s.GetComponentsInChildren<TurretHardpoint>().Select(hp => WeaponHardpointDefinition.FromHardpoint(hp)).ToArray(),
@@ -49,12 +61,16 @@ public class ShipHullDefinition
             MaxSpecialCharacters = s.MaxSpecialCharacters,
             Shield = s.transform.Find("Shield").ToSerializableHierarchy(),
             MagneticField = s.transform.Find("MagneticField").ToSerializableHierarchy(),
-            DamageSmoke = s.transform.Find("MagneticField").ToSerializableHierarchy(),
-            EngineExhaustOn = FindEngineExhausts(s, "Engine exhaust on"),
-            EngineExhaustIdle = FindEngineExhausts(s, "Engine exhaust idle"),
-            EngineExhaustBrake = FindEngineExhausts(s, "Engine exhaust brake"),
+            DamageSmoke = s.transform.Find("Damage smoke effect").ToSerializableHierarchy(),
+            EngineExhaustOn = s.transform.Find("Engine exhaust on").ToSerializableHierarchy(),
+            EngineExhaustIdle = s.transform.Find("Engine exhaust idle").ToSerializableHierarchy(),
+            EngineExhaustBrake = s.transform.Find("Engine exhaust brake").ToSerializableHierarchy(),
             StatusRing = s.GetComponentInChildren<LineRenderer>().transform.ToSerializableHierarchy()
         };
+
+        FixEngineExhausts(res.EngineExhaustIdle);
+        FixEngineExhausts(res.EngineExhaustOn);
+        FixEngineExhausts(res.EngineExhaustBrake);
 
         CarrierBehavior carrier;
         if ((carrier = s.GetComponent<CarrierBehavior>()) != null)
@@ -67,24 +83,19 @@ public class ShipHullDefinition
         return res;
     }
 
-    private static HierarchyNode[] FindEngineExhausts(Ship s, string engineExhaustName)
+    private static void FixEngineExhausts(HierarchyNode node)
     {
-        Transform t = s.transform.Find(engineExhaustName);
-        if (t != null)
+        if (node.NodeParticleSystem != null)
         {
-            List<ParticleSystem> tmpPS = new List<ParticleSystem>(t.childCount);
-            for (int i = 0; i < t.childCount; ++i)
-            {
-                ParticleSystem p = t.GetChild(i).GetComponent<ParticleSystem>();
-                if (p != null && p.gameObject.activeInHierarchy)
-                {
-                    p.Stop();
-                    tmpPS.Add(p);
-                }
-            }
-            return tmpPS.Select(ps => ps.transform.ToSerializableHierarchy()).ToArray();
+            node.SubNodes = new HierarchyNode[0];
         }
-        return null;
+        else
+        {
+            foreach (HierarchyNode subNode in node.SubNodes)
+            {
+                FixEngineExhausts(subNode);
+            }
+        }
     }
 }
 
