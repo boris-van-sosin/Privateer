@@ -1,0 +1,1106 @@
+HullName: Navarino
+ShipSize: CapitalShip
+Geometry:
+  Name: Hull
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - demi battleship - navarino
+    MeshPath: Navarino Hull
+    DoCombine: true
+  SubNodes: []
+CollisionMesh:
+  AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+  AssetPath: terran - demi battleship - navarino collision
+  MeshPath: ''
+  DoCombine: false
+MovementData:
+  MaxSpeed: 0.78
+  Thrust: 0.076
+  Braking: 0.775
+  TurnRate: 24
+TeamColorComponents:
+- Name: TeamColor
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - demi battleship - navarino
+    MeshPath: Navarino TeamColor
+    DoCombine: true
+  SubNodes: []
+ComponentSlots:
+  CenterComponentSlots:
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  ForeComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  AftComponentSlots:
+  - Engine
+  - ShipSystem
+  - ShipSystem
+  LeftComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  RightComponentSlots:
+  - ShipSystem
+  - ShipSystem
+WeaponHardpoints:
+- HardpointNode:
+    Name: Turret A
+    Position:
+      x: 0
+      y: 0
+      z: 0.68
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Turret A
+    MinRotation: 65
+    MaxRotation: 295
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - HeavyTurret2Heavy
+    LocationOnShip: Fore
+    WeaponAIHint: Main
+    DefaultGroup: 1
+- HardpointNode:
+    Name: Turret X
+    Position:
+      x: 0
+      y: 0
+      z: -0.88
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Turret X
+    MinRotation: 245
+    MaxRotation: 115
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - HeavyTurret2Heavy
+    LocationOnShip: Aft
+    WeaponAIHint: Main
+    DefaultGroup: 1
+- HardpointNode:
+    Name: Broadside R1
+    Position:
+      x: 0.295125365
+      y: 0.025
+      z: 0.185
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside right 1
+    MinRotation: 247.5
+    MaxRotation: 295
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Right
+    WeaponAIHint: Secondary
+    DefaultGroup: 2
+- HardpointNode:
+    Name: Broadside L1
+    Position:
+      x: -0.295125365
+      y: 0.025
+      z: 0.185
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside left 1
+    MinRotation: 65
+    MaxRotation: 112.5
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Left
+    WeaponAIHint: Secondary
+    DefaultGroup: 3
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Broadside R2
+    Position:
+      x: 0.295125365
+      y: 0.025
+      z: -0.005
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside right 2
+    MinRotation: 245
+    MaxRotation: 295
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Right
+    WeaponAIHint: Secondary
+    DefaultGroup: 2
+- HardpointNode:
+    Name: Broadside L2
+    Position:
+      x: -0.295125365
+      y: 0.025
+      z: -0.005
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside left 2
+    MinRotation: 65
+    MaxRotation: 115
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Left
+    WeaponAIHint: Secondary
+    DefaultGroup: 3
+- HardpointNode:
+    Name: Broadside R3
+    Position:
+      x: 0.295125365
+      y: 0.025
+      z: -0.195
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside right 3
+    MinRotation: 245
+    MaxRotation: 295
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Right
+    WeaponAIHint: Secondary
+    DefaultGroup: 2
+- HardpointNode:
+    Name: Broadside L3
+    Position:
+      x: -0.295125365
+      y: 0.025
+      z: -0.195
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside left 3
+    MinRotation: 65
+    MaxRotation: 115
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Left
+    WeaponAIHint: Secondary
+    DefaultGroup: 3
+- HardpointNode:
+    Name: Broadside R4
+    Position:
+      x: 0.295125365
+      y: 0.025
+      z: -0.385
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside right 4
+    MinRotation: 245
+    MaxRotation: 292.5
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Right
+    WeaponAIHint: Secondary
+    DefaultGroup: 2
+- HardpointNode:
+    Name: Broadside L4
+    Position:
+      x: -0.295125365
+      y: 0.025
+      z: -0.385
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Broadside left 4
+    MinRotation: 67.5
+    MaxRotation: 115
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Left
+    WeaponAIHint: Secondary
+    DefaultGroup: 3
+- HardpointNode:
+    Name: Light gun R1
+    Position:
+      x: 0.312
+      y: 0.13
+      z: 0.269
+    Rotation:
+      x: 270
+      y: 225
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Light gun right 1
+    MinRotation: 170
+    MaxRotation: 310
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette2Light
+    LocationOnShip: Right
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+- HardpointNode:
+    Name: Light gun L1
+    Position:
+      x: -0.312
+      y: 0.13
+      z: 0.269
+    Rotation:
+      x: 270
+      y: 135
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Light gun left 1
+    MinRotation: 50
+    MaxRotation: 190
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette2Light
+    LocationOnShip: Left
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+- HardpointNode:
+    Name: Light gun R2
+    Position:
+      x: 0.312
+      y: 0.13
+      z: -0.1
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Light gun right 2
+    MinRotation: 225
+    MaxRotation: 315
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Right
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+- HardpointNode:
+    Name: Light gun L2
+    Position:
+      x: -0.312
+      y: 0.13
+      z: -0.1
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Light gun left 2
+    MinRotation: 45
+    MaxRotation: 135
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Left
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+- HardpointNode:
+    Name: Light gun R3
+    Position:
+      x: 0.312
+      y: 0.13
+      z: -0.468500555
+    Rotation:
+      x: 270
+      y: 315
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Light gun right 3
+    MinRotation: 225
+    MaxRotation: 10
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette2Light
+    LocationOnShip: Right
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+- HardpointNode:
+    Name: Light gun L3
+    Position:
+      x: -0.312
+      y: 0.13
+      z: -0.468500555
+    Rotation:
+      x: 270
+      y: 45
+      z: 0
+    Scale:
+      x: -10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Light gun left 3
+    MinRotation: 350
+    MaxRotation: 135
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette2Light
+    LocationOnShip: Left
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+- HardpointNode:
+    Name: Torp R
+    Position:
+      x: 0.4
+      y: -0.055
+      z: -0.008
+    Rotation:
+      x: 0
+      y: 90
+      z: 90
+    Scale:
+      x: 12.5
+      y: 12.5
+      z: 12.5
+    SubNodes: []
+  TorpedoHardpoint:
+    HardpointBaseDefinition:
+      DisplayString: Torpedo right
+      MinRotation: 170
+      MaxRotation: 330
+      DeadZoneAngles: []
+      TreatAsFixed: false
+      AllowedWeaponTypes:
+      - TorpedoTube
+      LocationOnShip: Right
+      WeaponAIHint: Secondary
+      DefaultGroup: 5
+    LaunchVector:
+      x: 0
+      y: 3
+      z: 1
+- HardpointNode:
+    Name: Torp L
+    Position:
+      x: -0.4
+      y: -0.055
+      z: -0.008
+    Rotation:
+      x: 0
+      y: 270
+      z: 270
+    Scale:
+      x: -12.5
+      y: 12.5
+      z: 12.5
+    SubNodes: []
+  TorpedoHardpoint:
+    HardpointBaseDefinition:
+      DisplayString: Torpedo left
+      MinRotation: 30
+      MaxRotation: 190
+      DeadZoneAngles: []
+      TreatAsFixed: false
+      AllowedWeaponTypes:
+      - TorpedoTube
+      LocationOnShip: Right
+      WeaponAIHint: Secondary
+      DefaultGroup: 5
+    LaunchVector:
+      x: 0
+      y: 3
+      z: 1
+HullProtection:
+  HullHitpoints: 200000
+  Armour:
+    ForeValue: 825
+    AftValue: 775
+    LeftValue: 850
+    RightValue: 850
+  ReducedArmour:
+    ForeValue: 275
+    AftValue: 255
+    LeftValue: 280
+    RightValue: 280
+  MitigationArmour:
+    ForeValue: 650
+    AftValue: 600
+    LeftValue: 675
+    RightValue: 675
+  ArmourMitigation: 0.7
+Mass: 425
+SkeletonCrew: 32
+OperationalCrew: 120
+MaxCrew: 240
+MaxSpecialCharacters: 3
+Shield:
+  Name: Shield
+  Position:
+    x: 0
+    y: 0.011
+    z: 0.124
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.984135985
+    y: 1.86118042
+    z: 1.03080475
+  SubNodes: []
+MagneticField:
+  Name: MagneticField
+  Position:
+    x: 0
+    y: -0.084
+    z: -0.044
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.3
+    y: 1.06647992
+    z: 1
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: MagneticField
+    ParticleSystemPath: ''
+  SubNodes: []
+DamageSmoke:
+  Name: Damage smoke effect
+  Position:
+    x: 0
+    y: -0.238
+    z: -1.727
+  Rotation:
+    x: 0
+    y: 270
+    z: 0
+  Scale:
+    x: 0.2
+    y: 0.2
+    z: 0.2
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: Damage smoke effect
+    ParticleSystemPath: ''
+  SubNodes: []
+EngineExhaustOn:
+  Name: Engine exhaust on
+  Position:
+    x: 0
+    y: 0
+    z: -1.54380453
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.0075
+      y: -0.0246
+      z: -0.0164
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.16
+      y: 0.16
+      z: 0.16
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R Small 1
+    Position:
+      x: -0.0134
+      y: -0.0004
+      z: -0.0128
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R Small 2
+    Position:
+      x: -0.0116
+      y: -0.0037
+      z: -0.0174
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.0075
+      y: -0.0246
+      z: -0.0164
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.16
+      y: 0.16
+      z: 0.16
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L Small 1
+    Position:
+      x: 0.0134
+      y: -0.0004
+      z: -0.0128
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L Small 2
+    Position:
+      x: 0.0116
+      y: -0.0037
+      z: -0.0174
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+EngineExhaustIdle:
+  Name: Engine exhaust idle
+  Position:
+    x: 0
+    y: 0
+    z: -1.54380488
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.0058
+      y: -0.0056
+      z: -0.0139
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.06
+      y: 0.06
+      z: 0.06
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R Small 1
+    Position:
+      x: -0.0125
+      y: 0.0096
+      z: -0.0117
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R Small 2
+    Position:
+      x: -0.0111
+      y: 0.0081
+      z: -0.0165
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.0058
+      y: -0.0056
+      z: -0.0139
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.06
+      y: 0.06
+      z: 0.06
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L Small 1
+    Position:
+      x: 0.0125
+      y: 0.0096
+      z: -0.0117
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L Small 2
+    Position:
+      x: 0.0111
+      y: 0.0081
+      z: -0.0165
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+EngineExhaustBrake:
+  Name: Engine exhaust brake
+  Position:
+    x: 0
+    y: 0
+    z: -1.54380453
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.0487
+      y: 0.1307
+      z: -0.0133
+    Rotation:
+      x: 285
+      y: 270
+      z: 270
+    Scale:
+      x: 0.15
+      y: 0.14
+      z: 0.15
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.0487
+      y: 0.1307
+      z: -0.0133
+    Rotation:
+      x: 285
+      y: 90
+      z: 90
+    Scale:
+      x: 0.15
+      y: 0.14
+      z: 0.15
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+StatusRing:
+  Name: StatusRing
+  Position:
+    x: 0
+    y: -0.15
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes: []
+CarrierModuleData:
+  MaxFormations: 1
+  HangerRootNodes:
+  - Name: CarrierHanger1
+    Position:
+      x: 0
+      y: 0
+      z: -0.453427613
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    OpenCloseData:
+      AnimComponentPaths:
+      - Cover
+      - Elevator
+      ClosedState:
+        Positions:
+        - x: 0
+          y: 0
+          z: 0.013
+        - x: 0
+          y: 0
+          z: 0.001
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 0
+      OpenState:
+        Positions:
+        - x: 0
+          y: 0.022
+          z: 0.0105
+        - x: 0
+          y: 0
+          z: 0.013
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 1.5
+      AnimWaypoints:
+      - Positions:
+        - x: 0
+          y: 0
+          z: 0.0105
+        - x: 0
+          y: 0
+          z: 0.001
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 0.3
+      - Positions:
+        - x: 0
+          y: 0.022
+          z: 0.0105
+        - x: 0
+          y: 0
+          z: 0.001
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 0.9
+    SubNodes:
+    - Name: Elevator
+      Position:
+        x: 0
+        y: 0
+        z: 0.001
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+        AssetPath: terran - demi battleship - navarino
+        MeshPath: Navarino Elevator Bot
+        DoCombine: false
+      SubNodes: []
+    - Name: Cover
+      Position:
+        x: 0
+        y: 0
+        z: 0.013
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+        AssetPath: terran - demi battleship - navarino
+        MeshPath: Navarino Elevator Top
+        DoCombine: false
+      SubNodes: []
+    - Name: CarrierLaunchTr
+      Position:
+        x: 0
+        y: 0
+        z: 0.013
+      Rotation:
+        x: 0
+        y: 0
+        z: 180
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      SubNodes: []
+    - Name: CarrierRecoveryEndTr
+      Position:
+        x: 0
+        y: 0
+        z: 0.013
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      SubNodes: []
+    - Name: CarrierRecoveryStartTr
+      Position:
+        x: 0
+        y: -0.0839948952
+        z: 0.06
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      SubNodes: []

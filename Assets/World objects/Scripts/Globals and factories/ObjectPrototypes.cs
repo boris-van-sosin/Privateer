@@ -328,7 +328,15 @@ public class ObjectPrototypes : MonoBehaviour
     public GameObject CreateObjectByPath(string assetBundlePath, string assetPath, string objPath)
     {
         GameObject proto = GetObjectByPath(assetBundlePath, assetPath, objPath);
-        return Instantiate(proto);
+        if (null != proto)
+        {
+            return Instantiate(proto);
+        }
+        else
+        {
+            Debug.LogWarningFormat("Requested asset does not exist: ({0},{1},{2})", assetBundlePath, assetPath, objPath);
+            return null;
+        }
     }
 
     public GameObject GetObjectByPath(string assetBundlePath, string assetPath, string objPath)

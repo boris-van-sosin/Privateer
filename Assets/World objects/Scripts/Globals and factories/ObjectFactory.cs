@@ -384,6 +384,28 @@ public static class ObjectFactory
         s.MaxSpecialCharacters = hullDef.MaxSpecialCharacters;
         hullDef.MovementData.FillShipData(s);
         Enum.TryParse(hullDef.ShipSize, out s.ShipSize);
+
+        if (hullDef.CarrierModuleData != null)
+        {
+            CarrierBehavior carrierAddon = resObj.AddComponent<CarrierBehavior>();
+            carrierAddon.CarrierHangerAnim = new GenericOpenCloseAnim[hullDef.CarrierModuleData.HangerRootNodes.Length];
+            int animIdx = 0;
+            foreach (HierarchyNode carreirComp in hullDef.CarrierModuleData.HangerRootNodes)
+            {
+                GameObject carrierCompObj = HierarchyConstructionUtil.ConstructHierarchy(carreirComp, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer);
+                Vector3 pos = carrierCompObj.transform.position;
+                Quaternion rot = carrierCompObj.transform.rotation;
+                Vector3 scale = carrierCompObj.transform.localScale;
+                carrierCompObj.transform.parent = resObj.transform;
+                carrierCompObj.transform.position = pos;
+                carrierCompObj.transform.rotation = rot;
+                carrierCompObj.transform.localScale = scale;
+
+                carrierAddon.CarrierHangerAnim[animIdx++] = carrierCompObj.GetComponent<GenericOpenCloseAnim>();
+            }
+            carrierAddon.MaxFormations = hullDef.CarrierModuleData.MaxFormations;
+        }
+
         s.PostAwake();
 
         return s;
@@ -622,7 +644,9 @@ public static class ObjectFactory
 
     public static StrikeCraft CreateStrikeCraft(string prodKey)
     {
-        return _prototypes.CreateStrikeCraft(prodKey);
+        StrikeCraft res = _prototypes.CreateStrikeCraft(prodKey);
+        res.PostAwake();
+        return res;
     }
 
     public static StrikeCraft CreateStrikeCraftAndFitOut(string prodKey)

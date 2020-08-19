@@ -79,7 +79,7 @@ public class ShipHullDefinition
         CarrierBehavior carrier;
         if ((carrier = s.GetComponent<CarrierBehavior>()) != null)
         {
-            res.CarrierModuleData = ShipCarrierModuleData.FromCarrierModule(carrier);
+            res.CarrierModuleData = ShipCarrierModuleData.FromCarrierModule(carrier, meshABPath, meshAssetPath, partSysABPath, partSysAssetPath);
         }
 
         res.Shield.NodeMesh = null;
@@ -313,10 +313,15 @@ public class ShipCarrierModuleData
 
     public static ShipCarrierModuleData FromCarrierModule(CarrierBehavior c)
     {
+        return FromCarrierModule(c, "", "", "", "");
+    }
+
+    public static ShipCarrierModuleData FromCarrierModule(CarrierBehavior c, string meshABPath, string meshAssetPath, string partSysABPath, string partSysAssetPath)
+    {
         ShipCarrierModuleData res = new ShipCarrierModuleData()
         {
             MaxFormations = c.MaxFormations,
-            HangerRootNodes = c.CarrierHangerAnim.Select(openClose => openClose.transform.ToSerializableHierarchy()).ToArray()
+            HangerRootNodes = c.CarrierHangerAnim.Select(openClose => openClose.transform.ToSerializableHierarchy(meshABPath, meshAssetPath, partSysABPath, partSysAssetPath)).ToArray()
         };
         return res;
     }

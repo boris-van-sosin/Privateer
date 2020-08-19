@@ -184,7 +184,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         yield return _targetAcquirePulseDelay;
         while (true)
         {
-            if (_controlledFormation.AllStrikeCraft().All(s => ((StrikeCraft)s).IsOutOfAmmo()) && _controlledFormation.AllStrikeCraft().Any())
+            if (_controlledFormation.DestroyOnEmpty && _controlledFormation.AllStrikeCraft().All(s => ((StrikeCraft)s).IsOutOfAmmo()) && _controlledFormation.AllStrikeCraft().Any())
             {
                 CarrierBehavior c = _controlledFormation.HostCarrier;
                 if (c != null)

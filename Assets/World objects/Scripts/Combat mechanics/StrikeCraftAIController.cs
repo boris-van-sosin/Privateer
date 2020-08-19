@@ -253,9 +253,20 @@ public class StrikeCraftAIController : ShipAIController
         Maneuver.AccelerationModifier acc = null;
         if (_controlledCraft.CurrSpeed < _controlledCraft.MaxSpeed * 0.75f)
         {
-            acc = new Maneuver.AccelerateToTargetSpeedFraction() { TargetSpeedFrac = 0.75f };
+            acc = new Maneuver.SelfAccelerateToTargetSpeedFraction() { TargetSpeedFrac = 0.75f };
             speedHint = _controlledCraft.MaxSpeed * 0.75f;
         }
+
+        // DEBUG:
+        if (acc == null)
+        {
+            Debug.LogFormat("Creating recovery climb path. Initial speed: {0}. Will not accelerate.", _controlledCraft.CurrSpeed);
+        }
+        else
+        {
+            Debug.LogFormat("Creating recovery climb path. Initial speed: {0}. Will accelerate to {1}.", _controlledCraft.CurrSpeed, speedHint);
+        }
+
         Maneuver.BsplinePathSegmnet seg = new Maneuver.BsplinePathSegmnet()
         {
             AccelerationBehavior = acc,

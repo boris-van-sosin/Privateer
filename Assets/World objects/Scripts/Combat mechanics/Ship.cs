@@ -164,28 +164,33 @@ public class Ship : ShipBase
         _maxMitigationArmour = DefaultMitigationArmour.ToDict();
         _currMitigationArmour = DefaultMitigationArmour.ToDict();
         _armour = Armour.ToDict();
+        _reducedArmour = ReducedArmour.ToDict();
         foreach (ShipSection section in _componentSlotsOccupied.Keys)
         {
+            if (!_maxMitigationArmour.ContainsKey(section))
+            {
+                _maxMitigationArmour.Add(section, 0);
+            }
+            if (!_currMitigationArmour.ContainsKey(section))
+            {
+                _currMitigationArmour.Add(section, _maxMitigationArmour[section]);
+            }
+            if (!_armour.ContainsKey(section))
+            {
+                _armour.Add(section, 0);
+            }
+            if (!_reducedArmour.ContainsKey(section))
+            {
+                _reducedArmour.Add(section, 0);
+            }
             foreach (IShipComponent comp in AllComponentsInSection(section, false))
             {
-                if (!_maxMitigationArmour.ContainsKey(section))
-                {
-                    _maxMitigationArmour.Add(section, 0);
-                }
-                if (!_currMitigationArmour.ContainsKey(section))
-                {
-                    _currMitigationArmour.Add(section, _maxMitigationArmour[section]);
-                }
-                if (!_armour.ContainsKey(section))
-                {
-                    _armour.Add(section, 0);
-                }
-
                 ExtraArmour a = comp as ExtraArmour;
                 if (a != null)
                 {
-                    _maxMitigationArmour[section] += a.ArmourAmount;
-                    _currMitigationArmour[section] += a.ArmourAmount;
+                    _armour[section] += a.ArmourAmount;
+                    _maxMitigationArmour[section] += a.MitigationArmourAmount;
+                    _currMitigationArmour[section] += a.MitigationArmourAmount;
                 }
             }
         }
@@ -404,6 +409,11 @@ public class Ship : ShipBase
         {
             base.Update();
         }
+        if (!ShipDisabled && Vector3.Angle(transform.up, Vector3.up) > Mathf.Epsilon)
+        {
+            Quaternion flattenedRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, flattenedRotation, TurnRate * Time.deltaTime);
+        }
 	}
 
     protected void RevertRotation()
@@ -619,7 +629,7 @@ public class Ship : ShipBase
         }
 
         // armour penetration
-        int armourAtLocation = _armour[sec];
+        int armourAtLocation = GetArmourAtSection(sec);
         bool recheckMinEnergyToAct = false;
         for (int i = 0; i < w.HitMultiplicity; ++i)
         {
@@ -704,6 +714,14 @@ public class Ship : ShipBase
         {
             return ShipSection.Right;
         }
+    }
+
+    private int GetArmourAtSection(ShipSection sec)
+    {
+        if (_currMitigationArmour[sec] > 0)
+            return _armour[sec];
+        else
+            return _reducedArmour[sec];
     }
 
     public override int ShipTotalShields
@@ -1262,6 +1280,7 @@ public class Ship : ShipBase
     public ShipHullFourSidesValues DefaultMitigationArmour;
     public float ArmourMitigation;
     private IDictionary<ShipSection, int> _armour;
+    private IDictionary<ShipSection, int> _reducedArmour;
     private IDictionary<ShipSection, int> _maxMitigationArmour;
     private IDictionary<ShipSection, int> _currMitigationArmour;
     public bool ShipSurrendered { get; private set; }

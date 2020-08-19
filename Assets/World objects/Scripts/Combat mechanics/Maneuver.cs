@@ -75,6 +75,11 @@ public class Maneuver
         public float TargetSpeedFrac { get; set; }
     }
 
+    public class SelfAccelerateToTargetSpeedFraction : AccelerationModifier
+    {
+        public float TargetSpeedFrac { get; set; }
+    }
+
     public abstract class ManeuverSegment
     {
     }
@@ -179,6 +184,22 @@ public class Maneuver
             {
                 float segTargetSpeed = _ship.MaxSpeed * fracAccelerate.TargetSpeedFrac;
                 targetSpeed = Mathf.Lerp(_segStartSpeed, targetSpeed, _t);
+            }
+            else if (pathSeg.AccelerationBehavior is SelfAccelerateToTargetSpeedFraction selfFracAccelerate)
+            {
+                float segTargetSpeed = _ship.MaxSpeed * selfFracAccelerate.TargetSpeedFrac;
+                if (_segStartSpeed < segTargetSpeed - Mathf.Epsilon)
+                {
+                    targetSpeed = Mathf.Clamp(targetSpeed + _ship.Thrust * timeInterval, 0.0f, _ship.MaxSpeed);
+                }
+                else if (_segStartSpeed > segTargetSpeed + Mathf.Epsilon)
+                {
+                    targetSpeed = Mathf.Clamp(targetSpeed - _ship.Braking * timeInterval, 0.0f, _ship.MaxSpeed);
+                }
+                else
+                {
+                    targetSpeed = segTargetSpeed;
+                }
             }
 
             float minSpeed = _ship.Thrust * Time.deltaTime;

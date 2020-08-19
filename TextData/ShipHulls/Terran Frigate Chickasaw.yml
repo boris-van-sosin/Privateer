@@ -1,0 +1,577 @@
+HullName: Chickasaw
+ShipSize: Frigate
+Geometry:
+  Name: Hull
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - frigate Chickasaw
+    MeshPath: Chickasaw Hull
+    DoCombine: true
+  SubNodes: []
+CollisionMesh:
+  AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+  AssetPath: terran - frigate Chickasaw collision
+  MeshPath: ''
+  DoCombine: false
+MovementData:
+  MaxSpeed: 0.875
+  Thrust: 0.09
+  Braking: 0.8
+  TurnRate: 29
+TeamColorComponents:
+- Name: TeamColor
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - frigate Chickasaw
+    MeshPath: Chickasaw TeamColor
+    DoCombine: true
+  SubNodes: []
+ComponentSlots:
+  CenterComponentSlots:
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  ForeComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  AftComponentSlots:
+  - Engine
+  LeftComponentSlots:
+  - ShipSystem
+  RightComponentSlots:
+  - ShipSystem
+WeaponHardpoints:
+- HardpointNode:
+    Name: TurretA
+    Position:
+      x: 0
+      y: 0
+      z: 0.335474044
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Turret A
+    MinRotation: 30
+    MaxRotation: 330
+    DeadZoneAngles:
+    - 155,205
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Fore
+    WeaponAIHint: Main
+    DefaultGroup: 1
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: TurretB
+    Position:
+      x: 0
+      y: 0
+      z: -0.231526017
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Turret X
+    MinRotation: 205
+    MaxRotation: 155
+    DeadZoneAngles:
+    - 340,360
+    - 0,20
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Aft
+    WeaponAIHint: Main
+    DefaultGroup: 1
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Fore gun
+    Position:
+      x: 0
+      y: 0
+      z: 0.583045065
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Fore light gun
+    MinRotation: 30
+    MaxRotation: 330
+    DeadZoneAngles:
+    - 195,240
+    - 120,165
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Fore
+    WeaponAIHint: Secondary
+    DefaultGroup: 2
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Aft gun
+    Position:
+      x: 0
+      y: 0
+      z: -0.485165149
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Aft light gun
+    MinRotation: 205
+    MaxRotation: 155
+    DeadZoneAngles:
+    - 345,360
+    - 0,15
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Aft
+    WeaponAIHint: Secondary
+    DefaultGroup: 2
+  TorpedoHardpoint: 
+HullProtection:
+  HullHitpoints: 28000
+  Armour:
+    ForeValue: 340
+    AftValue: 250
+    LeftValue: 350
+    RightValue: 350
+  ReducedArmour:
+    ForeValue: 110
+    AftValue: 80
+    LeftValue: 115
+    RightValue: 115
+  MitigationArmour:
+    ForeValue: 200
+    AftValue: 175
+    LeftValue: 210
+    RightValue: 210
+  ArmourMitigation: 0.349999994
+Mass: 16
+SkeletonCrew: 8
+OperationalCrew: 30
+MaxCrew: 75
+MaxSpecialCharacters: 3
+Shield:
+  Name: Shield
+  Position:
+    x: 0
+    y: 0.01
+    z: 0.0718349069
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.375
+    y: 0.8
+    z: 0.375
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes: []
+MagneticField:
+  Name: MagneticField
+  Position:
+    x: 0
+    y: -0.033
+    z: 0.154834926
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.2
+    y: 0.8
+    z: 0.1
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: MagneticField
+    ParticleSystemPath: ''
+  SubNodes: []
+DamageSmoke:
+  Name: Damage smoke effect
+  Position:
+    x: 0
+    y: -0.0337
+    z: -0.558165133
+  Rotation:
+    x: 0
+    y: 270
+    z: 0
+  Scale:
+    x: 0.1
+    y: 0.1
+    z: 0.1
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: Damage smoke effect
+    ParticleSystemPath: ''
+  SubNodes: []
+EngineExhaustOn:
+  Name: Engine exhaust on
+  Position:
+    x: 0
+    y: -0.0646999478
+    z: -0.534165144
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.00425
+      y: -0.01422
+      z: 0.00178
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.065
+      y: 0.065
+      z: 0.065
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R small 1
+    Position:
+      x: -0.00948
+      y: -0.0096
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.045
+      y: 0.045
+      z: 0.045
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R small 2
+    Position:
+      x: -0.0117
+      y: -0.0088
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.045
+      y: 0.045
+      z: 0.045
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.00425
+      y: -0.01422
+      z: 0.00178
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.065
+      y: 0.065
+      z: 0.065
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L small 1
+    Position:
+      x: 0.00948
+      y: -0.0096
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.045
+      y: 0.045
+      z: 0.045
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L small 2
+    Position:
+      x: 0.0117
+      y: -0.0088
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.045
+      y: 0.045
+      z: 0.045
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+EngineExhaustIdle:
+  Name: Engine exhaust idle
+  Position:
+    x: 0
+    y: -0.0646999478
+    z: -0.534165144
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.00425
+      y: -0.00798998773
+      z: 0.00178
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.028
+      y: 0.028
+      z: 0.028
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R small 1
+    Position:
+      x: -0.00948
+      y: -0.00713
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust R small 2
+    Position:
+      x: -0.0117
+      y: -0.00633
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.00425
+      y: -0.00798999984
+      z: 0.00178
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.028
+      y: 0.028
+      z: 0.028
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L small 1
+    Position:
+      x: 0.00948
+      y: -0.00713
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L small 2
+    Position:
+      x: 0.0117
+      y: -0.00633
+      z: 0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+EngineExhaustBrake:
+  Name: Engine exhaust brake
+  Position:
+    x: 0
+    y: 0
+    z: -0.0551651083
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.0151
+      y: -0.022
+      z: -0.0052
+    Rotation:
+      x: 280
+      y: 270
+      z: 270
+    Scale:
+      x: 0.065
+      y: 0.065
+      z: 0.065
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.0151
+      y: -0.022
+      z: -0.0052
+    Rotation:
+      x: 280
+      y: 90
+      z: 90
+    Scale:
+      x: 0.065
+      y: 0.065
+      z: 0.065
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    SubNodes: []
+StatusRing:
+  Name: StatusRing
+  Position:
+    x: 0
+    y: -0.15
+    z: 0.104834929
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  SubNodes: []
+CarrierModuleData: 

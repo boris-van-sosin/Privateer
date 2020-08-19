@@ -510,6 +510,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
 public class ExtraArmour : ShipComponentBase
 {
     public int ArmourAmount;
+    public int MitigationArmourAmount;
     public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem" };
