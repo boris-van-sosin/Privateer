@@ -50,7 +50,7 @@ public class HarpaxBehavior : Projectile
     {
         while (true)
         {
-            Debug.Log(string.Format("Joint force: {0}", j.currentForce));
+            Debug.LogFormat("Joint force: {0}", j.currentForce);
             yield return new WaitForSeconds(0.1f);
         }
     }

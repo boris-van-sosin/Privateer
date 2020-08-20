@@ -33,7 +33,7 @@ public class Faction : MonoBehaviour
         {
             return res;
         }
-        Debug.LogWarning(string.Format("Faction relations not found: {0},{1}", this, other));
+        Debug.LogWarningFormat("Faction relations not found: {0},{1}", this, other);
         return FactionRelationType.Neutral;
     }
 

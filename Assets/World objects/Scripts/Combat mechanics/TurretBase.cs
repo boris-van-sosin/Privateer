@@ -169,7 +169,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (!ReadyToFire())
         {
-            //Debug.Log(string.Format("{0} on {1} not ready to fire", this, _containingShip));
+            //Debug.LogFormat("{0} on {1} not ready to fire", this, _containingShip);
             return false;
         }
         if (_status == ComponentStatus.KnockedOut || _status == ComponentStatus.Destroyed)
@@ -278,7 +278,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         Vector3 firingVector = GetFiringVector(vecToTarget);
         if (!_containingShip.TryChangeEnergyAndHeat(-EnergyToFire, HeatToFire))
         {
-            //Debug.Log(string.Format("{0} on {1} not enough heat or energy to fire", this, _containingShip));
+            //Debug.LogFormat("{0} on {1} not enough heat or energy to fire", this, _containingShip);
             return false;
         }
 
@@ -727,7 +727,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             else if (_currHitPoints <= ComponentMaxHitPoints / 4)
             {
                 Status = ComponentStatus.HeavilyDamaged;
-                Debug.Log(string.Format("{0} on {1} is heavily damaged. Time: {2}", this, _containingShip, Time.time));
+                Debug.LogFormat("{0} on {1} is heavily damaged. Time: {2}", this, _containingShip, Time.time);
             }
             else if (_currHitPoints <= ComponentMaxHitPoints / 2)
             {

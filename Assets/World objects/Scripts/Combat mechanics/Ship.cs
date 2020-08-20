@@ -610,7 +610,7 @@ public class Ship : ShipBase
     public override void TakeHit(Warhead w, Vector3 location)
     {
         ShipSection sec = GetHitSection(location);
-        //Debug.Log(string.Format("Ship {0} hit in {1}", name, sec));
+        //Debug.LogFormat("Ship {0} hit in {1}", name, sec);
         LastInCombat = Time.time;
         bool tookCasualties = false;
 
@@ -631,11 +631,13 @@ public class Ship : ShipBase
         // armour penetration
         int armourAtLocation = GetArmourAtSection(sec);
         bool recheckMinEnergyToAct = false;
+        float mitigationFactor = 1f;
+        bool tookDamage = false;
         for (int i = 0; i < w.HitMultiplicity; ++i)
         {
             if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
             {
-                float mitigationFactor = 1f;
+                tookDamage = true;
                 if (_currMitigationArmour[sec] > 0)
                 {
                     _currMitigationArmour[sec] = System.Math.Max(0, _currMitigationArmour[sec] - w.ArmourDamage);
@@ -681,8 +683,12 @@ public class Ship : ShipBase
                         }
                     }
                 }
-                HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
             }
+        }
+        if (tookDamage)
+        {
+            //Debug.LogFormat("Ship {0} took damage in {1}", name, sec);
+            HullHitPoints = System.Math.Max(0, HullHitPoints - Mathf.CeilToInt(w.HullDamage * mitigationFactor));
         }
         if (tookCasualties)
         {
@@ -698,15 +704,16 @@ public class Ship : ShipBase
     private ShipSection GetHitSection(Vector3 hitLocation)
     {
         Vector3 localHitLocation = transform.InverseTransformPoint(hitLocation);
-        if (localHitLocation.y > ShipUnscaledLength / 6)
+        //Debug.LogFormat("Location z: {0} Length: {1} scaled: {2}", localHitLocation.z, ShipLength, ShipUnscaledLength);
+        if (localHitLocation.z > ShipLength / 4)
         {
             return ShipSection.Fore;
         }
-        else if (localHitLocation.y < -ShipUnscaledLength / 6)
+        else if (localHitLocation.z < -ShipLength / 4)
         {
             return ShipSection.Aft;
         }
-        else if (localHitLocation.x > 0)
+        else if (localHitLocation.x < 0)
         {
             return ShipSection.Left;
         }
@@ -804,11 +811,11 @@ public class Ship : ShipBase
         {
             if (HullHitPoints > 0)
             {
-                Debug.Log(string.Format("Ship {0} {1} is in critical!", this, DisplayName.ShortName));
+                Debug.LogFormat("Ship {0} {1} is in critical!", this, DisplayName.ShortName);
             }
             else
             {
-                Debug.Log(string.Format("Ship {0} {1} destroyed!", this, DisplayName.ShortName));
+                Debug.LogFormat("Ship {0} {1} destroyed!", this, DisplayName.ShortName);
             }
             ShipDisabled = true;
         }
@@ -1016,13 +1023,13 @@ public class Ship : ShipBase
 
     void OnCollisionEnter(Collision c)
     {
-        Debug.LogWarning(string.Format("Collision {0}", this));
+        Debug.LogWarningFormat("Collision {0}", this);
         HandleShipCollision(c.collider);
     }
 
     private void OnCollisionExit(Collision c)
     {
-        Debug.LogWarning(string.Format("Collision exit: {0},", this));
+        Debug.LogWarningFormat("Collision exit: {0},", this);
         _rigidBody.angularVelocity = Vector3.zero;
         HandleShipCollisionExit();
     }
@@ -1279,10 +1286,10 @@ public class Ship : ShipBase
     public ShipHullFourSidesValues ReducedArmour;
     public ShipHullFourSidesValues DefaultMitigationArmour;
     public float ArmourMitigation;
-    private IDictionary<ShipSection, int> _armour;
-    private IDictionary<ShipSection, int> _reducedArmour;
-    private IDictionary<ShipSection, int> _maxMitigationArmour;
-    private IDictionary<ShipSection, int> _currMitigationArmour;
+    private Dictionary<ShipSection, int> _armour;
+    private Dictionary<ShipSection, int> _reducedArmour;
+    private Dictionary<ShipSection, int> _maxMitigationArmour;
+    private Dictionary<ShipSection, int> _currMitigationArmour;
     public bool ShipSurrendered { get; private set; }
     public bool InBoarding { get; private set; }
 
@@ -1314,6 +1321,9 @@ public class Ship : ShipBase
 
     private bool _explosionPlayed = false;
 
+    // Get current mitigatio armour values, for debugging purposes:
+    public IReadOnlyDictionary<ShipSection, int> CurrMitigationArmour => _currMitigationArmour;
+
     private static readonly WaitForSeconds _componentPulseDelay = new WaitForSeconds(0.25f);
 }
 
@@ -1330,9 +1340,9 @@ public struct ShipHullFourSidesValues
     public int LeftValue { get { return Left; } set { Left = value; } }
     public int RightValue { get { return Right; } set { Right = value; } }
 
-    public IDictionary<Ship.ShipSection, int> ToDict()
+    public Dictionary<Ship.ShipSection, int> ToDict()
     {
-        IDictionary<Ship.ShipSection, int> res = new Dictionary<Ship.ShipSection, int>();
+        Dictionary<Ship.ShipSection, int> res = new Dictionary<Ship.ShipSection, int>();
         res[Ship.ShipSection.Fore] = Fore;
         res[Ship.ShipSection.Aft] = Aft;
         res[Ship.ShipSection.Left] = Left;

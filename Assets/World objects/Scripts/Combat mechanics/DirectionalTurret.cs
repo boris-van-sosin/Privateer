@@ -39,7 +39,7 @@ public abstract class DirectionalTurret : TurretBase
         }
 
         float relativeAngle = GlobalDirToShipHeading(flatVec);
-        //Debug.Log(string.Format("Angle to target: {0}", relativeAngle));
+        //Debug.LogFormat("Angle to target: {0}", relativeAngle);
         _isLegalFireAngle = _isLegalAimAngle = false;
         float angleTol = _treatAsFixed ? _targetingFiringArcToleranceLarge : _targetingFiringArcToleranceSmall;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
@@ -80,7 +80,7 @@ public abstract class DirectionalTurret : TurretBase
         {
             if (_minRotation == 0.0f && _maxRotation == 360.0f)
             {
-                //Debug.Log(string.Format("Target angle: {0} Current Angle {1}", _targetAngle, currLocal));
+                //Debug.LogFormat("Target angle: {0} Current Angle {1}", _targetAngle, currLocal);
                 if (Mathf.Abs(_targetAngle - currLocal) <= 180.0f)
                 {
                     _rotationDir = Mathf.Sign(_targetAngle - currLocal);

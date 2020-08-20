@@ -96,7 +96,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                 float rotAngle;
                 rotToTarget.ToAngleAxis(out rotAngle, out rotAxis);
                 Quaternion actualRot = Quaternion.AngleAxis(Mathf.Min(rotAngle, Time.deltaTime * _actualTurnRate), rotAxis);
-                //Debug.Log(string.Format("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles));
+                //Debug.LogFormat("Torpedo heading: {0} . Angle to target: {0}", transform.up, rotToTarget.eulerAngles);
                 transform.rotation = actualRot * transform.rotation;
             }
 

@@ -68,7 +68,7 @@ public static class Combat
         //float armourDifference = armourPenetration - armourRating;
         //float penetrateChance = _minArmourPenetration + (_maxArmourPenetration - _minArmourPenetration) / (1 + Mathf.Exp(-_armourPenetrationSteepness * armourDifference));
         float penetrateRoll = UnityEngine.Random.value;
-        //Debug.Log(string.Format("Hit on armour. Armour rating: {0}. Armour penetration: {1}. Chance to penetrate: {2}. Roll: {3}.", armourRating, armourPenetration, penetrateChance, penetrateRoll));
+        //Debug.LogFormat("Hit on armour. Armour rating: {0}. Armour penetration: {1}. Chance to penetrate: {2}. Roll: {3}.", armourRating, armourPenetration, penetrateChance, penetrateRoll);
         return penetrateRoll < penetrateChance;
     }
 

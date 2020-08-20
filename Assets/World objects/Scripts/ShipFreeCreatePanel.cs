@@ -238,7 +238,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 {
                     tb.AmmoType = wt.Item3;
                     ValueTuple<float, float, float> dps = tb.DebugGetDPS();
-                    Debug.Log(string.Format("Weapon: {0} {1}: SH={2} SY={3} HL={4}", cst, wt, dps.Item1, dps.Item2, dps.Item3));
+                    Debug.LogFormat("Weapon: {0} {1}: SH={2} SY={3} HL={4}", cst, wt, dps.Item1, dps.Item2, dps.Item3);
                     Destroy(tb);
                 }
             }

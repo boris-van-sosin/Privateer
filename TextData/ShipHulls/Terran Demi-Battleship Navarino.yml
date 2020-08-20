@@ -555,20 +555,20 @@ WeaponHardpoints:
 HullProtection:
   HullHitpoints: 200000
   Armour:
-    ForeValue: 825
-    AftValue: 775
-    LeftValue: 850
-    RightValue: 850
+    ForeValue: 875
+    AftValue: 850
+    LeftValue: 900
+    RightValue: 900
   ReducedArmour:
-    ForeValue: 275
-    AftValue: 255
-    LeftValue: 280
-    RightValue: 280
+    ForeValue: 290
+    AftValue: 280
+    LeftValue: 300
+    RightValue: 300
   MitigationArmour:
-    ForeValue: 650
-    AftValue: 600
-    LeftValue: 675
-    RightValue: 675
+    ForeValue: 750
+    AftValue: 725
+    LeftValue: 750
+    RightValue: 750
   ArmourMitigation: 0.7
 Mass: 425
 SkeletonCrew: 32
