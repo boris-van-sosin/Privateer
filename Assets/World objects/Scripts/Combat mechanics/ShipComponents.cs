@@ -325,7 +325,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
             Status = ComponentStatus.Undamaged,
             MaxShieldPoints = 1000,
             CurrShieldPoints = 1000,
-            MaxShieldPointRegeneration = 8,
+            MaxShieldPointRegeneration = 2,
             PowerUsage = 2,
             HeatGeneration = 1,
             PowerPerShieldRegeneration = 3,
