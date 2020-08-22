@@ -11,7 +11,6 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         _exhaustPatricleSystem = GetComponentInChildren<ParticleSystem>();
         _trail = GetComponent<TrailRenderer>();
         _collider = GetComponent<Collider>();
-        WeaponEffectKey = ObjectFactory.WeaponEffect.SmallExplosion;
         _targetReached = false;
         Targetable = true;
         Origin = transform.position;
@@ -141,12 +140,12 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     private void DoHit(RaycastHit hit, ShipBase shipHit)
     {
         shipHit.TakeHit(ProjectileWarhead, hit.point);
-        ParticleSystem ps = ObjectFactory.CreateWeaponEffect(WeaponEffectKey, hit.point);
+        ParticleSystem ps = ObjectFactory.AcquireParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, hit.point);
         if (ps != null)
         {
             ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
             ps.Play();
-            Destroy(ps.gameObject, 5.0f);
+            ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
         }
         Destroy(gameObject);
     }
@@ -243,7 +242,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     public ShipBase OriginShip;
     private bool _inBurnPhase = false;
     public Warhead ProjectileWarhead { get; set; }
-    public ObjectFactory.WeaponEffect WeaponEffectKey { get; set; }
+    public (string, string) WeaponEffectKey { get; set; }
     public Vector3 Target;
     public float TargetAcquisitionRadius;
     public ShipBase TargetShip { get; set; }

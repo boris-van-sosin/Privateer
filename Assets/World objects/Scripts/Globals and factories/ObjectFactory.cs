@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Text;
@@ -165,22 +164,24 @@ public static class ObjectFactory
     {
         if (_prototypes != null)
         {
-            ObjectCache.SpecificCache<ParticleSystem> currCache;
-            if (!_objCache.ParticleSystems.TryGetValue((assetBundleSource, asset), out currCache))
-            {
-                _objCache.ParticleSystems.Add((assetBundleSource, asset), currCache = new ObjectCache.SpecificCache<ParticleSystem>());
-            }
+            ObjectCache.SpecificCache<ParticleSystem> currCache = _objCache.GetOrCreateParticleSystemCache(assetBundleSource, asset);
             if (currCache.Count > 0)
             {
-                return currCache.Acquire();
+                ParticleSystem res = currCache.Acquire();
+                res.transform.position = position;
+                res.gameObject.SetActive(true);
+                //Debug.LogFormat("Got a particle system ({0}) from cache", asset);
+                return res;
             }
             else
             {
                 GameObject resObj = _prototypes.CreateObjectByPath(assetBundleSource, asset, "");
+                //Debug.LogFormat("Created a new particle system ({0})", asset);
                 ParticleSystem res = resObj.GetComponent<ParticleSystem>();
                 if (res != null)
                 {
                     res.transform.position = position;
+                    res.gameObject.SetActive(true);
                     return res;
                 }
                 else
@@ -197,12 +198,23 @@ public static class ObjectFactory
 
     public static void ReleaseParticleSystem(string assetBundleSource, string asset, ParticleSystem ps)
     {
-        ObjectCache.SpecificCache<ParticleSystem> currCache;
-        if (!_objCache.ParticleSystems.TryGetValue((assetBundleSource, asset), out currCache))
-        {
-            _objCache.ParticleSystems.Add((assetBundleSource, asset), currCache = new ObjectCache.SpecificCache<ParticleSystem>());
-        }
+        ps.gameObject.SetActive(false);
+        ObjectCache.SpecificCache<ParticleSystem> currCache = _objCache.GetOrCreateParticleSystemCache(assetBundleSource, asset);
         currCache.Release(ps);
+    }
+
+    public static void ReleaseParticleSystem(string assetBundleSource, string asset, ParticleSystem ps, float delay)
+    {
+        if (_prototypes != null)
+        {
+            float recycleTime = Time.time + delay;
+            _objCache.RecycleParticleSystem(assetBundleSource, asset, ps, recycleTime);
+            _prototypes.QueueDelayedAction(_objCache.AdvanceAllParticleSystemRecyclers, recycleTime);
+        }
+        else
+        {
+            GameObject.Destroy(ps, delay);
+        }
     }
 
     public static T GetRandom<T>(IEnumerable<T> lst)

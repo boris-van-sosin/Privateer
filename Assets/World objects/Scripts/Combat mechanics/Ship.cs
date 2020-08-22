@@ -756,7 +756,7 @@ public class Ship : ShipBase
             }
             if (!_explosionPlayed)
             {
-                ParticleSystem explosion = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.BigExplosion, transform.position);
+                ParticleSystem explosion = ObjectFactory.AcquireParticleSystem("AssetBundles\\StandaloneWindows\\effects", "BigExplosionEffect", transform.position);
                 explosion.Play();
                 switch (ShipSize)
                 {
@@ -778,7 +778,7 @@ public class Ship : ShipBase
                     default:
                         break;
                 }
-                Destroy(explosion.gameObject, 5.0f);
+                ObjectFactory.ReleaseParticleSystem("AssetBundles\\StandaloneWindows\\effects", "BigExplosionEffect", explosion, 5.0f);
                 _explosionPlayed = true;
             }
             critical = true;

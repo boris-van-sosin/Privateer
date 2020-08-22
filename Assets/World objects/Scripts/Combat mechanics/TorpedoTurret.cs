@@ -175,6 +175,7 @@ public class TorpedoTurret : TurretBase
         {
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, LaunchOrientation, _torpedoTarget, LoadedTorpedoType, ContainingShip);
+            t.WeaponEffectKey = ObjectFactory.GetEffectKey(LoadedTorpedoType);
             t.IsTracking = (LoadedTorpedoType == "Tracking");
             t.transform.position = Muzzles[_nextBarrel].position;
             yield return _spreadDelay;

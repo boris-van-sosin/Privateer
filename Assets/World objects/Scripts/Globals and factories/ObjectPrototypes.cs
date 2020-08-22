@@ -9,6 +9,7 @@ public class ObjectPrototypes : MonoBehaviour
     void Awake()
     {
         ObjectFactory.SetPrototypes(this);
+        _delayedActions = null;
     }
 
     public Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
@@ -359,6 +360,32 @@ public class ObjectPrototypes : MonoBehaviour
         return new GameObject();
     }
 
+    public void QueueDelayedAction(Action<float> a, float actionTime)
+    {
+        _delayedActionQueue.Add(a, actionTime);
+        if (_delayedActions == null)
+        {
+            _delayedActions = StartCoroutine(DelayedActions());
+        }
+    }
+
+    private IEnumerator DelayedActions()
+    {
+        WaitUntil waitEmptyQueue = new WaitUntil(() => _delayedActionQueue.Count > 0);
+        while (true)
+        {
+            if (_delayedActionQueue.Count == 0)
+            {
+                yield return waitEmptyQueue;
+            }
+            (Action<float>, float) next = _delayedActionQueue.RemoveWithCost();
+            float t = Time.time;
+            yield return new WaitForSeconds(next.Item2 - t);
+            next.Item1(t);
+            yield return null;
+        }
+    }
+
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
@@ -407,6 +434,9 @@ public class ObjectPrototypes : MonoBehaviour
 
     private Dictionary<(string, string, string), GameObject> _objCache = new Dictionary<(string, string, string), GameObject>();
 
+    private Coroutine _delayedActions;
+    private StagPoint.Collections.BinaryMinHeap<Action<float>, float> _delayedActionQueue = new StagPoint.Collections.BinaryMinHeap<Action<float>, float>();
+
     [Serializable]
     public struct SprikeKeyValue
     {
@@ -426,5 +456,13 @@ public class ObjectPrototypes : MonoBehaviour
     {
         public StrikeCraft CraftType;
         public int FormationSize;
+    }
+
+    private class DelayedActionComparer : IComparer<(float, Action)>
+    {
+        public int Compare((float, Action) x, (float, Action) y)
+        {
+            return x.Item1.CompareTo(y.Item1);
+        }
     }
 }

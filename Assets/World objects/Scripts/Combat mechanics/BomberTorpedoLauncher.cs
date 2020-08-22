@@ -124,6 +124,7 @@ public class BomberTorpedoLauncher : TurretBase
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * GlobalDistances.TorpedoLaunchNoiseMagnitude)).normalized;
             Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
             Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, w, ContainingShip);
+            t.WeaponEffectKey = ObjectFactory.GetEffectKey(LoadedTorpedoType);
             t.ColdLaunchDist = GlobalDistances.TorpedoBomberColdLaunchDist;
             t.IsTracking = (LoadedTorpedoType == "Tracking");
             t.transform.position = Muzzles[idx].position;

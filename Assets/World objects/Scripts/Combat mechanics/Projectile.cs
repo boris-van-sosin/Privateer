@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
         {
             ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
             ps.Play();
-            Destroy(ps.gameObject, 5.0f);
+            ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
         }
         Destroy(gameObject);
     }
@@ -56,7 +56,7 @@ public class Projectile : MonoBehaviour
         {
             ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
             ps.Play();
-            Destroy(ps.gameObject, 5.0f);
+            ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
         }
         Destroy(gameObject);
         Destroy(torp.gameObject); //TODO: replace with damage calculation
@@ -140,7 +140,7 @@ public class Projectile : MonoBehaviour
             {
                 ps.transform.localScale = new Vector3(ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale, ProjectileWarhead.WeaponEffectScale);
                 ps.Play();
-                Destroy(ps.gameObject, 5.0f);
+                ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
             }
             Destroy(gameObject);
         }
