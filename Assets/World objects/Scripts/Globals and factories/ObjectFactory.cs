@@ -39,7 +39,7 @@ public static class ObjectFactory
         }
     }
 
-    public static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
+    private static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
     {
         if (_prototypes != null)
         {
@@ -52,6 +52,42 @@ public static class ObjectFactory
         {
             return null;
         }
+    }
+
+    public static Projectile AcquireProjectile(Vector3 position, Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
+    {
+        if (_prototypes != null)
+        {
+            Projectile res;
+            if (_objCache.ProjectileCache.Count > 0)
+            {
+                res = _objCache.ProjectileCache.Acquire();
+                Quaternion q = Quaternion.LookRotation(Vector3.up, firingVector);
+                res.transform.position = position;
+                res.transform.rotation = q;
+                res.Speed = velocity;
+                res.Range = range;
+                res.OriginShip = origShip;
+                res.SetScale(projectileScale);
+                res.ProjectileWarhead = w;
+                res.ResetObject();
+            }
+            else
+            {
+                res = CreateProjectile(firingVector, velocity, range, projectileScale, w, origShip);
+                res.transform.position = position;
+            }
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static void ReleaseProjectile(Projectile p)
+    {
+        _objCache.ProjectileCache.Release(p);
     }
 
     public static Projectile CreatePlasmaProjectile(Vector3 firingVector, float velocity, float range, Warhead w, ShipBase origShip)
@@ -115,12 +151,13 @@ public static class ObjectFactory
         return res;
     }
 
-    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, ShipBase origShip)
+    private static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, float torpedoScale, ShipBase origShip)
     {
         if (_prototypes != null)
         {
             Torpedo t = _prototypes.CreateTorpedo(launchVector, launchOrientation, target, range, origShip);
             t.ProjectileWarhead = w;
+            t.transform.localScale = Vector3.one * torpedoScale;
             return t;
         }
         else
@@ -129,19 +166,41 @@ public static class ObjectFactory
         }
     }
 
-    public static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, string torpType, ShipBase origShip)
+    public static Torpedo AcquireTorpedo(Vector3 position, Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, float torpedoScale, ShipBase origShip)
     {
         if (_prototypes != null)
         {
-            WarheadDataEntry4 torpData = _torpedoWarheads[torpType];
-            Torpedo t = CreateTorpedo(launchVector, launchOrientation, target, torpData.MaxRange, CreateWarhead(torpType), origShip);
-            t.transform.localScale = Vector3.one * torpData.ProjectileScale;
+            Torpedo t;
+            if (_objCache.TorpedoCache.Count > 0)
+            {
+                t = _objCache.TorpedoCache.Acquire();
+                t.transform.position = position;
+                t.ProjectileWarhead = w;
+                t.transform.localScale = Vector3.one * torpedoScale;
+                Quaternion q = Quaternion.LookRotation(Vector3.up, launchOrientation);
+                t.transform.rotation = q;
+                t.OriginShip = origShip;
+                t.Target = target;
+                t.Range = range;
+                t.ColdLaunchVec = launchVector;
+                t.ResetObject();
+            }
+            else
+            {
+                t = CreateTorpedo(launchVector, launchOrientation, target, range, w, torpedoScale, origShip);
+                t.transform.position = position;
+            }
             return t;
         }
         else
         {
             return null;
         }
+    }
+
+    public static void ReleaseTorpedo(Torpedo t)
+    {
+        _objCache.TorpedoCache.Release(t);
     }
 
     public static ParticleSystem CreateWeaponEffect(WeaponEffect e, Vector3 position)
@@ -164,7 +223,8 @@ public static class ObjectFactory
     {
         if (_prototypes != null)
         {
-            ObjectCache.SpecificCache<ParticleSystem> currCache = _objCache.GetOrCreateParticleSystemCache(assetBundleSource, asset);
+            ObjectCache.CacheWithRecycler<ParticleSystem> currCache = _objCache.GetOrCreateParticleSystemCache(assetBundleSource, asset);
+            _objCache.AdvanceAllParticleSystemRecyclers(Time.time);
             if (currCache.Count > 0)
             {
                 ParticleSystem res = currCache.Acquire();
@@ -199,8 +259,8 @@ public static class ObjectFactory
     public static void ReleaseParticleSystem(string assetBundleSource, string asset, ParticleSystem ps)
     {
         ps.gameObject.SetActive(false);
-        ObjectCache.SpecificCache<ParticleSystem> currCache = _objCache.GetOrCreateParticleSystemCache(assetBundleSource, asset);
-        currCache.Release(ps);
+        ObjectCache.CacheWithRecycler<ParticleSystem> currCache = _objCache.GetOrCreateParticleSystemCache(assetBundleSource, asset);
+        currCache.Recycle(ps);
     }
 
     public static void ReleaseParticleSystem(string assetBundleSource, string asset, ParticleSystem ps, float delay)
@@ -209,7 +269,7 @@ public static class ObjectFactory
         {
             float recycleTime = Time.time + delay;
             _objCache.RecycleParticleSystem(assetBundleSource, asset, ps, recycleTime);
-            _prototypes.QueueDelayedAction(_objCache.AdvanceAllParticleSystemRecyclers, recycleTime);
+            //_prototypes.QueueDelayedAction(_objCache.AdvanceAllParticleSystemRecyclers, recycleTime);
         }
         else
         {
@@ -242,10 +302,10 @@ public static class ObjectFactory
         return _torpedoWarheads[torpType].WarheadData;
     }
 
-    public static ValueTuple<int, float> TorpedoLaunchDataFromTorpedoType(string torpType)
+    public static (int, float, float, Warhead) TorpedoLaunchDataFromTorpedoType(string torpType)
     {
-        WarheadDataEntry4 tropData = _torpedoWarheads[torpType];
-        return new ValueTuple<int, float>(tropData.SpeardSize, tropData.MaxRange);
+        WarheadDataEntry4 torpData = _torpedoWarheads[torpType];
+        return (torpData.SpeardSize, torpData.MaxRange, torpData.ProjectileScale, torpData.WarheadData);
     }
 
     public static IEnumerable<string> GetAllTurretMounts()

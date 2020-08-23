@@ -21,9 +21,10 @@ public class BomberTorpedoLauncher : TurretBase
             _dummyTorpedoRoot = transform;
         }
         base.Start();
-        ValueTuple<int, float> launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
+        (int, float, float, Warhead) launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
         TorpedoesLoaded = _torpedoesInSpread = Muzzles.Length;
+        _warhead = launchData.Item4;
     }
 
     protected override void ParseMuzzles()
@@ -122,12 +123,11 @@ public class BomberTorpedoLauncher : TurretBase
         {
             int idx = TorpedoesLoaded - 1;
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * GlobalDistances.TorpedoLaunchNoiseMagnitude)).normalized;
-            Warhead w = ObjectFactory.CreateWarhead(LoadedTorpedoType);
-            Torpedo t = ObjectFactory.CreateTorpedo(LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, w, ContainingShip);
+            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[idx].position, LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, _warhead, Muzzles[idx].lossyScale.x, ContainingShip);
             t.WeaponEffectKey = ObjectFactory.GetEffectKey(LoadedTorpedoType);
             t.ColdLaunchDist = GlobalDistances.TorpedoBomberColdLaunchDist;
             t.IsTracking = (LoadedTorpedoType == "Tracking");
-            t.transform.position = Muzzles[idx].position;
+            t.transform.localScale = Muzzles[idx].lossyScale;
             Muzzles[idx].gameObject.SetActive(false);
             --TorpedoesLoaded;
             yield return _spreadDelay;
@@ -208,6 +208,7 @@ public class BomberTorpedoLauncher : TurretBase
     private int _torpedoesInSpread;
     private Vector3 _torpedoTarget;
     private Transform _dummyTorpedoRoot;
+    private Warhead _warhead;
 
     private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
 }

@@ -10,10 +10,9 @@ public class GunTurret : DirectionalTurret
     {
         Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, AmmoType);
         warhead.EffectVsStrikeCraft = Mathf.Clamp(warhead.EffectVsStrikeCraft + _vsStrikeCraftModifier, 0.05f, 0.95f);
-        Projectile p = ObjectFactory.CreateProjectile(firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
+        Projectile p = ObjectFactory.AcquireProjectile(Muzzles[barrelIdx].position, firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
         p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize, AmmoType);
         p.ProximityProjectile = warhead.BlastRadius > 0f;
-        p.transform.position = Muzzles[barrelIdx].position;
         if (MuzzleFx[barrelIdx] != null)
         {
             MuzzleFx[barrelIdx].Play(true);

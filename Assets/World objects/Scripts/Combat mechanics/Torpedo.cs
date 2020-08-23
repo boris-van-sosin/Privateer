@@ -20,8 +20,8 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             _trail.enabled = false;
         }
         TargetShip = null;
-        StartCoroutine(TargetAcquirePulse());
-        StartCoroutine(TargetAdjustPulse());
+        _acquireTargetCoroutine = StartCoroutine(TargetAcquirePulse());
+        _adjustTargetCoroutine =  StartCoroutine(TargetAdjustPulse());
         if (OriginShip != null)
         {
             _coldVFromOriginShip = OriginShip.ActualVelocity;
@@ -132,7 +132,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             _distanceTraveled += distanceToTravel;
             if (_distanceTraveled >= Range)
             {
-                Destroy(gameObject);
+                RecycleObject();
             }
         }
     }
@@ -147,7 +147,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             ps.Play();
             ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
         }
-        Destroy(gameObject);
+        RecycleObject();
     }
 
     void OnDestroy()
@@ -203,7 +203,57 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         }
     }
 
+    private void RecycleObject()
+    {
+        Targetable = false;
+        if (_acquireTargetCoroutine != null)
+        {
+            StopCoroutine(_acquireTargetCoroutine);
+        }
+        if (_adjustTargetCoroutine != null)
+        {
+            StopCoroutine(_adjustTargetCoroutine);
+        }
+        if (null != _exhaustPatricleSystem)
+        {
+            _exhaustPatricleSystem.Stop();
+        }
+        gameObject.SetActive(false);
+        ObjectFactory.ReleaseTorpedo(this);
+    }
+
+    public void ResetObject()
+    {
+        gameObject.SetActive(true);
+        _targetReached = false;
+        Targetable = true;
+        Origin = transform.position;
+        _actualTurnRate = 0f;
+        _inBurnPhase = false;
+        TargetShip = null;
+        _acquireTargetCoroutine = StartCoroutine(TargetAcquirePulse());
+        _adjustTargetCoroutine = StartCoroutine(TargetAdjustPulse());
+        if (OriginShip != null)
+        {
+            _coldVFromOriginShip = OriginShip.ActualVelocity;
+        }
+        else
+        {
+            _coldVFromOriginShip = Vector3.zero;
+        }
+        if (null != _trail)
+        {
+            _trail.Clear();
+            _trail.enabled = false;
+        }
+    }
+
     // TargetableEntity properties:
+    public void TakeHit(Warhead w, Vector3 location)
+    {
+        RecycleObject();
+    }
+
     public Vector3 EntityLocation { get { return transform.position; } }
     public bool Targetable { get; private set; }
     public TargetableEntityInfo TargetableBy => TargetableEntityInfo.Flak | TargetableEntityInfo.AntiTorpedo;
@@ -253,6 +303,9 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     private ParticleSystem _exhaustPatricleSystem;
     private TrailRenderer _trail;
     private Collider _collider;
+
+    private Coroutine _acquireTargetCoroutine;
+    private Coroutine _adjustTargetCoroutine;
 
     private static readonly WaitForSeconds _trackingDelay = new WaitForSeconds(1f);
     private static readonly WaitForSeconds _nonTrackingDelay = new WaitForSeconds(10f);

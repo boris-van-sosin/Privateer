@@ -32,9 +32,22 @@ public class Projectile : MonoBehaviour
         _distanceTraveled += distanceToTravel;
         if (_distanceTraveled >= Range)
         {
-            Destroy(gameObject);
+            RecycleObject();
         }
 	}
+
+    public void ResetObject()
+    {
+        gameObject.SetActive(true);
+        _trail.Clear();
+        _distanceTraveled = 0;
+    }
+
+    private void RecycleObject()
+    {
+        gameObject.SetActive(false);
+        ObjectFactory.ReleaseProjectile(this);
+    }
 
     protected virtual void DoHit(RaycastHit hit, ShipBase shipHit)
     {
@@ -46,7 +59,7 @@ public class Projectile : MonoBehaviour
             ps.Play();
             ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
         }
-        Destroy(gameObject);
+        RecycleObject();
     }
 
     protected virtual void DoHit(RaycastHit hit, Torpedo torp)
@@ -58,8 +71,8 @@ public class Projectile : MonoBehaviour
             ps.Play();
             ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
         }
-        Destroy(gameObject);
-        Destroy(torp.gameObject); //TODO: replace with damage calculation
+        RecycleObject();
+        torp.TakeHit(ProjectileWarhead, transform.position);
     }
 
     public void SetScale(float sc)
@@ -123,13 +136,13 @@ public class Projectile : MonoBehaviour
                     validHit = true;
                 }
             }
-            else if ((t = c.GetComponent<Torpedo>())!=null)
+            else if ((t = c.GetComponent<Torpedo>()) != null)
             {
                 //Debug.LogFormat("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", t, pos, blastRadius);
                 validHit = true;
                 if (IsHit(t))
                 {
-                    Destroy(t.gameObject); //TODO: replace with damage calculation
+                    t.TakeHit(ProjectileWarhead, transform.position);
                 }
             }
         }
@@ -142,7 +155,7 @@ public class Projectile : MonoBehaviour
                 ps.Play();
                 ObjectFactory.ReleaseParticleSystem(WeaponEffectKey.Item1, WeaponEffectKey.Item2, ps, 2.0f);
             }
-            Destroy(gameObject);
+            RecycleObject();
         }
         return validHit;
     }

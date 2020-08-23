@@ -5,72 +5,55 @@ using UnityEngine;
 
 public class ObjectCache
 {
-    public SpecificCache<SelectedShipCard> ShipCards = new SpecificCache<SelectedShipCard>();
-    private Dictionary<(string, string), SpecificCache<ParticleSystem>> _particleSystems = new Dictionary<(string, string), SpecificCache<ParticleSystem>>();
-    private Dictionary<(string, string), BinaryMinHeap<ParticleSystem, float>> _particleSystemRecyclers = new Dictionary<(string, string), BinaryMinHeap<ParticleSystem, float>>();
-
-    public SpecificCache<ParticleSystem> GetOrCreateParticleSystemCache(string assetBundleSource, string asset)
+    public ObjectCache()
     {
-        SpecificCache<ParticleSystem> currCache;
-        if (!_particleSystems.TryGetValue((assetBundleSource, asset), out currCache))
+        ShipCards = new SpecificCache<SelectedShipCard>();
+        ProjectileCache = new SpecificCache<Projectile>();
+        HarpaxCache = new SpecificCache<HarpaxBehavior>();
+        TorpedoCache = new SpecificCache<Torpedo>();
+    }
+
+    public SpecificCache<SelectedShipCard> ShipCards { get; private set; }
+    private Dictionary<(string, string), CacheWithRecycler<ParticleSystem>> _particleSystemCache = new Dictionary<(string, string), CacheWithRecycler<ParticleSystem>>();
+
+    public SpecificCache<Projectile> ProjectileCache { get; private set; }
+    public SpecificCache<HarpaxBehavior> HarpaxCache { get; private set; }
+    public SpecificCache<Torpedo> TorpedoCache { get; private set; }
+
+    public CacheWithRecycler<ParticleSystem> GetOrCreateParticleSystemCache(string assetBundleSource, string asset)
+    {
+        CacheWithRecycler<ParticleSystem> currCache;
+        if (!_particleSystemCache.TryGetValue((assetBundleSource, asset), out currCache))
         {
-            _particleSystems.Add((assetBundleSource, asset), currCache = new SpecificCache<ParticleSystem>());
+            _particleSystemCache.Add((assetBundleSource, asset), currCache = new CacheWithRecycler<ParticleSystem>());
         }
         return currCache;
     }
 
     public void RecycleParticleSystem(string assetBundleSource, string asset, ParticleSystem ps, float time)
     {
-        BinaryMinHeap<ParticleSystem, float> currRecycler;
-        if (!_particleSystemRecyclers.TryGetValue((assetBundleSource, asset), out currRecycler))
+        CacheWithRecycler<ParticleSystem> currCache;
+        if (!_particleSystemCache.TryGetValue((assetBundleSource, asset), out currCache))
         {
-            _particleSystemRecyclers.Add((assetBundleSource, asset), currRecycler = new BinaryMinHeap<ParticleSystem, float>());
+            _particleSystemCache.Add((assetBundleSource, asset), currCache = new CacheWithRecycler<ParticleSystem>());
         }
-        currRecycler.Add(ps, time);
+        currCache.Recycle(ps, time);
     }
 
     public void AdvanceParticleSystemRecycler(string assetBundleSource, string asset, float time)
     {
-        BinaryMinHeap<ParticleSystem, float> currRecycler;
-        if (!_particleSystemRecyclers.TryGetValue((assetBundleSource, asset), out currRecycler))
+        CacheWithRecycler<ParticleSystem> currCache;
+        if (_particleSystemCache.TryGetValue((assetBundleSource, asset), out currCache))
         {
-            return;
-        }
-        while (currRecycler.Count > 0)
-        {
-            (ParticleSystem, float) next = currRecycler.PeekWithCost();
-            if (time < next.Item2)
-            {
-                break;
-            }
-            else
-            {
-                next.Item1.gameObject.SetActive(false);
-                GetOrCreateParticleSystemCache(assetBundleSource, asset).Release(next.Item1);
-                currRecycler.Remove();
-            }
+            currCache.AdvanceRecycler(time);
         }
     }
 
     public void AdvanceAllParticleSystemRecyclers(float time)
     {
-        foreach (KeyValuePair<(string, string), BinaryMinHeap<ParticleSystem, float>> currRecyclerKV in _particleSystemRecyclers)
+        foreach (CacheWithRecycler<ParticleSystem> currRecycler in _particleSystemCache.Values)
         {
-            SpecificCache<ParticleSystem> currCache = GetOrCreateParticleSystemCache(currRecyclerKV.Key.Item1, currRecyclerKV.Key.Item2);
-            while (currRecyclerKV.Value.Count > 0)
-            {
-                (ParticleSystem, float) next = currRecyclerKV.Value.PeekWithCost();
-                if (time < next.Item2)
-                {
-                    break;
-                }
-                else
-                {
-                    next.Item1.gameObject.SetActive(false);
-                    currCache.Release(next.Item1);
-                    currRecyclerKV.Value.Remove();
-                }
-            }
+            currRecycler.AdvanceRecycler(time);
         }
     }
 
@@ -89,6 +72,60 @@ public class ObjectCache
         }
 
         private Queue<T> _cache = new Queue<T>();
+    }
+
+    public class CacheWithRecycler<T> where T : Component
+    {
+        public CacheWithRecycler(bool deactivateOnRecycle)
+        {
+            _deactivateOnRecycle = deactivateOnRecycle;
+        }
+
+        public CacheWithRecycler() : this(true)
+        {
+        }
+
+        public T Acquire()
+        {
+            return _cache.Acquire();
+        }
+
+        public void Recycle(T t, float time)
+        {
+            _recycler.Add(t, time);
+        }
+
+        public void Recycle(T t)
+        {
+            _cache.Release(t);
+        }
+
+        public void AdvanceRecycler(float time)
+        {
+            while (_recycler.Count > 0)
+            {
+                (T, float) next = _recycler.PeekWithCost();
+                if (time < next.Item2)
+                {
+                    break;
+                }
+                else
+                {
+                    if (_deactivateOnRecycle)
+                    {
+                        next.Item1.gameObject.SetActive(false);
+                    }
+                    _cache.Release(next.Item1);
+                    _recycler.Remove();
+                }
+            }
+        }
+
+        public int Count => _cache.Count;
+
+        private SpecificCache<T> _cache = new SpecificCache<T>();
+        private BinaryMinHeap<T, float> _recycler = new BinaryMinHeap<T, float>();
+        private bool _deactivateOnRecycle;
     }
 }
 

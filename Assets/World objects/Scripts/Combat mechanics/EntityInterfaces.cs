@@ -9,6 +9,7 @@ public interface ITargetableEntity
     bool Targetable { get; }
     TargetableEntityInfo TargetableBy { get; }
     ObjectFactory.TacMapEntityType TargetableEntityType { get; }
+    void TakeHit(Warhead w, Vector3 location);
 }
 
 [Flags]
