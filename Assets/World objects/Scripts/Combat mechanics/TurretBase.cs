@@ -53,6 +53,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         SlotType = turretSlotType;
         ComponentHitPoints = ComponentMaxHitPoints;
         _allowedSlotTypes = new string[] { turretSlotType };
+        _warheads = new Warhead[_maxWarheads];
     }
 
     private void ParseDeadZones()
@@ -650,6 +651,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public string TurretType;
     public float MaxRange;
     public float FiringInterval;
+    protected Warhead[] _warheads;
+    private static readonly int _maxWarheads = 2;
+
     public float ActualFiringInterval { get; protected set; }
     public string TurretWeaponSize;
     public string TurretWeaponType;
@@ -801,8 +805,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected bool _flippedX = false;
 
-    private static DynamicBuff _defaultBuff = DynamicBuff.Default();
+    private static readonly DynamicBuff _defaultBuff = DynamicBuff.Default();
     public DynamicBuff ComponentBuff => _defaultBuff;
+
+    // Ugly optimization:
+    protected Collider[] _collidersCache = new Collider[1024];
 
     protected static readonly WaitForSeconds _autoBehaviorPulseDelay = new WaitForSeconds(0.1f);
     protected static readonly WaitForSeconds _fullBroadsideDelay = new WaitForSeconds(0.1f);

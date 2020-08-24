@@ -24,7 +24,7 @@ public class BomberTorpedoLauncher : TurretBase
         (int, float, float, Warhead) launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
         TorpedoesLoaded = _torpedoesInSpread = Muzzles.Length;
-        _warhead = launchData.Item4;
+        _warheads[0] = launchData.Item4;
     }
 
     protected override void ParseMuzzles()
@@ -123,7 +123,7 @@ public class BomberTorpedoLauncher : TurretBase
         {
             int idx = TorpedoesLoaded - 1;
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * GlobalDistances.TorpedoLaunchNoiseMagnitude)).normalized;
-            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[idx].position, LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, _warhead, Muzzles[idx].lossyScale.x, ContainingShip);
+            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[idx].position, LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, _warheads[0], Muzzles[idx].lossyScale.x, ContainingShip);
             t.WeaponEffectKey = ObjectFactory.GetEffectKey(LoadedTorpedoType);
             t.ColdLaunchDist = GlobalDistances.TorpedoBomberColdLaunchDist;
             t.IsTracking = (LoadedTorpedoType == "Tracking");
@@ -147,12 +147,12 @@ public class BomberTorpedoLauncher : TurretBase
 
     protected override ITargetableEntity AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * GlobalDistances.TurretTargetAcquisitionRangeFactor, ObjectFactory.NavBoxesAllLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, MaxRange * GlobalDistances.TurretTargetAcquisitionRangeFactor, _collidersCache, ObjectFactory.NavBoxesAllLayerMask);
         ITargetableEntity foundTarget = null;
         int bestScore = 0;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
-            Ship s = ShipBase.FromCollider(c) as Ship;
+            Ship s = ShipBase.FromCollider(_collidersCache[i]) as Ship;
             if (s == null)
             {
                 continue;
@@ -208,7 +208,6 @@ public class BomberTorpedoLauncher : TurretBase
     private int _torpedoesInSpread;
     private Vector3 _torpedoTarget;
     private Transform _dummyTorpedoRoot;
-    private Warhead _warhead;
 
     private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
 }

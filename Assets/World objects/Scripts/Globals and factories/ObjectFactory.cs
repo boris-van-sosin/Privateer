@@ -39,13 +39,11 @@ public static class ObjectFactory
         }
     }
 
-    private static Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, float projectileScale, Warhead w, ShipBase origShip)
+    private static Projectile CreateProjectile()
     {
         if (_prototypes != null)
         {
-            Projectile p = _prototypes.CreateProjectile(firingVector, velocity, range, origShip);
-            p.SetScale(projectileScale);
-            p.ProjectileWarhead = w;
+            Projectile p = _prototypes.CreateProjectile();
             return p;
         }
         else
@@ -59,23 +57,27 @@ public static class ObjectFactory
         if (_prototypes != null)
         {
             Projectile res;
+            bool needsReset = false;
             if (_objCache.ProjectileCache.Count > 0)
             {
                 res = _objCache.ProjectileCache.Acquire();
-                Quaternion q = Quaternion.LookRotation(Vector3.up, firingVector);
-                res.transform.position = position;
-                res.transform.rotation = q;
-                res.Speed = velocity;
-                res.Range = range;
-                res.OriginShip = origShip;
-                res.SetScale(projectileScale);
-                res.ProjectileWarhead = w;
-                res.ResetObject();
+                needsReset = true;
             }
             else
             {
-                res = CreateProjectile(firingVector, velocity, range, projectileScale, w, origShip);
-                res.transform.position = position;
+                res = CreateProjectile();
+            }
+            Quaternion q = Quaternion.LookRotation(Vector3.up, firingVector);
+            res.transform.position = position;
+            res.transform.rotation = q;
+            res.Speed = velocity;
+            res.Range = range;
+            res.OriginShip = origShip;
+            res.SetScale(projectileScale);
+            res.ProjectileWarhead = w;
+            if (needsReset)
+            {
+                res.ResetObject();
             }
             return res;
         }
@@ -124,11 +126,11 @@ public static class ObjectFactory
     }
 
 
-    public static HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
+    private static HarpaxBehavior CreateHarpaxProjectile()
     {
         if (_prototypes != null)
         {
-            HarpaxBehavior p = _prototypes.CreateHarpaxProjectile(firingVector, velocity, range, origShip);
+            HarpaxBehavior p = _prototypes.CreateHarpaxProjectile();
             return p;
         }
         else
@@ -137,27 +139,88 @@ public static class ObjectFactory
         }
     }
 
-    public static CableBehavior CreateHarpaxTowCable(Rigidbody obj1, Rigidbody obj2)
-    {
-        CableBehavior res = _prototypes.CreateHarpaxCable();
-        res.Connect(obj1, obj2);
-        return res;
-    }
-
-    public static CableBehavior CreateHarpaxTowCable(Rigidbody obj1, Rigidbody obj2, Vector3 targetConnectionPoint)
-    {
-        CableBehavior res = _prototypes.CreateHarpaxCable();
-        res.Connect(obj1, obj2, targetConnectionPoint);
-        return res;
-    }
-
-    private static Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, Warhead w, float torpedoScale, ShipBase origShip)
+    public static HarpaxBehavior AcquireHarpaxProjectile(Vector3 position, Vector3 firingVector, float velocity, float range, float scale, ShipBase origShip)
     {
         if (_prototypes != null)
         {
-            Torpedo t = _prototypes.CreateTorpedo(launchVector, launchOrientation, target, range, origShip);
-            t.ProjectileWarhead = w;
-            t.transform.localScale = Vector3.one * torpedoScale;
+            HarpaxBehavior res;
+            bool needsReset = false;
+            if (_objCache.HarpaxCache.Count > 0)
+            {
+                res = _objCache.HarpaxCache.Acquire();
+                needsReset = true;
+            }
+            else
+            {
+                res = CreateHarpaxProjectile();
+            }
+            res.transform.position = position;
+            Quaternion q = Quaternion.LookRotation(Vector3.up, firingVector);
+            res.transform.rotation = q;
+            res.Speed = velocity;
+            res.Range = range;
+            res.OriginShip = origShip;
+            if (needsReset)
+            {
+                res.ResetObject();
+            }
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static void ReleaseHarpaxProjectile(HarpaxBehavior h)
+    {
+        _objCache.HarpaxCache.Release(h);
+    }
+
+    public static CableBehavior CreateHarpaxTowCable()
+    {
+        CableBehavior res = _prototypes.CreateHarpaxCable();
+        return res;
+    }
+
+    public static CableBehavior AcquireHarpaxTowCable(Rigidbody obj1, Rigidbody obj2, Vector3 targetConnectionPoint)
+    {
+        if (_prototypes != null)
+        {
+            CableBehavior res;
+            bool needsReset = false;
+            if (_objCache.HarpaxCableCache.Count > 0)
+            {
+                res = _objCache.HarpaxCableCache.Acquire();
+                needsReset = true;
+            }
+            else
+            {
+                res = CreateHarpaxTowCable();
+            }
+            if (needsReset)
+            {
+                res.ResetObject();
+            }
+            res.Connect(obj1, obj2, targetConnectionPoint);
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static void ReleaseHHarpaxTowCable(CableBehavior c)
+    {
+        _objCache.HarpaxCableCache.Release(c);
+    }
+
+    private static Torpedo CreateTorpedo()
+    {
+        if (_prototypes != null)
+        {
+            Torpedo t = _prototypes.CreateTorpedo();
             return t;
         }
         else
@@ -171,24 +234,28 @@ public static class ObjectFactory
         if (_prototypes != null)
         {
             Torpedo t;
+            bool needsReset = false;
             if (_objCache.TorpedoCache.Count > 0)
             {
                 t = _objCache.TorpedoCache.Acquire();
-                t.transform.position = position;
-                t.ProjectileWarhead = w;
-                t.transform.localScale = Vector3.one * torpedoScale;
-                Quaternion q = Quaternion.LookRotation(Vector3.up, launchOrientation);
-                t.transform.rotation = q;
-                t.OriginShip = origShip;
-                t.Target = target;
-                t.Range = range;
-                t.ColdLaunchVec = launchVector;
-                t.ResetObject();
+                needsReset = true;
             }
             else
             {
-                t = CreateTorpedo(launchVector, launchOrientation, target, range, w, torpedoScale, origShip);
-                t.transform.position = position;
+                t = CreateTorpedo();
+            }
+            t.transform.position = position;
+            t.ProjectileWarhead = w;
+            t.transform.localScale = Vector3.one * torpedoScale;
+            Quaternion q = Quaternion.LookRotation(Vector3.up, launchOrientation);
+            t.transform.rotation = q;
+            t.OriginShip = origShip;
+            t.Target = target;
+            t.Range = range;
+            t.ColdLaunchVec = launchVector;
+            if (needsReset)
+            {
+                t.ResetObject();
             }
             return t;
         }
@@ -666,7 +733,7 @@ public static class ObjectFactory
         if (t is GunTurret)
         {
             GunTurret gt = t as GunTurret;
-            gt.AmmoType = "KineticPenetrator";
+            gt.SetAmmoType(0, "KineticPenetrator");
             gt.DefaultAlternatingFire = weaponType.Contains("Auto");
         }
         else if (t is BomberTorpedoLauncher)

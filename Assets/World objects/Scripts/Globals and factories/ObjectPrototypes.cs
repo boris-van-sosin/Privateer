@@ -12,14 +12,9 @@ public class ObjectPrototypes : MonoBehaviour
         _delayedActions = null;
     }
 
-    public Projectile CreateProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
+    public Projectile CreateProjectile()
     {
         Projectile res = Instantiate(ProjectileTemplate);
-        Quaternion q = Quaternion.FromToRotation(res.transform.up, firingVector);
-        res.transform.rotation = q;
-        res.Speed = velocity;
-        res.Range = range;
-        res.OriginShip = origShip;
         return res;
     }
 
@@ -34,14 +29,9 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
-    public HarpaxBehavior CreateHarpaxProjectile(Vector3 firingVector, float velocity, float range, ShipBase origShip)
+    public HarpaxBehavior CreateHarpaxProjectile()
     {
         HarpaxBehavior res = Instantiate(HarpaxTemplate);
-        Quaternion q = Quaternion.FromToRotation(res.transform.up, firingVector);
-        res.transform.rotation = q;
-        res.Speed = velocity;
-        res.Range = range;
-        res.OriginShip = origShip;
         return res;
     }
 
@@ -50,15 +40,9 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate<CableBehavior>(HarpaxCableTemplate);
     }
 
-    public Torpedo CreateTorpedo(Vector3 launchVector, Vector3 launchOrientation, Vector3 target, float range, ShipBase origShip)
+    public Torpedo CreateTorpedo()
     {
         Torpedo res = Instantiate(TorpedoTemplate);
-        Quaternion q = Quaternion.FromToRotation(res.transform.up, launchOrientation);
-        res.transform.rotation = q;
-        res.OriginShip = origShip;
-        res.Target = target;
-        res.Range = range;
-        res.ColdLaunchVec = launchVector;
         return res;
     }
 

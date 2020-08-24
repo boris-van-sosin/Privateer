@@ -18,16 +18,28 @@ public class HarpaxBehavior : Projectile
         _cableRenderer.SetPosition(1, transform.position);
     }
 
+    public override void ResetObject()
+    {
+        base.ResetObject();
+        _attached = false;
+    }
+
+    protected override void RecycleObject()
+    {
+        gameObject.SetActive(false);
+        ObjectFactory.ReleaseHarpaxProjectile(this);
+    }
+
     protected override void DoHit(RaycastHit hit, ShipBase shipHit)
     {
         if (shipHit.ShipTotalShields > 0)
         {
-            Destroy(gameObject);
+            RecycleObject();
             return;
         }
         if (_attached || OriginShip.TowedByHarpax != null || OriginShip.TowingByHarpax != null || shipHit.TowedByHarpax != null || shipHit.TowingByHarpax != null)
         {
-            Destroy(gameObject);
+            RecycleObject();
             return;
         }
         _attached = true;
@@ -37,13 +49,13 @@ public class HarpaxBehavior : Projectile
         Rigidbody targetRB = shipHit.GetComponent<Rigidbody>();
         targetRB.drag = 10; targetRB.angularDrag = 10;
         origRB.drag = 10; origRB.angularDrag = 10;
-        CableBehavior cable = ObjectFactory.CreateHarpaxTowCable(origRB, targetRB, hit.point);
+        CableBehavior cable = ObjectFactory.AcquireHarpaxTowCable(origRB, targetRB, hit.point);
         OriginShip.TowingByHarpax = cable;
         shipHit.TowedByHarpax = cable;
         cable.MinRopeLength = 0.01f;
         cable.MaxRopeLength = (OriginShip.transform.position - hit.point).magnitude;
 
-        Destroy(gameObject);
+        RecycleObject();
     }
 
     private IEnumerator Bleh(Joint j)

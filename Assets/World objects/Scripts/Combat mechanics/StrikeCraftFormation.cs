@@ -104,4 +104,21 @@ public class StrikeCraftFormation : FormationBase
     public bool DestroyOnEmpty { get; set; }
 
     public CarrierBehavior HostCarrier { get; set; }
+
+    public bool AllOutOfAmmo()
+    {
+        if (_ships.Count == 0)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < _ships.Count; ++i)
+        {
+            if (!((StrikeCraft)_ships[i]).IsOutOfAmmo())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

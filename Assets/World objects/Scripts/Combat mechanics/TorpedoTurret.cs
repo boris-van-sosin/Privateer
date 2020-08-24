@@ -24,7 +24,7 @@ public class TorpedoTurret : TurretBase
         MaxRange = launchData.Item2;
         _torpedoesInSpread = launchData.Item1;
         _torpedoScale = launchData.Item3;
-        _warhead = launchData.Item4;
+        _warheads[0] = launchData.Item4;
     }
 
     protected override void SetDefaultAngle()
@@ -176,7 +176,7 @@ public class TorpedoTurret : TurretBase
         for (int i = 0; i < _torpedoesInSpread; ++i)
         {
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * 0.001f)).normalized;
-            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[_nextBarrel].position, LaunchVector, LaunchOrientation, _torpedoTarget, MaxRange, _warhead, _torpedoScale, ContainingShip);
+            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[_nextBarrel].position, LaunchVector, LaunchOrientation, _torpedoTarget, MaxRange, _warheads[0], _torpedoScale, ContainingShip);
             t.WeaponEffectKey = ObjectFactory.GetEffectKey(LoadedTorpedoType);
             t.IsTracking = (LoadedTorpedoType == "Tracking");
             yield return _spreadDelay;
@@ -210,7 +210,6 @@ public class TorpedoTurret : TurretBase
     private GenericOpenCloseAnim _torpedoTubeDoorsAnim;
     private Vector3 _torpedoTarget;
     private float _torpedoScale;
-    private Warhead _warhead;
 
     private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
 }

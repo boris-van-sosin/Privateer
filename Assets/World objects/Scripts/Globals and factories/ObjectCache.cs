@@ -11,6 +11,7 @@ public class ObjectCache
         ProjectileCache = new SpecificCache<Projectile>();
         HarpaxCache = new SpecificCache<HarpaxBehavior>();
         TorpedoCache = new SpecificCache<Torpedo>();
+        HarpaxCableCache = new SpecificCache<CableBehavior>();
     }
 
     public SpecificCache<SelectedShipCard> ShipCards { get; private set; }
@@ -19,6 +20,7 @@ public class ObjectCache
     public SpecificCache<Projectile> ProjectileCache { get; private set; }
     public SpecificCache<HarpaxBehavior> HarpaxCache { get; private set; }
     public SpecificCache<Torpedo> TorpedoCache { get; private set; }
+    public SpecificCache<CableBehavior> HarpaxCableCache { get; private set; }
 
     public CacheWithRecycler<ParticleSystem> GetOrCreateParticleSystemCache(string assetBundleSource, string asset)
     {

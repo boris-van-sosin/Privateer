@@ -2,6 +2,7 @@
 using System.Text;
 using UnityEngine;
 using System.Linq;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 public abstract class ShipBase : MovementBase, ITargetableEntity
@@ -571,7 +572,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         CableBehavior cable;
         if ((cable = TowingByHarpax) != null)
         {
-            cable.DisconnectAndDestroy();
+            cable.DisconnectAndRecycle();
         }
     }
     protected void DisconnectHarpaxTowed()
@@ -579,7 +580,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         CableBehavior cable;
         if ((cable = TowedByHarpax) != null)
         {
-            cable.DisconnectAndDestroy();
+            cable.DisconnectAndRecycle();
         }
     }
 
@@ -710,6 +711,40 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         return
             Vector3.Dot(offset, transform.up) > 0 &&
             Vector3.Angle(offset, transform.up) < 30;
+    }
+
+    // Attack range, for AI:
+    public float TurretsGetAttackRange(Func<ITurret, bool> turretFilter)
+    {
+        return TurretsGetAttackRange(turretFilter, true);
+    }
+    public float TurretsGetAttackRange(Func<ITurret, bool> turretFilter, bool min)
+    {
+        float range = -1f;
+        for (int i = 0; i < _turrets.Length; ++i)
+        {
+            if (_turrets[i] != null && turretFilter(_turrets[i]))
+            {
+                float currRange = _turrets[i].GetMaxRange;
+                if (range < 0f || (min && range < currRange) || (!min && range > currRange))
+                {
+                    range = currRange;
+                }
+            }
+        }
+        return range;
+    }
+
+    public bool TurretsAllReadyToFire(Func<ITurret, bool> turretFilter)
+    {
+        for (int i = 0; i < _turrets.Length; ++i)
+        {
+            if (_turrets[i] != null && _turrets[i].ComponentIsWorking && turretFilter(_turrets[i]) && !_turrets[i].ReadyToFire())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Things not in use, but needed in other classes:

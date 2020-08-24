@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class SpecialProjectileTurret : DirectionalTurret
 {
+    protected override void Start()
+    {
+        base.Start();
+        _warheads[0] = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
+    }
+
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
-        Projectile p = ObjectFactory.CreatePlasmaProjectile(firingVector, MuzzleVelocity, MaxRange, w, _containingShip);
+        Projectile p = ObjectFactory.CreatePlasmaProjectile(firingVector, MuzzleVelocity, MaxRange, _warheads[0], _containingShip);
         p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize);
         p.transform.position = Muzzles[barrelIdx].position;
     }

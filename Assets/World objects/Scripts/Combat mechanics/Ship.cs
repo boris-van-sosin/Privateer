@@ -369,35 +369,35 @@ public class Ship : ShipBase
     {
         if (On && (_acceleratingForward || _brakingForward))
         {
-            foreach (ParticleSystem p in _engineExhaustsOn)
-            {
-                p.Play();
-            }
-            foreach (ParticleSystem p in _engineExhaustsIdle.Concat(_engineExhaustsBrake))
-            {
-                p.Stop();
-            }
+            SetParticleSystems(_engineExhaustsOn, true);
+            SetParticleSystems(_engineExhaustsIdle, false);
+            SetParticleSystems(_engineExhaustsBrake, false);
         }
         else if (On && (_acceleratingBackwards || _brakingBackwards))
         {
-            foreach (ParticleSystem p in _engineExhaustsBrake.Concat(_engineExhaustsIdle))
-            {
-                p.Play();
-            }
-            foreach (ParticleSystem p in _engineExhaustsOn)
-            {
-                p.Stop();
-            }
+            SetParticleSystems(_engineExhaustsOn, false);
+            SetParticleSystems(_engineExhaustsIdle, true);
+            SetParticleSystems(_engineExhaustsBrake, true);
         }
         else
         {
-            foreach (ParticleSystem p in _engineExhaustsIdle)
+            SetParticleSystems(_engineExhaustsOn, false);
+            SetParticleSystems(_engineExhaustsIdle, true);
+            SetParticleSystems(_engineExhaustsBrake, false);
+        }
+    }
+
+    private void SetParticleSystems(ParticleSystem[] particleSystems, bool activate)
+    {
+        for (int i = 0; i < particleSystems.Length; ++i)
+        {
+            if (activate)
             {
-                p.Play();
+                particleSystems[i].Play();
             }
-            foreach (ParticleSystem p in _engineExhaustsOn.Concat(_engineExhaustsBrake))
+            else
             {
-                p.Stop();
+                particleSystems[i].Stop();
             }
         }
     }
@@ -432,9 +432,9 @@ public class Ship : ShipBase
         yield return new WaitForSeconds(UnityEngine.Random.Range(0f, 0.25f));
         while (true)
         {
-            foreach (IPeriodicActionComponent comp in _updateComponents)
+            for (int i = 0; i < _updateComponents.Length; ++i)
             {
-                comp.PeriodicAction();
+                _updateComponents[i].PeriodicAction();
             }
             if (_shieldCapsule)
             {
@@ -453,10 +453,13 @@ public class Ship : ShipBase
 
     private void UpdateAndApplyBuffs()
     {
-        CombinedBuff = DynamicBuff.Combine(AllBuffs);
-        foreach (ITurret t in Turrets)
+        CombinedBuff = AllBuffsCombined();
+        for (int i = 0; i < _turrets.Length; ++i)
         {
-            t.ApplyBuff(CombinedBuff);
+            if (_turrets[i] != null)
+            {
+                _turrets[i].ApplyBuff(CombinedBuff);
+            }
         }
     }
 
@@ -736,9 +739,9 @@ public class Ship : ShipBase
         get
         {
             int totalShields = 0;
-            foreach (IShieldComponent shield in _shieldComponents)
+            for (int i = 0; i < _shieldComponents.Length; ++i)
             {
-                totalShields += shield.CurrShieldPoints;
+                totalShields += _shieldComponents[i].CurrShieldPoints;
             }
             return totalShields;
         }
@@ -1238,21 +1241,26 @@ public class Ship : ShipBase
         _crewExperienceBuff = StandardBuffs.CrewExperienceBuff(avgLevel, numCrew < OperationalCrew);
     }
 
-    private IEnumerable<DynamicBuff> AllBuffs
+    private DynamicBuff AllBuffsCombined()
     {
-        get
+        DynamicBuff res = DynamicBuff.Default();
+        res.Combine(_crewNumBuff);
+        res.Combine(_crewExperienceBuff);
+        if (InherentBuff != null)
         {
-            if (InherentBuff != null)
+            res.Combine(InherentBuff.DynamicData);
+        }
+        foreach (Tuple<string, IShipComponent>[] compArr in _componentSlotsOccupied.Values)
+        {
+            for (int i = 0; i < compArr.Length; ++i)
             {
-                yield return InherentBuff.DynamicData;
-            }
-            yield return _crewNumBuff;
-            yield return _crewExperienceBuff;
-            foreach (IShipComponent comp in AllComponents)
-            {
-                yield return comp.ComponentBuff;
+                if (compArr[i] != null)
+                {
+                    res.Combine(compArr[i].Item2.ComponentBuff);
+                }
             }
         }
+        return res;
     }
 
     // In formation behavior

@@ -8,6 +8,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
     {
         base.Start();
         _pulseDelay = new WaitForSeconds(BeamPulseTime);
+        _warheads[0] = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
     }
 
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
@@ -18,7 +19,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
         _beamOrigin = Muzzles[barrelIdx].position;
         if (!prevFiring)
         {
-            StartCoroutine(DoBeam(ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize)));
+            StartCoroutine(DoBeam(_warheads[0]));
         }
     }
 

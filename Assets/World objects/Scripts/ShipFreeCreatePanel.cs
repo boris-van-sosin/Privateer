@@ -112,15 +112,15 @@ public class ShipFreeCreatePanel : MonoBehaviour
             {
                 if (gt.TurretWeaponSize == "Light" && gt.TurretWeaponType == "Autocannon")
                 {
-                    gt.AmmoType = "ShrapnelRound";
+                    gt.SetAmmoType(0, "ShrapnelRound");
                 }
                 else if (gt.TurretWeaponType == "HVGun")
                 {
-                    gt.AmmoType = "KineticPenetrator";
+                    gt.SetAmmoType(0, "KineticPenetrator");
                 }
                 else
                 {
-                    gt.AmmoType = "ShapedCharge";
+                    gt.SetAmmoType(0, "ShapedCharge");
                 }
                 t.InstalledTurretMod = TurretMod.Harpax;
             }
@@ -236,7 +236,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 GunTurret tb = ObjectFactory.CreateTurret(cst, "1", wt.Item1, wt.Item2) as GunTurret;
                 if (tb != null)
                 {
-                    tb.AmmoType = wt.Item3;
+                    tb.SetAmmoType(0, wt.Item3);
                     ValueTuple<float, float, float> dps = tb.DebugGetDPS();
                     Debug.LogFormat("Weapon: {0} {1}: SH={2} SY={3} HL={4}", cst, wt, dps.Item1, dps.Item2, dps.Item3);
                     Destroy(tb);

@@ -55,10 +55,10 @@ public class SelectionHandler
             new Vector3(Mathf.Abs(Corner2.x - Corner1.x) / 2,
                         1,
                         Mathf.Abs(Corner2.z - Corner1.z) / 2);
-        Collider[] boxedColliders = Physics.OverlapBox(boxCenter, boxExt, Quaternion.identity, ObjectFactory.NavBoxesLayerMask);
-        foreach (Collider c in boxedColliders)
+        int numHits = Physics.OverlapBoxNonAlloc(boxCenter, boxExt, _collidersCache, Quaternion.identity, ObjectFactory.NavBoxesLayerMask);
+        for (int i = 0; i < numHits; ++i)
         {
-            ShipBase s2 = ShipBase.FromCollider(c);
+            ShipBase s2 = ShipBase.FromCollider(_collidersCache[i]);
             if (s2 != null && s2 is Ship)
             {
                 _fleetSelectedShips.Add(s2);
@@ -137,4 +137,7 @@ public class SelectionHandler
     private List<SelectedShipCard> _selectedShipCards = new List<SelectedShipCard>();
 
     public RectTransform SelectedShipPanel { get; set; }
+
+    // Ugly optimization:
+    private Collider[] _collidersCache = new Collider[1024];
 }

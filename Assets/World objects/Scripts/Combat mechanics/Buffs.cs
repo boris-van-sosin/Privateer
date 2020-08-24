@@ -26,13 +26,18 @@ public struct DynamicBuff
 
     private static void CombineSingle(ref DynamicBuff target, DynamicBuff other)
     {
-        target.WeaponAccuracyFactor += other.WeaponAccuracyFactor;
-        target.WeaponRateOfFireFactor += other.WeaponRateOfFireFactor;
-        target.WeaponVsStrikeCraftFactor += other.WeaponVsStrikeCraftFactor;
-        target.SpeedFactor += other.SpeedFactor;
-        target.AcceleraionFactor += other.AcceleraionFactor;
-        target.RepairRateModifier += other.RepairRateModifier;
-        target.ShieldRechargeRateModifier += other.ShieldRechargeRateModifier;
+        target.Combine(other);
+    }
+
+    public void Combine(DynamicBuff other)
+    {
+        WeaponAccuracyFactor += other.WeaponAccuracyFactor;
+        WeaponRateOfFireFactor += other.WeaponRateOfFireFactor;
+        WeaponVsStrikeCraftFactor += other.WeaponVsStrikeCraftFactor;
+        SpeedFactor += other.SpeedFactor;
+        AcceleraionFactor += other.AcceleraionFactor;
+        RepairRateModifier += other.RepairRateModifier;
+        ShieldRechargeRateModifier += other.ShieldRechargeRateModifier;
     }
 
     public void ResetToDefault()

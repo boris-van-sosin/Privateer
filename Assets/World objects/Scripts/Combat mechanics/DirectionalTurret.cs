@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net;
 using UnityEngine;
 
 public abstract class DirectionalTurret : TurretBase
@@ -162,14 +159,14 @@ public abstract class DirectionalTurret : TurretBase
 
     protected override ITargetableEntity AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, MaxRange * 1.05f, ObjectFactory.NavBoxesAllLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, MaxRange * 1.05f, _collidersCache, ObjectFactory.NavBoxesAllLayerMask);
         ITargetableEntity foundTarget = null;
         int bestScore = 0;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
             ShipBase s;
             Torpedo t;
-            if ((s = ShipBase.FromCollider(c)) != null)
+            if ((s = ShipBase.FromCollider(_collidersCache[i])) != null)
             {
                 if (!s.ShipActiveInCombat)
                 {
@@ -185,7 +182,7 @@ public abstract class DirectionalTurret : TurretBase
                     }
                 }
             }
-            else if ((t = Torpedo.FromCollider(c)) != null)
+            else if ((t = Torpedo.FromCollider(_collidersCache[i])) != null)
             {
                 if (t.OriginShip != null && ContainingShip.Owner.IsEnemy(t.OriginShip.Owner))
                 {

@@ -36,6 +36,21 @@ public class CableBehavior : MonoBehaviour
         springJoint.damper = 1e+8f;
     }
 
+    public void ResetObject()
+    {
+        WhatTheRopeIsConnectedTo = null;
+        WhatIsHangingFromTheRope = null;
+        fixedJoint.connectedBody = null;
+        springJoint.connectedBody = null;
+        gameObject.SetActive(true);
+    }
+
+    private void Recycle()
+    {
+        gameObject.SetActive(false);
+        ObjectFactory.ReleaseHHarpaxTowCable(this);
+    }
+
     public void Connect(Rigidbody whatTheRopeIsConnectedTo, Rigidbody whatIsHangingFromTheRope)
     {
         Connect(whatTheRopeIsConnectedTo, whatIsHangingFromTheRope, whatIsHangingFromTheRope.transform.position);
@@ -160,7 +175,7 @@ public class CableBehavior : MonoBehaviour
         }
     }
 
-    public void DisconnectAndDestroy()
+    public void DisconnectAndRecycle()
     {
         Ship ship1 = WhatTheRopeIsConnectedTo.GetComponent<Ship>();
         Ship ship2 = WhatIsHangingFromTheRope.GetComponent<Ship>();
@@ -169,6 +184,6 @@ public class CableBehavior : MonoBehaviour
             ship1.TowingByHarpax = null;
             ship2.TowedByHarpax = null;
         }
-        Destroy(gameObject);
+        Recycle();
     }
 }

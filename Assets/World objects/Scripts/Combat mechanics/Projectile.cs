@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
@@ -36,14 +34,17 @@ public class Projectile : MonoBehaviour
         }
 	}
 
-    public void ResetObject()
+    public virtual void ResetObject()
     {
         gameObject.SetActive(true);
-        _trail.Clear();
+        if (null != _trail)
+        {
+            _trail.Clear();
+        }
         _distanceTraveled = 0;
     }
 
-    private void RecycleObject()
+    protected virtual void RecycleObject()
     {
         gameObject.SetActive(false);
         ObjectFactory.ReleaseProjectile(this);
@@ -117,26 +118,26 @@ public class Projectile : MonoBehaviour
 
     private bool CheckForProximityHit(Vector3 pos, float blastRadius)
     {
-        Collider[] objsHits = Physics.OverlapSphere(pos, blastRadius, ObjectFactory.AllTargetableLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(pos, blastRadius, _collidersCache, ObjectFactory.AllTargetableLayerMask);
         bool validHit = false;
-        foreach (Collider c in objsHits)
+        for (int i = 0; i < numHits; ++i)
         {
             ShipBase s;
             Torpedo t;
-            if ((s = ShipBase.FromCollider(c)) != null)
+            if ((s = ShipBase.FromCollider(_collidersCache[i])) != null)
             {
                 //Debug.LogFormat("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", s, pos, blastRadius);
                 if (s != OriginShip)
                 {
                     if (IsHit(s))
                     {
-                        Vector3 hitLocation = c.ClosestPoint(pos);
+                        Vector3 hitLocation = _collidersCache[i].ClosestPoint(pos);
                         s.TakeHit(ProjectileWarhead, hitLocation);
                     }
                     validHit = true;
                 }
             }
-            else if ((t = c.GetComponent<Torpedo>()) != null)
+            else if ((t = _collidersCache[i].GetComponent<Torpedo>()) != null)
             {
                 //Debug.LogFormat("Proximity hit triggered on {0}. Shell location: {1} blast radius {2}", t, pos, blastRadius);
                 validHit = true;
@@ -209,4 +210,7 @@ public class Projectile : MonoBehaviour
     private static float _trailWidthFactor = 1.0f; // 1.0f/0.01f;
     public bool ProximityProjectile;
     public float BlastRadius { get { return ProjectileWarhead.BlastRadius; } }
+
+    // Ugly optimization:
+    private Collider[] _collidersCache = new Collider[1024];
 }

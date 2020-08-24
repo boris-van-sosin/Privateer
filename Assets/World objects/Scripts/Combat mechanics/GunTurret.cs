@@ -8,15 +8,22 @@ public class GunTurret : DirectionalTurret
 {
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        Warhead warhead = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, AmmoType);
-        warhead.EffectVsStrikeCraft = Mathf.Clamp(warhead.EffectVsStrikeCraft + _vsStrikeCraftModifier, 0.05f, 0.95f);
-        Projectile p = ObjectFactory.AcquireProjectile(Muzzles[barrelIdx].position, firingVector, MuzzleVelocity, MaxRange, ProjectileScale, warhead, _containingShip);
-        p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize, AmmoType);
-        p.ProximityProjectile = warhead.BlastRadius > 0f;
+        Warhead w = _warheads[_currAmmoType];
+        w.EffectVsStrikeCraft = Mathf.Clamp(w.EffectVsStrikeCraft + _vsStrikeCraftModifier, 0.05f, 0.95f);
+        Projectile p = ObjectFactory.AcquireProjectile(Muzzles[barrelIdx].position, firingVector, MuzzleVelocity, MaxRange, ProjectileScale, w, _containingShip);
+        p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize, _ammoTypes[_currAmmoType]);
+        p.ProximityProjectile = w.BlastRadius > 0f;
         if (MuzzleFx[barrelIdx] != null)
         {
             MuzzleFx[barrelIdx].Play(true);
         }
+    }
+
+    public override void Init(string turretSlotType)
+    {
+        base.Init(turretSlotType);
+        _ammoTypes = new string[_warheads.Length];
+        _currAmmoType = 0;
     }
 
     public override bool IsTurretModCombatible(TurretMod m)
@@ -38,8 +45,7 @@ public class GunTurret : DirectionalTurret
 
     protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
-        HarpaxBehavior p = ObjectFactory.CreateHarpaxProjectile(firingVector, MuzzleVelocity, MaxRange, _containingShip);
-        p.transform.position = Muzzles[_nextBarrel].position;
+        HarpaxBehavior p = ObjectFactory.AcquireHarpaxProjectile(Muzzles[_nextBarrel].position, firingVector, MuzzleVelocity, MaxRange, ProjectileScale, _containingShip);
         if (MuzzleFx[barrelIdx] != null)
         {
             MuzzleFx[barrelIdx].Play(true);
@@ -57,13 +63,32 @@ public class GunTurret : DirectionalTurret
     {
         int numBarrels = FindMuzzles(transform).Count();
         float fireRate = numBarrels / FiringInterval;
-        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, AmmoType);
+        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, _ammoTypes[0]);
         return new ValueTuple<float, float, float>(w.ShieldDamage * fireRate, w.SystemDamage * fireRate, w.HullDamage * fireRate);
+    }
+
+    public void SetAmmoType(int idx, string ammoType)
+    {
+        _ammoTypes[idx] = ammoType;
+        _warheads[idx] = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, ammoType);
+    }
+
+    public void SwitchAmmoType(int idx)
+    {
+        if (_turretMod == TurretMod.DualAmmoFeed)
+        {
+            if (idx < 0 || idx >= _warheads.Length)
+            {
+                throw new ArgumentOutOfRangeException("idx", string.Format("Attempted to switch to ammo index {0}. Allowed range: 0-{1}", idx, _warheads.Length - 1));
+            }
+            _currAmmoType = idx;
+        }
     }
 
     public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Gun;
 
     public float ProjectileScale;
     public float MuzzleVelocity;
-    public string AmmoType;
+    private string[] _ammoTypes;
+    private int _currAmmoType;
 }

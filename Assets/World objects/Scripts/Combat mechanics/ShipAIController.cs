@@ -40,12 +40,12 @@ public class ShipAIController : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, 30, ObjectFactory.NavBoxesLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, 30, _collidersCache, ObjectFactory.NavBoxesLayerMask);
         ShipBase foundTarget = null;
         _currAttackBehavior = ShipAttackPattern.Aggressive;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
-            ShipBase s = ShipBase.FromCollider(c);
+            ShipBase s = ShipBase.FromCollider(_collidersCache[i]);
             if (s == null)
             {
                 continue;
@@ -104,9 +104,13 @@ public class ShipAIController : MonoBehaviour
         return s is Ship;
     }
 
+    protected Func<ITurret, bool> _turretsMain = t => t.HardpointAIHint == TurretAIHint.Main;
+    protected Func<ITurret, bool> _turretsMainAndSecondary = t => t.HardpointAIHint == TurretAIHint.Main || t.HardpointAIHint == TurretAIHint.Secondary;
+    protected Func<ITurret, bool> _turretsHitAndRun = t => t.HardpointAIHint == TurretAIHint.HitandRun;
+    protected Func<ITurret, bool> _turretsAll = t => true;
     protected virtual Vector3 AttackPosition(ShipBase enemyShip)
     {
-        float minRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.Main || t.HardpointAIHint == TurretAIHint.Secondary).Select(x => x.GetMaxRange).Min();
+        float minRange = _controlledShip.TurretsGetAttackRange(_turretsMainAndSecondary);
         Vector3 Front = enemyShip.transform.forward;
         //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
         //Vector3 Right = -Left;
@@ -153,19 +157,19 @@ public class ShipAIController : MonoBehaviour
 
     protected virtual Vector3 AttackPositionArtilery(ShipBase enemyShip)
     {
-        float attackRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.Main).Select(x => x.GetMaxRange).Min();
-        float mainEnemyRange = enemyShip.Turrets.Select(x => x.GetMaxRange).Max();
+        float attackRange = _controlledShip.TurretsGetAttackRange(_turretsMainAndSecondary);
+        float mainEnemyRange = enemyShip.TurretsGetAttackRange(_turretsAll, false);
         Vector3 attackVec = enemyShip.transform.position - transform.position;
         //Vector3 attackVecNormalized = attackVec.normalized;
 
-        Collider[] colliders = Physics.OverlapSphere(enemyShip.transform.position, attackRange, ObjectFactory.NavBoxesLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(enemyShip.transform.position, attackRange, _collidersCache, ObjectFactory.NavBoxesLayerMask);
         Vector3 friendlyShipsCentroid = Vector3.zero;
         Vector3 enemyShipsCentroid = enemyShip.transform.position;
         float threatMaxRange = 0f;
         int friendlyCount = 0, enemyCount = 0;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
-            ShipBase sb = ShipBase.FromCollider(c);
+            ShipBase sb = ShipBase.FromCollider(_collidersCache[i]);
             if (sb == _controlledShip || sb == enemyShip || !sb.ShipActiveInCombat)
             {
                 continue;
@@ -218,16 +222,16 @@ public class ShipAIController : MonoBehaviour
 
     protected virtual Vector3 HitAndRunDest(ShipBase enemyShip)
     {
-        float attackRange = _controlledShip.Turrets.Where(t => t.HardpointAIHint == TurretAIHint.HitandRun).Select(x => x.GetMaxRange).Min();
-        float mainEnemyRange = enemyShip.Turrets.Select(x => x.GetMaxRange).Max();
+        float attackRange = _controlledShip.TurretsGetAttackRange(_turretsHitAndRun);
+        float mainEnemyRange = enemyShip.TurretsGetAttackRange(_turretsAll);
 
-        Collider[] colliders = Physics.OverlapSphere(enemyShip.transform.position, Mathf.Max(mainEnemyRange, attackRange), ObjectFactory.NavBoxesLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(enemyShip.transform.position, Mathf.Max(mainEnemyRange, attackRange), _collidersCache, ObjectFactory.NavBoxesLayerMask);
         int friendlyCount = 0, enemyCount = 1;
         Vector3 friendlyCentroid = Vector3.zero;
         Vector3 enemyCentroid = enemyShip.transform.position;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
-            ShipBase sb = ShipBase.FromCollider(c);
+            ShipBase sb = ShipBase.FromCollider(_collidersCache[i]);
             if (sb == _controlledShip || sb == enemyShip || !sb.ShipActiveInCombat)
             {
                 continue;
@@ -254,9 +258,7 @@ public class ShipAIController : MonoBehaviour
         Vector3 fightVec = enemyCentroid - friendlyCentroid;
 
         if ((enemyCount * 3) <= (friendlyCount * 4) &&
-            _controlledShip.Turrets.
-                Where(t => t.HardpointAIHint == TurretAIHint.HitandRun && t.ComponentIsWorking).
-                    All(t2 => t2.ReadyToFire()))
+            _controlledShip.TurretsAllReadyToFire(_turretsHitAndRun))
         {
             // Hit
             Quaternion q1 = Quaternion.AngleAxis(45, Vector3.up);
@@ -389,12 +391,12 @@ public class ShipAIController : MonoBehaviour
     protected virtual Vector3? AntiClumpNav()
     {
         float clumpingDetectRadius = _controlledShip.ShipLength * GlobalDistances.ShipAIAntiClumpLengthFactor;
-        Collider[] colliders = Physics.OverlapSphere(transform.position, clumpingDetectRadius, ObjectFactory.NavBoxesLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, clumpingDetectRadius, _collidersCache, ObjectFactory.NavBoxesLayerMask);
         int clumping = 1;
         Vector3 centroid = transform.position;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
-            ShipBase s = ShipBase.FromCollider(c);
+            ShipBase s = ShipBase.FromCollider(_collidersCache[i]);
             if (s == null || s == _controlledShip)
             {
                 continue;
@@ -728,6 +730,9 @@ public class ShipAIController : MonoBehaviour
     }
 
     public ShipActivity CurrActivity { get; protected set; }
+
+    // Ugly optimization:
+    protected Collider[] _collidersCache = new Collider[1024];
 
     protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
 }

@@ -8,14 +8,14 @@ public class BeamTurret : GeneralBeamTurret
     {
         base.Start();
         _beamDurationWait = new WaitForSeconds(BeamDuration);
+        _warheads[0] = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
     }
 
     IEnumerator HandleBeam()
     {
         yield return _endOfFrameWait;
         _beamRenderer.enabled = true;
-        Warhead w = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
-        DoBeamHit(w);
+        DoBeamHit(_warheads[0]);
         yield return new WaitForSeconds(BeamDuration);
         _beamRenderer.enabled = false;
         yield return null;

@@ -44,11 +44,11 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     private void AcquireTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, GlobalDistances.StrikeCraftAIFormationAggroDist, ObjectFactory.AllShipsLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, GlobalDistances.StrikeCraftAIFormationAggroDist, _collidersCache, ObjectFactory.AllShipsLayerMask);
         ShipBase foundTarget = null;
-        foreach (Collider c in colliders)
+        for (int i = 0; i < numHits; ++i)
         {
-            ShipBase s = ShipBase.FromCollider(c);
+            ShipBase s = ShipBase.FromCollider(_collidersCache[i]);
             if (s == null)
             {
                 continue;
@@ -184,7 +184,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         yield return _targetAcquirePulseDelay;
         while (true)
         {
-            if (_controlledFormation.DestroyOnEmpty && _controlledFormation.AllStrikeCraft().All(s => ((StrikeCraft)s).IsOutOfAmmo()) && _controlledFormation.AllStrikeCraft().Any())
+            if (_controlledFormation.DestroyOnEmpty && _controlledFormation.AllOutOfAmmo())
             {
                 CarrierBehavior c = _controlledFormation.HostCarrier;
                 if (c != null)
@@ -339,6 +339,9 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     private void OnDrawGizmos()
     {
     }
+
+    // Ugly optimization:
+    private Collider[] _collidersCache = new Collider[1024];
 
     private static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
 }
