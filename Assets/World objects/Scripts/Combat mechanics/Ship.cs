@@ -862,11 +862,27 @@ public class Ship : ShipBase
     {
         get
         {
-            foreach (IShipActiveComponent c in AllComponents.Where(x => x is IShipActiveComponent).Select(y => y as IShipActiveComponent).Where(z => z.Status != ComponentStatus.Destroyed))
+            foreach (Tuple<string, IShipComponent>[] comps in _componentSlotsOccupied.Values)
             {
-                if (c.ComponentMaxHitPoints != c.ComponentHitPoints)
+                for (int i = 0; i < comps.Length; ++i)
                 {
-                    return false;
+                    if (comps[i] != null && comps[i] is IShipActiveComponent activeComp)
+                    {
+                        if (activeComp.ComponentHitPoints < activeComp.ComponentMaxHitPoints)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < _turrets.Length; ++i)
+            {
+                if (_turrets[i] != null)
+                {
+                    if (_turrets[i].ComponentHitPoints < _turrets[i].ComponentMaxHitPoints)
+                    {
+                        return false;
+                    }
                 }
             }
             return true;
@@ -913,6 +929,46 @@ public class Ship : ShipBase
                 repairPointsLeft = 0;
             }
         }
+    }
+
+    public int RepairComponents(int repairPoints)
+    {
+        foreach (Tuple<string, IShipComponent>[] comps in _componentSlotsOccupied.Values)
+        {
+            for (int i = 0; i < comps.Length; ++i)
+            {
+                if (comps[i] != null && comps[i] is IShipActiveComponent activeComp)
+                {
+                    if (activeComp.ComponentMaxHitPoints - activeComp.ComponentHitPoints <= repairPoints)
+                    {
+                        repairPoints -= (activeComp.ComponentMaxHitPoints - activeComp.ComponentHitPoints);
+                        activeComp.ComponentHitPoints = activeComp.ComponentMaxHitPoints;
+                    }
+                    else
+                    {
+                        activeComp.ComponentHitPoints += repairPoints;
+                        return 0;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < _turrets.Length; ++i)
+        {
+            if (_turrets[i] != null)
+            {
+                if (_turrets[i].ComponentMaxHitPoints - _turrets[i].ComponentHitPoints <= repairPoints)
+                {
+                    repairPoints -= (_turrets[i].ComponentMaxHitPoints - _turrets[i].ComponentHitPoints);
+                    _turrets[i].ComponentHitPoints = _turrets[i].ComponentMaxHitPoints;
+                }
+                else
+                {
+                    _turrets[i].ComponentHitPoints += repairPoints;
+                    return 0;
+                }
+            }
+        }
+        return repairPoints;
     }
 
     public override void NotifyInComabt()
@@ -1112,9 +1168,9 @@ public class Ship : ShipBase
     public string[] AftComponentSlots;
     public string[] LeftComponentSlots;
     public string[] RightComponentSlots;
-    private Dictionary<ShipSection, string[]> _componentsSlotTypes = new Dictionary<ShipSection, string[]>();
-    private Dictionary<ShipSection, Tuple<string, IShipComponent>[]> _componentSlotsOccupied = new Dictionary<ShipSection, Tuple<string, IShipComponent>[]>();
-    private Dictionary<ShipSection, List<Tuple<string, IShipComponent>>> _turretSlotsOccupied = new Dictionary<ShipSection, List<Tuple<string, IShipComponent>>>();
+    private Dictionary<ShipSection, string[]> _componentsSlotTypes = new Dictionary<ShipSection, string[]>(SectionEqComparer);
+    private Dictionary<ShipSection, Tuple<string, IShipComponent>[]> _componentSlotsOccupied = new Dictionary<ShipSection, Tuple<string, IShipComponent>[]>(SectionEqComparer);
+    private Dictionary<ShipSection, List<Tuple<string, IShipComponent>>> _turretSlotsOccupied = new Dictionary<ShipSection, List<Tuple<string, IShipComponent>>>(SectionEqComparer);
 
     private IEnumerable<IShipComponent> AllComponentsInSection(ShipSection sec, bool includeTurrets)
     {
@@ -1332,6 +1388,21 @@ public class Ship : ShipBase
     // Get current mitigatio armour values, for debugging purposes:
     public IReadOnlyDictionary<ShipSection, int> CurrMitigationArmour => _currMitigationArmour;
 
+    internal class ShipSectionComparer : IEqualityComparer<ShipSection>
+    {
+        public bool Equals(ShipSection x, ShipSection y)
+        {
+            return x == y;
+        }
+
+        public int GetHashCode(ShipSection sec)
+        {
+            return (int) sec;
+        }
+    }
+
+    internal static readonly ShipSectionComparer SectionEqComparer = new ShipSectionComparer();
+
     private static readonly WaitForSeconds _componentPulseDelay = new WaitForSeconds(0.25f);
 }
 
@@ -1350,7 +1421,7 @@ public struct ShipHullFourSidesValues
 
     public Dictionary<Ship.ShipSection, int> ToDict()
     {
-        Dictionary<Ship.ShipSection, int> res = new Dictionary<Ship.ShipSection, int>();
+        Dictionary<Ship.ShipSection, int> res = new Dictionary<Ship.ShipSection, int>(Ship.SectionEqComparer);
         res[Ship.ShipSection.Fore] = Fore;
         res[Ship.ShipSection.Aft] = Aft;
         res[Ship.ShipSection.Left] = Left;

@@ -35,6 +35,7 @@ public class GunTurret : DirectionalTurret
             case TurretMod.Accelerator:
             case TurretMod.AdvancedTargeting:
             case TurretMod.FastAutoloader:
+            case TurretMod.DualAmmoFeed:
                 return true;
             case TurretMod.TractorBeam:
             case TurretMod.ImprovedCapacitors:

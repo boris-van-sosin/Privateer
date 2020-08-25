@@ -40,13 +40,13 @@ public abstract class DirectionalTurret : TurretBase
         _isLegalFireAngle = _isLegalAimAngle = false;
         float angleTol = _treatAsFixed ? _targetingFiringArcToleranceLarge : _targetingFiringArcToleranceSmall;
         float closestLegalAngle = 0.0f, angleDiff = 360.0f;
-        foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
+        for (int i = 0; i < _rotationAllowedRanges.Length; ++i)
         {
-            if (r.Item1 - angleTol <= relativeAngle && relativeAngle <= r.Item2 + angleTol)
+            if (_rotationAllowedRanges[i].Item1 - angleTol <= relativeAngle && relativeAngle <= _rotationAllowedRanges[i].Item2 + angleTol)
             {
                 _isLegalAimAngle = true;
             }
-            if (r.Item1 <= relativeAngle && relativeAngle <= r.Item2)
+            if (_rotationAllowedRanges[i].Item1 <= relativeAngle && relativeAngle <= _rotationAllowedRanges[i].Item2)
             {
                 _targetAngle = relativeAngle;
                 _isLegalFireAngle = true;
@@ -55,15 +55,15 @@ public abstract class DirectionalTurret : TurretBase
             else
             {
                 float diff1, diff2;
-                if ((diff1 = Mathf.Abs(r.Item1 - relativeAngle)) < angleDiff)
+                if ((diff1 = Mathf.Abs(_rotationAllowedRanges[i].Item1 - relativeAngle)) < angleDiff)
                 {
                     angleDiff = diff1;
-                    closestLegalAngle = r.Item1;
+                    closestLegalAngle = _rotationAllowedRanges[i].Item1;
                 }
-                if ((diff2 = Mathf.Abs(r.Item2 - relativeAngle)) < angleDiff)
+                if ((diff2 = Mathf.Abs(_rotationAllowedRanges[i].Item2 - relativeAngle)) < angleDiff)
                 {
                     angleDiff = diff2;
-                    closestLegalAngle = r.Item2;
+                    closestLegalAngle = _rotationAllowedRanges[i].Item2;
                 }
             }
         }
@@ -126,9 +126,9 @@ public abstract class DirectionalTurret : TurretBase
         if (CanRotate)
         {
             float relativeAngle = GlobalDirToShipHeading(flatVec);
-            foreach (ValueTuple<float, float> r in _rotationAllowedRanges)
+            for (int i = 0; i < _rotationAllowedRanges.Length; ++i)
             {
-                if (r.Item1 - tolerance <= relativeAngle && relativeAngle <= r.Item2 + tolerance)
+                if (_rotationAllowedRanges[i].Item1 - tolerance <= relativeAngle && relativeAngle <= _rotationAllowedRanges[i].Item2 + tolerance)
                 {
                     return true;
                 }

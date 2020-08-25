@@ -183,10 +183,10 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
         if (_deadZoneAngleRanges != null)
         {
-            foreach (ValueTuple<float, float> d in _deadZoneAngleRanges)
+            for (int i = 0; i < _deadZoneAngleRanges.Length; ++i)
             {
                 float currAngle = CurrLocalAngle;
-                if (d.Item1 < currAngle && currAngle < d.Item2)
+                if (_deadZoneAngleRanges[i].Item1 < currAngle && currAngle < _deadZoneAngleRanges[i].Item2)
                 {
                     return false;
                 }

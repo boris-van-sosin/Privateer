@@ -402,20 +402,10 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
 
         if (!componentsAtFull)
         {
-            int SystemPointRegenLeft = SystemMaxHitPointRegeneration;
-            foreach (IShipActiveComponent c in _containingShip.AllComponents.Where(x =>  x is IShipActiveComponent).Select(y => y as IShipActiveComponent).Where(z => z.Status != ComponentStatus.Destroyed))
+            int systemPointRegenLeft = SystemMaxHitPointRegeneration;
+            while (systemPointRegenLeft > 0)
             {
-                if (c.ComponentMaxHitPoints - c.ComponentHitPoints <= SystemPointRegenLeft)
-                {
-                    SystemPointRegenLeft -= (c.ComponentMaxHitPoints - c.ComponentHitPoints);
-                    c.ComponentHitPoints = c.ComponentMaxHitPoints;
-                }
-                else
-                {
-                    c.ComponentHitPoints += SystemPointRegenLeft;
-                    SystemPointRegenLeft = 0;
-                    break;
-                }
+                systemPointRegenLeft = _containingShip.RepairComponents(systemPointRegenLeft);
             }
         }
         _containingShip.RepairHull(HullMaxHitPointRegeneration);
