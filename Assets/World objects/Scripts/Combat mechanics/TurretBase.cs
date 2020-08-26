@@ -9,6 +9,21 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     // Use this for initialization
     protected virtual void Start()
     {
+        LastFire = 0f;
+    }
+
+    public virtual void Init(string turretSlotType)
+    {
+        SlotType = turretSlotType;
+        ComponentHitPoints = ComponentMaxHitPoints;
+        ParseMuzzles();
+        AlternatingFire = DefaultAlternatingFire;
+        _allowedSlotTypes = new string[] { turretSlotType };
+        _warheads = new Warhead[_maxWarheads];
+    }
+
+    public virtual void PostInstallTurret(ShipBase s)
+    {
         TurretHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TurretHardpoint>()) != null)
         {
@@ -37,23 +52,12 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             _deadZoneAngleStrings = null;
             HardpointAIHint = TurretAIHint.Main;
         }
-        _containingShip = FindContainingShip(transform.parent);
+        _containingShip = s;
         ParseDeadZones();
-        ParseMuzzles();
-        AlternatingFire = DefaultAlternatingFire;
         SetDefaultAngle();
-        LastFire = 0f;
         _initialized = true;
         _firingIntervalCoeff = 1f;
         _vsStrikeCraftModifier = 0f;
-    }
-
-    public virtual void Init(string turretSlotType)
-    {
-        SlotType = turretSlotType;
-        ComponentHitPoints = ComponentMaxHitPoints;
-        _allowedSlotTypes = new string[] { turretSlotType };
-        _warheads = new Warhead[_maxWarheads];
     }
 
     private void ParseDeadZones()

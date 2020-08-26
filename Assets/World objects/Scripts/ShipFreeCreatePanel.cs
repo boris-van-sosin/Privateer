@@ -74,12 +74,12 @@ public class ShipFreeCreatePanel : MonoBehaviour
             s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Fore, ShieldGenerator.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
+            //s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
             s.PlaceComponent(Ship.ShipSection.Left, CapacitorBank.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Right, CapacitorBank.DefaultComponent(s));
             s.PlaceComponent(Ship.ShipSection.Aft, FireControlGeneral.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Left, HeatSink.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Right, HeatSink.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Fore, HeatSink.DefaultComponent(s));
+            s.PlaceComponent(Ship.ShipSection.Aft, HeatSink.DefaultComponent(s));
         }
         foreach (TurretHardpoint hp in s.WeaponHardpoints)
         {
@@ -89,7 +89,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 hp.AllowedWeaponTypes.Contains("LightBarbette2Light"))
             {
                 currBest = BestWeapon(hp.AllowedWeaponTypes);
-                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "Autocannon");
+                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "HVGun"); // was Autocannon
             }
             else if (hp.AllowedWeaponTypes.Contains("TorpedoTube"))
             {
@@ -122,7 +122,17 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 {
                     gt.SetAmmoType(0, "ShapedCharge");
                 }
-                t.InstalledTurretMod = TurretMod.Harpax;
+                if (s.ShipSize != ObjectFactory.ShipSize.Sloop && gt.TurretWeaponSize == "Light")
+                {
+                    gt.InstalledTurretMod = TurretMod.DualAmmoFeed;
+                    gt.SetAmmoType(0, "ShrapnelRound");
+                    gt.SetAmmoType(1, "KineticPenetrator");
+                    gt.AlternatingFire = true;
+                }
+                else
+                {
+                    t.InstalledTurretMod = TurretMod.Harpax;
+                }
             }
             s.PlaceTurret(hp, t);
         }

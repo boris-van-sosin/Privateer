@@ -418,6 +418,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             };
         }
 
+        t.PostInstallTurret(this);
+
         return true;
     }
 
@@ -442,16 +444,17 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     {
         if (WeaponGroups == null)
         {
-            foreach (ITurret t in _manualTurrets)
+            for (int i = 0; i < _turrets.Length; ++i)
             {
-                t.ManualTarget(target);
+                _turrets[i].ManualTarget(target);
             }
         }
         else
         {
-            foreach (ITurret t in WeaponGroups.ManualTurrets)
+            IReadOnlyList<ITurret> currManualTurrets = WeaponGroups.ManualTurrets;
+            for (int i = 0; i < currManualTurrets.Count; ++i)
             {
-                t.ManualTarget(target);
+                currManualTurrets[i].ManualTarget(target);
             }
         }
     }
@@ -470,21 +473,25 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     public void FireWeaponManual(Vector3 target)
     {
-        StringBuilder sb = new StringBuilder();
+        //StringBuilder sb = new StringBuilder();
         if (WeaponGroups == null)
         {
-            foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
+            for (int i = 0; i < _turrets.Length; ++i)
             {
-                t.Fire(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+                if (_turrets[i].GetTurretBehavior() == TurretBase.TurretMode.Manual)
+                {
+                    _turrets[i].Fire(target);
+                    //sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+                }
             }
         }
         else
         {
-            foreach (ITurret t in WeaponGroups.ManualTurrets)
+            IReadOnlyList<ITurret> currManualTurrets = WeaponGroups.ManualTurrets;
+            for (int i = 0; i < currManualTurrets.Count; ++i)
             {
-                t.Fire(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+                currManualTurrets[i].Fire(target);
+                //sb.AppendFormat("Turret {0}:{1}, ", currManualTurrets[i], currManualTurrets[i].CurrLocalAngle);
             }
         }
         //Debug.Log(sb.ToString());

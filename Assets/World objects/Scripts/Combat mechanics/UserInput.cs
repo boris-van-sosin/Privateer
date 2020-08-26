@@ -25,22 +25,6 @@ public class UserInput : MonoBehaviour
 
     void Awake()
     {
-        // Moved to project settings, where it should be.
-        /*
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Ships"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Shields"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Strike Craft"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Torpedoes"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Weapons"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Background"), LayerMask.NameToLayer("Effects"), true);
-
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Ships"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Shields"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Strike Craft"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Torpedoes"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Weapons"), true);
-        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("NavColliders"), LayerMask.NameToLayer("Effects"), true);
-        */
         _selectionHandler.SelectedShipPanel = SelectedShipPanel;
     }
 
@@ -216,6 +200,19 @@ public class UserInput : MonoBehaviour
                 sc.OrderReturnToHost();
             }
         }
+
+        if (Input.GetKeyDown(_keyMapping[UserOperation.SwitchAmmo]))
+        {
+            IReadOnlyList<ITurret> manualTurrets = _controlledShip.WeaponGroups.ManualTurrets;
+            for (int i = 0; i < manualTurrets.Count; ++i)
+            {
+                if (manualTurrets[i] is GunTurret gt)
+                {
+                    gt.CycleAmmoType();
+                }
+            }
+        }
+
         foreach (ValueTuple<UserOperation, int> cg in _controlGroupKeys)
         {
             if (Input.GetKeyDown(_keyMapping[cg.Item1]))
@@ -323,7 +320,7 @@ public class UserInput : MonoBehaviour
 
     public enum UserOperation
     {
-        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, GrapplingTool, StrikeCraftLaunch,
+        Forward, Backward, Left, Right, Break, MagneticClamps, Shields, GrapplingTool, StrikeCraftLaunch, SwitchAmmo,
         SwitchMode,
         ControlGroup1,
         ControlGroup2,
@@ -349,6 +346,7 @@ public class UserInput : MonoBehaviour
         { UserOperation.Shields, KeyCode.G },
         { UserOperation.GrapplingTool, KeyCode.H },
         { UserOperation.StrikeCraftLaunch, KeyCode.L },
+        { UserOperation.SwitchAmmo, KeyCode.Q },
         { UserOperation.ControlGroup1, KeyCode.Alpha1 },
         { UserOperation.ControlGroup2, KeyCode.Alpha2 },
         { UserOperation.ControlGroup3, KeyCode.Alpha3 },

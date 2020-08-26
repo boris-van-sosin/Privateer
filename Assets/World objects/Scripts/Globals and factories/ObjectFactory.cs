@@ -817,14 +817,13 @@ public static class ObjectFactory
             else if (hp.AllowedWeaponTypes.Contains("BomberTorpedoStrikeCraft"))
             {
                 t = CreateStrikeCraftTurret("BomberTorpedo", "StrikeCraft", "TorpedoWeapon");
+                if (t != null)
+                {
+                    BomberTorpedoLauncher tl = (BomberTorpedoLauncher)t;
+                    tl.DummyTorpedoString = s.DummyTorpedoString;
+                    tl.LoadedTorpedoType = "Heavy";
+                }
                 s.PlaceTurret(hp, t);
-            }
-
-            if (t != null && t is BomberTorpedoLauncher)
-            {
-                BomberTorpedoLauncher tl = (BomberTorpedoLauncher)t;
-                tl.DummyTorpedoString = s.DummyTorpedoString;
-                tl.LoadedTorpedoType = "Heavy";
             }
         }
         s.gameObject.AddComponent<StrikeCraftAIController>();

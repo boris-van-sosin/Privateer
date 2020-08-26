@@ -405,7 +405,12 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
             int systemPointRegenLeft = SystemMaxHitPointRegeneration;
             while (systemPointRegenLeft > 0)
             {
-                systemPointRegenLeft = _containingShip.RepairComponents(systemPointRegenLeft);
+                (int, bool) repairRes = _containingShip.RepairComponents(systemPointRegenLeft);
+                if (repairRes.Item2)
+                {
+                    break;
+                }
+                systemPointRegenLeft = repairRes.Item1;
             }
         }
         _containingShip.RepairHull(HullMaxHitPointRegeneration);

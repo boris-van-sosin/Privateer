@@ -8,7 +8,7 @@ public class TurretControlGrouping
     {
         TurretControlGrouping res = new TurretControlGrouping()
         {
-            ControlGroups = new Dictionary<int, IEnumerable<ITurret>>(),
+            ControlGroups = new Dictionary<int, IReadOnlyList<ITurret>>(),
             ControlGroupStatus = new Dictionary<int, TurretBase.TurretMode>(),
             ControlGroupDefaultStatus = new Dictionary<int, TurretBase.TurretMode>()
         };
@@ -47,18 +47,18 @@ public class TurretControlGrouping
     {
         TurretControlGrouping res = new TurretControlGrouping()
         {
-            ControlGroups = new Dictionary<int, IEnumerable<ITurret>>(),
+            ControlGroups = new Dictionary<int, IReadOnlyList<ITurret>>(),
             ControlGroupStatus = new Dictionary<int, TurretBase.TurretMode>(),
             ControlGroupDefaultStatus = new Dictionary<int, TurretBase.TurretMode>()
         };
 
         res.ControlGroupStatus[1] = res.ControlGroupDefaultStatus[1] = TurretBase.TurretMode.Auto;
-        res.ControlGroups[1] = s.Turrets;
+        res.ControlGroups[1] = new List<ITurret>(s.Turrets);
         res.CacheManualTurrets();
         return res;
     }
 
-    private Dictionary<int, IEnumerable<ITurret>> ControlGroups { get; set; }
+    private Dictionary<int, IReadOnlyList<ITurret>> ControlGroups { get; set; }
     private Dictionary<int, TurretBase.TurretMode> ControlGroupStatus { get; set; }
     private Dictionary<int, TurretBase.TurretMode> ControlGroupDefaultStatus { get; set; }
 
@@ -122,7 +122,7 @@ public class TurretControlGrouping
         }
     }
 
-    public IEnumerable<ITurret> ManualTurrets
+    public IReadOnlyList<ITurret> ManualTurrets
     {
         get
         {

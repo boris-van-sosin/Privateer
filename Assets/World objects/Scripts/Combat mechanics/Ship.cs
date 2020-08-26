@@ -931,14 +931,16 @@ public class Ship : ShipBase
         }
     }
 
-    public int RepairComponents(int repairPoints)
+    public (int, bool) RepairComponents(int repairPoints)
     {
+        bool neededRepair = false;
         foreach (Tuple<string, IShipComponent>[] comps in _componentSlotsOccupied.Values)
         {
             for (int i = 0; i < comps.Length; ++i)
             {
                 if (comps[i] != null && comps[i] is IShipActiveComponent activeComp)
                 {
+                    neededRepair = neededRepair || activeComp.ComponentMaxHitPoints != activeComp.ComponentHitPoints;
                     if (activeComp.ComponentMaxHitPoints - activeComp.ComponentHitPoints <= repairPoints)
                     {
                         repairPoints -= (activeComp.ComponentMaxHitPoints - activeComp.ComponentHitPoints);
@@ -947,7 +949,7 @@ public class Ship : ShipBase
                     else
                     {
                         activeComp.ComponentHitPoints += repairPoints;
-                        return 0;
+                        return (0, neededRepair);
                     }
                 }
             }
@@ -956,6 +958,7 @@ public class Ship : ShipBase
         {
             if (_turrets[i] != null)
             {
+                neededRepair = neededRepair || _turrets[i].ComponentMaxHitPoints != _turrets[i].ComponentHitPoints;
                 if (_turrets[i].ComponentMaxHitPoints - _turrets[i].ComponentHitPoints <= repairPoints)
                 {
                     repairPoints -= (_turrets[i].ComponentMaxHitPoints - _turrets[i].ComponentHitPoints);
@@ -964,11 +967,11 @@ public class Ship : ShipBase
                 else
                 {
                     _turrets[i].ComponentHitPoints += repairPoints;
-                    return 0;
+                    return (0, neededRepair);
                 }
             }
         }
-        return repairPoints;
+        return (repairPoints, neededRepair);
     }
 
     public override void NotifyInComabt()

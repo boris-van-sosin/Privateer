@@ -70,8 +70,13 @@ public class GunTurret : DirectionalTurret
 
     public void SetAmmoType(int idx, string ammoType)
     {
+        SetAmmoType(idx, ammoType, ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, ammoType));
+    }
+
+    public void SetAmmoType(int idx, string ammoType, Warhead w)
+    {
         _ammoTypes[idx] = ammoType;
-        _warheads[idx] = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize, ammoType);
+        _warheads[idx] = w;
     }
 
     public void SwitchAmmoType(int idx)
@@ -82,8 +87,19 @@ public class GunTurret : DirectionalTurret
             {
                 throw new ArgumentOutOfRangeException("idx", string.Format("Attempted to switch to ammo index {0}. Allowed range: 0-{1}", idx, _warheads.Length - 1));
             }
+            bool changed = _currAmmoType != idx;
             _currAmmoType = idx;
+            if (changed)
+            {
+                LastFire = Time.time;
+            }
         }
+    }
+
+    public void CycleAmmoType()
+    {
+        if (_turretMod == TurretMod.DualAmmoFeed)
+            SwitchAmmoType((_currAmmoType + 1) % _warheads.Length);
     }
 
     public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Gun;

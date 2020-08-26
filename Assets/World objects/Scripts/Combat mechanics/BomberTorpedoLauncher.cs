@@ -6,32 +6,15 @@ using System.Linq;
 
 public class BomberTorpedoLauncher : TurretBase
 {
-    protected override void Start()
-    {
-        TorpedoHardpoint parentHardpoint;
-        if (transform.parent != null && (parentHardpoint = GetComponentInParent<TorpedoHardpoint>()) != null)
-        {
-            Vector3 dirInHPSystem = parentHardpoint.transform.TransformDirection(parentHardpoint.LaunchVector);
-            _launchDirection = transform.InverseTransformDirection(dirInHPSystem);
-            _dummyTorpedoRoot = parentHardpoint.transform;
-        }
-        else
-        {
-            _launchDirection = new Vector3(0, 1, 0);
-            _dummyTorpedoRoot = transform;
-        }
-        base.Start();
-        (int, float, float, Warhead) launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
-        MaxRange = launchData.Item2;
-        TorpedoesLoaded = _torpedoesInSpread = Muzzles.Length;
-        _warheads[0] = launchData.Item4;
-    }
-
-    protected override void ParseMuzzles()
+    private void ParseMuzzlesInBomber()
     {
         Muzzles = FindDummyTorpedoes(_dummyTorpedoRoot).ToArray();
         ActualFiringInterval = 0;
         MuzzleFx = null;
+    }
+    
+    protected override void ParseMuzzles()
+    {
     }
 
     private IEnumerable<Transform> FindDummyTorpedoes(Transform root)
@@ -51,6 +34,28 @@ public class BomberTorpedoLauncher : TurretBase
                 }
             }
         }
+    }
+    
+    public override void PostInstallTurret(ShipBase s)
+    {
+        TorpedoHardpoint parentHardpoint;
+        if (transform.parent != null && (parentHardpoint = GetComponentInParent<TorpedoHardpoint>()) != null)
+        {
+            Vector3 dirInHPSystem = parentHardpoint.transform.TransformDirection(parentHardpoint.LaunchVector);
+            _launchDirection = transform.InverseTransformDirection(dirInHPSystem);
+            _dummyTorpedoRoot = parentHardpoint.transform;
+        }
+        else
+        {
+            _launchDirection = new Vector3(0, 1, 0);
+            _dummyTorpedoRoot = transform;
+        }
+        ParseMuzzlesInBomber();
+        base.PostInstallTurret(s);
+        (int, float, float, Warhead) launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
+        MaxRange = launchData.Item2;
+        TorpedoesLoaded = _torpedoesInSpread = Muzzles.Length;
+        _warheads[0] = launchData.Item4;
     }
 
     public override void ManualTarget(Vector3 target)

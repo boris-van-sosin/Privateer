@@ -6,9 +6,21 @@ using System;
 
 public class TorpedoTurret : TurretBase
 {
-    protected override void Start()
+    protected override void SetDefaultAngle()
     {
-        base.Start();
+        _defaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
+    }
+
+    protected override void ParseMuzzles()
+    {
+        Muzzles = new Transform[] { FindTorpedoBarrel() };
+        ActualFiringInterval = FiringInterval;
+        MuzzleFx = null;
+    }
+    
+    public override void PostInstallTurret(ShipBase s)
+    {
+        base.PostInstallTurret(s);
         TorpedoHardpoint parentHardpoint;
         if (transform.parent != null && (parentHardpoint = GetComponentInParent<TorpedoHardpoint>()) != null)
         {
@@ -25,18 +37,6 @@ public class TorpedoTurret : TurretBase
         _torpedoesInSpread = launchData.Item1;
         _torpedoScale = launchData.Item3;
         _warheads[0] = launchData.Item4;
-    }
-
-    protected override void SetDefaultAngle()
-    {
-        _defaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
-    }
-
-    protected override void ParseMuzzles()
-    {
-        Muzzles = new Transform[] { FindTorpedoBarrel() };
-        ActualFiringInterval = FiringInterval;
-        MuzzleFx = null;
     }
 
     private Transform FindTorpedoBarrel()
