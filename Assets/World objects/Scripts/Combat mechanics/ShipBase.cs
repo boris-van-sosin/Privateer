@@ -87,7 +87,8 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         }
         else
         {
-            _rigidBody.AddForce((targetVelocity - rbVelocity), ForceMode.VelocityChange);
+            //_rigidBody.AddForce((targetVelocity - rbVelocity), ForceMode.VelocityChange);
+            _rigidBody.velocity = targetVelocity;
         }
         if (_autoHeading && ShipControllable)
         {
