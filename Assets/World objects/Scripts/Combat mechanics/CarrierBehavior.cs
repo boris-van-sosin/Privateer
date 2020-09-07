@@ -27,7 +27,7 @@ public class CarrierBehavior : MonoBehaviour
 
     public void LaunchDbg()
     {
-        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
+        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations && !_ship.ShipDisabled)
         {
             StartCoroutine(LaunchSequence("Fed Torpedo Bomber"));
         }
@@ -35,7 +35,7 @@ public class CarrierBehavior : MonoBehaviour
 
     public bool LaunchFormationOfType(string key)
     {
-        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations)
+        if (!_inLaunch && !_inRecovery && _formations.Count < MaxFormations && !_ship.ShipDisabled)
         {
             StartCoroutine(LaunchSequence(key));
             return true;

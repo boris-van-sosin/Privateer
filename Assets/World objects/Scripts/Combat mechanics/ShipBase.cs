@@ -70,13 +70,17 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         if (TowedByHarpax != null)
         {
             _prevForceTow = (targetVelocity - rbVelocity) * _rigidBody.mass;
+            _needsApplyForce = true;
+            _forceMode = ForceMode.Impulse;
             if (!_hasPrevForceTow)
             {
-                _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass, ForceMode.Impulse);
+                //_rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass, ForceMode.Impulse);
+                _forceVec = (targetVelocity - rbVelocity) * _rigidBody.mass;
             }
             else
             {
-                _rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass - _prevForceTow, ForceMode.Impulse);
+                //_rigidBody.AddForce((targetVelocity - rbVelocity) * _rigidBody.mass - _prevForceTow, ForceMode.Impulse);
+                _forceVec = (targetVelocity - rbVelocity) * _rigidBody.mass - _prevForceTow;
             }
             _hasPrevForceTow = true;
         }
@@ -84,11 +88,15 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             _rigidBody.angularVelocity = Vector3.zero;
             _rigidBody.velocity = Vector3.zero;
+            _needsApplyForce = false;
         }
         else
         {
+            _needsApplyForce = true;
+            _forceMode = ForceMode.VelocityChange;
+            _forceVec = targetVelocity - rbVelocity;
             //_rigidBody.AddForce((targetVelocity - rbVelocity), ForceMode.VelocityChange);
-            _rigidBody.velocity = targetVelocity;
+            //_rigidBody.velocity = targetVelocity;
         }
         if (_autoHeading && ShipControllable)
         {
@@ -107,6 +115,15 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             _towedTime = Time.time;
         }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (_needsApplyForce)
+        {
+            _rigidBody.AddForce(_forceVec, _forceMode);
+        }
+        _needsApplyForce = false;
     }
 
     private void RotateToHeading()
@@ -802,6 +819,9 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     protected float _brakingTargetSpeedFactor;
     protected float _turnCoefficient;
     protected float _speedOnTurningCoefficient;
+    protected bool _needsApplyForce = false;
+    protected ForceMode _forceMode;
+    protected Vector3 _forceVec;
 
     public Faction Owner;
 
