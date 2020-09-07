@@ -12,6 +12,7 @@ public static class ObjectFactory
         if (_prototypes == null)
         {
             _prototypes = p;
+            GameObject.DontDestroyOnLoad(_prototypes);
         }
         if (_gunWarheads == null || _otherWarheads == null)
         {
@@ -302,7 +303,7 @@ public static class ObjectFactory
             }
             else
             {
-                GameObject resObj = _prototypes.CreateObjectByPath(assetBundleSource, asset, "");
+                GameObject resObj = _loader.CreateObjectByPath(assetBundleSource, asset, "");
                 //Debug.LogFormat("Created a new particle system ({0})", asset);
                 ParticleSystem res = resObj.GetComponent<ParticleSystem>();
                 if (res != null)
@@ -402,12 +403,6 @@ public static class ObjectFactory
 
     public static Ship CreateShip(string prodKey)
     {
-        return CreateShip2(prodKey);
-        //return _prototypes.CreateShip(prodKey);
-    }
-
-    public static Ship CreateShip2(string prodKey)
-    {
         if (_shipHullDefinitions == null)
         {
             LoadShipHullDefinitions();
@@ -428,18 +423,18 @@ public static class ObjectFactory
         HierarchyNode shield = hullDef.Shield;
         HierarchyNode statusRing = hullDef.StatusRing;
 
-        GameObject hullObj = HierarchyConstructionUtil.ConstructHierarchy(hullRoot, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer);
+        GameObject hullObj = HierarchyConstructionUtil.ConstructHierarchy(hullRoot, _loader, ShipsLayer, ShipsLayer, EffectsLayer);
         GameObject[] particleSysObjs = new GameObject[]
         {
-            HierarchyConstructionUtil.ConstructHierarchy(damageSmoke, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
-            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustIdle, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
-            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustOn, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
-            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustBrake, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
-            HierarchyConstructionUtil.ConstructHierarchy(magneticField, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(damageSmoke, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustIdle, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustOn, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustBrake, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(magneticField, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
         };
-        GameObject[] teamColorObjs = teamColor.Select(r => HierarchyConstructionUtil.ConstructHierarchy(r, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer)).ToArray();
+        GameObject[] teamColorObjs = teamColor.Select(r => HierarchyConstructionUtil.ConstructHierarchy(r, _loader, ShipsLayer, ShipsLayer, EffectsLayer)).ToArray();
 
-        GameObject resObj = _prototypes.CreateObjectEmpty();
+        GameObject resObj = _loader.CreateObjectEmpty();
         resObj.layer = ShipsLayer;
         resObj.name = hullDef.HullName + " ship";
         hullObj.transform.parent = resObj.transform;
@@ -469,7 +464,7 @@ public static class ObjectFactory
 
         foreach (WeaponHardpointDefinition hardpoint in hullDef.WeaponHardpoints)
         {
-            GameObject hardPointObj = _prototypes.CreateObjectEmpty();
+            GameObject hardPointObj = _loader.CreateObjectEmpty();
             hardPointObj.layer = ShipsLayer;
             hardPointObj.transform.parent = resObj.transform;
             hardpoint.HardpointNode.ApplyToTransform(hardPointObj.transform);
@@ -485,7 +480,7 @@ public static class ObjectFactory
             }
         }
 
-        GameObject navBoxObj = _prototypes.CreateObjectEmpty();
+        GameObject navBoxObj = _loader.CreateObjectEmpty();
         navBoxObj.name = "NavBox";
         navBoxObj.layer = NavCollidersLayer;
         navBoxObj.transform.parent = resObj.transform;
@@ -493,7 +488,7 @@ public static class ObjectFactory
         navBoxObj.transform.localRotation = Quaternion.identity;
         navBoxObj.transform.localScale = Vector3.one;
 
-        GameObject meshSrc = _prototypes.GetObjectByPath(hullDef.CollisionMesh.AssetBundlePath, hullDef.CollisionMesh.AssetPath, hullDef.CollisionMesh.MeshPath);
+        GameObject meshSrc = _loader.GetObjectByPath(hullDef.CollisionMesh.AssetBundlePath, hullDef.CollisionMesh.AssetPath, hullDef.CollisionMesh.MeshPath);
         if (null != meshSrc)
         {
             MeshFilter mesh = meshSrc.GetComponent<MeshFilter>();
@@ -531,7 +526,7 @@ public static class ObjectFactory
             int animIdx = 0;
             foreach (HierarchyNode carreirComp in hullDef.CarrierModuleData.HangerRootNodes)
             {
-                GameObject carrierCompObj = HierarchyConstructionUtil.ConstructHierarchy(carreirComp, _prototypes, ShipsLayer, ShipsLayer, EffectsLayer);
+                GameObject carrierCompObj = HierarchyConstructionUtil.ConstructHierarchy(carreirComp, _loader, ShipsLayer, ShipsLayer, EffectsLayer);
                 Vector3 pos = carrierCompObj.transform.position;
                 Quaternion rot = carrierCompObj.transform.rotation;
                 Vector3 scale = carrierCompObj.transform.localScale;
@@ -548,6 +543,89 @@ public static class ObjectFactory
         s.PostAwake();
 
         return s;
+    }
+
+    public static Transform CreateShipDummy(string prodKey)
+    {
+        if (_shipHullDefinitions == null)
+        {
+            LoadShipHullDefinitions();
+        }
+        ShipHullDefinition hullDef;
+        if (!_shipHullDefinitions.TryGetValue(prodKey, out hullDef))
+        {
+            return null;
+        }
+
+        HierarchyNode hullRoot = hullDef.Geometry;
+        HierarchyNode damageSmoke = hullDef.DamageSmoke;
+        HierarchyNode engineExhaustIdle = hullDef.EngineExhaustIdle;
+        HierarchyNode engineExhaustOn = hullDef.EngineExhaustOn;
+        HierarchyNode engineExhaustBrake = hullDef.EngineExhaustBrake;
+        HierarchyNode[] teamColor = hullDef.TeamColorComponents;
+
+        GameObject hullObj = HierarchyConstructionUtil.ConstructHierarchy(hullRoot, _loader, ShipsLayer, ShipsLayer, EffectsLayer);
+        GameObject[] particleSysObjs = new GameObject[]
+        {
+            HierarchyConstructionUtil.ConstructHierarchy(damageSmoke, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustIdle, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustOn, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+            HierarchyConstructionUtil.ConstructHierarchy(engineExhaustBrake, _loader, ShipsLayer, ShipsLayer, EffectsLayer),
+        };
+        GameObject[] teamColorObjs = teamColor.Select(r => HierarchyConstructionUtil.ConstructHierarchy(r, _loader, ShipsLayer, ShipsLayer, EffectsLayer)).ToArray();
+
+        GameObject resObj = _loader.CreateObjectEmpty();
+        resObj.layer = ShipsLayer;
+        resObj.name = hullDef.HullName + " ship";
+        hullObj.transform.parent = resObj.transform;
+        hullRoot.ApplyToTransform(hullObj.transform);
+
+        foreach (GameObject o in teamColorObjs.Union(particleSysObjs))
+        {
+            Vector3 pos = o.transform.position;
+            Quaternion rot = o.transform.rotation;
+            Vector3 scale = o.transform.localScale;
+
+            o.transform.parent = resObj.transform;
+            o.transform.position = pos;
+            o.transform.rotation = rot;
+            o.transform.localScale = scale;
+        }
+
+        foreach (WeaponHardpointDefinition hardpoint in hullDef.WeaponHardpoints)
+        {
+            GameObject hardPointObj = _loader.CreateObjectEmpty();
+            hardPointObj.layer = ShipsLayer;
+            hardPointObj.transform.parent = resObj.transform;
+            hardpoint.HardpointNode.ApplyToTransform(hardPointObj.transform);
+            if (hardpoint.TurretHardpoint != null)
+            {
+                TurretHardpoint turretHardpoint = hardPointObj.AddComponent<TurretHardpoint>();
+                hardpoint.TurretHardpoint.SetHardpointFields(turretHardpoint);
+            }
+            else if (hardpoint.TorpedoHardpoint != null)
+            {
+                TorpedoHardpoint torpHardpoint = hardPointObj.AddComponent<TorpedoHardpoint>();
+                hardpoint.TorpedoHardpoint.SetHardpointFields(torpHardpoint);
+            }
+        }
+
+        if (hullDef.CarrierModuleData != null)
+        {
+            foreach (HierarchyNode carreirComp in hullDef.CarrierModuleData.HangerRootNodes)
+            {
+                GameObject carrierCompObj = HierarchyConstructionUtil.ConstructHierarchy(carreirComp, _loader, ShipsLayer, ShipsLayer, EffectsLayer);
+                Vector3 pos = carrierCompObj.transform.position;
+                Quaternion rot = carrierCompObj.transform.rotation;
+                Vector3 scale = carrierCompObj.transform.localScale;
+                carrierCompObj.transform.parent = resObj.transform;
+                carrierCompObj.transform.position = pos;
+                carrierCompObj.transform.rotation = rot;
+                carrierCompObj.transform.localScale = scale;
+            }
+        }
+
+        return resObj.transform;
     }
 
     public static Ship GetShipTemplate(string prodKey)
@@ -575,7 +653,7 @@ public static class ObjectFactory
         }
 
         HierarchyNode root = turretDef.Geometry;
-        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _prototypes, WeaponsLayer, WeaponsLayer, EffectsLayer);
+        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _loader, WeaponsLayer, WeaponsLayer, EffectsLayer);
         TurretBase resTurret;
         switch (turretDef.BehaviorType)
         {
@@ -748,6 +826,24 @@ public static class ObjectFactory
         return t;
     }
 
+    public static Transform CreateTurretDummy(string turretMountType, string weaponNum, string weaponSize, string weaponType)
+    {
+        if (_turretDefinitions == null)
+        {
+            LoadTurretDefinitions();
+        }
+        TurretDefinition turretDef;
+        if (!_turretDefinitions.TryGetValue((turretMountType, weaponNum, weaponSize, weaponType), out turretDef))
+        {
+            return null;
+        }
+
+        HierarchyNode root = turretDef.Geometry;
+        GameObject resObj = HierarchyConstructionUtil.ConstructHierarchy(root, _loader, WeaponsLayer, WeaponsLayer, EffectsLayer);
+
+        return resObj.transform;
+    }
+
     private static void LoadTurretDefinitions()
     {
         _turretDefinitions = new Dictionary<(string, string, string, string), TurretDefinition>();
@@ -836,6 +932,24 @@ public static class ObjectFactory
         res.SetFormationType(FormationBase.FormationType.Vee);
         res.gameObject.AddComponent<StrikeCraftFormationAIController>();
         return res;
+    }
+
+    public static IEnumerable<ShipHullDefinition> GetAllShipHulls()
+    {
+        if (_shipHullDefinitions == null)
+        {
+            LoadShipHullDefinitions();
+        }
+        return _shipHullDefinitions.Values;
+    }
+
+    public static IEnumerable<TurretDefinition> GetAllTurretTypes()
+    {
+        if (_turretDefinitions == null)
+        {
+            LoadTurretDefinitions();
+        }
+        return _turretDefinitions.Values;
     }
 
     public static Sprite GetSprite(string key)
@@ -1534,6 +1648,7 @@ public static class ObjectFactory
     }
 
     private static ObjectPrototypes _prototypes = null;
+    private static ObjectLoader _loader = new ObjectLoader();
 }
 
 public class ShipTemplate

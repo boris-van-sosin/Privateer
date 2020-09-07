@@ -5,37 +5,37 @@ using UnityEngine;
 
 public static class HierarchyConstructionUtil
 {
-    public static GameObject ConstructHierarchy(HierarchyNode root, ObjectPrototypes proto)
+    public static GameObject ConstructHierarchy(HierarchyNode root, ObjectLoader loader)
     {
         int layer = ObjectFactory.DefaultLayer;
-        return ConstructHierarchy(root, proto, layer, layer, layer);
+        return ConstructHierarchy(root, loader, layer, layer, layer);
     }
 
-    public static GameObject ConstructHierarchy(HierarchyNode root, ObjectPrototypes proto, int generalLayer, int meshLayer, int particleSysLayer)
+    public static GameObject ConstructHierarchy(HierarchyNode root, ObjectLoader loader, int generalLayer, int meshLayer, int particleSysLayer)
     {
-        GameObject res = ConstructHierarchyRecursive(root, true, proto, generalLayer, meshLayer, particleSysLayer);
+        GameObject res = ConstructHierarchyRecursive(root, true, loader, generalLayer, meshLayer, particleSysLayer);
         FixTransformsRecursive(res.transform, root);
         SetOpenCloseAnims(res.transform, root);
         CombineMeshes(res.transform, root);
         return res;
     }
 
-    private static GameObject ConstructHierarchyRecursive(HierarchyNode obj, bool setName, ObjectPrototypes proto, int generalLayer, int meshLayer, int particleSysLayer)
+    private static GameObject ConstructHierarchyRecursive(HierarchyNode obj, bool setName, ObjectLoader loader, int generalLayer, int meshLayer, int particleSysLayer)
     {
         GameObject resObj;
         if (obj.NodeMesh != null)
         {
-            resObj = proto.CreateObjectByPath(obj.NodeMesh.AssetBundlePath, obj.NodeMesh.AssetPath, obj.NodeMesh.MeshPath);
+            resObj = loader.CreateObjectByPath(obj.NodeMesh.AssetBundlePath, obj.NodeMesh.AssetPath, obj.NodeMesh.MeshPath);
             resObj.layer = meshLayer;
         }
         else if (obj.NodeParticleSystem != null)
         {
-            resObj = proto.CreateObjectByPath(obj.NodeParticleSystem.AssetBundlePath, obj.NodeParticleSystem.AssetPath, obj.NodeParticleSystem.ParticleSystemPath);
+            resObj = loader.CreateObjectByPath(obj.NodeParticleSystem.AssetBundlePath, obj.NodeParticleSystem.AssetPath, obj.NodeParticleSystem.ParticleSystemPath);
             resObj.layer = particleSysLayer;
         }
         else
         {
-            resObj = proto.CreateObjectEmpty();
+            resObj = loader.CreateObjectEmpty();
             resObj.layer = generalLayer;
         }
 
@@ -47,7 +47,7 @@ public static class HierarchyConstructionUtil
         Transform tr = resObj.transform;
         foreach (HierarchyNode subNode in obj.SubNodes)
         {
-            Transform subTr = ConstructHierarchyRecursive(subNode, true, proto, generalLayer, meshLayer, particleSysLayer).transform;
+            Transform subTr = ConstructHierarchyRecursive(subNode, true, loader, generalLayer, meshLayer, particleSysLayer).transform;
             subTr.SetParent(tr);
         }
 

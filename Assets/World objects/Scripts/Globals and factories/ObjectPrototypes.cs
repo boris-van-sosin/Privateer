@@ -310,40 +310,6 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate(SelectionRing);
     }
 
-    public GameObject CreateObjectByPath(string assetBundlePath, string assetPath, string objPath)
-    {
-        GameObject proto = GetObjectByPath(assetBundlePath, assetPath, objPath);
-        if (null != proto)
-        {
-            return Instantiate(proto);
-        }
-        else
-        {
-            Debug.LogWarningFormat("Requested asset does not exist: ({0},{1},{2})", assetBundlePath, assetPath, objPath);
-            return null;
-        }
-    }
-
-    public GameObject GetObjectByPath(string assetBundlePath, string assetPath, string objPath)
-    {
-        GameObject res;
-        if (!_objCache.TryGetValue((assetBundlePath, assetPath, objPath), out res))
-        {
-            res = AssetBundleUtil.LoadSingleObject<GameObject>(assetBundlePath, assetPath, objPath, true);
-            if (res == null)
-            {
-                return null;
-            }
-            _objCache[(assetBundlePath, assetPath, objPath)] = res;
-        }
-        return res;
-    }
-
-    public GameObject CreateObjectEmpty()
-    {
-        return new GameObject();
-    }
-
     public void QueueDelayedAction(Action<float> a, float actionTime)
     {
         _delayedActionQueue.Add(a, actionTime);
@@ -415,8 +381,6 @@ public class ObjectPrototypes : MonoBehaviour
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
     private Dictionary<string, BspPath> _paths = new Dictionary<string, BspPath>();
     private Dictionary<string, Material> _materials = new Dictionary<string, Material>();
-
-    private Dictionary<(string, string, string), GameObject> _objCache = new Dictionary<(string, string, string), GameObject>();
 
     private Coroutine _delayedActions;
     private StagPoint.Collections.BinaryMinHeap<Action<float>, float> _delayedActionQueue = new StagPoint.Collections.BinaryMinHeap<Action<float>, float>();
