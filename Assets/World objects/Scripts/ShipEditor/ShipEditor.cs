@@ -22,12 +22,29 @@ public class ShipEditor : MonoBehaviour
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
-
             string hullKey = hulls[i].HullName;
             textElem.text = hullKey;
 
             Button buttonElem = t.GetComponent<Button>();
             buttonElem.onClick.AddListener(() => CreateShipDummy(hullKey));
+
+            Transform shipDummy;
+            if (_shipsCache.TryGetValue(hullKey, out shipDummy))
+            {
+                shipDummy.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogFormat("Createing hull {0}", hullKey);
+                shipDummy = ObjectFactory.CreateShipDummy(hullKey);
+                shipDummy.position = new Vector3(-2.5f, 0, 0);
+                _shipsCache[hullKey] = shipDummy;
+            }
+            Sprite objSprite = ObjectFactory.GetObjectPhoto(shipDummy, true, ImageCam);
+            shipDummy.gameObject.SetActive(false);
+
+            Image img = t.Find("Image").GetComponent<Image>();
+            img.sprite = objSprite;
         }
     }
 
@@ -52,6 +69,7 @@ public class ShipEditor : MonoBehaviour
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform ButtonPrototype;
+    public Camera ImageCam;
 
     private Transform _currShip = null;
     private Dictionary<string, Transform> _shipsCache = new Dictionary<string, Transform>();

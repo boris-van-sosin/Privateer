@@ -1103,7 +1103,39 @@ public static class ObjectFactory
             return res;
         }
     }
+
+    public static Sprite GetShipPhoto(Ship s, Camera cam)
+    {
+        Sprite res;
+        if (_shipPhotos.TryGetValue(s, out res))
+        {
+            return res;
+        }
+        else
+        {
+            res = ShipPhotoUtil.TakePhoto(s, 512, 512, cam);
+            _shipPhotos[s] = res;
+            return res;
+        }
+    }
     private static Dictionary<Ship, Sprite> _shipPhotos = new Dictionary<Ship, Sprite>();
+
+    public static Sprite GetObjectPhoto(Transform t, bool cache, Camera cam)
+    {
+        Sprite res;
+        if (cache && _objectPhotos.TryGetValue(t, out res))
+        {
+            return res;
+        }
+        else
+        {
+            res = ShipPhotoUtil.TakeObjectPhoto(t, 512, 512, cam);
+            if (cache)
+                _objectPhotos[t] = res;
+            return res;
+        }
+    }
+    private static Dictionary<Transform, Sprite> _objectPhotos = new Dictionary<Transform, Sprite>();
 
     public static int DefaultLayer => _defaultLayer;
     public static int ShipsLayer => _shipsLayer;
