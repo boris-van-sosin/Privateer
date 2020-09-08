@@ -260,7 +260,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         if (_cfgPanelVisible)
         {
             string shipKey = ShipDropdown.options[i].text;
-            Ship s = ObjectFactory.GetShipTemplate(shipKey);
+            ShipHullDefinition s = ObjectFactory.GetShipTemplate(shipKey);
             if (s != null)
             {
                 _weaponsCfgPanel.Clear();

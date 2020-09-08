@@ -17,16 +17,29 @@ public class WeaponControlGroupCfgPanel : MonoBehaviour
 		
 	}
 
-    public void SetShipTemplate(Ship s)
+    public void SetShipTemplate(ShipHullDefinition s)
     {
         int items = 2;
-        foreach (TurretHardpoint hp in s.WeaponHardpoints)
+        foreach (WeaponHardpointDefinition hp in s.WeaponHardpoints)
         {
-            WeaponCtrlCfgLine ln = ObjectFactory.CreateWeaponCtrlCfgLine(hp.DisplayString);
-            ln.HardpointKey = hp.name;
+            string displayString = string.Empty;
+            int defaultGroup = 1;
+            if (hp.TurretHardpoint != null)
+            {
+                displayString = hp.TurretHardpoint.DisplayString;
+                defaultGroup = hp.TurretHardpoint.DefaultGroup;
+            }
+            else if (hp.TorpedoHardpoint != null)
+            {
+                displayString = hp.TorpedoHardpoint.HardpointBaseDefinition.DisplayString;
+                defaultGroup = hp.TorpedoHardpoint.HardpointBaseDefinition.DefaultGroup;
+            }
+
+            WeaponCtrlCfgLine ln = ObjectFactory.CreateWeaponCtrlCfgLine(displayString);
+            ln.HardpointKey = hp.HardpointNode.Name;
             for (int i = 0; i < ln.WeaponGroupCheckboxes.Length; i++)
             {
-                ln.WeaponGroupCheckboxes[i].isOn = (i == (hp.DefaultGroup - 1));
+                ln.WeaponGroupCheckboxes[i].isOn = (i == (defaultGroup - 1));
             }
             ln.transform.SetParent(WeaponConfigsBox);
             ln.transform.SetAsLastSibling();

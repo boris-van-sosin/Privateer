@@ -398,7 +398,11 @@ public static class ObjectFactory
 
     public static string[] GetAllShipTypes()
     {
-        return _prototypes.GetAllShipTypes();
+        if (_shipHulls == null)
+        {
+            _shipHulls = GetAllShipHulls().Select(h => h.HullName).ToArray();
+        }
+        return _shipHulls;
     }
 
     public static Ship CreateShip(string prodKey)
@@ -628,14 +632,16 @@ public static class ObjectFactory
         return resObj.transform;
     }
 
-    public static Ship GetShipTemplate(string prodKey)
+    public static ShipHullDefinition GetShipTemplate(string prodKey)
     {
-        foreach (Ship s in _prototypes.ShipPrototypes)
+        if (_shipHullDefinitions == null)
         {
-            if (s.ProductionKey == prodKey)
-            {
-                return s;
-            }
+            LoadShipHullDefinitions();
+        }
+        ShipHullDefinition res;
+        if (_shipHullDefinitions.TryGetValue(prodKey, out res))
+        {
+            return res;
         }
         return null;
     }
@@ -1333,6 +1339,7 @@ public static class ObjectFactory
     private static Dictionary<(string, string), List<TacMapEntityType>> _defaultPriorityLists = null;
     private static Dictionary<(string, string, string, string), TurretDefinition> _turretDefinitions = null; // Key: MountType, WeaponNum, WeaponSize, WeaponType
     private static Dictionary<string, ShipHullDefinition> _shipHullDefinitions = null;
+    private static string[] _shipHulls;
     
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");

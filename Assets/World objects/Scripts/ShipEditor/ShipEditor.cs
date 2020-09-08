@@ -23,7 +23,7 @@ public class ShipEditor : MonoBehaviour
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
             string hullKey = hulls[i].HullName;
-            textElem.text = hullKey;
+            textElem.text = string.Format("{0} - {1}", hulls[i].ShipType, hullKey);
 
             Button buttonElem = t.GetComponent<Button>();
             buttonElem.onClick.AddListener(() => CreateShipDummy(hullKey));

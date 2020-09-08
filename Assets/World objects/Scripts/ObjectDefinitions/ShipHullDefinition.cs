@@ -10,6 +10,7 @@ public class ShipHullDefinition
 {
     public string HullName { get; set; }
     public string ShipSize { get; set; }
+    public string ShipType { get; set; }
     public HierarchyNode Geometry { get; set; }
     public MeshData CollisionMesh { get; set; }
     public ShipHullMovementData MovementData { get; set; }
