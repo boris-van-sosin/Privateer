@@ -4,19 +4,6 @@ using UnityEngine;
 
 public class WeaponControlGroupCfgPanel : MonoBehaviour
 {
-
-	// Use this for initialization
-	void Start ()
-    {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
-
     public void SetShipTemplate(ShipHullDefinition s)
     {
         int items = 2;

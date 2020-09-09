@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class ObjectLoader
@@ -33,11 +34,29 @@ public class ObjectLoader
         return res;
     }
 
+    public Texture2D GetImageByPath(string imgPath, int w, int h)
+    {
+        Texture2D res;
+        if (_imgCache.TryGetValue(imgPath, out res))
+        {
+            return res;
+        }
+        if (!File.Exists(imgPath))
+        {
+            return null;
+        }
+        byte[] data = File.ReadAllBytes(imgPath);
+        res = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        res.LoadImage(data, true);
+        return res;
+    }
+
     public GameObject CreateObjectEmpty()
     {
         return new GameObject();
     }
 
     private Dictionary<(string, string, string), GameObject> _objCache = new Dictionary<(string, string, string), GameObject>();
+    private Dictionary<string, Texture2D> _imgCache = new Dictionary<string, Texture2D>();
 }
 

@@ -38,6 +38,10 @@ public static class ObjectFactory
         {
             LoadDefaultPriorityLists();
         }
+        if (_weaponImagePaths == null)
+        {
+            LoadWeaponImages();
+        }
     }
 
     private static Projectile CreateProjectile()
@@ -396,11 +400,11 @@ public static class ObjectFactory
         return _otherWarheads.Keys;
     }
 
-    public static string[] GetAllShipTypes()
+    public static IReadOnlyList<string> GetAllShipTypes()
     {
         if (_shipHulls == null)
         {
-            _shipHulls = GetAllShipHulls().Select(h => h.HullName).ToArray();
+            _shipHulls = GetAllShipHulls().Select(h => h.HullName).ToList();
         }
         return _shipHulls;
     }
@@ -958,6 +962,15 @@ public static class ObjectFactory
         return _turretDefinitions.Values;
     }
 
+    public static IReadOnlyList<string> GetAllWeaponTypes()
+    {
+        if (_weapons_beam == null || _weapons_projectile == null || _weapons_torpedo == null)
+        {
+            LoadWeapons();
+        }
+        return _weaponTypes;
+    }
+
     public static Sprite GetSprite(string key)
     {
         return _prototypes.GetSprite(key);
@@ -1143,6 +1156,30 @@ public static class ObjectFactory
     }
     private static Dictionary<Transform, Sprite> _objectPhotos = new Dictionary<Transform, Sprite>();
 
+    public static Sprite GetWeaponImage(string weaponType)
+    {
+        if (_weaponImagePaths == null)
+        {
+            LoadWeaponImages();
+        }
+        string imgPath;
+        if (_weaponImagePaths.TryGetValue(weaponType, out imgPath))
+        {
+            Sprite res;
+            if (!_weaponSpriteCache.TryGetValue(weaponType, out res))
+            {
+                int w = 64, h = 64;
+                res = Sprite.Create(_loader.GetImageByPath(_weaponImagePaths[weaponType], w, h), new Rect(0, 0, w, h), new Vector2(0, 0));
+                _weaponSpriteCache[weaponType] = res;
+            }
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static int DefaultLayer => _defaultLayer;
     public static int ShipsLayer => _shipsLayer;
     public static int ShieldsLayer => _shieldsLayer;
@@ -1223,9 +1260,11 @@ public static class ObjectFactory
             if (l.Trim().StartsWith("WeaponMount"))
             {
                 TurretMountDataEntry tm = TurretMountDataEntry.FromString(l);
-                _weaponMounts.Add(tm.MountSize + tm.Mount, tm);
+                string key = tm.MountSize + tm.Mount;
+                _weaponMounts.Add(key, tm);
             }
         }
+        _weaponMountTypes = _weaponMounts.Keys.ToList();
     }
 
     private static void LoadPenetrationTable()
@@ -1259,21 +1298,43 @@ public static class ObjectFactory
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
         _weapons_projectile = new Dictionary<(string, string), WeaponProjectileDataEntry>();
         _weapons_beam = new Dictionary<(string, string), WeaponBeamDataEntry>();
+        _weaponTypes = new List<string>();
+        _weaponSizes = new List<string>();
         foreach (string l in lines)
-        {
+        {   
             if (l.Trim().StartsWith("ProjectileWeapon"))
             {
                 WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
                 _weapons_projectile.Add((w.WeaponSize, w.Weapon), w);
+                if (!_weaponTypes.Contains(w.Weapon))
+                {
+                    _weaponTypes.Add(w.Weapon);
+                }
+                if (!_weaponSizes.Contains(w.WeaponSize))
+                {
+                    _weaponSizes.Add(w.WeaponSize);
+                }
             }
             else if (l.Trim().StartsWith("BeamWeapon"))
             {
                 WeaponBeamDataEntry w = WeaponBeamDataEntry.FromString(l);
                 _weapons_beam.Add((w.WeaponSize, w.Weapon), w);
+                if (!_weaponTypes.Contains(w.Weapon))
+                {
+                    _weaponTypes.Add(w.Weapon);
+                }
+                if (!_weaponSizes.Contains(w.WeaponSize))
+                {
+                    _weaponSizes.Add(w.WeaponSize);
+                }
             }
             else if (l.Trim().StartsWith("TorpedoWeapon"))
             {
                 _weapons_torpedo = WeaponTorpedoDataEntry.FromString(l);
+                if (!_weaponTypes.Contains("TorpedoWeapon"))
+                {
+                    _weaponTypes.Add("TorpedoWeapon");
+                }
             }
         }
     }
@@ -1320,6 +1381,21 @@ public static class ObjectFactory
         System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","Warheads.txt"), sb.ToString());
     }
 
+    private static void LoadWeaponImages()
+    {
+        string[] lines = File.ReadAllLines(Path.Combine("TextData", "WeaponImages.txt"));
+        _weaponImagePaths = new Dictionary<string, string>();
+        foreach (string l in lines)
+        {
+            string trimLn = l.Trim();
+            if (!trimLn.StartsWith("#"))
+            {
+                string[] pair = trimLn.Split(',');
+                _weaponImagePaths.Add(pair[0], pair[1]);
+            }
+        }
+    }
+
     public enum WeaponBehaviorType { Unknown, Gun, Beam, ContinuousBeam, Torpedo, BomberTorpedo, Special }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
@@ -1339,8 +1415,13 @@ public static class ObjectFactory
     private static Dictionary<(string, string), List<TacMapEntityType>> _defaultPriorityLists = null;
     private static Dictionary<(string, string, string, string), TurretDefinition> _turretDefinitions = null; // Key: MountType, WeaponNum, WeaponSize, WeaponType
     private static Dictionary<string, ShipHullDefinition> _shipHullDefinitions = null;
-    private static string[] _shipHulls;
-    
+    private static Dictionary<string, string> _weaponImagePaths = null;
+    private static Dictionary<string, Sprite> _weaponSpriteCache = new Dictionary<string, Sprite>();
+    private static List<string> _shipHulls;
+    private static List<string> _weaponTypes;
+    private static List<string> _weaponSizes;
+    private static List<string> _weaponMountTypes;
+
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");
     private static readonly int _allStrikeCraftLayerMask = LayerMask.GetMask("Strike Craft");

@@ -52,17 +52,26 @@ public class StrikeCraftCommandPanel : MonoBehaviour
 
     private void IncreaseFormations()
     {
-        _attachedCarrier?.QueueLaunchFormationOfType(_strikeCraftType);
+        if (null != _attachedCarrier)
+        {
+            _attachedCarrier.QueueLaunchFormationOfType(_strikeCraftType);
+        }
     }
 
     private void DecreaseFormations()
     {
-        _attachedCarrier?.QueueRecallFormationOfType(_strikeCraftType);
+        if (null != _attachedCarrier)
+        {
+            _attachedCarrier.QueueRecallFormationOfType(_strikeCraftType);
+        }
     }
 
     private void ToggleLock(bool val)
     {
-        _attachedCarrier?.LockFormationNumSet(_strikeCraftType, val);
+        if (null != _attachedCarrier)
+        {
+            _attachedCarrier.LockFormationNumSet(_strikeCraftType, val);
+        }
     }
 
     public Button UpButton;

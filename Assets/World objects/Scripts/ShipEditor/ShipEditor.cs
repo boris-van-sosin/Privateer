@@ -9,6 +9,12 @@ public class ShipEditor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        PopulateHulls();
+        PopulateWeapons();
+    }
+
+    private void PopulateHulls()
+    {
         ShipHullDefinition[] hulls = ObjectFactory.GetAllShipHulls().ToArray();
         float offset = 0.0f;
         for (int i = 0; i < hulls.Length; ++i)
@@ -18,7 +24,7 @@ public class ShipEditor : MonoBehaviour
             t.SetParent(ShipHullsScrollViewContent, false);
             float height = t.rect.height;
             float pivotOffset = (1.0f - t.pivot.y) * height;
-            t.anchoredPosition  = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -50,7 +56,10 @@ public class ShipEditor : MonoBehaviour
 
     private void CreateShipDummy(string key)
     {
-        _currShip?.gameObject.SetActive(false);
+        if (null != _currShip)
+        {
+            _currShip.gameObject.SetActive(false);
+        }
         Transform s;
         if (_shipsCache.TryGetValue(key, out s))
         {
@@ -66,8 +75,37 @@ public class ShipEditor : MonoBehaviour
         _currShip = s;
     }
 
+    private void PopulateWeapons()
+    {
+        IReadOnlyList<string> weapons = ObjectFactory.GetAllWeaponTypes();
+        float offset = 0.0f;
+        for (int i = 0; i < weapons.Count; ++i)
+        {
+            string weaponKey = weapons[i];
+            Sprite s = ObjectFactory.GetWeaponImage(weaponKey);
+            if (s == null)
+            {
+                continue;
+            }
+            RectTransform t = Instantiate(ButtonPrototype);
+
+            t.SetParent(WeaponsScrollViewContent, false);
+            float height = t.rect.height;
+            float pivotOffset = (1.0f - t.pivot.y) * height;
+            t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            offset -= height;
+
+            TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
+            textElem.text = weaponKey;
+
+            Image img = t.Find("Image").GetComponent<Image>();
+            img.sprite = s;
+        }
+    }
+
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
+    public RectTransform WeaponsScrollViewContent;
     public RectTransform ButtonPrototype;
     public Camera ImageCam;
 

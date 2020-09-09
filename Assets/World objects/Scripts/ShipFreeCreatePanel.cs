@@ -16,12 +16,6 @@ public class ShipFreeCreatePanel : MonoBehaviour
         _cfgPanelVisible = false;
         _weaponsCfgPanel.gameObject.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
 
     public void CreateShip()
     {

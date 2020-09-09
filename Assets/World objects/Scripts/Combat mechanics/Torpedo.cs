@@ -32,9 +32,6 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
         }
     }
 
-    void Awake()
-    {
-    }
 
     // Update is called once per frame
     void Update()
