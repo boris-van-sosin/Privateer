@@ -32,47 +32,84 @@ public class ShipEditor : MonoBehaviour
             textElem.text = string.Format("{0} - {1}", hulls[i].ShipType, hullKey);
 
             Button buttonElem = t.GetComponent<Button>();
-            buttonElem.onClick.AddListener(() => CreateShipDummy(hullKey));
+            buttonElem.onClick.AddListener(() => SelectShipDummy(hullKey));
 
-            Transform shipDummy;
-            if (_shipsCache.TryGetValue(hullKey, out shipDummy))
+            ShipDummyInEditor shipDummy;
+            Sprite objSprite;
+            if (!_shipsCache.TryGetValue(hullKey, out shipDummy))
             {
-                shipDummy.gameObject.SetActive(true);
+                Debug.LogFormat("Createing hull {0}", hullKey);
+                (shipDummy, objSprite) = CreateShipDummy(hullKey);
+                _shipsCache[hullKey] = shipDummy;
             }
             else
             {
-                Debug.LogFormat("Createing hull {0}", hullKey);
-                shipDummy = ObjectFactory.CreateShipDummy(hullKey);
-                shipDummy.position = new Vector3(-2.5f, 0, 0);
-                _shipsCache[hullKey] = shipDummy;
+                objSprite = null;
             }
-            Sprite objSprite = ObjectFactory.GetObjectPhoto(shipDummy, true, ImageCam);
-            shipDummy.gameObject.SetActive(false);
+            shipDummy.ShipModel.gameObject.SetActive(false);
 
             Image img = t.Find("Image").GetComponent<Image>();
             img.sprite = objSprite;
         }
+
+        FitScrollContent(ShipHullsScrollViewContent.GetComponent<RectTransform>(), offset);
     }
 
-    private void CreateShipDummy(string key)
+    private void FitScrollContent(RectTransform contentRect, float offset)
+    {
+        contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, -offset);
+        ScrollRect scrollRect = ShipHullsScrollViewContent.GetComponentInParent<ScrollRect>();
+        RectTransform viewportRect = scrollRect.viewport;
+        if (viewportRect.rect.height < contentRect.rect.height)
+        {
+            RectTransform scrollbarRect = scrollRect.verticalScrollbar.GetComponent<RectTransform>();
+            RectTransform tabRect = scrollRect.transform.parent.GetComponent<RectTransform>();
+            tabRect.sizeDelta = new Vector2(tabRect.sizeDelta.x + scrollbarRect.rect.width, tabRect.sizeDelta.y);
+        }
+    }
+
+    private void SelectShipDummy(string key)
     {
         if (null != _currShip)
         {
-            _currShip.gameObject.SetActive(false);
+            for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
+            {
+                _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(false);
+            }
+            _currShip.Value.ShipModel.gameObject.SetActive(false);
         }
-        Transform s;
+        ShipDummyInEditor s;
         if (_shipsCache.TryGetValue(key, out s))
         {
-            s.gameObject.SetActive(true);
+            s.ShipModel.gameObject.SetActive(true);
         }
         else
         {
-            Debug.LogFormat("Createing hull {0}", key);
-            s = ObjectFactory.CreateShipDummy(key);
-            s.position = new Vector3(-2.5f, 0, 0);
+            s = CreateShipDummy(key).Item1;
             _shipsCache[key] = s;
         }
+        
         _currShip = s;
+    }
+
+    private (ShipDummyInEditor, Sprite) CreateShipDummy(string key)
+    {
+        Debug.LogFormat("Createing hull {0}", key);
+        Transform s = ObjectFactory.CreateShipDummy(key);
+        Sprite shipPhoto = ObjectFactory.GetObjectPhoto(s, true, ImageCam);
+        s.position = new Vector3(-2.5f, 0, 0);
+        TurretHardpoint[] hardpoints = s.GetComponentsInChildren<TurretHardpoint>();
+        List<(TurretHardpoint, Collider, Transform)> editorHardpoints = new List<(TurretHardpoint, Collider, Transform)>(hardpoints.Length);
+        for (int i = 0; i < hardpoints.Length; ++i)
+        {
+            GameObject hardpointObj = hardpoints[i].gameObject;
+            Transform marker = Instantiate(HardpointMarkerPrototype);
+            marker.transform.parent = hardpointObj.transform;
+            marker.transform.localPosition = Vector3.zero;
+            Collider coll = marker.GetComponent<Collider>();
+            editorHardpoints.Add((hardpoints[i], coll, marker));
+        }
+        return (new ShipDummyInEditor() { ShipModel = s, Hardpoints = editorHardpoints }, shipPhoto);
     }
 
     private void PopulateWeapons()
@@ -100,6 +137,39 @@ public class ShipEditor : MonoBehaviour
 
             Image img = t.Find("Image").GetComponent<Image>();
             img.sprite = s;
+
+            ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
+            draggable.ContainingEditor = this;
+            draggable.Item = EditorItemType.Weapon;
+            draggable.WeaponKey = weaponKey;
+        }
+
+        FitScrollContent(WeaponsScrollViewContent.GetComponent<RectTransform>(), offset);
+    }
+
+    public void StartDragItem(ShipEditorDraggable draggedItem)
+    {
+        switch (draggedItem.Item)
+        {
+            case EditorItemType.ShipComponent:
+                break;
+            case EditorItemType.Weapon:
+                {
+                    if (_currShip.HasValue)
+                    {
+                        for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
+                        {
+                            Debug.LogFormat("Allowed weapon types: {0}", string.Join(",", _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes));
+                        }
+                    }
+                }
+                break;
+            case EditorItemType.Ammo:
+                break;
+            case EditorItemType.TurretMod:
+                break;
+            default:
+                break;
         }
     }
 
@@ -107,8 +177,17 @@ public class ShipEditor : MonoBehaviour
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform WeaponsScrollViewContent;
     public RectTransform ButtonPrototype;
+    public Transform HardpointMarkerPrototype;
     public Camera ImageCam;
 
-    private Transform _currShip = null;
-    private Dictionary<string, Transform> _shipsCache = new Dictionary<string, Transform>();
+    private ShipDummyInEditor? _currShip = null;
+    private Dictionary<string, ShipDummyInEditor> _shipsCache = new Dictionary<string, ShipDummyInEditor>();
+
+    private struct ShipDummyInEditor
+    {
+        public Transform ShipModel;
+        public List<(TurretHardpoint, Collider, Transform)> Hardpoints;
+    }
+
+    public enum EditorItemType { ShipComponent, Weapon, Ammo, TurretMod }
 }

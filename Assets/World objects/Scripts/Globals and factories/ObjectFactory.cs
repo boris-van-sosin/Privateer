@@ -349,6 +349,24 @@ public static class ObjectFactory
         }
     }
 
+    /*
+    public static ParticleSystem CreateParticleSystem(string assetBundleSource, string asset)
+    {
+        GameObject resObj = _loader.CreateObjectByPath(assetBundleSource, asset, "");
+        //Debug.LogFormat("Created a new particle system ({0})", asset);
+        ParticleSystem res = resObj.GetComponent<ParticleSystem>();
+        if (res != null)
+        {
+            return res;
+        }
+        else
+        {
+            GameObject.Destroy(resObj);
+            return null;
+        }
+    }
+    */
+
     public static T GetRandom<T>(IEnumerable<T> lst)
     {
         int numElems = lst.Count();
