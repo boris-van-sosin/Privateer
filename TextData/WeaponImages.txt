@@ -1,4 +1,7 @@
-Autocannon,TextData\Images\Autocannon.png
-Howitzer,TextData\Images\Howitzer.png
-HVGun,TextData\Images\HVGun.png
-TorpedoWeapon,TextData\Images\TorpedoTube.png
+Weapon,Autocannon,TextData\Images\Weapons.png,160,128,0,0,64,64
+Weapon,Howitzer,TextData\Images\Weapons.png,160,128,64,0,64,64
+Weapon,HVGun,TextData\Images\Weapons.png,160,128,0,64,64,64
+Weapon,TorpedoWeapon,TextData\Images\Weapons.png,160,128,64,64,64,64
+Size,Light,TextData\Images\Weapons.png,160,128,128,0,32,32
+Size,Medium,TextData\Images\Weapons.png,160,128,128,32,32,32
+Size,Heavy,TextData\Images\Weapons.png,160,128,128,64,32,32

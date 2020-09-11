@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ShipEditor : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class ShipEditor : MonoBehaviour
     {
         PopulateHulls();
         PopulateWeapons();
+        GetTurretDefs();
     }
 
     private void PopulateHulls()
@@ -38,7 +40,6 @@ public class ShipEditor : MonoBehaviour
             Sprite objSprite;
             if (!_shipsCache.TryGetValue(hullKey, out shipDummy))
             {
-                Debug.LogFormat("Createing hull {0}", hullKey);
                 (shipDummy, objSprite) = CreateShipDummy(hullKey);
                 _shipsCache[hullKey] = shipDummy;
             }
@@ -82,6 +83,7 @@ public class ShipEditor : MonoBehaviour
         if (_shipsCache.TryGetValue(key, out s))
         {
             s.ShipModel.gameObject.SetActive(true);
+            ShipPhotoUtil.PositionCameraToObject(ShipViewCam, s.ShipModel, 1.2f);
         }
         else
         {
@@ -97,7 +99,7 @@ public class ShipEditor : MonoBehaviour
         Debug.LogFormat("Createing hull {0}", key);
         Transform s = ObjectFactory.CreateShipDummy(key);
         Sprite shipPhoto = ObjectFactory.GetObjectPhoto(s, true, ImageCam);
-        s.position = new Vector3(-2.5f, 0, 0);
+        s.position = Vector3.zero;
         TurretHardpoint[] hardpoints = s.GetComponentsInChildren<TurretHardpoint>();
         List<(TurretHardpoint, Collider, Transform)> editorHardpoints = new List<(TurretHardpoint, Collider, Transform)>(hardpoints.Length);
         for (int i = 0; i < hardpoints.Length; ++i)
@@ -108,22 +110,34 @@ public class ShipEditor : MonoBehaviour
             marker.transform.localPosition = Vector3.zero;
             Collider coll = marker.GetComponent<Collider>();
             editorHardpoints.Add((hardpoints[i], coll, marker));
+            marker.gameObject.SetActive(false);
         }
         return (new ShipDummyInEditor() { ShipModel = s, Hardpoints = editorHardpoints }, shipPhoto);
     }
 
     private void PopulateWeapons()
     {
-        IReadOnlyList<string> weapons = ObjectFactory.GetAllWeaponTypes();
+        IReadOnlyList<(string, string)> weapons = ObjectFactory.GetAllWeaponTypesAndSizes();
         float offset = 0.0f;
         for (int i = 0; i < weapons.Count; ++i)
         {
-            string weaponKey = weapons[i];
-            Sprite s = ObjectFactory.GetWeaponImage(weaponKey);
-            if (s == null)
+            string weaponSizeKey = weapons[i].Item2;
+            Sprite szSprite = ObjectFactory.GetWeaponSizeImage(weaponSizeKey);
+            string weaponKey = weapons[i].Item1;
+            Sprite s, weaponSprite = ObjectFactory.GetWeaponImage(weaponKey);
+            if (weaponSprite == null)
             {
                 continue;
             }
+            if (szSprite != null)
+            {
+                s = CombineSpriteTextures(weaponSprite, szSprite);
+            }
+            else
+            {
+                s = weaponSprite;
+            }
+
             RectTransform t = Instantiate(ButtonPrototype);
 
             t.SetParent(WeaponsScrollViewContent, false);
@@ -133,7 +147,7 @@ public class ShipEditor : MonoBehaviour
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
-            textElem.text = weaponKey;
+            textElem.text = string.Format("{0} {1}", weaponSizeKey, weaponKey);
 
             Image img = t.Find("Image").GetComponent<Image>();
             img.sprite = s;
@@ -141,15 +155,73 @@ public class ShipEditor : MonoBehaviour
             ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
             draggable.ContainingEditor = this;
             draggable.Item = EditorItemType.Weapon;
+            draggable.WeaponSize = weaponSizeKey;
             draggable.WeaponKey = weaponKey;
         }
 
         FitScrollContent(WeaponsScrollViewContent.GetComponent<RectTransform>(), offset);
     }
 
-    public void StartDragItem(ShipEditorDraggable draggedItem)
+    private Sprite CombineSpriteTextures(Sprite s1, Sprite s2)
     {
-        switch (draggedItem.Item)
+        Texture2D t1 = s1.texture;
+        Texture2D t2 = s2.texture;
+        Texture2D res = new Texture2D(Mathf.RoundToInt(s1.rect.width), Mathf.RoundToInt(s1.rect.height));
+
+        int endX = Mathf.RoundToInt(s2.rect.width);
+        int startY = Mathf.RoundToInt(s1.rect.height) - Mathf.RoundToInt(s2.rect.height);
+        int offsetX1 = Mathf.RoundToInt(s1.rect.x), offsetY1 = Mathf.RoundToInt(s1.rect.y),
+            offsetX2 = Mathf.RoundToInt(s2.rect.x), offsetY2 = Mathf.RoundToInt(s2.rect.y);
+
+        for (int x = 0; x < res.width; x++)
+        {
+            for (int y = 0; y < res.height; y++)
+            {
+                Color resColor;
+                if (x <= endX && y >= startY)
+                {
+                    Color t1Color = t1.GetPixel(offsetX1 + x, offsetY1 + y);
+                    Color t2Color = t2.GetPixel(offsetX2 + x, offsetY2 + y);
+                    resColor = new Color(Mathf.Lerp(t1Color.r, t2Color.r, t2Color.a),
+                                         Mathf.Lerp(t1Color.g, t2Color.g, t2Color.a),
+                                         Mathf.Lerp(t1Color.b, t2Color.b, t2Color.a),
+                                         Mathf.Max(t1Color.a, t2Color.a));
+                }
+                else
+                {
+                    resColor = t1.GetPixel(offsetX1 + x, offsetY1 + y);
+                }
+                res.SetPixel(x, y, resColor);
+            }
+        }
+
+        res.Apply();
+        return Sprite.Create(res, new Rect(0, 0, res.width, res.height), Vector2.zero);
+    }
+
+    private void GetTurretDefs()
+    {
+        _allTurretDefs = ObjectFactory.GetAllTurretTypes().ToArray();
+    }
+
+    private TurretDefinition TryMatchTurretDef(string[] hardpointAllowedSlots, string weaponType, string weaponSize)
+    {
+        for (int i = 0; i < _allTurretDefs.Length; ++i)
+        {
+            if (_allTurretDefs[i].WeaponType == weaponType && _allTurretDefs[i].WeaponSize == weaponSize)
+            {
+                if (hardpointAllowedSlots.Contains(string.Format("{0}{1}{2}", _allTurretDefs[i].TurretType, _allTurretDefs[i].WeaponNum, _allTurretDefs[i].WeaponSize)))
+                {
+                    return _allTurretDefs[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    public void StartDragItem(ShipEditorDraggable item)
+    {
+        switch (item.Item)
         {
             case EditorItemType.ShipComponent:
                 break;
@@ -159,7 +231,9 @@ public class ShipEditor : MonoBehaviour
                     {
                         for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
                         {
-                            Debug.LogFormat("Allowed weapon types: {0}", string.Join(",", _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes));
+                            string[] allowedTurrets = _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes;
+                            TurretDefinition turretDef = TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize);
+                            _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(turretDef != null);
                         }
                     }
                 }
@@ -173,15 +247,107 @@ public class ShipEditor : MonoBehaviour
         }
     }
 
+    public void DropItem(ShipEditorDraggable item, PointerEventData eventData)
+    {
+        switch (item.Item)
+        {
+            case EditorItemType.ShipComponent:
+                break;
+            case EditorItemType.Weapon:
+                {
+                    if (_currShip.HasValue)
+                    {
+                        int hardpointIdx = RaycastDropWeapon(eventData.position);
+                        if (hardpointIdx >= 0)
+                        {
+                            TurretHardpoint hardpoint = _currShip.Value.Hardpoints[hardpointIdx].Item1;
+                            TurretDefinition turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
+                            if (turretDef != null)
+                            {
+                                Transform dummyTurret = ObjectFactory.CreateTurretDummy(turretDef.TurretType, turretDef.WeaponNum, item.WeaponSize, item.WeaponKey);
+                                dummyTurret.parent = hardpoint.transform;
+                                dummyTurret.localScale = Vector3.one;
+                                dummyTurret.localPosition = Vector3.zero;
+                                Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
+                                dummyTurret.transform.rotation = q;
+                            }
+                        }
+                        for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
+                        {
+                            _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(false);
+                        }
+                    }
+                }
+                break;
+            case EditorItemType.Ammo:
+                break;
+            case EditorItemType.TurretMod:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private int RaycastDropWeapon(Vector3 clickPosition)
+    {
+        if (!_currShip.HasValue)
+        {
+            return -1;
+        }
+        // Transform the click from world space to the local space of the RenderTexture:
+        Vector3 posInImg = ShipViewBox.rectTransform.InverseTransformPoint(clickPosition);
+
+        // Adjust to the different origin and direction of the image:
+        Vector3 size = new Vector3(ShipViewCam.targetTexture.width, ShipViewCam.targetTexture.height, 0);
+        Vector3 adjustedPos = new Vector3(posInImg.x, size.y + posInImg.y, posInImg.z);
+        //Debug.LogFormat("Drop poisition (relative): {0}. Adjusted: {1}", posInImg, adjustedPos);
+
+        //with this knowledge we can creata a ray.
+        Ray portaledRay = ShipViewCam.ScreenPointToRay(adjustedPos);
+        
+        _doDrawDebugRaycast = true;
+        _debugRaycast = (portaledRay.origin, portaledRay.origin + portaledRay.direction.normalized * 10f);
+
+        //and cast it.
+        int numHits = Physics.RaycastNonAlloc(portaledRay, _raycastBuf);
+        for (int i = 0; i < numHits; ++i)
+        {
+            Debug.LogFormat("Hit object {0}", _raycastBuf[i].collider.gameObject);
+            for (int j = 0; j < _currShip.Value.Hardpoints.Count; j++)
+            {
+                if (_currShip.Value.Hardpoints[j].Item3 == _raycastBuf[i].collider.transform)
+                {
+                    return j;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_doDrawDebugRaycast)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(_debugRaycast.Item1, _debugRaycast.Item2);
+        }
+    }
+
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform WeaponsScrollViewContent;
     public RectTransform ButtonPrototype;
     public Transform HardpointMarkerPrototype;
     public Camera ImageCam;
+    public Camera ShipViewCam;
+    public RawImage ShipViewBox;
 
     private ShipDummyInEditor? _currShip = null;
     private Dictionary<string, ShipDummyInEditor> _shipsCache = new Dictionary<string, ShipDummyInEditor>();
+    private TurretDefinition[] _allTurretDefs;
+    private RaycastHit[] _raycastBuf = new RaycastHit[100];
+    private bool _doDrawDebugRaycast = false;
+    private (Vector3, Vector3) _debugRaycast;
 
     private struct ShipDummyInEditor
     {

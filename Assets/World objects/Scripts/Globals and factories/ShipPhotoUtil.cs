@@ -79,14 +79,7 @@ public static class ShipPhotoUtil
     private static ValueTuple<Sprite, IEnumerable<ValueTuple<TurretHardpoint, Vector3>>> TakeObjectPhotoInner(Transform t, int ImgH, int ImgW, bool withTurretPos, Camera cam)
     {
         float scaleFactor = 1.2f;
-        (Vector2, Vector2) objBoundsData = ObjBoundsData(t);
-        float requiredSize = scaleFactor * Mathf.Max(objBoundsData.Item2.x, objBoundsData.Item2.y);
-        Vector3 shipAxis = t.up;
-        Vector3 downDir = Vector3.down;
-        cam.transform.position = t.position + (t.up * objBoundsData.Item1.y);
-        float height = requiredSize * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
-        cam.transform.position += new Vector3(0, height, 0);
-        cam.transform.rotation = Quaternion.LookRotation(downDir, shipAxis);
+        PositionCameraToObject(cam, t, scaleFactor);
 
         Texture2D shipImg;
         shipImg = new Texture2D(ImgW, ImgH);
@@ -141,5 +134,17 @@ public static class ShipPhotoUtil
         Vector2 localCenter = new Vector2(minX + maxX, minY + maxY) / 2.0f;
         Vector2 widthHeight = new Vector2(maxX - minX, maxY - minY);
         return (localCenter, widthHeight);
+    }
+
+    public static void PositionCameraToObject(Camera cam, Transform t, float scaleFactor)
+    {
+        (Vector2, Vector2) objBoundsData = ObjBoundsData(t);
+        float requiredSize = scaleFactor * Mathf.Max(objBoundsData.Item2.x, objBoundsData.Item2.y);
+        Vector3 shipAxis = t.up;
+        Vector3 downDir = Vector3.down;
+        cam.transform.position = t.position + (t.up * objBoundsData.Item1.y);
+        float height = requiredSize * 0.5f / Mathf.Tan(cam.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        cam.transform.position += new Vector3(0, height, 0);
+        cam.transform.rotation = Quaternion.LookRotation(downDir, shipAxis);
     }
 }

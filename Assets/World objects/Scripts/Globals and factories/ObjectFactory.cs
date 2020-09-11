@@ -38,7 +38,7 @@ public static class ObjectFactory
         {
             LoadDefaultPriorityLists();
         }
-        if (_weaponImagePaths == null)
+        if (_weaponImagePaths == null || _weaponSizeImagePaths == null)
         {
             LoadWeaponImages();
         }
@@ -713,7 +713,7 @@ public static class ObjectFactory
         resTurret.ComponentHitPoints = md.HitPoints;
         resTurret.RotationSpeed = md.RotationSpeed;
         resTurret.ComponentHitPoints = resTurret.ComponentMaxHitPoints;
-        resTurret.Init(turretMountType + weaponNum + weaponSize);
+        resTurret.Init(string.Format("{0}{1}{2}", turretMountType , weaponNum , weaponSize));
 
         return resTurret;
     }
@@ -980,13 +980,47 @@ public static class ObjectFactory
         return _turretDefinitions.Values;
     }
 
+    public static IReadOnlyList<(string, string)> GetAllWeaponTypesAndSizes()
+    {
+        if (_weapons_beam == null || _weapons_projectile == null || _weapons_torpedo == null)
+        {
+            LoadWeapons();
+        }
+        return _weaponTypesAndSizes;
+    }
+
     public static IReadOnlyList<string> GetAllWeaponTypes()
     {
         if (_weapons_beam == null || _weapons_projectile == null || _weapons_torpedo == null)
         {
             LoadWeapons();
         }
-        return _weaponTypes;
+        List<string> res = new List<string>();
+        for (int i = 0; i < _weaponTypesAndSizes.Count; ++i)
+        {
+            if (!res.Contains(_weaponTypesAndSizes[i].Item1))
+            {
+                res.Add(_weaponTypesAndSizes[i].Item1);
+            }
+        }
+        return res;
+    }
+
+    public static IReadOnlyList<string> GetAllWeaponSizes()
+    {
+        if (_weapons_beam == null || _weapons_projectile == null || _weapons_torpedo == null)
+        {
+            LoadWeapons();
+        }
+        List<string> res = new List<string>();
+        for (int i = 0; i < _weaponTypesAndSizes.Count; ++i)
+        {
+            if (!res.Contains(_weaponTypesAndSizes[i].Item2))
+            {
+                res.Add(_weaponTypesAndSizes[i].Item2);
+            }
+        }
+        return res;
     }
 
     public static Sprite GetSprite(string key)
@@ -1180,15 +1214,39 @@ public static class ObjectFactory
         {
             LoadWeaponImages();
         }
-        string imgPath;
-        if (_weaponImagePaths.TryGetValue(weaponType, out imgPath))
+        (string, int, int, int, int, int, int) spriteItem;
+        if (_weaponImagePaths.TryGetValue(weaponType, out spriteItem))
         {
             Sprite res;
             if (!_weaponSpriteCache.TryGetValue(weaponType, out res))
             {
-                int w = 64, h = 64;
-                res = Sprite.Create(_loader.GetImageByPath(_weaponImagePaths[weaponType], w, h), new Rect(0, 0, w, h), new Vector2(0, 0));
+                int w = spriteItem.Item2, h = spriteItem.Item3;
+                res = Sprite.Create(_loader.GetImageByPath(spriteItem.Item1, w, h), new Rect(spriteItem.Item4, spriteItem.Item5, spriteItem.Item6, spriteItem.Item7), new Vector2(0, 0));
                 _weaponSpriteCache[weaponType] = res;
+            }
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static Sprite GetWeaponSizeImage(string weaponSize)
+    {
+        if (_weaponSizeImagePaths == null)
+        {
+            LoadWeaponImages();
+        }
+        (string, int, int, int, int, int, int) spriteItem;
+        if (_weaponSizeImagePaths.TryGetValue(weaponSize, out spriteItem))
+        {
+            Sprite res;
+            if (!_weaponSizeSpriteCache.TryGetValue(weaponSize, out res))
+            {
+                int w = spriteItem.Item2, h = spriteItem.Item3;
+                res = Sprite.Create(_loader.GetImageByPath(spriteItem.Item1, w, h), new Rect(spriteItem.Item4, spriteItem.Item5, spriteItem.Item6, spriteItem.Item7), new Vector2(0, 0));
+                _weaponSizeSpriteCache[weaponSize] = res;
             }
             return res;
         }
@@ -1316,42 +1374,33 @@ public static class ObjectFactory
         string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
         _weapons_projectile = new Dictionary<(string, string), WeaponProjectileDataEntry>();
         _weapons_beam = new Dictionary<(string, string), WeaponBeamDataEntry>();
-        _weaponTypes = new List<string>();
-        _weaponSizes = new List<string>();
+        _weaponTypesAndSizes = new List<(string, string)>();
         foreach (string l in lines)
         {   
             if (l.Trim().StartsWith("ProjectileWeapon"))
             {
                 WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
                 _weapons_projectile.Add((w.WeaponSize, w.Weapon), w);
-                if (!_weaponTypes.Contains(w.Weapon))
+                if (!_weaponTypesAndSizes.Contains((w.Weapon, w.WeaponSize)))
                 {
-                    _weaponTypes.Add(w.Weapon);
-                }
-                if (!_weaponSizes.Contains(w.WeaponSize))
-                {
-                    _weaponSizes.Add(w.WeaponSize);
+                    _weaponTypesAndSizes.Add((w.Weapon, w.WeaponSize));
                 }
             }
             else if (l.Trim().StartsWith("BeamWeapon"))
             {
                 WeaponBeamDataEntry w = WeaponBeamDataEntry.FromString(l);
                 _weapons_beam.Add((w.WeaponSize, w.Weapon), w);
-                if (!_weaponTypes.Contains(w.Weapon))
+                if (!_weaponTypesAndSizes.Contains((w.Weapon, w.WeaponSize)))
                 {
-                    _weaponTypes.Add(w.Weapon);
-                }
-                if (!_weaponSizes.Contains(w.WeaponSize))
-                {
-                    _weaponSizes.Add(w.WeaponSize);
+                    _weaponTypesAndSizes.Add((w.Weapon, w.WeaponSize));
                 }
             }
             else if (l.Trim().StartsWith("TorpedoWeapon"))
             {
                 _weapons_torpedo = WeaponTorpedoDataEntry.FromString(l);
-                if (!_weaponTypes.Contains("TorpedoWeapon"))
+                if (!_weaponTypesAndSizes.Contains(("TorpedoWeapon", string.Empty)))
                 {
-                    _weaponTypes.Add("TorpedoWeapon");
+                    _weaponTypesAndSizes.Add(("TorpedoWeapon", string.Empty));
                 }
             }
         }
@@ -1402,14 +1451,31 @@ public static class ObjectFactory
     private static void LoadWeaponImages()
     {
         string[] lines = File.ReadAllLines(Path.Combine("TextData", "WeaponImages.txt"));
-        _weaponImagePaths = new Dictionary<string, string>();
+        _weaponImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
+        _weaponSizeImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         foreach (string l in lines)
         {
             string trimLn = l.Trim();
             if (!trimLn.StartsWith("#"))
             {
-                string[] pair = trimLn.Split(',');
-                _weaponImagePaths.Add(pair[0], pair[1]);
+                string[] items = trimLn.Split(',');
+                int i = 1;
+                string key = items[i++];
+                string imgFile = items[i++];
+                int imgW = int.Parse(items[i++]);
+                int imgH = int.Parse(items[i++]);
+                int spriteX = int.Parse(items[i++]);
+                int spriteY = int.Parse(items[i++]);
+                int spriteW = int.Parse(items[i++]);
+                int spriteH = int.Parse(items[i++]);
+                if (items[0] == "Weapon")
+                {
+                    _weaponImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
+                }
+                else if (items[0] == "Size")
+                {
+                    _weaponSizeImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
+                }
             }
         }
     }
@@ -1433,11 +1499,12 @@ public static class ObjectFactory
     private static Dictionary<(string, string), List<TacMapEntityType>> _defaultPriorityLists = null;
     private static Dictionary<(string, string, string, string), TurretDefinition> _turretDefinitions = null; // Key: MountType, WeaponNum, WeaponSize, WeaponType
     private static Dictionary<string, ShipHullDefinition> _shipHullDefinitions = null;
-    private static Dictionary<string, string> _weaponImagePaths = null;
+    private static Dictionary<string, (string, int, int, int, int, int, int)> _weaponImagePaths = null;
+    private static Dictionary<string, (string, int, int, int, int, int, int)> _weaponSizeImagePaths = null;
     private static Dictionary<string, Sprite> _weaponSpriteCache = new Dictionary<string, Sprite>();
+    private static Dictionary<string, Sprite> _weaponSizeSpriteCache = new Dictionary<string, Sprite>();
     private static List<string> _shipHulls;
-    private static List<string> _weaponTypes;
-    private static List<string> _weaponSizes;
+    private static List<(string, string)> _weaponTypesAndSizes;
     private static List<string> _weaponMountTypes;
 
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
@@ -1807,4 +1874,3 @@ public class ShipTemplate
     public int DefaultArmorLeft;
     public int DefaultArmorRight;
 }
-

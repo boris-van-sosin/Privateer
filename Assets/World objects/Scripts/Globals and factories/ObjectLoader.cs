@@ -47,7 +47,7 @@ public class ObjectLoader
         }
         byte[] data = File.ReadAllBytes(imgPath);
         res = new Texture2D(w, h, TextureFormat.RGBA32, false);
-        res.LoadImage(data, true);
+        res.LoadImage(data, false);
         return res;
     }
 
