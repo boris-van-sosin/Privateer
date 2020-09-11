@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class ShipEditor : MonoBehaviour
 {
@@ -78,6 +79,17 @@ public class ShipEditor : MonoBehaviour
                 _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(false);
             }
             _currShip.Value.ShipModel.gameObject.SetActive(false);
+            if (_currShip.Value.Key != key)
+            {
+                for (int i = 0; i < _currHardpoints.Count; ++i)
+                {
+                    if (null != _currHardpoints[i].Item3)
+                    {
+                        Destroy(_currHardpoints[i].Item3.gameObject);
+                    }
+                }
+                _currHardpoints.Clear();
+            }
         }
         ShipDummyInEditor s;
         if (_shipsCache.TryGetValue(key, out s))
@@ -90,7 +102,11 @@ public class ShipEditor : MonoBehaviour
             s = CreateShipDummy(key).Item1;
             _shipsCache[key] = s;
         }
-        
+        for (int i = 0; i < s.Hardpoints.Count; ++i)
+        {
+            _currHardpoints.Add((s.Hardpoints[i].Item1, null, null));
+        }
+
         _currShip = s;
     }
 
@@ -112,7 +128,7 @@ public class ShipEditor : MonoBehaviour
             editorHardpoints.Add((hardpoints[i], coll, marker));
             marker.gameObject.SetActive(false);
         }
-        return (new ShipDummyInEditor() { ShipModel = s, Hardpoints = editorHardpoints }, shipPhoto);
+        return (new ShipDummyInEditor() { Key = key, ShipModel = s, Hardpoints = editorHardpoints }, shipPhoto);
     }
 
     private void PopulateWeapons()
@@ -257,21 +273,7 @@ public class ShipEditor : MonoBehaviour
                 {
                     if (_currShip.HasValue)
                     {
-                        int hardpointIdx = RaycastDropWeapon(eventData.position);
-                        if (hardpointIdx >= 0)
-                        {
-                            TurretHardpoint hardpoint = _currShip.Value.Hardpoints[hardpointIdx].Item1;
-                            TurretDefinition turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
-                            if (turretDef != null)
-                            {
-                                Transform dummyTurret = ObjectFactory.CreateTurretDummy(turretDef.TurretType, turretDef.WeaponNum, item.WeaponSize, item.WeaponKey);
-                                dummyTurret.parent = hardpoint.transform;
-                                dummyTurret.localScale = Vector3.one;
-                                dummyTurret.localPosition = Vector3.zero;
-                                Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
-                                dummyTurret.transform.rotation = q;
-                            }
-                        }
+                        PlaceWeapon(item, eventData);
                         for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
                         {
                             _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(false);
@@ -285,6 +287,33 @@ public class ShipEditor : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    private void PlaceWeapon(ShipEditorDraggable item, PointerEventData eventData)
+    {
+        int hardpointIdx = RaycastDropWeapon(eventData.position);
+        if (hardpointIdx >= 0)
+        {
+            TurretHardpoint hardpoint = _currShip.Value.Hardpoints[hardpointIdx].Item1;
+            TurretDefinition turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
+            if (turretDef != null)
+            {
+                // Remove any existing weapon
+                if (null != _currHardpoints[hardpointIdx].Item3)
+                {
+                    Destroy(_currHardpoints[hardpointIdx].Item3.gameObject);
+                }
+
+                // Place the new weapon
+                Transform dummyTurret = ObjectFactory.CreateTurretDummy(turretDef.TurretType, turretDef.WeaponNum, item.WeaponSize, item.WeaponKey);
+                dummyTurret.parent = hardpoint.transform;
+                dummyTurret.localScale = Vector3.one;
+                dummyTurret.localPosition = Vector3.zero;
+                Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
+                dummyTurret.transform.rotation = q;
+                _currHardpoints[hardpointIdx] = (hardpoint, turretDef, dummyTurret);
+            }
         }
     }
 
@@ -343,7 +372,9 @@ public class ShipEditor : MonoBehaviour
     public RawImage ShipViewBox;
 
     private ShipDummyInEditor? _currShip = null;
+    List<(TurretHardpoint, TurretDefinition, Transform)> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform)>();
     private Dictionary<string, ShipDummyInEditor> _shipsCache = new Dictionary<string, ShipDummyInEditor>();
+    [NonSerialized]
     private TurretDefinition[] _allTurretDefs;
     private RaycastHit[] _raycastBuf = new RaycastHit[100];
     private bool _doDrawDebugRaycast = false;
@@ -351,6 +382,7 @@ public class ShipEditor : MonoBehaviour
 
     private struct ShipDummyInEditor
     {
+        public string Key;
         public Transform ShipModel;
         public List<(TurretHardpoint, Collider, Transform)> Hardpoints;
     }
