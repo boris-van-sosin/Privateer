@@ -245,11 +245,35 @@ public class ShipEditor : MonoBehaviour
                 {
                     if (_currShip.HasValue)
                     {
+                        bool drawnPenChard = false;
                         for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
                         {
                             string[] allowedTurrets = _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes;
                             TurretDefinition turretDef = TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize);
                             _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(turretDef != null);
+                            if (!drawnPenChard && turretDef != null)
+                            {
+                                switch (turretDef.BehaviorType)
+                                {
+                                    case ObjectFactory.WeaponBehaviorType.Gun:
+                                        SetArmourPenetartionChartGun(item.WeaponKey, item.WeaponSize, "ShapedCharge");
+                                        drawnPenChard = true;
+                                        break;
+                                    case ObjectFactory.WeaponBehaviorType.Torpedo:
+                                    case ObjectFactory.WeaponBehaviorType.BomberTorpedo:
+                                        SetArmourPenetartionChartTorpedo("Heavy");
+                                        drawnPenChard = true;
+                                        break;
+                                    case ObjectFactory.WeaponBehaviorType.Beam:
+                                    case ObjectFactory.WeaponBehaviorType.ContinuousBeam:
+                                    case ObjectFactory.WeaponBehaviorType.Special:
+                                        SetArmourPenetartionChartOther(item.WeaponKey, item.WeaponSize);
+                                        drawnPenChard = true;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
                         }
                     }
                 }
@@ -362,9 +386,41 @@ public class ShipEditor : MonoBehaviour
         }
     }
 
+    private void SetArmourPenetartionChartGun(string weaponType, string weaponSize, string ammoType)
+    {
+        SetArmourPenetartionChartInner(ObjectFactory.CreateWarhead(weaponType, weaponSize, ammoType));
+    }
+
+    private void SetArmourPenetartionChartTorpedo(string torpedoType)
+    {
+        SetArmourPenetartionChartInner(ObjectFactory.CreateWarhead(torpedoType));
+    }
+
+    private void SetArmourPenetartionChartOther(string weaponType, string weaponSize)
+    {
+        SetArmourPenetartionChartInner(ObjectFactory.CreateWarhead(weaponType, weaponSize));
+    }
+
+    private void SetArmourPenetartionChartInner(Warhead w)
+    {
+        ArmourPenetrationTable penetrationTable = ObjectFactory.GetArmourPenetrationTable();
+        int minArmor = 0, maxArmor = 1000, samplePoints = 50;
+        PenetrationGraph.DataPoints = new Vector2[samplePoints + 1];
+
+        float fSamplePoints = samplePoints;
+        for (int i = 0; i <= samplePoints; ++i)
+        {
+            float currStep = i / fSamplePoints;
+            float penetrationProb = penetrationTable.PenetrationProbability(Mathf.RoundToInt(Mathf.Lerp(minArmor, maxArmor, currStep)), w.ArmourPenetration);
+            PenetrationGraph.DataPoints[i] = new Vector2(currStep, penetrationProb);
+        }
+        PenetrationGraph.RequireUpdate();
+    }
+
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform WeaponsScrollViewContent;
+    public AreaGraphRenderer PenetrationGraph;
     public RectTransform ButtonPrototype;
     public Transform HardpointMarkerPrototype;
     public Camera ImageCam;

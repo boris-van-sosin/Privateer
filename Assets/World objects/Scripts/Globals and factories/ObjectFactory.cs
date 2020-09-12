@@ -14,7 +14,7 @@ public static class ObjectFactory
             _prototypes = p;
             GameObject.DontDestroyOnLoad(_prototypes);
         }
-        if (_gunWarheads == null || _otherWarheads == null)
+        if (_gunWarheads == null || _otherWarheads == null || _torpedoWarheads == null)
         {
             LoadWarheads();
         }
@@ -379,16 +379,28 @@ public static class ObjectFactory
 
     public static Warhead CreateWarhead(string weaponType, string size, string ammo)
     {
+        if (_gunWarheads == null || _otherWarheads == null || _torpedoWarheads == null)
+        {
+            LoadWarheads();
+        }
         return _gunWarheads[(weaponType, size, ammo)].WarheadData;
     }
 
     public static Warhead CreateWarhead(string weaponType, string size)
     {
+        if (_gunWarheads == null || _otherWarheads == null || _torpedoWarheads == null)
+        {
+            LoadWarheads();
+        }
         return _otherWarheads[(weaponType, size)].WarheadData;
     }
 
     public static Warhead CreateWarhead(string torpType)
     {
+        if (_gunWarheads == null || _otherWarheads == null || _torpedoWarheads == null)
+        {
+            LoadWarheads();
+        }
         return _torpedoWarheads[torpType].WarheadData;
     }
 
@@ -1113,6 +1125,10 @@ public static class ObjectFactory
 
     public static ArmourPenetrationTable GetArmourPenetrationTable()
     {
+        if (_penetrationTable == null)
+        {
+            LoadPenetrationTable();
+        }
         return _penetrationTable;
     }
 
@@ -1329,7 +1345,7 @@ public static class ObjectFactory
 
     private static void LoadWeaponMounts()
     {
-        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "WeaponMounts.txt"));
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "WeaponMounts.csv"));
         _weaponMounts = new Dictionary<string, TurretMountDataEntry>();
         foreach (string l in lines)
         {
@@ -1345,7 +1361,7 @@ public static class ObjectFactory
 
     private static void LoadPenetrationTable()
     {
-        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "PenetrationChart.txt"));
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "PenetrationChart.csv"));
         List<string[]> cleanLines = new List<string[]>(lines.Length);
         foreach (string l in lines)
         {
@@ -1371,7 +1387,7 @@ public static class ObjectFactory
 
     private static void LoadWeapons()
     {
-        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.txt"));
+        string[] lines = System.IO.File.ReadAllLines(System.IO.Path.Combine("TextData", "Weapons.csv"));
         _weapons_projectile = new Dictionary<(string, string), WeaponProjectileDataEntry>();
         _weapons_beam = new Dictionary<(string, string), WeaponBeamDataEntry>();
         _weaponTypesAndSizes = new List<(string, string)>();
@@ -1445,12 +1461,12 @@ public static class ObjectFactory
         }
 
 
-        System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","Warheads.txt"), sb.ToString());
+        System.IO.File.WriteAllText(System.IO.Path.Combine("TextData","Warheads.csv"), sb.ToString());
     }
 
     private static void LoadWeaponImages()
     {
-        string[] lines = File.ReadAllLines(Path.Combine("TextData", "WeaponImages.txt"));
+        string[] lines = File.ReadAllLines(Path.Combine("TextData", "WeaponImages.csv"));
         _weaponImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         _weaponSizeImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         foreach (string l in lines)
