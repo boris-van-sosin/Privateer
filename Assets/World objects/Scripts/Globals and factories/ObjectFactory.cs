@@ -1499,7 +1499,7 @@ public static class ObjectFactory
     public enum WeaponBehaviorType { Unknown, Gun, Beam, ContinuousBeam, Torpedo, BomberTorpedo, Special }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
-    public enum TacMapEntityType { Torpedo, SrikeCraft, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, StaticDefence }
+    public enum TacMapEntityType { Torpedo, StrikeCraft, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, StaticDefence }
 
     private static Dictionary<(string, string, string), WarheadDataEntry3> _gunWarheads = null;
     private static Dictionary<(string, string), WarheadDataEntry2> _otherWarheads = null;

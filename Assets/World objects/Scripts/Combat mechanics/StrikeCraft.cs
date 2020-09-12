@@ -82,7 +82,7 @@ public class StrikeCraft : ShipBase
     }
 
     public override TargetableEntityInfo TargetableBy => TargetableEntityInfo.Flak;
-    public override ObjectFactory.TacMapEntityType TargetableEntityType => ObjectFactory.TacMapEntityType.SrikeCraft;
+    public override ObjectFactory.TacMapEntityType TargetableEntityType => ObjectFactory.TacMapEntityType.StrikeCraft;
 
     public bool IsOutOfAmmo()
     {
