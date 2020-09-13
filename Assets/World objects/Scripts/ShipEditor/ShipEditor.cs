@@ -347,22 +347,19 @@ public class ShipEditor : MonoBehaviour
         {
             TurretHardpoint hardpoint = _currShip.Value.Hardpoints[hardpointIdx].Item1;
             TurretDefinition turretDef;
-            if (null != _currHardpoints[hardpointIdx].Item3)
+            int prevWeaponNum;
+            if (null != _currHardpoints[hardpointIdx].Item3 &&
+                _currHardpoints[hardpointIdx].Item2.WeaponType == item.WeaponKey && _currHardpoints[hardpointIdx].Item2.WeaponSize == item.WeaponSize &&
+                int.TryParse(_currHardpoints[hardpointIdx].Item2.WeaponNum, out prevWeaponNum))
             {
-                int prevWeaponNum;
-                if (int.TryParse(_currHardpoints[hardpointIdx].Item2.WeaponNum, out prevWeaponNum))
-                {
-                    turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize, prevWeaponNum);
-                }
-                else
-                {
-                    turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
-                }
+
+                turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize, prevWeaponNum);
             }
             else
             {
                 turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
             }
+
             if (turretDef != null)
             {
                 // Remove any existing weapon
