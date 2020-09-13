@@ -1230,22 +1230,7 @@ public static class ObjectFactory
         {
             LoadWeaponImages();
         }
-        (string, int, int, int, int, int, int) spriteItem;
-        if (_weaponImagePaths.TryGetValue(weaponType, out spriteItem))
-        {
-            Sprite res;
-            if (!_weaponSpriteCache.TryGetValue(weaponType, out res))
-            {
-                int w = spriteItem.Item2, h = spriteItem.Item3;
-                res = Sprite.Create(_loader.GetImageByPath(spriteItem.Item1, w, h), new Rect(spriteItem.Item4, spriteItem.Item5, spriteItem.Item6, spriteItem.Item7), new Vector2(0, 0));
-                _weaponSpriteCache[weaponType] = res;
-            }
-            return res;
-        }
-        else
-        {
-            return null;
-        }
+        return GetSpriteSpecInner(_weaponImagePaths, _weaponSpriteCache, weaponType);
     }
 
     public static Sprite GetWeaponSizeImage(string weaponSize)
@@ -1254,15 +1239,38 @@ public static class ObjectFactory
         {
             LoadWeaponImages();
         }
+        return GetSpriteSpecInner(_weaponSizeImagePaths, _weaponSizeSpriteCache, weaponSize);
+    }
+
+    public static Sprite GeAmmonImage(string weaponType)
+    {
+        if (_weaponImagePaths == null)
+        {
+            LoadWeaponImages();
+        }
+        return GetSpriteSpecInner(_weaponImagePaths, _weaponSpriteCache, weaponType);
+    }
+
+    public static Sprite GetTorpedoTypeImage(string weaponType)
+    {
+        if (_weaponImagePaths == null)
+        {
+            LoadWeaponImages();
+        }
+        return GetSpriteSpecInner(_weaponImagePaths, _weaponSpriteCache, weaponType);
+    }
+
+    private static Sprite GetSpriteSpecInner(Dictionary<string, (string, int, int, int, int, int, int)> imgPathDict, Dictionary<string, Sprite> spriteDict, string key)
+    {
         (string, int, int, int, int, int, int) spriteItem;
-        if (_weaponSizeImagePaths.TryGetValue(weaponSize, out spriteItem))
+        if (imgPathDict.TryGetValue(key, out spriteItem))
         {
             Sprite res;
-            if (!_weaponSizeSpriteCache.TryGetValue(weaponSize, out res))
+            if (!spriteDict.TryGetValue(key, out res))
             {
                 int w = spriteItem.Item2, h = spriteItem.Item3;
-                res = Sprite.Create(_loader.GetImageByPath(spriteItem.Item1, w, h), new Rect(spriteItem.Item4, spriteItem.Item5, spriteItem.Item6, spriteItem.Item7), new Vector2(0, 0));
-                _weaponSizeSpriteCache[weaponSize] = res;
+                res = Sprite.Create(_loader.GetImageByPath(spriteItem.Item1, w, h), new Rect(spriteItem.Item4, spriteItem.Item5, spriteItem.Item6, spriteItem.Item7), Vector2.zero);
+                spriteDict[key] = res;
             }
             return res;
         }
@@ -1469,6 +1477,8 @@ public static class ObjectFactory
         string[] lines = File.ReadAllLines(Path.Combine("TextData", "WeaponImages.csv"));
         _weaponImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         _weaponSizeImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
+        _ammoImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
+        _torpedoTypeImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         foreach (string l in lines)
         {
             string trimLn = l.Trim();
@@ -1491,6 +1501,14 @@ public static class ObjectFactory
                 else if (items[0] == "Size")
                 {
                     _weaponSizeImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
+                }
+                else if (items[0] == "Ammo")
+                {
+                    _ammoImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
+                }
+                else if (items[0] == "Torpedo")
+                {
+                    _torpedoTypeImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
                 }
             }
         }
@@ -1517,8 +1535,12 @@ public static class ObjectFactory
     private static Dictionary<string, ShipHullDefinition> _shipHullDefinitions = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _weaponImagePaths = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _weaponSizeImagePaths = null;
+    private static Dictionary<string, (string, int, int, int, int, int, int)> _ammoImagePaths = null;
+    private static Dictionary<string, (string, int, int, int, int, int, int)> _torpedoTypeImagePaths = null;
     private static Dictionary<string, Sprite> _weaponSpriteCache = new Dictionary<string, Sprite>();
     private static Dictionary<string, Sprite> _weaponSizeSpriteCache = new Dictionary<string, Sprite>();
+    private static Dictionary<string, Sprite> _ammoSpriteCache = new Dictionary<string, Sprite>();
+    private static Dictionary<string, Sprite> _torpedoTypeSpriteCache = new Dictionary<string, Sprite>();
     private static List<string> _shipHulls;
     private static List<(string, string)> _weaponTypesAndSizes;
     private static List<string> _weaponMountTypes;
