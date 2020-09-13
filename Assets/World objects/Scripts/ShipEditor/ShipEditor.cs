@@ -222,17 +222,43 @@ public class ShipEditor : MonoBehaviour
 
     private TurretDefinition TryMatchTurretDef(string[] hardpointAllowedSlots, string weaponType, string weaponSize)
     {
+        return TryMatchTurretDef(hardpointAllowedSlots, weaponType, weaponSize, 0);
+    }
+
+    private TurretDefinition TryMatchTurretDef(string[] hardpointAllowedSlots, string weaponType, string weaponSize, int weaponNumAbove)
+    {
+        TurretDefinition res = null;
+        int minWeaponNum = -1;
         for (int i = 0; i < _allTurretDefs.Length; ++i)
         {
             if (_allTurretDefs[i].WeaponType == weaponType && _allTurretDefs[i].WeaponSize == weaponSize)
             {
-                if (hardpointAllowedSlots.Contains(string.Format("{0}{1}{2}", _allTurretDefs[i].TurretType, _allTurretDefs[i].WeaponNum, _allTurretDefs[i].WeaponSize)))
+                if (!hardpointAllowedSlots.Contains(string.Format("{0}{1}{2}", _allTurretDefs[i].TurretType, _allTurretDefs[i].WeaponNum, _allTurretDefs[i].WeaponSize)))
+                {
+                    continue;
+                }
+
+                // Try to find the turret with the minimum number of weapons:
+                int currWeaponNum;
+                if (int.TryParse(_allTurretDefs[i].WeaponNum, out currWeaponNum))
+                {
+                    if (currWeaponNum <= weaponNumAbove)
+                    {
+                        continue;
+                    }
+                    if (minWeaponNum < 0 || currWeaponNum < minWeaponNum)
+                    {
+                        minWeaponNum = currWeaponNum;
+                        res = _allTurretDefs[i];
+                    }
+                }
+                else
                 {
                     return _allTurretDefs[i];
                 }
             }
         }
-        return null;
+        return res;
     }
 
     public void StartDragItem(ShipEditorDraggable item)
@@ -320,7 +346,23 @@ public class ShipEditor : MonoBehaviour
         if (hardpointIdx >= 0)
         {
             TurretHardpoint hardpoint = _currShip.Value.Hardpoints[hardpointIdx].Item1;
-            TurretDefinition turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
+            TurretDefinition turretDef;
+            if (null != _currHardpoints[hardpointIdx].Item3)
+            {
+                int prevWeaponNum;
+                if (int.TryParse(_currHardpoints[hardpointIdx].Item2.WeaponNum, out prevWeaponNum))
+                {
+                    turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize, prevWeaponNum);
+                }
+                else
+                {
+                    turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
+                }
+            }
+            else
+            {
+                turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize);
+            }
             if (turretDef != null)
             {
                 // Remove any existing weapon

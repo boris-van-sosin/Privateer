@@ -1302,7 +1302,7 @@ PrefabInstance:
     - target: {fileID: 224883522976972502, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 100.000084
+      value: 100.00073
       objectReference: {fileID: 0}
     - target: {fileID: 319994641088601665, guid: bc226280ecd900145bd76c8bf930047e,
         type: 3}
@@ -5472,6 +5472,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LayoutDirection: 0
+  StartPadding: 0
+  ComponentPadding: 0
 --- !u!114 &1749592348
 MonoBehaviour:
   m_ObjectHideFlags: 0

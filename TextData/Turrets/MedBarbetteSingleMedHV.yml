@@ -1,0 +1,166 @@
+Geometry:
+  Name: Med barbette hv
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Base
+    Position:
+      x: 0
+      y: 0.0002
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+      AssetPath: guns new
+      MeshPath: Medium barbette
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Carriage1
+      Position:
+        x: 0
+        y: -0.00332498574
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1.33333337
+        y: 1.33333397
+        z: 1.33333397
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Barbette carriage L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Sleeve1
+        Position:
+          x: 0
+          y: 0
+          z: 0.000498750014
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+          AssetPath: guns new
+          MeshPath: HV gun barbette sleeve L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Barrel1
+          Position:
+            x: 0
+            y: 0.00162604789
+            z: 0.00112218782
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh:
+            AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+            AssetPath: guns new
+            MeshPath: HV gun barrel L
+            DoCombine: true
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: Muzzle1
+            Position:
+              x: 0
+              y: 0.006625
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 0
+            Scale:
+              x: 1
+              y: 1
+              z: 1
+            NodeMesh: 
+            NodeParticleSystem: 
+            OpenCloseData: 
+            SubNodes:
+            - Name: MuzzleFlashEffect
+              Position:
+                x: 0
+                y: 0.0023
+                z: 0
+              Rotation:
+                x: 0
+                y: 0
+                z: 90
+              Scale:
+                x: 0.1
+                y: 0.1
+                z: 0.1
+              NodeMesh: 
+              NodeParticleSystem:
+                AssetBundlePath: AssetBundles\StandaloneWindows\effects
+                AssetPath: MuzzleFlashMediumEffect
+                ParticleSystemPath: ''
+              OpenCloseData: 
+              SubNodes: []
+    - Name: Shield
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: HV gun shield single
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+TurretAxis: YAxis
+TurretType: MediumBarbette
+WeaponNum: 1
+WeaponSize: Medium
+WeaponType: HVGun
+BehaviorType: Gun

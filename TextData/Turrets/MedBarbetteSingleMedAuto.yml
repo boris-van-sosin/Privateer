@@ -1,0 +1,166 @@
+Geometry:
+  Name: Med barbette auto
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Base
+    Position:
+      x: 0
+      y: 0.0002
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+      AssetPath: guns new
+      MeshPath: Medium barbette
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Carriage1
+      Position:
+        x: 0
+        y: -0.00332498597
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1.3333329
+        y: 1.33333504
+        z: 1.33333504
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Barbette carriage L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Sleeve1
+        Position:
+          x: 0
+          y: 0
+          z: 0.000498749141
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+          AssetPath: guns new
+          MeshPath: Autocannon barbette sleeve L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Barrel1
+          Position:
+            x: 0
+            y: 0.00432275934
+            z: 0.000374061987
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh:
+            AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+            AssetPath: guns new
+            MeshPath: Autocannon L
+            DoCombine: true
+          NodeParticleSystem: 
+          OpenCloseData: 
+          SubNodes:
+          - Name: Muzzle1
+            Position:
+              x: 0
+              y: 0.002
+              z: 0.0007
+            Rotation:
+              x: 0
+              y: 0
+              z: 0
+            Scale:
+              x: 1
+              y: 1
+              z: 1
+            NodeMesh: 
+            NodeParticleSystem: 
+            OpenCloseData: 
+            SubNodes:
+            - Name: MuzzleFlashEffect
+              Position:
+                x: 0
+                y: 0.0005
+                z: 0
+              Rotation:
+                x: 0
+                y: 0
+                z: 90
+              Scale:
+                x: 0.05
+                y: 0.05
+                z: 0.05
+              NodeMesh: 
+              NodeParticleSystem:
+                AssetBundlePath: AssetBundles\StandaloneWindows\effects
+                AssetPath: MuzzleFlashSmallEffect
+                ParticleSystemPath: ''
+              OpenCloseData: 
+              SubNodes: []
+    - Name: Shield
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\weapons
+        AssetPath: guns new
+        MeshPath: Shield single
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+TurretAxis: YAxis
+TurretType: MediumBarbette
+WeaponNum: 1
+WeaponSize: Medium
+WeaponType: Autocannon
+BehaviorType: Gun
