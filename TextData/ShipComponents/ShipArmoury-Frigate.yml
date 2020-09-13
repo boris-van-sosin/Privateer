@@ -1,0 +1,10 @@
+ComponentName: Ship armoury - Frigate-grade
+ComponentType: Ship armoury
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Frigate
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+ShipArmouryDefinition:
+  CrewCapacity: 10

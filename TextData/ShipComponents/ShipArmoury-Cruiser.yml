@@ -1,0 +1,10 @@
+ComponentName: Ship armoury - Cruiser-grade
+ComponentType: Ship armoury
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Cruiser
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+ShipArmouryDefinition:
+  CrewCapacity: 45

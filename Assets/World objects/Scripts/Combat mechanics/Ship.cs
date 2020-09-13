@@ -151,7 +151,7 @@ public class Ship : ShipBase
         _heatCapacityComps = AllComponents.Where(x => x is IHeatCapacityComponent).Select(y => y as IHeatCapacityComponent).ToArray();
         _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
-        _combatDetachments = AllComponents.Where(x => x is CombatDetachment).Select(y => y as CombatDetachment).ToArray();
+        _combatDetachments = AllComponents.Where(x => x is ShipArmoury).Select(y => y as ShipArmoury).ToArray();
         _totalMaxShield = 0;
         foreach (IShieldComponent shield in _shieldComponents)
         {
@@ -868,7 +868,7 @@ public class Ship : ShipBase
                 {
                     if (comps[i] != null && comps[i] is IShipActiveComponent activeComp)
                     {
-                        if (activeComp.ComponentHitPoints < activeComp.ComponentMaxHitPoints)
+                        if (activeComp.ComponentHitPoints < activeComp.ComponentGlobalMaxHitPoints)
                         {
                             return false;
                         }
@@ -879,7 +879,7 @@ public class Ship : ShipBase
             {
                 if (_turrets[i] != null)
                 {
-                    if (_turrets[i].ComponentHitPoints < _turrets[i].ComponentMaxHitPoints)
+                    if (_turrets[i].ComponentHitPoints < _turrets[i].ComponentGlobalMaxHitPoints)
                     {
                         return false;
                     }
@@ -1109,7 +1109,7 @@ public class Ship : ShipBase
             case ShipCharacter.CharacterProfession.Captain:
                 break;
             case ShipCharacter.CharacterProfession.Combat:
-                foreach (CombatDetachment cd in AllComponents.Where(x => x is CombatDetachment).Select(y => y as CombatDetachment))
+                foreach (ShipArmoury cd in AllComponents.Where(x => x is ShipArmoury).Select(y => y as ShipArmoury))
                 {
                     if (cd.Forces.Count < cd.CrewCapacity)
                     {
@@ -1249,7 +1249,7 @@ public class Ship : ShipBase
     {
         get
         {
-            foreach (CombatDetachment combatGroup in _combatDetachments)
+            foreach (ShipArmoury combatGroup in _combatDetachments)
             {
                 foreach (ShipCharacter c in combatGroup.Forces)
                 {
@@ -1340,7 +1340,7 @@ public class Ship : ShipBase
     private IHeatCapacityComponent[] _heatCapacityComps;
     private IPeriodicActionComponent[] _updateComponents;
     private IShieldComponent[] _shieldComponents;
-    private CombatDetachment[] _combatDetachments;
+    private ShipArmoury[] _combatDetachments;
     private bool _useShields = true;
     private ShipEngine _engine;
 

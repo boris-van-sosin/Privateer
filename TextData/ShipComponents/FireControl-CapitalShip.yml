@@ -1,0 +1,12 @@
+ComponentName: Fire control computer - Capital ship grade
+ComponentType: Fire control computer
+ComponentGlobalMaxHitPoints: 1100
+MinShipSize: CapitalShip
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+FireControlGeneralDefinition:
+  PowerUsage: 6
+  HeatGeneration: 1
+  WeaponAccuracyFactor: 0.1

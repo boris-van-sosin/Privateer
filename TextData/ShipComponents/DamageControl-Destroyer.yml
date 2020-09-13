@@ -1,0 +1,15 @@
+ComponentName: Damage control center - Destroyer-grade
+ComponentType: Damage control center
+ComponentGlobalMaxHitPoints: 600
+MinShipSize: Destroyer
+MaxShipSize: Destroyer
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+DamageControDefinition:
+  PowerUsage: 5
+  HeatGeneration: 0
+  HullMaxHitPointRegeneration: 2
+  SystemMaxHitPointRegeneration: 2
+  ArmorMaxPointRegeneration: 1
+  TimeOutOfCombatToRepair: 10

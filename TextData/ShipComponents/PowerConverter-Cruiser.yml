@@ -1,0 +1,10 @@
+ComponentName: Power converter - Cruiser-grade
+ComponentType: Power converter
+ComponentGlobalMaxHitPoints: 800
+MinShipSize: Cruiser
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystemCenter
+PowerPlantDefinition:
+  PowerOutput: 10
+  HeatOutput: 3

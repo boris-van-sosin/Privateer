@@ -1,0 +1,19 @@
+ComponentName: Shield generator - Frigate-grade
+ComponentType: Shield generator
+ComponentGlobalMaxHitPoints: 400
+MinShipSize: Frigate
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+ShieldGeneratorDefinition:
+  MaxShieldPoints: 1000
+  MaxShieldPointRegeneration: 2
+  PowerUsage: 2
+  PowerPerShieldRegeneration: 3
+  PowerToRestart: 20
+  RestartDelay: 20
+  HeatGeneration: 1
+  HeatPerShieldRegeneration: 2
+  HeatToRestart: 10
+

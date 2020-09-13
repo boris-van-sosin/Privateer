@@ -28,7 +28,7 @@ public class StatusSubsystem : MonoBehaviour
 
     private void UpdateHitPointsDisplay()
     {
-        _image.color = ColorGradient.Evaluate(((float)_attachedComponent.ComponentHitPoints) / _attachedComponent.ComponentMaxHitPoints);
+        _image.color = ColorGradient.Evaluate(((float)_attachedComponent.ComponentHitPoints) / _attachedComponent.ComponentGlobalMaxHitPoints);
     }
 
     private IShipActiveComponent _attachedComponent;

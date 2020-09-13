@@ -20,6 +20,20 @@ public abstract class ShipComponentBase : IShipComponent
 
 public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveComponent
 {
+    public virtual int ComponentGlobalMaxHitPoints
+    {
+        get
+        {
+            return _componentGlobalMaxHitPoints;
+        }
+        protected set
+        {
+            if (value > 0)
+            {
+                _componentGlobalMaxHitPoints = value;
+            }
+        }
+    }
     public virtual int ComponentMaxHitPoints
     {
         get
@@ -47,16 +61,16 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
             {
                 Status = ComponentStatus.Destroyed;
             }
-            else if (_componentCurrHitPoints <= ComponentMaxHitPoints / 10)
+            else if (_componentCurrHitPoints <= ComponentGlobalMaxHitPoints / 10)
             {
                 Status = ComponentStatus.KnockedOut;
             }
-            else if (_componentCurrHitPoints <= ComponentMaxHitPoints / 4)
+            else if (_componentCurrHitPoints <= ComponentGlobalMaxHitPoints / 4)
             {
                 Status = ComponentStatus.HeavilyDamaged;
                 Debug.LogFormat("{0} is heavily damaged. Time: {1}", this, Time.time);
             }
-            else if (_componentCurrHitPoints <= ComponentMaxHitPoints / 2)
+            else if (_componentCurrHitPoints <= ComponentGlobalMaxHitPoints / 2)
             {
                 Status = ComponentStatus.LightlyDamaged;
             }
@@ -104,7 +118,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
     {
         if (ComponentHitPoints > 0)
         {
-            ComponentMaxHitPoints += b.Component;
+            ComponentGlobalMaxHitPoints += b.Component;
         }
     }
 
@@ -112,6 +126,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
 
     public event Action OnHitpointsChanged;
 
+    protected int _componentGlobalMaxHitPoints;
     protected int _componentMaxHitPoints;
     protected int _componentCurrHitPoints;
     protected ComponentStatus _status;

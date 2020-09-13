@@ -1,0 +1,10 @@
+ComponentName: Ship engine - Frigate-grade
+ComponentType: Ship engine
+ComponentGlobalMaxHitPoints: 600
+MinShipSize: Frigate
+MaxShipSize: Destroyer
+AllowedSlotTypes:
+- Engine
+ShipEngineDefinition:
+  EnergyPerThrust: 2
+  HeatPerThrust: 2

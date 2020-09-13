@@ -36,6 +36,7 @@ public interface IShipComponent
 
 public interface IShipActiveComponent : IShipComponent
 {
+    int ComponentGlobalMaxHitPoints { get; }
     int ComponentMaxHitPoints { get; }
     int ComponentHitPoints { get; set; }
     bool ComponentIsWorking { get; }

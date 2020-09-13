@@ -1,0 +1,10 @@
+ComponentName: Ship armoury - Destroyer-grade
+ComponentType: Ship armoury
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Destroyer
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+ShipArmouryDefinition:
+  CrewCapacity: 20

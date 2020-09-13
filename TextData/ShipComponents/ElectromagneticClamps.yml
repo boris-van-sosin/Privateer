@@ -1,0 +1,10 @@
+ComponentName: Electromagnetic clamps
+ComponentType: Electromagnetic clamps
+ComponentGlobalMaxHitPoints: 1
+MinShipSize: Sloop
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- Hidden 
+ElectromagneticClampsDefinition:
+  EnergyPerPulse: 4
+  HeatPerPulse: 0 

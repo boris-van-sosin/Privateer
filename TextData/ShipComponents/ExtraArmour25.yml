@@ -1,0 +1,10 @@
+ComponentName: Extra armour plating - Light
+ComponentType: Extra armour plating
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Sloop
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+ExtraArmourDefinition:
+  ArmourAmount: 25
+  MitigationArmourAmount: 100

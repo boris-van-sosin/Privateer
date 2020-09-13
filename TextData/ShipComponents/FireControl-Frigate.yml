@@ -1,0 +1,12 @@
+ComponentName: Fire control computer - Frigate-grade
+ComponentType: Fire control computer
+ComponentGlobalMaxHitPoints: 400
+MinShipSize: Frigate
+MaxShipSize: Destroyer
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+FireControlGeneralDefinition:
+  PowerUsage: 3
+  HeatGeneration: 1
+  WeaponAccuracyFactor: 0.1

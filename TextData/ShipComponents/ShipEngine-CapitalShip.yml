@@ -1,0 +1,10 @@
+ComponentName: Ship engine - Capital ship grade
+ComponentType: Ship engine
+ComponentGlobalMaxHitPoints: 1650
+MinShipSize: CapitalShip
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- Engine
+ShipEngineDefinition:
+  EnergyPerThrust: 4
+  HeatPerThrust: 4

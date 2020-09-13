@@ -1,0 +1,10 @@
+ComponentName: Power converter - Destroyer-grade
+ComponentType: Power converter
+ComponentGlobalMaxHitPoints: 600
+MinShipSize: Destroyer
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystemCenter
+PowerPlantDefinition:
+  PowerOutput: 8
+  HeatOutput: 2

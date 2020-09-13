@@ -1,0 +1,10 @@
+ComponentName: Power converter - Sloop-grade
+ComponentType: Power converter
+ComponentGlobalMaxHitPoints: 300
+MinShipSize: Sloop
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystemCenter
+PowerPlantDefinition:
+  PowerOutput: 6
+  HeatOutput: 1

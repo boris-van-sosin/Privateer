@@ -1,0 +1,12 @@
+ComponentName: Fire control computer - Cruiser-grade
+ComponentType: Fire control computer
+ComponentGlobalMaxHitPoints: 800
+MinShipSize: Cruiser
+MaxShipSize: Cruiser
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+FireControlGeneralDefinition:
+  PowerUsage: 4
+  HeatGeneration: 1
+  WeaponAccuracyFactor: 0.1

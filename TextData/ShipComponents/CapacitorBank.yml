@@ -1,0 +1,11 @@
+ComponentName: Capacitor bank
+ComponentType: Capacitor bank
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Sloop
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+CapacitorBankDefinition:
+  PowerCapacity: 50
+

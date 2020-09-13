@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
@@ -85,86 +84,48 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
 
     public override string SpriteKey { get { return "Power plant"; } }
 
+    public PowerPlant(int maxHitPoints, int hitPoints, int powerOutput, int headOutput, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentHitPoints = hitPoints;
+        PowerOutput = powerOutput;
+        HeatOutput = headOutput;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
+
     public static PowerPlant DefaultComponent(Ship containingShip)
     {
-        return new PowerPlant()
-        {
-            ComponentMaxHitPoints = 400,
-            ComponentHitPoints = 400,
-            Status = ComponentStatus.Undamaged,
-            PowerOutput = 3,
-            HeatOutput = 1,
-            _containingShip = containingShip
-        };
+        PowerPlant res = new PowerPlant(400, 400, 3, 1, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     public static PowerPlant DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
     {
+        PowerPlant res = null;
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
-                return new PowerPlant()
-                {
-                    ComponentMaxHitPoints = 300,
-                    ComponentHitPoints = 300,
-                    Status = ComponentStatus.Undamaged,
-                    PowerOutput = 6,
-                    HeatOutput = 1,
-                    _containingShip = containingShip,
-                    MinShipSize = grade,
-                    MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-                };
+                res = new PowerPlant(300, 300, 6, 1, grade, ObjectFactory.ShipSize.CapitalShip);
+                break;
             case ObjectFactory.ShipSize.Frigate:
-                return new PowerPlant()
-                {
-                    ComponentMaxHitPoints = 400,
-                    ComponentHitPoints = 400,
-                    Status = ComponentStatus.Undamaged,
-                    PowerOutput = 6,
-                    HeatOutput = 1,
-                    _containingShip = containingShip,
-                    MinShipSize = grade,
-                    MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-                };
+                res = new PowerPlant(400, 400, 6, 1, grade, ObjectFactory.ShipSize.CapitalShip);
+                break;
             case ObjectFactory.ShipSize.Destroyer:
-                return new PowerPlant()
-                {
-                    ComponentMaxHitPoints = 600,
-                    ComponentHitPoints = 600,
-                    Status = ComponentStatus.Undamaged,
-                    PowerOutput = 8,
-                    HeatOutput = 1,
-                    _containingShip = containingShip,
-                    MinShipSize = grade,
-                    MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-                };
+                res = new PowerPlant(600, 600, 8, 2, grade, ObjectFactory.ShipSize.CapitalShip);
+                break;
             case ObjectFactory.ShipSize.Cruiser:
-                return new PowerPlant()
-                {
-                    ComponentMaxHitPoints = 800,
-                    ComponentHitPoints = 800,
-                    Status = ComponentStatus.Undamaged,
-                    PowerOutput = 10,
-                    HeatOutput = 2,
-                    _containingShip = containingShip,
-                    MinShipSize = grade,
-                    MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-                };
+                res = new PowerPlant(800, 800, 10, 3, grade, ObjectFactory.ShipSize.CapitalShip);
+                break;
             case ObjectFactory.ShipSize.CapitalShip:
-                return new PowerPlant()
-                {
-                    ComponentMaxHitPoints = 1100,
-                    ComponentHitPoints = 1100,
-                    Status = ComponentStatus.Undamaged,
-                    PowerOutput = 10,
-                    HeatOutput = 3,
-                    _containingShip = containingShip,
-                    MinShipSize = grade,
-                    MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-                };
+                res = new PowerPlant(1100, 1100, 10, 3, grade, ObjectFactory.ShipSize.CapitalShip);
+                break;
             default:
                 return null;
         }
+        res._containingShip = containingShip;
+        return res;
     }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystemCenter" };
@@ -184,15 +145,18 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
 
     public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
+    public CapacitorBank(int powerCapacity, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        Capacity = powerCapacity;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
+
     public static CapacitorBank DefaultComponent(Ship containingShip)
     {
-        return new CapacitorBank()
-        {
-            Capacity = 50,
-            _containingShip = containingShip,
-            MinShipSize = ObjectFactory.ShipSize.Sloop,
-            MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-        };
+        CapacitorBank res = new CapacitorBank(50, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
@@ -206,15 +170,18 @@ public class HeatSink : ShipComponentBase, IHeatCapacityComponent
 
     public int HeatCapacity => Capacity;
 
+    public HeatSink(int heatCapacity, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        Capacity = heatCapacity;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
+
     public static HeatSink DefaultComponent(Ship containingShip)
     {
-        return new HeatSink()
-        {
-            Capacity = 50,
-            _containingShip = containingShip,
-            MinShipSize = ObjectFactory.ShipSize.Sloop,
-            MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-        };
+        HeatSink res = new HeatSink(50, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
@@ -316,26 +283,33 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
 
     public override string SpriteKey { get { return "Shield generator"; } }
 
+    public ShieldGenerator(int maxHitPoints, int hitPoints, int maxShieldPoints, int shieldPoints,
+                           int maxShieldPointRegeneration, int powerUsage, int heatGeneration, int powerPerRegen, int heatPerRegen,
+                           int powerToRestart, int heatToRestart, float restartDelay,
+                           ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentHitPoints = hitPoints;
+        MaxShieldPoints = maxShieldPoints;
+        CurrShieldPoints = shieldPoints;
+        MaxShieldPointRegeneration = maxShieldPointRegeneration;
+        PowerUsage = powerUsage;
+        HeatGeneration = heatGeneration;
+        PowerPerShieldRegeneration = powerPerRegen;
+        HeatGenerationPerShieldRegeneration = heatPerRegen;
+        PowerToRestart = powerToRestart;
+        HeatToRestart = heatToRestart;
+        RestartDelay = restartDelay;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+        _shieldRequired = true;
+    }
+
     public static ShieldGenerator DefaultComponent(Ship containingShip)
     {
-        return new ShieldGenerator()
-        {
-            ComponentMaxHitPoints = 400,
-            ComponentHitPoints = 400,
-            Status = ComponentStatus.Undamaged,
-            MaxShieldPoints = 1000,
-            CurrShieldPoints = 1000,
-            MaxShieldPointRegeneration = 2,
-            PowerUsage = 2,
-            HeatGeneration = 1,
-            PowerPerShieldRegeneration = 3,
-            HeatGenerationPerShieldRegeneration = 2,
-            PowerToRestart = 20,
-            HeatToRestart = 10,
-            RestartDelay = 20 * 4,
-            _shieldRequired = true,
-            _containingShip = containingShip
-        };
+        ShieldGenerator res = new ShieldGenerator(400, 400, 1000, 1000, 2, 2, 1, 3, 2, 20, 10, 20 * 4, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     public static ShieldGenerator DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
@@ -346,19 +320,19 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 300;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 300;
                 break;
             case ObjectFactory.ShipSize.Frigate:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 400;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 400;
                 break;
             case ObjectFactory.ShipSize.Destroyer:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 600;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 600;
                 break;
             case ObjectFactory.ShipSize.Cruiser:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 800;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 800;
                 break;
             case ObjectFactory.ShipSize.CapitalShip:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 1100;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 1100;
                 break;
             default:
                 break;
@@ -372,9 +346,10 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
 public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionComponent
 {
     public int PowerUsage;
+    public int HeatGeneration;
     public int HullMaxHitPointRegeneration;
     public int SystemMaxHitPointRegeneration;
-    public int ArmorMaxPointRegeneration;
+    public int ArmourMaxPointRegeneration;
     public float TimeOutOfCombatToRepair;
 
     
@@ -395,7 +370,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
             return;
         }
 
-        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, 0))
+        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration))
         {
             return;
         }
@@ -416,7 +391,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         _containingShip.RepairHull(HullMaxHitPointRegeneration);
         if (!armourAtFull)
         {
-            _containingShip.RepairArmour(ArmorMaxPointRegeneration);
+            _containingShip.RepairArmour(ArmourMaxPointRegeneration);
         }
     }
 
@@ -425,22 +400,31 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
     public override string SpriteKey { get { return "Damage control"; } }
 
     public int EnergyPerTick => PowerUsage;
-    public int HeatPerTick => 0;
+    public int HeatPerTick => HeatGeneration;
+
+    public DamageControlNode(int maxHitPoints, int hitPoints,
+                             int hullHitPointRegen, int armourPointRegen, int systemHitPointRegen,
+                             int powerUsage, int heatGeneration,
+                             float timeOutOfCombatToRepair,
+                             ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentHitPoints = hitPoints;
+        HullMaxHitPointRegeneration = hullHitPointRegen;
+        ArmourMaxPointRegeneration = armourPointRegen;
+        SystemMaxHitPointRegeneration = systemHitPointRegen;
+        TimeOutOfCombatToRepair = timeOutOfCombatToRepair;
+        PowerUsage = powerUsage;
+        HeatGeneration = heatGeneration;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
 
     public static DamageControlNode DefaultComponent(Ship containingShip)
     {
-        return new DamageControlNode()
-        {
-            ComponentMaxHitPoints = 400,
-            ComponentHitPoints = 400,
-            Status = ComponentStatus.Undamaged,
-            HullMaxHitPointRegeneration = 2,
-            ArmorMaxPointRegeneration = 1,
-            SystemMaxHitPointRegeneration = 2,
-            TimeOutOfCombatToRepair = 5.0f,
-            PowerUsage = 5,
-            _containingShip = containingShip
-        };
+        DamageControlNode res = new DamageControlNode(400, 400, 2, 1, 2, 5, 0, 5.0f, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     public static DamageControlNode DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
@@ -451,19 +435,19 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 300;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 300;
                 break;
             case ObjectFactory.ShipSize.Frigate:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 400;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 400;
                 break;
             case ObjectFactory.ShipSize.Destroyer:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 600;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 600;
                 break;
             case ObjectFactory.ShipSize.Cruiser:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 800;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 800;
                 break;
             case ObjectFactory.ShipSize.CapitalShip:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 1100;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 1100;
                 break;
             default:
                 break;
@@ -486,17 +470,19 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
     public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
     public int EnergyPerTick => 0;
-    public int HeatPerTick => -1;
+    public int HeatPerTick => -CoolingRate;
 
+    public HeatExchange(int coolingRate, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        CoolingRate = coolingRate;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
     public static HeatExchange DefaultComponent(Ship containingShip)
     {
-        return new HeatExchange()
-        {
-            CoolingRate = 6,
-            _containingShip = containingShip,
-            MinShipSize = ObjectFactory.ShipSize.Sloop,
-            MaxShipSize = ObjectFactory.ShipSize.CapitalShip
-        };
+        HeatExchange res = new HeatExchange(6, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
@@ -507,6 +493,14 @@ public class ExtraArmour : ShipComponentBase
     public int ArmourAmount;
     public int MitigationArmourAmount;
     public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
+
+    public ExtraArmour(int armourAmount, int mitigationArmourAmount, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ArmourAmount = armourAmount;
+        MitigationArmourAmount = mitigationArmourAmount;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem" };
 }
@@ -597,17 +591,20 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     public int EnergyPerTick => EnergyPerThrust;
     public int HeatPerTick => HeatPerThrust;
 
+    public ShipEngine(int maxHitPoints, int hitPoints, int energyPerThrust, int heatPerThrust, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentHitPoints = hitPoints;
+        EnergyPerThrust = energyPerThrust;
+        HeatPerThrust = heatPerThrust;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
     public static ShipEngine DefaultComponent(Ship containingShip)
     {
-        return new ShipEngine()
-        {
-            ComponentMaxHitPoints = 600,
-            ComponentHitPoints = 600,
-            Status = ComponentStatus.Undamaged,
-            EnergyPerThrust = 2,
-            HeatPerThrust = 1,
-            _containingShip = containingShip
-        };
+        ShipEngine res = new ShipEngine(600, 600, 2, 2, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     public static ShipEngine DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
@@ -618,19 +615,19 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 450;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 450;
                 break;
             case ObjectFactory.ShipSize.Frigate:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 600;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 600;
                 break;
             case ObjectFactory.ShipSize.Destroyer:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 900;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 900;
                 break;
             case ObjectFactory.ShipSize.Cruiser:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 1200;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 1200;
                 break;
             case ObjectFactory.ShipSize.CapitalShip:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 1650;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 1650;
                 break;
             default:
                 break;
@@ -692,23 +689,27 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
     public int EnergyPerTick => EnergyPerPulse;
     public int HeatPerTick => HeatPerPulse;
 
+    public ElectromagneticClamps(int maxHitPoints, int hitPoints, int energyPerPulse, int heatPerPulse, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentHitPoints = hitPoints;
+        EnergyPerPulse = energyPerPulse;
+        HeatPerPulse = heatPerPulse;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
+
     public static ElectromagneticClamps DefaultComponent(Ship containingShip)
     {
-        return new ElectromagneticClamps()
-        {
-            ComponentMaxHitPoints = 1,
-            ComponentHitPoints = 1,
-            Status = ComponentStatus.Undamaged,
-            EnergyPerPulse = 1,
-            HeatPerPulse = 0,
-            _containingShip = containingShip
-        };
+        ElectromagneticClamps res = new ElectromagneticClamps(1, 1, 1, 0, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     private static readonly string[] _allowedSlotTypes = new string[] { "Hidden" };
 }
 
-public class CombatDetachment : ShipComponentBase
+public class ShipArmoury : ShipComponentBase
 {
     public int CrewCapacity;
     public List<ShipCharacter> Forces { get; private set; }
@@ -726,19 +727,24 @@ public class CombatDetachment : ShipComponentBase
     }
     public override IEnumerable<string> AllowedSlotTypes { get { return _allowedSlotTypes; } }
 
-    public static CombatDetachment DefaultComponent(Ship s)
+    public ShipArmoury(int crewCapacity, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        return new CombatDetachment()
-        {
-            CrewCapacity = 10,
-            Forces = new List<ShipCharacter>(),
-            _containingShip = s
-        };
+        CrewCapacity = crewCapacity;
+        Forces = new List<ShipCharacter>(crewCapacity);
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
     }
 
-    public static CombatDetachment DefaultComponent(ObjectFactory.ShipSize grade, Ship s)
+    public static ShipArmoury DefaultComponent(Ship s)
     {
-        CombatDetachment res = DefaultComponent(s);
+        ShipArmoury res = new ShipArmoury(10, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = s;
+        return res;
+    }
+
+    public static ShipArmoury DefaultComponent(ObjectFactory.ShipSize grade, Ship s)
+    {
+        ShipArmoury res = DefaultComponent(s);
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
@@ -757,7 +763,7 @@ public class CombatDetachment : ShipComponentBase
                 res.CrewCapacity = 65;
                 break;
             default:
-                break;
+                return null;
         }
         res.Forces.Capacity = res.CrewCapacity;
         res.MinShipSize = grade;
@@ -771,6 +777,7 @@ public class CombatDetachment : ShipComponentBase
 public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionComponent
 {
     public int PowerUsage;
+    public int HeatGeneration;
     private DynamicBuff _activeBuff;
     private static DynamicBuff _inactiveBuff = DynamicBuff.Default();
     private bool _nextActive;
@@ -797,29 +804,34 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
     public override string SpriteKey { get { return "Fire control general"; } }
 
     public int EnergyPerTick => PowerUsage;
-    public int HeatPerTick => 0;
+    public int HeatPerTick => HeatGeneration;
+
+    public FireControlGeneral(int maxHitPoints, int hitPoints, float weaponAccuracyFactor, int powerUsage, int heatGeneration, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    {
+        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentHitPoints = hitPoints;
+        _activeBuff = new DynamicBuff()
+        {
+            WeaponAccuracyFactor = weaponAccuracyFactor,
+
+            SpeedFactor = 0,
+            AcceleraionFactor = 0,
+            WeaponRateOfFireFactor = 0f,
+            WeaponVsStrikeCraftFactor = 0,
+            RepairRateModifier = 0,
+            ShieldRechargeRateModifier = 0
+        };
+        PowerUsage = powerUsage;
+        HeatGeneration = heatGeneration;
+        MinShipSize = minShipSize;
+        MaxShipSize = maxShipSize;
+    }
 
     public static FireControlGeneral DefaultComponent(Ship containingShip)
     {
-        return new FireControlGeneral()
-        {
-            ComponentMaxHitPoints = 400,
-            ComponentHitPoints = 400,
-            Status = ComponentStatus.Undamaged,
-            _activeBuff = new DynamicBuff()
-            {
-                WeaponAccuracyFactor = 0.1f,
-
-                SpeedFactor = 0,
-                AcceleraionFactor = 0,
-                WeaponRateOfFireFactor = 0f,
-                WeaponVsStrikeCraftFactor = 0,
-                RepairRateModifier = 0,
-                ShieldRechargeRateModifier = 0
-            },
-            PowerUsage = 1,
-            _containingShip = containingShip
-        };
+        FireControlGeneral res = new FireControlGeneral(400, 400, 0.1f, 4, 0, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
+        res._containingShip = containingShip;
+        return res;
     }
 
     public static FireControlGeneral DefaultComponent(ObjectFactory.ShipSize grade, Ship containingShip)
@@ -830,19 +842,19 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
         switch (grade)
         {
             case ObjectFactory.ShipSize.Sloop:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 300;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 300;
                 break;
             case ObjectFactory.ShipSize.Frigate:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 400;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 400;
                 break;
             case ObjectFactory.ShipSize.Destroyer:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 600;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 600;
                 break;
             case ObjectFactory.ShipSize.Cruiser:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 800;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 800;
                 break;
             case ObjectFactory.ShipSize.CapitalShip:
-                res.ComponentHitPoints = res.ComponentMaxHitPoints = 1100;
+                res.ComponentHitPoints = res.ComponentGlobalMaxHitPoints = 1100;
                 break;
             default:
                 break;

@@ -11,7 +11,6 @@ public class ShipExporterHelper : Editor
     {
         DrawDefaultInspector();
 
-
         GUILayout.Space(10f);
         GUILayout.BeginVertical();
 

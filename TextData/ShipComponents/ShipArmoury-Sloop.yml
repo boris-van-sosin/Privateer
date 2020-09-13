@@ -1,0 +1,10 @@
+ComponentName: Ship armoury - Sloop-grade
+ComponentType: Ship armoury
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Sloop
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+ShipArmouryDefinition:
+  CrewCapacity: 5

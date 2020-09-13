@@ -139,7 +139,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         }
         if (friendly && userShip)
         {
-            CombatDetachment d = CombatDetachment.DefaultComponent(s.ShipSize, s);
+            ShipArmoury d = ShipArmoury.DefaultComponent(s.ShipSize, s);
             s.PlaceComponent(Ship.ShipSection.Center, d);
 
             if (_cfgPanelVisible)

@@ -1,0 +1,10 @@
+ComponentName: Ship engine - Cruiser-grade
+ComponentType: Ship engine
+ComponentGlobalMaxHitPoints: 1200
+MinShipSize: Cruiser
+MaxShipSize: Cruiser
+AllowedSlotTypes:
+- Engine
+ShipEngineDefinition:
+  EnergyPerThrust: 3
+  HeatPerThrust: 3

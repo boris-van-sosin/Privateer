@@ -1,0 +1,12 @@
+ComponentName: Fire control computer - Sloop-grade
+ComponentType: Fire control computer
+ComponentGlobalMaxHitPoints: 300
+MinShipSize: Sloop
+MaxShipSize: Frigate
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+FireControlGeneralDefinition:
+  PowerUsage: 3
+  HeatGeneration: 1
+  WeaponAccuracyFactor: 0.1

@@ -1,0 +1,15 @@
+ComponentName: Damage control center - Frigate-grade
+ComponentType: Damage control center
+ComponentGlobalMaxHitPoints: 400
+MinShipSize: Frigate
+MaxShipSize: Frigate
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+DamageControDefinition:
+  PowerUsage: 4
+  HeatGeneration: 0
+  HullMaxHitPointRegeneration: 2
+  SystemMaxHitPointRegeneration: 2
+  ArmorMaxPointRegeneration: 1
+  TimeOutOfCombatToRepair: 10

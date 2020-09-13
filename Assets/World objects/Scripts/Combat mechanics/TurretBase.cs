@@ -15,7 +15,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public virtual void Init(string turretSlotType)
     {
         SlotType = turretSlotType;
-        ComponentHitPoints = ComponentMaxHitPoints;
+        ComponentHitPoints = ComponentGlobalMaxHitPoints;
         ParseMuzzles();
         AlternatingFire = DefaultAlternatingFire;
         _allowedSlotTypes = new string[] { turretSlotType };
@@ -677,7 +677,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     private ITargetableEntity _targetShip = null;
 
-    public int MaxHitpoints;
+    public int GlobalMaxHitpoints;
+    private int MaxHitpoints;
     private int _currHitPoints;
     private ComponentStatus _status;
 
@@ -701,6 +702,20 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public event Action OnHitpointsChanged;
 
     // Hit point stuff:
+    public virtual int ComponentGlobalMaxHitPoints
+    {
+        get
+        {
+            return GlobalMaxHitpoints;
+        }
+        protected set
+        {
+            if (value > 0)
+            {
+                GlobalMaxHitpoints = value;
+            }
+        }
+    }
     public virtual int ComponentMaxHitPoints
     {
         get
@@ -728,16 +743,16 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             {
                 Status = ComponentStatus.Destroyed;
             }
-            else if (_currHitPoints <= ComponentMaxHitPoints / 10)
+            else if (_currHitPoints <= ComponentGlobalMaxHitPoints / 10)
             {
                 Status = ComponentStatus.KnockedOut;
             }
-            else if (_currHitPoints <= ComponentMaxHitPoints / 4)
+            else if (_currHitPoints <= ComponentGlobalMaxHitPoints / 4)
             {
                 Status = ComponentStatus.HeavilyDamaged;
                 Debug.LogFormat("{0} on {1} is heavily damaged. Time: {2}", this, _containingShip, Time.time);
             }
-            else if (_currHitPoints <= ComponentMaxHitPoints / 2)
+            else if (_currHitPoints <= ComponentGlobalMaxHitPoints / 2)
             {
                 Status = ComponentStatus.LightlyDamaged;
             }
@@ -745,10 +760,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             {
                 Status = ComponentStatus.Undamaged;
             }
-            if (OnHitpointsChanged != null)
-            {
-                OnHitpointsChanged();
-            }
+            OnHitpointsChanged?.Invoke();
         }
     }
     public virtual bool ComponentIsWorking

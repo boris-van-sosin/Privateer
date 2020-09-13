@@ -1,0 +1,12 @@
+ComponentName: Fire control computer - Destroyer-grade
+ComponentType: Fire control computer
+ComponentGlobalMaxHitPoints: 600
+MinShipSize: Destroyer
+MaxShipSize: Cruiser
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+FireControlGeneralDefinition:
+  PowerUsage: 4
+  HeatGeneration: 1
+  WeaponAccuracyFactor: 0.1

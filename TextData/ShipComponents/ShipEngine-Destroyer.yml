@@ -1,0 +1,10 @@
+ComponentName: Ship engine - Destroyer-grade
+ComponentType: Ship engine
+ComponentGlobalMaxHitPoints: 900
+MinShipSize: Destroyer
+MaxShipSize: Destroyer
+AllowedSlotTypes:
+- Engine
+ShipEngineDefinition:
+  EnergyPerThrust: 2
+  HeatPerThrust: 2

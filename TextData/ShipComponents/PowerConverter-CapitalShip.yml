@@ -1,0 +1,10 @@
+ComponentName: Power converter - Capital ship grade
+ComponentType: Power converter
+ComponentGlobalMaxHitPoints: 1100
+MinShipSize: CapitalShip
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystemCenter
+PowerPlantDefinition:
+  PowerOutput: 10
+  HeatOutput: 3

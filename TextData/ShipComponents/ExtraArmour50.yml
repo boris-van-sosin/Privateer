@@ -1,0 +1,10 @@
+ComponentName: Extra armour plating - Heavy
+ComponentType: Extra armour plating
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Destroyer
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+ExtraArmourDefinition:
+  ArmourAmount: 50
+  MitigationArmourAmount: 100

@@ -1,0 +1,11 @@
+ComponentName: Heat sink
+ComponentType: Heat sink
+ComponentGlobalMaxHitPoints: 0
+MinShipSize: Sloop
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+HeatSinkDefinition:
+  HeatCapacity: 50
+

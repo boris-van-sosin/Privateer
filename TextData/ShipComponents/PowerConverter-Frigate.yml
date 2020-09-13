@@ -1,0 +1,10 @@
+ComponentName: Power converter - Frigate-grade
+ComponentType: Power converter
+ComponentGlobalMaxHitPoints: 400
+MinShipSize: Frigate
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystemCenter
+PowerPlantDefinition:
+  PowerOutput: 6
+  HeatOutput: 1

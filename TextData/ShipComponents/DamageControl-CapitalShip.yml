@@ -1,0 +1,15 @@
+ComponentName: Damage control center - Capital ship grade
+ComponentType: Damage control center
+ComponentGlobalMaxHitPoints: 1100
+MinShipSize: CapitalShip
+MaxShipSize: CapitalShip
+AllowedSlotTypes:
+- ShipSystem
+- ShipSystemCenter
+DamageControDefinition:
+  PowerUsage: 6
+  HeatGeneration: 0
+  HullMaxHitPointRegeneration: 2
+  SystemMaxHitPointRegeneration: 2
+  ArmorMaxPointRegeneration: 1
+  TimeOutOfCombatToRepair: 10
