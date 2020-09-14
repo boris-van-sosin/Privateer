@@ -92,6 +92,7 @@ WeaponHardpoints:
     - 155,205
     TreatAsFixed: false
     AllowedWeaponTypes:
+    - MediumTurret1Medium
     - MediumTurret2Medium
     LocationOnShip: Fore
     WeaponAIHint: Main
@@ -121,6 +122,7 @@ WeaponHardpoints:
     - 0,20
     TreatAsFixed: false
     AllowedWeaponTypes:
+    - MediumTurret1Medium
     - MediumTurret2Medium
     LocationOnShip: Aft
     WeaponAIHint: Main

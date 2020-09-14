@@ -8,15 +8,101 @@ public class StackingLayout : MonoBehaviour
     void Start()
     {
         _rt = GetComponent<RectTransform>();
-        _childElements.AddRange(this.GetComponentsInChildrenOneLevel<StackableUIComponent>(false));
-        foreach (StackableUIComponent child in _childElements)
-        {
-            child.onDimensionsChanged += GeometryChanged;
-        }
-        GeometryChanged();
+        ForceRefresh();
     }
 
     void OnTransformChildrenChanged()
+    {
+        ForceRefresh();
+    }
+
+    protected virtual void GeometryChanged()
+    {
+        if (_rt == null)
+        {
+            _rt = GetComponent<RectTransform>();
+        }
+        float offset = StartPadding;
+
+        switch (LayoutDirection)
+        {
+            case StackingDirection.LeftToRight:
+                {
+                    for (int i = 0; i < _childElements.Count; ++i)
+                    {
+                        StackableUIComponent c = _childElements[i];
+                        if (!c.gameObject.activeInHierarchy)
+                        {
+                            continue;
+                        }
+                        float width = c.StackableRectTransform.rect.width;
+                        float pivotOffset = c.StackableRectTransform.pivot.x * width;
+                        c.StackableRectTransform.anchoredPosition = new Vector2(offset + pivotOffset, c.StackableRectTransform.anchoredPosition.y);
+                        offset += (width + ComponentPadding);
+                    }
+                    break;
+                }
+            case StackingDirection.RightToLeft:
+                {
+                    offset = _rt.rect.width - StartPadding;
+                    for (int i = 0; i < _childElements.Count; ++i)
+                    {
+                        StackableUIComponent c = _childElements[i];
+                        if (!c.gameObject.activeInHierarchy)
+                        {
+                            continue;
+                        }
+                        float width = c.StackableRectTransform.rect.width;
+                        offset -= (width + ComponentPadding);
+                        float pivotOffset = c.StackableRectTransform.pivot.x * width;
+                        c.StackableRectTransform.anchoredPosition = new Vector2(offset + pivotOffset, c.StackableRectTransform.anchoredPosition.y);
+                    }
+                    break;
+                }
+            case StackingDirection.TopToBottom:
+                {
+                    for (int i = 0; i < _childElements.Count; ++i)
+                    {
+                        StackableUIComponent c = _childElements[i];
+                        if (!c.gameObject.activeInHierarchy)
+                        {
+                            continue;
+                        }
+                        float height = c.StackableRectTransform.rect.height;
+                        float pivotOffset = c.StackableRectTransform.pivot.y * height;
+                        offset -= (height + ComponentPadding);
+                        c.StackableRectTransform.anchoredPosition = new Vector2(c.StackableRectTransform.anchoredPosition.x, offset + pivotOffset);
+                    }
+                    break;
+                }
+            case StackingDirection.BottomToTop:
+                {
+                    offset = _rt.rect.height + StartPadding;
+                    for (int i = 0; i < _childElements.Count; ++i)
+                    {
+                        StackableUIComponent c = _childElements[i];
+                        if (!c.gameObject.activeInHierarchy)
+                        {
+                            continue;
+                        }
+                        float height = c.StackableRectTransform.rect.height;
+                        float pivotOffset = c.StackableRectTransform.pivot.y * height;
+                        c.StackableRectTransform.anchoredPosition = new Vector2(c.StackableRectTransform.anchoredPosition.x, offset + pivotOffset);
+                        offset += (height + ComponentPadding);
+                    }
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+
+    protected void OnRectTransformDimensionsChange()
+    {
+        GeometryChanged();
+    }
+
+    public void ForceRefresh()
     {
         foreach (StackableUIComponent child in _childElements)
         {
@@ -31,68 +117,11 @@ public class StackingLayout : MonoBehaviour
         GeometryChanged();
     }
 
-    private void GeometryChanged()
-    {
-        float offset = StartPadding;
-
-        switch (LayoutDirection)
-        {
-            case StackingDirection.Left:
-                {
-                    foreach (StackableUIComponent c in _childElements.Where(x => x.gameObject.activeInHierarchy))
-                    {
-                        float width = c.StackableRectTransform.rect.width;
-                        float pivotOffset = c.StackableRectTransform.pivot.x * width;
-                        c.StackableRectTransform.anchoredPosition = new Vector2(offset + pivotOffset, c.StackableRectTransform.anchoredPosition.y);
-                        offset += (width + ComponentPadding);
-                    }
-                    break;
-                }
-            case StackingDirection.Right:
-                {
-                    offset = _rt.rect.width - StartPadding;
-                    foreach (StackableUIComponent c in _childElements)
-                    {
-                        float width = c.StackableRectTransform.rect.width;
-                        offset -= (width + ComponentPadding);
-                        float pivotOffset = c.StackableRectTransform.pivot.x * width;
-                        c.StackableRectTransform.anchoredPosition = new Vector2(offset + pivotOffset, c.StackableRectTransform.anchoredPosition.y);
-                    }
-                    break;
-                }
-            case StackingDirection.Up:
-                {
-                    foreach (StackableUIComponent c in _childElements)
-                    {
-                        float height = c.StackableRectTransform.rect.height;
-                        float pivotOffset = c.StackableRectTransform.pivot.y * height;
-                        c.StackableRectTransform.anchoredPosition = new Vector2(c.StackableRectTransform.anchoredPosition.x, offset + pivotOffset);
-                        offset += (height + ComponentPadding);
-                    }
-                    break;
-                }
-            case StackingDirection.Down:
-                {
-                    offset = _rt.rect.height - StartPadding;
-                    foreach (StackableUIComponent c in _childElements)
-                    {
-                        float height = c.StackableRectTransform.rect.height;
-                        offset -= (height + ComponentPadding);
-                        float pivotOffset = c.StackableRectTransform.pivot.y * height;
-                        c.StackableRectTransform.anchoredPosition = new Vector2(c.StackableRectTransform.anchoredPosition.x, offset + pivotOffset);
-                    }
-                    break;
-                }
-            default:
-                break;
-        }
-    }
-
-    private List<StackableUIComponent> _childElements = new List<StackableUIComponent>();
+    protected List<StackableUIComponent> _childElements = new List<StackableUIComponent>();
     public StackingDirection LayoutDirection;
     public float StartPadding;
     public float ComponentPadding;
-    private RectTransform _rt;
+    protected RectTransform _rt = null;
 }
 
-public enum StackingDirection { Left, Right, Up, Down }
+public enum StackingDirection { LeftToRight, RightToLeft, TopToBottom, BottomToTop }

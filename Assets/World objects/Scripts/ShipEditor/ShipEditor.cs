@@ -13,7 +13,12 @@ public class ShipEditor : MonoBehaviour
     {
         PopulateHulls();
         PopulateWeapons();
+        PopulateShipComps();
+        PopulateAmmo();
         GetTurretDefs();
+        FilterWeapons(null);
+        FilterComponents(null);
+        FilterAmmo(null);
     }
 
     private void PopulateHulls()
@@ -23,11 +28,12 @@ public class ShipEditor : MonoBehaviour
         for (int i = 0; i < hulls.Length; ++i)
         {
             RectTransform t = Instantiate(ButtonPrototype);
+            t.gameObject.AddComponent<StackableUIComponent>();
 
             t.SetParent(ShipHullsScrollViewContent, false);
             float height = t.rect.height;
-            float pivotOffset = (1.0f - t.pivot.y) * height;
-            t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            //float pivotOffset = (1.0f - t.pivot.y) * height;
+            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -42,6 +48,7 @@ public class ShipEditor : MonoBehaviour
             if (!_shipsCache.TryGetValue(hullKey, out shipDummy))
             {
                 (shipDummy, objSprite) = CreateShipDummy(hullKey);
+                shipDummy.HullDef = hulls[i];
                 _shipsCache[hullKey] = shipDummy;
             }
             else
@@ -60,7 +67,12 @@ public class ShipEditor : MonoBehaviour
     private void FitScrollContent(RectTransform contentRect, float offset)
     {
         contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, -offset);
-        ScrollRect scrollRect = ShipHullsScrollViewContent.GetComponentInParent<ScrollRect>();
+        return;
+        ScrollRect scrollRect = contentRect.GetComponentInParent<ScrollRect>();
+        if (scrollRect == null)
+        {
+            return;
+        }
         RectTransform viewportRect = scrollRect.viewport;
         if (viewportRect.rect.height < contentRect.rect.height)
         {
@@ -72,6 +84,7 @@ public class ShipEditor : MonoBehaviour
 
     private void SelectShipDummy(string key)
     {
+        bool needsReFilter = false;
         if (null != _currShip)
         {
             for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
@@ -89,8 +102,14 @@ public class ShipEditor : MonoBehaviour
                     }
                 }
                 _currHardpoints.Clear();
+                needsReFilter = true;
             }
         }
+        else if (null == _currShip)
+        {
+            needsReFilter = true;
+        }
+
         ShipDummyInEditor s;
         if (_shipsCache.TryGetValue(key, out s))
         {
@@ -108,6 +127,12 @@ public class ShipEditor : MonoBehaviour
         }
 
         _currShip = s;
+
+        if (needsReFilter)
+        {
+            FilterWeapons(WeaponFilter);
+            FilterComponents(ComponentsFilter);
+        }
     }
 
     private (ShipDummyInEditor, Sprite) CreateShipDummy(string key)
@@ -134,6 +159,7 @@ public class ShipEditor : MonoBehaviour
     private void PopulateWeapons()
     {
         IReadOnlyList<(string, string)> weapons = ObjectFactory.GetAllWeaponTypesAndSizes();
+        _allWeapons = new List<ShipEditorDraggable>(weapons.Count);
         float offset = 0.0f;
         for (int i = 0; i < weapons.Count; ++i)
         {
@@ -155,11 +181,12 @@ public class ShipEditor : MonoBehaviour
             }
 
             RectTransform t = Instantiate(ButtonPrototype);
+            t.gameObject.AddComponent<StackableUIComponent>(); 
 
             t.SetParent(WeaponsScrollViewContent, false);
             float height = t.rect.height;
-            float pivotOffset = (1.0f - t.pivot.y) * height;
-            t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            //float pivotOffset = (1.0f - t.pivot.y) * height;
+            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -173,9 +200,271 @@ public class ShipEditor : MonoBehaviour
             draggable.Item = EditorItemType.Weapon;
             draggable.WeaponSize = weaponSizeKey;
             draggable.WeaponKey = weaponKey;
+            _allWeapons.Add(draggable);
+        }
+
+        _allWeaponsComatibleFlags = new bool[_allWeapons.Count];
+
+        FitScrollContent(WeaponsScrollViewContent.GetComponent<RectTransform>(), offset);
+    }
+
+    private void FilterWeapons(Func<ShipDummyInEditor, string, string, bool> filter)
+    {
+        float offset = 0.0f;
+        ShipEditorDraggable[] weaponItems = WeaponsScrollViewContent.GetComponentsInChildren<ShipEditorDraggable>(true);
+        for (int i = 0; i < weaponItems.Length; ++i)
+        {
+            if (!_currShip.HasValue || !filter(_currShip.Value, weaponItems[i].WeaponKey, weaponItems[i].WeaponSize))
+            {
+                //weaponItems[i].gameObject.SetActive(false);
+                weaponItems[i].GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                //weaponItems[i].gameObject.SetActive(true);
+                weaponItems[i].GetComponent<Button>().interactable = true;
+            }
+            RectTransform rt = weaponItems[i].GetComponent<RectTransform>();
+            float height = rt.rect.height;
+            offset -= height;
         }
 
         FitScrollContent(WeaponsScrollViewContent.GetComponent<RectTransform>(), offset);
+        WeaponsScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
+    }
+
+    private void PopulateShipComps()
+    {
+        IReadOnlyCollection<ShipComponentTemplateDefinition> allComps = ObjectFactory.GetAllShipComponents();
+        _allShipComponents = new List<ShipEditorDraggable>(allComps.Count);
+        float offset = 0.0f;
+        int i = 0;
+        int offsetModulus = 1;
+        StackingLayout2D stacking2D;
+        if (ShipCompsScrollViewContent.TryGetComponent<StackingLayout2D>(out stacking2D) && stacking2D.MaxFirstDirection > 0)
+        {
+            offsetModulus = stacking2D.MaxFirstDirection;
+        }
+        float areaWidth = ShipCompsScrollViewContent.rect.width;
+        foreach (ShipComponentTemplateDefinition comp in allComps)
+        {
+            string componentType = comp.ComponentType;
+            Sprite compSprite = ObjectFactory.GetShipComponentImage(comp.ComponentType);
+            string componentKey = comp.ComponentName;
+            if (compSprite == null)
+            {
+                continue;
+            }
+
+            RectTransform t = Instantiate(ButtonPrototype);
+            t.anchorMin = new Vector2((0f / areaWidth) - t.pivot.x / 3, t.anchorMin.y);
+            t.anchorMax = new Vector2((1f / 3f) - t.pivot.x / 3, t.anchorMax.y);
+            t.gameObject.AddComponent<StackableUIComponent>();
+
+            t.SetParent(ShipCompsScrollViewContent, false);
+            //float pivotOffset = (1.0f - t.pivot.y) * height;
+            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            if (i % offsetModulus == 0)
+            {
+                float height = t.rect.height;
+                offset -= height;
+            }
+
+            TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
+            textElem.text = comp.ComponentName.Replace(" - ", "\n");
+            textElem.fontSize = 14;
+
+            Image img = t.Find("Image").GetComponent<Image>();
+            img.sprite = compSprite;
+
+            ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
+            draggable.ContainingEditor = this;
+            draggable.Item = EditorItemType.ShipComponent;
+            draggable.ShipComponentDef = comp;
+            _allShipComponents.Add(draggable);
+            ++i;
+        }
+
+        _allShipComponentsComatibleFlags = new bool[_allShipComponents.Count];
+
+        FitScrollContent(ShipCompsScrollViewContent.GetComponent<RectTransform>(), offset);
+    }
+
+    private void FilterComponents(Func<ShipDummyInEditor, ShipComponentTemplateDefinition, bool> filter)
+    {
+        float offset = 0.0f;
+        List<ShipEditorDraggable> compItems = _allShipComponents;
+        bool[] compatible = _allShipComponentsComatibleFlags;
+
+        Toggle tt = ComponentDisplayToggleGroup.GetFirstActiveToggle();
+        FilterTag ftComp = tt.GetComponent<FilterTag>();
+        ShipComponentFilteringTag ft = ftComp.FilteringTag;
+        bool compatibleOnly = ft == ShipComponentFilteringTag.CompatibleOnly;
+
+        int offsetModulus = 1;
+        int j = 0;
+        StackingLayout2D stacking2D;
+        if (ShipCompsScrollViewContent.TryGetComponent<StackingLayout2D>(out stacking2D) && stacking2D.MaxFirstDirection > 0)
+        {
+            offsetModulus = stacking2D.MaxFirstDirection;
+        }
+        float areaWidth = ShipCompsScrollViewContent.rect.width;
+
+        int compatibleIdx = 0, incompatibleIdx = 0;
+
+        // Filter:
+        for (int i = 0; i < compItems.Count; ++i)
+        {
+            compatible[i] = (_currShip.HasValue && filter(_currShip.Value, compItems[i].ShipComponentDef));
+            
+            if (ft == ShipComponentFilteringTag.CompatibleOnly)
+            {
+                compItems[i].gameObject.SetActive(compatible[i]);
+            }
+            else
+            {
+                compItems[i].gameObject.SetActive(true);
+                compItems[i].GetComponent<Button>().interactable = compatible[i];
+            }
+
+            if (!compatible[i])
+            {
+                ++incompatibleIdx;
+            }
+
+            if (!compatibleOnly || compatible[i])
+            {
+                if (j % offsetModulus == 0)
+                {
+                    RectTransform rt = compItems[i].GetComponent<RectTransform>();
+                    float height = rt.rect.height;
+                    offset -= height;
+                }
+                ++j;
+            }
+        }
+
+        // Sort:
+        for (int i = 0; i < compItems.Count; ++i)
+        {
+            if (ft == ShipComponentFilteringTag.CompatibleFirst)
+            {
+                if (compatible[i])
+                {
+                    compItems[i].transform.SetSiblingIndex(compatibleIdx++);
+                }
+                else
+                {
+                    compItems[i].transform.SetSiblingIndex(incompatibleIdx++);
+                }
+            }
+            else
+            {
+                compItems[i].transform.SetSiblingIndex(i);
+            }
+        }
+
+        FitScrollContent(ShipCompsScrollViewContent.GetComponent<RectTransform>(), offset);
+        ShipCompsScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
+    }
+
+    private void PopulateAmmo()
+    {
+        float offset = 0.0f;
+
+        IReadOnlyList<string> gunAmmo = ObjectFactory.GetAllAmmoTypes(true, false);
+        _allAmmoTypes = new List<ShipEditorDraggable>(gunAmmo.Count);
+        for (int i = 0; i < gunAmmo.Count; ++i)
+        {
+            Sprite ammoSprite = ObjectFactory.GetAmmonImage(gunAmmo[i]);
+            if (ammoSprite == null)
+            {
+                continue;
+            }
+
+            RectTransform t = Instantiate(ButtonPrototype);
+            t.gameObject.AddComponent<StackableUIComponent>();
+
+            t.SetParent(AmmoScrollViewContent, false);
+            float height = t.rect.height;
+            //float pivotOffset = (1.0f - t.pivot.y) * height;
+            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            offset -= height;
+
+            TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
+            string ammoKey = gunAmmo[i];
+            textElem.text = gunAmmo[i];
+
+            Image img = t.Find("Image").GetComponent<Image>();
+            img.sprite = ammoSprite;
+
+            ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
+            draggable.ContainingEditor = this;
+            draggable.Item = EditorItemType.Ammo;
+            draggable.AmmoTypeKey = ammoKey;
+            _allAmmoTypes.Add(draggable);
+        }
+
+        IReadOnlyList<string> torpedoAmmo = ObjectFactory.GetAllAmmoTypes(false, true);
+        for (int i = 0; i < gunAmmo.Count; ++i)
+        {
+            Sprite ammoSprite = ObjectFactory.GetTorpedoTypeImage(torpedoAmmo[i]);
+            if (ammoSprite == null)
+            {
+                continue;
+            }
+
+            RectTransform t = Instantiate(ButtonPrototype);
+            t.gameObject.AddComponent<StackableUIComponent>();
+
+            t.SetParent(AmmoScrollViewContent, false);
+            float height = t.rect.height;
+            //float pivotOffset = (1.0f - t.pivot.y) * height;
+            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            offset -= height;
+
+            TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
+            string ammoKey = torpedoAmmo[i];
+            textElem.text = torpedoAmmo[i];
+
+            Image img = t.Find("Image").GetComponent<Image>();
+            img.sprite = ammoSprite;
+
+            ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
+            draggable.ContainingEditor = this;
+            draggable.Item = EditorItemType.Ammo;
+            draggable.AmmoTypeKey = ammoKey;
+            _allAmmoTypes.Add(draggable);
+        }
+
+        _allAmmoTypesComatibleFlags = new bool[_allAmmoTypes.Count];
+
+        FitScrollContent(AmmoScrollViewContent.GetComponent<RectTransform>(), offset);
+    }
+
+    private void FilterAmmo(Func<TurretDefinition, string, bool> filter)
+    {
+        float offset = 0.0f;
+        ShipEditorDraggable[] ammoItems = AmmoScrollViewContent.GetComponentsInChildren<ShipEditorDraggable>(true);
+        for (int i = 0; i < ammoItems.Length; ++i)
+        {
+            if (_currWeapon == null || !filter(_currWeapon, ammoItems[i].AmmoTypeKey))
+            {
+                //weaponItems[i].gameObject.SetActive(false);
+                ammoItems[i].GetComponent<Button>().interactable = false;
+            }
+            else
+            {
+                //weaponItems[i].gameObject.SetActive(true);
+                ammoItems[i].GetComponent<Button>().interactable = true;
+            }
+            RectTransform rt = ammoItems[i].GetComponent<RectTransform>();
+            float height = rt.rect.height;
+            offset -= height;
+        }
+
+        FitScrollContent(AmmoScrollViewContent.GetComponent<RectTransform>(), offset);
+        AmmoScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
     }
 
     private Sprite CombineSpriteTextures(Sprite s1, Sprite s2)
@@ -215,9 +504,98 @@ public class ShipEditor : MonoBehaviour
         return Sprite.Create(res, new Rect(0, 0, res.width, res.height), Vector2.zero);
     }
 
+    public void ForceReFilterComponent()
+    {
+        FilterComponents(ComponentsFilter);
+    }
+
     private void GetTurretDefs()
     {
         _allTurretDefs = ObjectFactory.GetAllTurretTypes().ToArray();
+    }
+
+    private bool WeaponFilter(ShipDummyInEditor shipDef, string weaponType, string weaponSize)
+    {
+        for (int i = 0; i < shipDef.Hardpoints.Count; ++i)
+        {
+            string[] allowedTurrets = shipDef.Hardpoints[i].Item1.AllowedWeaponTypes;
+            if (TryMatchTurretDef(allowedTurrets, weaponType, weaponSize) != null)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool ComponentsFilter(ShipDummyInEditor shipDef, ShipComponentTemplateDefinition comp)
+    {
+        ObjectFactory.ShipSize shipSz, compMinSz, compMaxSz;
+        if (!Enum.TryParse(shipDef.HullDef.ShipSize, out shipSz) ||
+            !Enum.TryParse(comp.MinShipSize, out compMinSz) ||
+            !Enum.TryParse(comp.MaxShipSize, out compMaxSz))
+        {
+            return false;
+        }
+
+        if (shipSz < compMinSz || shipSz > compMaxSz)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < shipDef.HullDef.ComponentSlots.ForeComponentSlots.Length; ++i)
+        {
+            if (comp.AllowedSlotTypes.Contains(shipDef.HullDef.ComponentSlots.ForeComponentSlots[i]))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i < shipDef.HullDef.ComponentSlots.CenterComponentSlots.Length; ++i)
+        {
+            if (comp.AllowedSlotTypes.Contains(shipDef.HullDef.ComponentSlots.CenterComponentSlots[i]))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i < shipDef.HullDef.ComponentSlots.LeftComponentSlots.Length; ++i)
+        {
+            if (comp.AllowedSlotTypes.Contains(shipDef.HullDef.ComponentSlots.LeftComponentSlots[i]))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i < shipDef.HullDef.ComponentSlots.RightComponentSlots.Length; ++i)
+        {
+            if (comp.AllowedSlotTypes.Contains(shipDef.HullDef.ComponentSlots.RightComponentSlots[i]))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i < shipDef.HullDef.ComponentSlots.AftComponentSlots.Length; ++i)
+        {
+            if (comp.AllowedSlotTypes.Contains(shipDef.HullDef.ComponentSlots.AftComponentSlots[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool AmmoFilter(TurretDefinition turretDef, string ammo)
+    {
+        if (turretDef.BehaviorType == ObjectFactory.WeaponBehaviorType.Gun)
+        {
+            Warhead w;
+            return (ObjectFactory.TryCreateWarhead(turretDef.WeaponType, turretDef.WeaponSize, ammo, out w));
+        }
+        else if (turretDef.BehaviorType == ObjectFactory.WeaponBehaviorType.Torpedo)
+        {
+            Warhead w;
+            return (ObjectFactory.TryCreateWarhead(turretDef.WeaponType, ammo, out w));
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private TurretDefinition TryMatchTurretDef(string[] hardpointAllowedSlots, string weaponType, string weaponSize)
@@ -269,39 +647,7 @@ public class ShipEditor : MonoBehaviour
                 break;
             case EditorItemType.Weapon:
                 {
-                    if (_currShip.HasValue)
-                    {
-                        bool drawnPenChard = false;
-                        for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
-                        {
-                            string[] allowedTurrets = _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes;
-                            TurretDefinition turretDef = TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize);
-                            _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(turretDef != null);
-                            if (!drawnPenChard && turretDef != null)
-                            {
-                                switch (turretDef.BehaviorType)
-                                {
-                                    case ObjectFactory.WeaponBehaviorType.Gun:
-                                        SetArmourPenetartionChartGun(item.WeaponKey, item.WeaponSize, "ShapedCharge");
-                                        drawnPenChard = true;
-                                        break;
-                                    case ObjectFactory.WeaponBehaviorType.Torpedo:
-                                    case ObjectFactory.WeaponBehaviorType.BomberTorpedo:
-                                        SetArmourPenetartionChartTorpedo("Heavy");
-                                        drawnPenChard = true;
-                                        break;
-                                    case ObjectFactory.WeaponBehaviorType.Beam:
-                                    case ObjectFactory.WeaponBehaviorType.ContinuousBeam:
-                                    case ObjectFactory.WeaponBehaviorType.Special:
-                                        SetArmourPenetartionChartOther(item.WeaponKey, item.WeaponSize);
-                                        drawnPenChard = true;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                    }
+                    StartDragWeapon(item);
                 }
                 break;
             case EditorItemType.Ammo:
@@ -310,6 +656,29 @@ public class ShipEditor : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    private void StartDragWeapon(ShipEditorDraggable item)
+    {
+        if (_currShip.HasValue)
+        {
+            bool drawnPenChard = false;
+            for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
+            {
+                string[] allowedTurrets = _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes;
+                TurretDefinition turretDef = TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize);
+                _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(turretDef != null);
+                if (turretDef != null)
+                {
+                    _currWeapon = turretDef;
+                    FilterAmmo(AmmoFilter);
+                }
+                if (!drawnPenChard && turretDef != null && _currAmmoType != null)
+                {
+                    drawnPenChard = DrawPenChart(turretDef, _currAmmoType);
+                }
+            }
         }
     }
 
@@ -337,6 +706,53 @@ public class ShipEditor : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    public void ClickItem(ShipEditorDraggable item)
+    {
+        switch (item.Item)
+        {
+            case EditorItemType.ShipComponent:
+                break;
+            case EditorItemType.Weapon:
+                {
+                    StartDragWeapon(item);
+                    Debug.LogFormat("Clicked on weapon {0} {1}", item.WeaponKey, item.WeaponSize);
+                }
+                break;
+            case EditorItemType.Ammo:
+                _currAmmoType = item.AmmoTypeKey;
+                if (_currWeapon != null)
+                {
+                    DrawPenChart(_currWeapon, _currAmmoType);
+                }
+                break;
+            case EditorItemType.TurretMod:
+                break;
+            default:
+                break;
+        }
+    }
+
+    private bool DrawPenChart(TurretDefinition turretDef, string ammoType)
+    {
+        switch (turretDef.BehaviorType)
+        {
+            case ObjectFactory.WeaponBehaviorType.Gun:
+                SetArmourPenetartionChartGun(turretDef.WeaponType, turretDef.WeaponSize, ammoType);
+                return true;
+            case ObjectFactory.WeaponBehaviorType.Torpedo:
+            case ObjectFactory.WeaponBehaviorType.BomberTorpedo:
+                SetArmourPenetartionChartTorpedo(ammoType);
+                return true;
+            case ObjectFactory.WeaponBehaviorType.Beam:
+            case ObjectFactory.WeaponBehaviorType.ContinuousBeam:
+            case ObjectFactory.WeaponBehaviorType.Special:
+                SetArmourPenetartionChartOther(turretDef.WeaponType, turretDef.WeaponSize);
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -425,19 +841,37 @@ public class ShipEditor : MonoBehaviour
         }
     }
 
-    private void SetArmourPenetartionChartGun(string weaponType, string weaponSize, string ammoType)
+    private bool SetArmourPenetartionChartGun(string weaponType, string weaponSize, string ammoType)
     {
-        SetArmourPenetartionChartInner(ObjectFactory.CreateWarhead(weaponType, weaponSize, ammoType));
+        Warhead w;
+        if (ObjectFactory.TryCreateWarhead(weaponType, weaponSize, ammoType, out w))
+        {
+            SetArmourPenetartionChartInner(w);
+            return true;
+        }
+        return false;
     }
 
-    private void SetArmourPenetartionChartTorpedo(string torpedoType)
+    private bool SetArmourPenetartionChartTorpedo(string torpedoType)
     {
-        SetArmourPenetartionChartInner(ObjectFactory.CreateWarhead(torpedoType));
+        Warhead w;
+        if (ObjectFactory.TryCreateWarhead(torpedoType, out w))
+        {
+            SetArmourPenetartionChartInner(w);
+            return true;
+        }
+        return false;
     }
 
-    private void SetArmourPenetartionChartOther(string weaponType, string weaponSize)
+    private bool SetArmourPenetartionChartOther(string weaponType, string weaponSize)
     {
-        SetArmourPenetartionChartInner(ObjectFactory.CreateWarhead(weaponType, weaponSize));
+        Warhead w;
+        if (ObjectFactory.TryCreateWarhead(weaponType, weaponSize, out w))
+        {
+            SetArmourPenetartionChartInner(w);
+            return true;
+        }
+        return false;
     }
 
     private void SetArmourPenetartionChartInner(Warhead w)
@@ -459,6 +893,9 @@ public class ShipEditor : MonoBehaviour
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform WeaponsScrollViewContent;
+    public RectTransform AmmoScrollViewContent;
+    public RectTransform ShipCompsScrollViewContent;
+
     public AreaGraphRenderer PenetrationGraph;
     public RectTransform ButtonPrototype;
     public Transform HardpointMarkerPrototype;
@@ -466,19 +903,45 @@ public class ShipEditor : MonoBehaviour
     public Camera ShipViewCam;
     public RawImage ShipViewBox;
 
+    public ToggleGroup ComponentDisplayToggleGroup;
+
+    [NonSerialized]
     private ShipDummyInEditor? _currShip = null;
-    List<(TurretHardpoint, TurretDefinition, Transform)> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform)>();
+    [NonSerialized]
+    private List<(TurretHardpoint, TurretDefinition, Transform)> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform)>();
+    [NonSerialized]
     private Dictionary<string, ShipDummyInEditor> _shipsCache = new Dictionary<string, ShipDummyInEditor>();
     [NonSerialized]
     private TurretDefinition[] _allTurretDefs;
+    [NonSerialized]
     private RaycastHit[] _raycastBuf = new RaycastHit[100];
+    [NonSerialized]
     private bool _doDrawDebugRaycast = false;
+    [NonSerialized]
     private (Vector3, Vector3) _debugRaycast;
+    [NonSerialized]
+    private List<ShipEditorDraggable> _allShipComponents;
+    [NonSerialized]
+    private bool[] _allShipComponentsComatibleFlags;
+    [NonSerialized]
+    private List<ShipEditorDraggable> _allWeapons;
+    [NonSerialized]
+    private bool[] _allWeaponsComatibleFlags;
+    [NonSerialized]
+    private List<ShipEditorDraggable> _allAmmoTypes;
+    [NonSerialized]
+    private bool[] _allAmmoTypesComatibleFlags;
+
+    [NonSerialized]
+    private string _currAmmoType = null;
+    [NonSerialized]
+    private TurretDefinition _currWeapon = null;
 
     private struct ShipDummyInEditor
     {
         public string Key;
         public Transform ShipModel;
+        public ShipHullDefinition HullDef;
         public List<(TurretHardpoint, Collider, Transform)> Hardpoints;
     }
 
