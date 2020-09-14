@@ -32,8 +32,8 @@ public class ShipEditor : MonoBehaviour
 
             t.SetParent(ShipHullsScrollViewContent, false);
             float height = t.rect.height;
-            //float pivotOffset = (1.0f - t.pivot.y) * height;
-            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            float pivotOffset = t.pivot.x * t.rect.width;
+            t.anchoredPosition = new Vector2(pivotOffset, 0);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -181,12 +181,12 @@ public class ShipEditor : MonoBehaviour
             }
 
             RectTransform t = Instantiate(ButtonPrototype);
-            t.gameObject.AddComponent<StackableUIComponent>(); 
+            t.gameObject.AddComponent<StackableUIComponent>();
 
             t.SetParent(WeaponsScrollViewContent, false);
             float height = t.rect.height;
-            //float pivotOffset = (1.0f - t.pivot.y) * height;
-            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            float pivotOffset = t.pivot.x * t.rect.width;
+            t.anchoredPosition = new Vector2(pivotOffset, 0);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -257,8 +257,8 @@ public class ShipEditor : MonoBehaviour
             }
 
             RectTransform t = Instantiate(ButtonPrototype);
-            t.anchorMin = new Vector2((0f / areaWidth) - t.pivot.x / 3, t.anchorMin.y);
-            t.anchorMax = new Vector2((1f / 3f) - t.pivot.x / 3, t.anchorMax.y);
+            //t.sizeDelta = new Vector2((0f / areaWidth) - t.pivot.x / 3, t.anchorMin.y);
+            //t.anchorMax = new Vector2((1f / 3f) - t.pivot.x / 3, t.anchorMax.y);
             t.gameObject.AddComponent<StackableUIComponent>();
 
             t.SetParent(ShipCompsScrollViewContent, false);
@@ -296,9 +296,17 @@ public class ShipEditor : MonoBehaviour
         List<ShipEditorDraggable> compItems = _allShipComponents;
         bool[] compatible = _allShipComponentsComatibleFlags;
 
-        Toggle tt = ComponentDisplayToggleGroup.GetFirstActiveToggle();
-        FilterTag ftComp = tt.GetComponent<FilterTag>();
-        ShipComponentFilteringTag ft = ftComp.FilteringTag;
+        ShipComponentFilteringTag ft = ShipComponentFilteringTag.All;
+        for (int i = 0; i < ComponentDisplayToggleGroup.Length; i++)
+        {
+            if (ComponentDisplayToggleGroup[i].isOn)
+            {
+                FilterTag ftComp = ComponentDisplayToggleGroup[i].GetComponent<FilterTag>();
+                ft = ftComp.FilteringTag;
+                break;
+            }
+        }
+
         bool compatibleOnly = ft == ShipComponentFilteringTag.CompatibleOnly;
 
         int offsetModulus = 1;
@@ -310,13 +318,12 @@ public class ShipEditor : MonoBehaviour
         }
         float areaWidth = ShipCompsScrollViewContent.rect.width;
 
-        int compatibleIdx = 0, incompatibleIdx = 0;
-
         // Filter:
         for (int i = 0; i < compItems.Count; ++i)
         {
             compatible[i] = (_currShip.HasValue && filter(_currShip.Value, compItems[i].ShipComponentDef));
-            
+
+            compItems[i].GetComponent<Button>().interactable = compatible[i];
             if (ft == ShipComponentFilteringTag.CompatibleOnly)
             {
                 compItems[i].gameObject.SetActive(compatible[i]);
@@ -324,12 +331,6 @@ public class ShipEditor : MonoBehaviour
             else
             {
                 compItems[i].gameObject.SetActive(true);
-                compItems[i].GetComponent<Button>().interactable = compatible[i];
-            }
-
-            if (!compatible[i])
-            {
-                ++incompatibleIdx;
             }
 
             if (!compatibleOnly || compatible[i])
@@ -345,20 +346,27 @@ public class ShipEditor : MonoBehaviour
         }
 
         // Sort:
-        for (int i = 0; i < compItems.Count; ++i)
+        if (ft == ShipComponentFilteringTag.CompatibleFirst)
         {
-            if (ft == ShipComponentFilteringTag.CompatibleFirst)
+            int sortingIdx = 0;
+            for (int i = 0; i < compItems.Count; ++i)
             {
                 if (compatible[i])
                 {
-                    compItems[i].transform.SetSiblingIndex(compatibleIdx++);
-                }
-                else
-                {
-                    compItems[i].transform.SetSiblingIndex(incompatibleIdx++);
+                    compItems[i].transform.SetSiblingIndex(sortingIdx++);
                 }
             }
-            else
+            for (int i = 0; i < compItems.Count; ++i)
+            {
+                if (!compatible[i])
+                {
+                    compItems[i].transform.SetSiblingIndex(sortingIdx++);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < compItems.Count; ++i)
             {
                 compItems[i].transform.SetSiblingIndex(i);
             }
@@ -387,8 +395,8 @@ public class ShipEditor : MonoBehaviour
 
             t.SetParent(AmmoScrollViewContent, false);
             float height = t.rect.height;
-            //float pivotOffset = (1.0f - t.pivot.y) * height;
-            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            float pivotOffset = t.pivot.x * t.rect.width;
+            t.anchoredPosition = new Vector2(pivotOffset, 0);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -419,8 +427,8 @@ public class ShipEditor : MonoBehaviour
 
             t.SetParent(AmmoScrollViewContent, false);
             float height = t.rect.height;
-            //float pivotOffset = (1.0f - t.pivot.y) * height;
-            //t.anchoredPosition = new Vector2(t.anchoredPosition.x, offset + pivotOffset);
+            float pivotOffset = t.pivot.x * t.rect.width;
+            t.anchoredPosition = new Vector2(pivotOffset, 0);
             offset -= height;
 
             TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
@@ -903,7 +911,7 @@ public class ShipEditor : MonoBehaviour
     public Camera ShipViewCam;
     public RawImage ShipViewBox;
 
-    public ToggleGroup ComponentDisplayToggleGroup;
+    public Toggle[] ComponentDisplayToggleGroup;
 
     [NonSerialized]
     private ShipDummyInEditor? _currShip = null;

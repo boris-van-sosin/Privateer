@@ -2162,7 +2162,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1525528658}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.29078013
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3636,7 +3636,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1146534860}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.34354487
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6223,7 +6223,10 @@ MonoBehaviour:
   ImageCam: {fileID: 839739874}
   ShipViewCam: {fileID: 1614639278}
   ShipViewBox: {fileID: 279862913}
-  ComponentDisplayToggleGroup: {fileID: 726548788}
+  ComponentDisplayToggleGroup:
+  - {fileID: 390508932}
+  - {fileID: 1117883601}
+  - {fileID: 1392027150}
 --- !u!1 &1525528657
 GameObject:
   m_ObjectHideFlags: 0
