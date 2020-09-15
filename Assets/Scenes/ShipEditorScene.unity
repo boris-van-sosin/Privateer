@@ -732,11 +732,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e28ed8615a2454cba2bdc381f9398a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LayoutDirection: 2
+  LayoutDirection: 0
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
-  SecondLayoutDirection: 0
+  SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
 --- !u!114 &179410159
@@ -1075,11 +1075,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e28ed8615a2454cba2bdc381f9398a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LayoutDirection: 2
+  LayoutDirection: 0
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
-  SecondLayoutDirection: 0
+  SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
 --- !u!114 &231784598
@@ -2568,7 +2568,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1525528658}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.29078013
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2775,11 +2775,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e28ed8615a2454cba2bdc381f9398a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LayoutDirection: 2
+  LayoutDirection: 0
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
-  SecondLayoutDirection: 0
+  SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
 --- !u!114 &489409138
@@ -2959,11 +2959,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e28ed8615a2454cba2bdc381f9398a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LayoutDirection: 2
+  LayoutDirection: 0
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
-  SecondLayoutDirection: 0
+  SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
 --- !u!114 &495388457
@@ -4146,11 +4146,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e28ed8615a2454cba2bdc381f9398a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LayoutDirection: 2
+  LayoutDirection: 0
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
-  SecondLayoutDirection: 0
+  SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
 --- !u!114 &726876574
@@ -4579,7 +4579,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1146534860}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.34354487
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

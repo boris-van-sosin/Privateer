@@ -1009,10 +1009,11 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             {
                 if (target == shipSecPanel.Value)
                 {
-                    bool success = PlaceComponentInSection(shipSecPanel.Key, comp.ShipComponentDef);
-                    Debug.LogFormat("Dropped {0} into ship {1} section. Placed = {2}", comp.ShipComponentDef.ComponentName, shipSecPanel.Key, success);
-                    if (success)
+                    int placedIdx = PlaceComponentInSection(shipSecPanel.Key, comp.ShipComponentDef);
+                    Debug.LogFormat("Dropped {0} into ship {1} section. Placed = {2}", comp.ShipComponentDef.ComponentName, shipSecPanel.Key, placedIdx >= 0);
+                    if (placedIdx >= 0)
                     {
+                        _currShipCompPlaceholders[shipSecPanel.Key][placedIdx].gameObject.SetActive(false);
                         if (oldIdx < 0)
                         {
                             RectTransform t = Instantiate(PlacedItemPrototype);
@@ -1031,7 +1032,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                         {
                             Debug.LogFormat("Removed component {0} from {1}", comp.ShipComponentDef.ComponentName, oldSec);
                             _currShipComps[oldSec][oldIdx] = null;
+                            _currShipCompPlaceholders[oldSec][oldIdx].gameObject.SetActive(true);
                             comp.transform.SetParent(shipSecPanel.Value.transform, false);
+                        }
+
+                        // Make sure the placeholders are last:
+                        for (int i = 0; i < _currShipCompPlaceholders[shipSecPanel.Key].Count; ++i)
+                        {
+                            _currShipCompPlaceholders[shipSecPanel.Key][i].SetAsLastSibling();
                         }
                     }
                 }
@@ -1057,7 +1065,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         return (Ship.ShipSection.Hidden, -1);
     }
 
-    private bool PlaceComponentInSection(Ship.ShipSection sec, ShipComponentTemplateDefinition comp)
+    private int PlaceComponentInSection(Ship.ShipSection sec, ShipComponentTemplateDefinition comp)
     {
         string[] slotTypes = _currShipComponentSlots[sec];
         List<ShipComponentTemplateDefinition> occupiedSlots = _currShipComps[sec];
@@ -1066,10 +1074,10 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             if (null == occupiedSlots[i] && comp.AllowedSlotTypes.Contains(slotTypes[i]))
             {
                 occupiedSlots[i] = comp;
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     private void RemoveComponent(ShipEditorDraggable comp)
@@ -1082,6 +1090,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             if (oldIdx >= 0)
             {
                 _currShipComps[oldSec][oldIdx] = null;
+                _currShipCompPlaceholders[oldSec][oldIdx].gameObject.SetActive(true);
                 Destroy(comp.gameObject);
             }
         }
@@ -1101,19 +1110,66 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         _shipSectionPanels.Add(Ship.ShipSection.Aft, ShipSectionsPanel.Aft);
         _shipSectionPanels.Add(Ship.ShipSection.Left, ShipSectionsPanel.Left);
         _shipSectionPanels.Add(Ship.ShipSection.Right, ShipSectionsPanel.Right);
+
+        _currShipCompPlaceholders.Add(Ship.ShipSection.Center, new List<RectTransform>());
+        _currShipCompPlaceholders.Add(Ship.ShipSection.Fore, new List<RectTransform>());
+        _currShipCompPlaceholders.Add(Ship.ShipSection.Aft, new List<RectTransform>());
+        _currShipCompPlaceholders.Add(Ship.ShipSection.Left, new List<RectTransform>());
+        _currShipCompPlaceholders.Add(Ship.ShipSection.Right, new List<RectTransform>());
     }
 
     private void SetShipSections(ShipHullDefinition hullDef)
     {
-        foreach (var oldCompSlots in _currShipComps.Values)
+        foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> oldCompSlots in _currShipComps)
         {
-            oldCompSlots.Clear();
+            ShipEditorDropTarget compsPanel;
+            if (_shipSectionPanels.TryGetValue(oldCompSlots.Key, out compsPanel))
+            {
+                ShipEditorDraggable[] componentItems = compsPanel.GetComponentsInChildren<ShipEditorDraggable>();
+                foreach (ShipEditorDraggable comp in componentItems)
+                {
+                    RemoveComponent(comp);
+                }
+            }
+            List<RectTransform> placeholders;
+            if (_currShipCompPlaceholders.TryGetValue(oldCompSlots.Key, out placeholders))
+            {
+                foreach (RectTransform rt in placeholders)
+                {
+                    Destroy(rt.gameObject);
+                }
+                placeholders.Clear();
+            }
+            oldCompSlots.Value.Clear();
         }
         _currShipComponentSlots = hullDef.ComponentSlots.ToDictionary();
         foreach (KeyValuePair<Ship.ShipSection, string[]> sec in _currShipComponentSlots)
         {
             for (int i = 0; i < sec.Value.Length; ++i)
+            {
                 _currShipComps[sec.Key].Add(null);
+                ShipEditorDropTarget compsPanel;
+                if (_shipSectionPanels.TryGetValue(sec.Key, out compsPanel))
+                {
+                    RectTransform t = Instantiate(PlacedItemPrototype);
+                    t.gameObject.AddComponent<StackableUIComponent>();
+                    t.SetParent(compsPanel.transform);
+                    Image img = t.GetComponent<Image>();
+                    if (sec.Value[i] == "ShipSystemCenter")
+                    {
+                        img.color = new Color(0, 1, 0);
+                    }
+                    else if (sec.Value[i] == "ShipSystem")
+                    {
+                        img.color = new Color(0, 0, 1);
+                    }
+                    else if (sec.Value[i] == "Engine")
+                    {
+                        img.color = new Color(1, 0, 1);
+                    }
+                    _currShipCompPlaceholders[sec.Key].Add(t);
+                }
+            }
         }
         _currShipComps[Ship.ShipSection.Hidden].Add(null);
     }
@@ -1163,6 +1219,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     private Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>> _currShipComps = new Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>>();
     [NonSerialized]
     private Dictionary<Ship.ShipSection, string[]> _currShipComponentSlots = new Dictionary<Ship.ShipSection, string[]>();
+    [NonSerialized]
+    private Dictionary<Ship.ShipSection, List<RectTransform>> _currShipCompPlaceholders = new Dictionary<Ship.ShipSection, List<RectTransform>>();
     [NonSerialized]
     private Dictionary<Ship.ShipSection, ShipEditorDropTarget> _shipSectionPanels = new Dictionary<Ship.ShipSection, ShipEditorDropTarget>();
     [NonSerialized]
