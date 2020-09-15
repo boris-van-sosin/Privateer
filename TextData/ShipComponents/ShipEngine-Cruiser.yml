@@ -6,5 +6,5 @@ MaxShipSize: Cruiser
 AllowedSlotTypes:
 - Engine
 ShipEngineDefinition:
-  EnergyPerThrust: 3
-  HeatPerThrust: 3
+  PowerUsage: 3
+  HeatGeneration: 3

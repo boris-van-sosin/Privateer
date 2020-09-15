@@ -508,8 +508,8 @@ public class ExtraArmour : ShipComponentBase
 public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
 {
 
-    public int EnergyPerThrust;
-    public int HeatPerThrust;
+    public int PowerUsage;
+    public int HeatGeneration;
     private bool _active;
 
     public bool ComponentActive
@@ -538,7 +538,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         {
             return true;
         }
-        if (ComponentIsWorking && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerThrust, HeatPerThrust))
+        if (ComponentIsWorking && ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration))
         {
             _active = true;
             OnToggle(true);
@@ -588,15 +588,15 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public override string SpriteKey { get { return "Engine"; } }
 
-    public int EnergyPerTick => EnergyPerThrust;
-    public int HeatPerTick => HeatPerThrust;
+    public int EnergyPerTick => PowerUsage;
+    public int HeatPerTick => HeatGeneration;
 
-    public ShipEngine(int maxHitPoints, int hitPoints, int energyPerThrust, int heatPerThrust, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+    public ShipEngine(int maxHitPoints, int hitPoints, int powerUsage, int heatGeneration, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
         ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
-        EnergyPerThrust = energyPerThrust;
-        HeatPerThrust = heatPerThrust;
+        PowerUsage = powerUsage;
+        HeatGeneration = heatGeneration;
         MinShipSize = minShipSize;
         MaxShipSize = maxShipSize;
     }
@@ -641,8 +641,8 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
 {
 
-    public int EnergyPerPulse;
-    public int HeatPerPulse;
+    public int PowerUsage;
+    public int HeatGeneration;
     private bool _active;
 
     public bool ComponentActive
@@ -662,7 +662,7 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
 
     public void PeriodicAction()
     {
-        if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-EnergyPerPulse, HeatPerPulse))
+        if (ComponentIsWorking && _active && ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration))
         {
             if (!ClampsWorking && OnToggle != null)
             {
@@ -686,15 +686,15 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
 
     public override string SpriteKey { get { return "Electromagentic Clamps"; } }
 
-    public int EnergyPerTick => EnergyPerPulse;
-    public int HeatPerTick => HeatPerPulse;
+    public int EnergyPerTick => PowerUsage;
+    public int HeatPerTick => HeatGeneration;
 
     public ElectromagneticClamps(int maxHitPoints, int hitPoints, int energyPerPulse, int heatPerPulse, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
         ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
-        EnergyPerPulse = energyPerPulse;
-        HeatPerPulse = heatPerPulse;
+        PowerUsage = energyPerPulse;
+        HeatGeneration = heatPerPulse;
         MinShipSize = minShipSize;
         MaxShipSize = maxShipSize;
     }

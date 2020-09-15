@@ -132,8 +132,8 @@ public class ShipComponentTemplateExportHelper : Editor
                 MaxShipSize = ObjectFactory.ShipSize.CapitalShip.ToString(),
                 ElectromagneticClampsDefinition = new ElectromagneticClampsTemplateDefinition()
                 {
-                    EnergyPerPulse = 4,
-                    HeatPerPulse = 0
+                    PowerUsage = 4,
+                    HeatGeneration = 0
                 }
             };
             string yaml = HierarchySerializer.SerializeObject(def);
@@ -224,8 +224,8 @@ public class ShipComponentTemplateExportHelper : Editor
                 MaxShipSize = ObjectFactory.ShipSize.CapitalShip.ToString(),
                 ShipEngineDefinition = new ShipEngineTemplateDefinition()
                 {
-                    EnergyPerThrust = 2,
-                    HeatPerThrust = 2
+                    PowerUsage = 2,
+                    HeatGeneration = 2
                 }
             };
             string yaml = HierarchySerializer.SerializeObject(def);

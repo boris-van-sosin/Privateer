@@ -452,6 +452,25 @@ public static class ObjectFactory
         return false;
     }
 
+    public static (int, int, float) GetWeaponPowerConsumption(string weaponType, string weaponSize)
+    {
+        WeaponProjectileDataEntry projectileWeaponData;
+        WeaponBeamDataEntry beamWeaponData;
+        if (_weapons_projectile.TryGetValue((weaponSize, weaponType), out projectileWeaponData))
+        {
+            return (projectileWeaponData.EnergyToFire, projectileWeaponData.HeatToFire, projectileWeaponData.FiringInterval);
+        }
+        else if (_weapons_beam.TryGetValue((weaponSize, weaponType), out beamWeaponData))
+        {
+            return (beamWeaponData.EnergyToFire, beamWeaponData.HeatToFire, beamWeaponData.FiringInterval);
+        }
+        else if (weaponType == "TorpedoWeapon")
+        {
+            return (_weapons_torpedo.EnergyToFire, _weapons_torpedo.HeatToFire, _weapons_torpedo.FiringInterval);
+        }
+        return (-1, -1, -1);
+    }
+
     public static (int, float, float, Warhead) TorpedoLaunchDataFromTorpedoType(string torpType)
     {
         WarheadDataEntry4 torpData = _torpedoWarheads[torpType];

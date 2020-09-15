@@ -6,5 +6,5 @@ MaxShipSize: CapitalShip
 AllowedSlotTypes:
 - Engine
 ShipEngineDefinition:
-  EnergyPerThrust: 4
-  HeatPerThrust: 4
+  PowerUsage: 4
+  HeatGeneration: 4

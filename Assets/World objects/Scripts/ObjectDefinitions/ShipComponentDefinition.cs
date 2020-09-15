@@ -51,7 +51,7 @@ public class ShipComponentTemplateDefinition
         }
         if (ElectromagneticClampsDefinition != null)
         {
-            return new ElectromagneticClamps(ComponentGlobalMaxHitPoints, ComponentGlobalMaxHitPoints, ElectromagneticClampsDefinition.EnergyPerPulse, ElectromagneticClampsDefinition.HeatPerPulse, minSz, maxSz);
+            return new ElectromagneticClamps(ComponentGlobalMaxHitPoints, ComponentGlobalMaxHitPoints, ElectromagneticClampsDefinition.PowerUsage, ElectromagneticClampsDefinition.HeatGeneration, minSz, maxSz);
         }
         if (ExtraArmourDefinition != null)
         {
@@ -117,8 +117,8 @@ public class DamageControTemplateDefinition
 [Serializable]
 public class ElectromagneticClampsTemplateDefinition
 {
-    public int EnergyPerPulse { get; set; }
-    public int HeatPerPulse { get; set; }
+    public int PowerUsage { get; set; }
+    public int HeatGeneration { get; set; }
 }
 
 [Serializable]
@@ -153,8 +153,8 @@ public class ShieldGeneratorTemplateDefinition
 [Serializable]
 public class ShipEngineTemplateDefinition
 {
-    public int EnergyPerThrust { get; set; }
-    public int HeatPerThrust { get; set; }
+    public int PowerUsage { get; set; }
+    public int HeatGeneration { get; set; }
 }
 
 [Serializable]

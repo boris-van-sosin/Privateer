@@ -899,6 +899,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
                 dummyTurret.transform.rotation = q;
                 _currHardpoints[hardpointIdx] = (hardpoint, turretDef, dummyTurret);
+
+                GetShipQualityStats();
             }
         }
     }
@@ -1041,10 +1043,113 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                         {
                             _currShipCompPlaceholders[shipSecPanel.Key][i].SetAsLastSibling();
                         }
+
+                        GetShipQualityStats();
+
+                        break;
                     }
                 }
             }
         }
+    }
+
+    private void GetShipQualityStats()
+    {
+        int powerCapacity = 0, heatCapacity = 0, powerGeneration = 0, cooling = 0, powerConsumption = 0, heatGeneration = 0, powerWithShield = 0, heatWithShield = 0, powerPerSalvoMain = 0, powerPerSalvoAll = 0, heatPerSalvoMain = 0, heatPerSalvoAll = 0;
+        float powerForSustainedFireMain = 0, powerForSustainedFireAll = 0, heatForSustainedFireMain = 0, heatForSustainedFireAll = 0;
+        foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> existingComps in _currShipComps)
+        {
+            foreach (ShipComponentTemplateDefinition currComp in existingComps.Value)
+            {
+                if (currComp == null)
+                {
+                    continue;
+                }
+
+                if (currComp.CapacitorBankDefinition != null)
+                {
+                    powerCapacity += currComp.CapacitorBankDefinition.PowerCapacity;
+                }
+                else if (currComp.DamageControDefinition != null)
+                {
+                    powerConsumption += currComp.DamageControDefinition.PowerUsage;
+                    heatGeneration += currComp.DamageControDefinition.HeatGeneration;
+                }
+                else if (currComp.ElectromagneticClampsDefinition != null)
+                {
+                    powerConsumption += currComp.ElectromagneticClampsDefinition.PowerUsage;
+                    heatGeneration += currComp.ElectromagneticClampsDefinition.HeatGeneration;
+                }
+                else if (currComp.FireControlGeneralDefinition != null)
+                {
+                    powerConsumption += currComp.FireControlGeneralDefinition.PowerUsage;
+                    heatGeneration += currComp.FireControlGeneralDefinition.HeatGeneration;
+                }
+                else if (currComp.HeatExchangeDefinition != null)
+                {
+                    cooling += currComp.HeatExchangeDefinition.CoolignRate;
+                }
+                else if (currComp.HeatSinkDefinition != null)
+                {
+                    heatCapacity += currComp.HeatSinkDefinition.HeatCapacity;
+                }
+                else if (currComp.PowerPlantDefinition != null)
+                {
+                    powerGeneration += currComp.PowerPlantDefinition.PowerOutput;
+                    heatGeneration += currComp.PowerPlantDefinition.HeatOutput;
+                }
+                else if (currComp.ShieldGeneratorDefinition != null)
+                {
+                    powerConsumption += currComp.ShieldGeneratorDefinition.PowerUsage;
+                    heatGeneration += currComp.ShieldGeneratorDefinition.HeatGeneration;
+                    powerWithShield += currComp.ShieldGeneratorDefinition.PowerPerShieldRegeneration;
+                    heatWithShield += currComp.ShieldGeneratorDefinition.HeatPerShieldRegeneration;
+                }
+                else if (currComp.ShipEngineDefinition != null)
+                {
+                    powerConsumption += currComp.ShipEngineDefinition.PowerUsage;
+                    heatGeneration += currComp.ShipEngineDefinition.HeatGeneration;
+                }
+            }
+        }
+        foreach (var hardpoint in _currHardpoints)
+        {
+            if (hardpoint.Item2 == null)
+            {
+                continue;
+            }
+
+            int powerToFire, heatToFire;
+            float firingInterval;
+            (powerToFire, heatToFire, firingInterval) = ObjectFactory.GetWeaponPowerConsumption(hardpoint.Item2.WeaponType, hardpoint.Item2.WeaponSize);
+            if (powerToFire >= 0)
+            {
+                int numBarrels;
+                if (!int.TryParse(hardpoint.Item2.WeaponNum, out numBarrels))
+                {
+                    numBarrels = 1;
+                }
+                powerToFire *= numBarrels;
+                heatToFire *= numBarrels;
+                float powerSustained = powerToFire / firingInterval, heatSustained = heatToFire / firingInterval;
+
+                powerPerSalvoAll += powerToFire;
+                heatPerSalvoAll += heatToFire;
+                powerForSustainedFireAll += powerSustained;
+                heatForSustainedFireAll += heatSustained;
+
+                if (hardpoint.Item1.WeaponAIHint == TurretAIHint.Main)
+                {
+                    powerPerSalvoMain += powerToFire;
+                    heatPerSalvoMain += heatToFire;
+                    powerForSustainedFireMain += powerSustained;
+                    heatForSustainedFireMain += heatSustained;
+                }
+            }
+        }
+        Debug.LogFormat("Ship stats: Power capacity: {0} Heat capacity: {1} Power generation: {2}/sec, Power consumption: {3}/sec Cooling: {4}/sec Heat generation: {5}/sec Power per salvo: main: {6} all: {7} Heat per salvo: main: {8} all: {9} Power for sustained fire: main: {10} all: {11} heat for sustained fire: main: {12} all: {13}",
+                        powerCapacity, heatCapacity, powerGeneration * 4, (powerConsumption + powerWithShield) * 4, cooling * 4, (heatGeneration + heatWithShield) * 4,
+                        powerPerSalvoMain, powerPerSalvoAll, heatPerSalvoMain, heatPerSalvoAll, powerForSustainedFireMain, powerForSustainedFireAll, heatForSustainedFireMain, heatForSustainedFireAll);
     }
 
     private (Ship.ShipSection, int) FindOldComLocation(ShipEditorDraggable comp)

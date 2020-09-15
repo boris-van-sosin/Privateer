@@ -6,5 +6,5 @@ MaxShipSize: CapitalShip
 AllowedSlotTypes:
 - Hidden 
 ElectromagneticClampsDefinition:
-  EnergyPerPulse: 4
-  HeatPerPulse: 0 
+  PowerUsage: 4
+  HeatGeneration: 0 
