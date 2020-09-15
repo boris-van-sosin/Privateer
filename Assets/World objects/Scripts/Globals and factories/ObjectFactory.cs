@@ -770,6 +770,7 @@ public static class ObjectFactory
 
         TurretMountDataEntry md = _weaponMounts[turretDef.TurretType];
         resTurret.GlobalMaxHitpoints = md.HitPoints;
+        //resTurret.MaxHitpoints = md.HitPoints;
         resTurret.ComponentHitPoints = md.HitPoints;
         resTurret.RotationSpeed = md.RotationSpeed;
         resTurret.ComponentHitPoints = resTurret.ComponentGlobalMaxHitPoints;

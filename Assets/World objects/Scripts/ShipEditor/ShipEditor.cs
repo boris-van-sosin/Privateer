@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class ShipEditor : MonoBehaviour
+public class ShipEditor : MonoBehaviour, IDropHandler
 {
     // Start is called before the first frame update
     void Start()
@@ -19,10 +19,14 @@ public class ShipEditor : MonoBehaviour
         FilterWeapons(null);
         FilterComponents(null);
         FilterAmmo(null);
+        InitShipSections();
     }
 
     private void PopulateHulls()
     {
+        StackingLayout stackingBehavior = ShipHullsScrollViewContent.GetComponent<StackingLayout>();
+        stackingBehavior.AutoRefresh = false;
+
         ShipHullDefinition[] hulls = ObjectFactory.GetAllShipHulls().ToArray();
         float offset = 0.0f;
         for (int i = 0; i < hulls.Length; ++i)
@@ -62,6 +66,7 @@ public class ShipEditor : MonoBehaviour
         }
 
         FitScrollContent(ShipHullsScrollViewContent.GetComponent<RectTransform>(), offset);
+        stackingBehavior.AutoRefresh = true;
     }
 
     private void FitScrollContent(RectTransform contentRect, float offset)
@@ -118,7 +123,7 @@ public class ShipEditor : MonoBehaviour
             {
                 s.Hardpoints[i].Item3.gameObject.SetActive(false);
             }
-            ShipPhotoUtil.PositionCameraToObject(ShipViewCam, s.ShipModel, 1.2f);
+            ShipPhotoUtil.PositionCameraToObject(ShipViewCam, s.ShipModel, 1.05f);
             for (int i = 0; i < s.Hardpoints.Count; ++i)
             {
                 s.Hardpoints[i].Item3.gameObject.SetActive(true);
@@ -133,6 +138,7 @@ public class ShipEditor : MonoBehaviour
         {
             _currHardpoints.Add((s.Hardpoints[i].Item1, null, null));
         }
+        SetShipSections(s.HullDef);
 
         _currShip = s;
 
@@ -167,6 +173,9 @@ public class ShipEditor : MonoBehaviour
 
     private void PopulateWeapons()
     {
+        StackingLayout stackingBehavior = WeaponsScrollViewContent.GetComponent<StackingLayout>();
+        stackingBehavior.AutoRefresh = false;
+
         IReadOnlyList<(string, string)> weapons = ObjectFactory.GetAllWeaponTypesAndSizes();
         _allWeapons = new List<ShipEditorDraggable>(weapons.Count);
         float offset = 0.0f;
@@ -209,12 +218,14 @@ public class ShipEditor : MonoBehaviour
             draggable.Item = EditorItemType.Weapon;
             draggable.WeaponSize = weaponSizeKey;
             draggable.WeaponKey = weaponKey;
+            draggable.CurrentLocation = EditorItemLocation.Production;
             _allWeapons.Add(draggable);
         }
 
         _allWeaponsComatibleFlags = new bool[_allWeapons.Count];
 
         FitScrollContent(WeaponsScrollViewContent.GetComponent<RectTransform>(), offset);
+        stackingBehavior.AutoRefresh = true;
     }
 
     private void FilterWeapons(Func<ShipDummyInEditor, string, string, bool> filter)
@@ -242,6 +253,9 @@ public class ShipEditor : MonoBehaviour
 
     private void PopulateShipComps()
     {
+        StackingLayout stackingBehavior = ShipCompsScrollViewContent.GetComponent<StackingLayout>();
+        stackingBehavior.AutoRefresh = false;
+
         IReadOnlyCollection<ShipComponentTemplateDefinition> allComps = ObjectFactory.GetAllShipComponents();
         _allShipComponents = new List<ShipEditorDraggable>(allComps.Count);
         float offset = 0.0f;
@@ -288,6 +302,7 @@ public class ShipEditor : MonoBehaviour
             draggable.ContainingEditor = this;
             draggable.Item = EditorItemType.ShipComponent;
             draggable.ShipComponentDef = comp;
+            draggable.CurrentLocation = EditorItemLocation.Production;
             _allShipComponents.Add(draggable);
             ++i;
         }
@@ -295,6 +310,7 @@ public class ShipEditor : MonoBehaviour
         _allShipComponentsComatibleFlags = new bool[_allShipComponents.Count];
 
         FitScrollContent(ShipCompsScrollViewContent.GetComponent<RectTransform>(), offset);
+        stackingBehavior.AutoRefresh = true;
     }
 
     private void FilterComponents(Func<ShipDummyInEditor, ShipComponentTemplateDefinition, bool> filter)
@@ -314,7 +330,7 @@ public class ShipEditor : MonoBehaviour
             }
         }
 
-        FilterAndSortInner(ShipCompsScrollViewContent, x => (_currShip.HasValue && filter(_currShip.Value, x.ShipComponentDef)), compItems, compatible, ft, out offset);
+        FilterAndSortInner(ShipCompsScrollViewContent, x => _currShip.HasValue && x.CurrentLocation != EditorItemLocation.Ship && filter(_currShip.Value, x.ShipComponentDef), compItems, compatible, ft, out offset);
 
         FitScrollContent(ShipCompsScrollViewContent.GetComponent<RectTransform>(), offset);
         ShipCompsScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
@@ -322,6 +338,9 @@ public class ShipEditor : MonoBehaviour
 
     private void PopulateAmmo()
     {
+        StackingLayout stackingBehavior = AmmoScrollViewContent.GetComponent<StackingLayout>();
+        stackingBehavior.AutoRefresh = false;
+
         float offset = 0.0f;
 
         IReadOnlyList<string> gunAmmo = ObjectFactory.GetAllAmmoTypes(true, false);
@@ -392,6 +411,7 @@ public class ShipEditor : MonoBehaviour
         _allAmmoTypesComatibleFlags = new bool[_allAmmoTypes.Count];
 
         FitScrollContent(AmmoScrollViewContent.GetComponent<RectTransform>(), offset);
+        stackingBehavior.AutoRefresh = true;
     }
 
     private void FilterAmmo(Func<TurretDefinition, string, bool> filter)
@@ -776,6 +796,26 @@ public class ShipEditor : MonoBehaviour
         }
     }
 
+    public void DropItem(ShipEditorDraggable item, ShipEditorDropTarget dropTarget, PointerEventData eventData)
+    {
+        switch (item.Item)
+        {
+            case EditorItemType.ShipComponent:
+                {
+                    PlaceComponent(item, dropTarget);
+                }
+                break;
+            case EditorItemType.Weapon:
+                break;
+            case EditorItemType.Ammo:
+                break;
+            case EditorItemType.TurretMod:
+                break;
+            default:
+                break;
+        }
+    }
+
     public void ClickItem(ShipEditorDraggable item)
     {
         switch (item.Item)
@@ -957,6 +997,140 @@ public class ShipEditor : MonoBehaviour
         PenetrationGraph.RequireUpdate();
     }
 
+    private void PlaceComponent(ShipEditorDraggable comp, ShipEditorDropTarget target)
+    {
+        if (comp.Item == EditorItemType.ShipComponent)
+        {
+            Ship.ShipSection oldSec;
+            int oldIdx;
+            (oldSec, oldIdx) = FindOldComLocation(comp);
+
+            foreach (KeyValuePair<Ship.ShipSection, ShipEditorDropTarget> shipSecPanel in _shipSectionPanels)
+            {
+                if (target == shipSecPanel.Value)
+                {
+                    bool success = PlaceComponentInSection(shipSecPanel.Key, comp.ShipComponentDef);
+                    Debug.LogFormat("Dropped {0} into ship {1} section. Placed = {2}", comp.ShipComponentDef.ComponentName, shipSecPanel.Key, success);
+                    if (success)
+                    {
+                        if (oldIdx < 0)
+                        {
+                            RectTransform t = Instantiate(PlacedItemPrototype);
+                            t.gameObject.AddComponent<StackableUIComponent>();
+                            t.SetParent(shipSecPanel.Value.transform);
+
+                            ShipEditorDraggable placedComp = t.gameObject.AddComponent<ShipEditorDraggable>();
+                            placedComp.ContainingEditor = this;
+                            placedComp.ShipComponentDef = comp.ShipComponentDef;
+                            placedComp.CurrentLocation = EditorItemLocation.Ship;
+
+                            Image img = t.Find("Image").GetComponent<Image>();
+                            img.sprite = ObjectFactory.GetShipComponentImage(comp.ShipComponentDef.ComponentType);
+                        }
+                        else
+                        {
+                            Debug.LogFormat("Removed component {0} from {1}", comp.ShipComponentDef.ComponentName, oldSec);
+                            _currShipComps[oldSec][oldIdx] = null;
+                            comp.transform.SetParent(shipSecPanel.Value.transform, false);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private (Ship.ShipSection, int) FindOldComLocation(ShipEditorDraggable comp)
+    {
+        if (comp.CurrentLocation == EditorItemLocation.Ship)
+        {
+            foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> existingComps in _currShipComps)
+            {
+                for (int i = 0; i < existingComps.Value.Count; i++)
+                {
+                    if (existingComps.Value[i] == comp.ShipComponentDef)
+                    {
+                        return (existingComps.Key, i);
+                    }
+                }
+            }
+        }
+        return (Ship.ShipSection.Hidden, -1);
+    }
+
+    private bool PlaceComponentInSection(Ship.ShipSection sec, ShipComponentTemplateDefinition comp)
+    {
+        string[] slotTypes = _currShipComponentSlots[sec];
+        List<ShipComponentTemplateDefinition> occupiedSlots = _currShipComps[sec];
+        for (int i = 0; i < slotTypes.Length; ++i)
+        {
+            if (null == occupiedSlots[i] && comp.AllowedSlotTypes.Contains(slotTypes[i]))
+            {
+                occupiedSlots[i] = comp;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void RemoveComponent(ShipEditorDraggable comp)
+    {
+        if (comp.Item == EditorItemType.ShipComponent)
+        {
+            Ship.ShipSection oldSec;
+            int oldIdx;
+            (oldSec, oldIdx) = FindOldComLocation(comp);
+            if (oldIdx >= 0)
+            {
+                _currShipComps[oldSec][oldIdx] = null;
+                Destroy(comp.gameObject);
+            }
+        }
+    }
+
+    private void InitShipSections()
+    {
+        _currShipComps.Add(Ship.ShipSection.Center, new List<ShipComponentTemplateDefinition>());
+        _currShipComps.Add(Ship.ShipSection.Fore, new List<ShipComponentTemplateDefinition>());
+        _currShipComps.Add(Ship.ShipSection.Aft, new List<ShipComponentTemplateDefinition>());
+        _currShipComps.Add(Ship.ShipSection.Left, new List<ShipComponentTemplateDefinition>());
+        _currShipComps.Add(Ship.ShipSection.Right, new List<ShipComponentTemplateDefinition>());
+        _currShipComps.Add(Ship.ShipSection.Hidden, new List<ShipComponentTemplateDefinition>());
+
+        _shipSectionPanels.Add(Ship.ShipSection.Center, ShipSectionsPanel.Center);
+        _shipSectionPanels.Add(Ship.ShipSection.Fore, ShipSectionsPanel.Fore);
+        _shipSectionPanels.Add(Ship.ShipSection.Aft, ShipSectionsPanel.Aft);
+        _shipSectionPanels.Add(Ship.ShipSection.Left, ShipSectionsPanel.Left);
+        _shipSectionPanels.Add(Ship.ShipSection.Right, ShipSectionsPanel.Right);
+    }
+
+    private void SetShipSections(ShipHullDefinition hullDef)
+    {
+        foreach (var oldCompSlots in _currShipComps.Values)
+        {
+            oldCompSlots.Clear();
+        }
+        _currShipComponentSlots = hullDef.ComponentSlots.ToDictionary();
+        foreach (KeyValuePair<Ship.ShipSection, string[]> sec in _currShipComponentSlots)
+        {
+            for (int i = 0; i < sec.Value.Length; ++i)
+                _currShipComps[sec.Key].Add(null);
+        }
+        _currShipComps[Ship.ShipSection.Hidden].Add(null);
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        ShipEditorDraggable droppedItem;
+        if (null != eventData.selectedObject && null != (droppedItem = eventData.selectedObject.GetComponent<ShipEditorDraggable>()))
+        {
+            if (droppedItem.ShipComponentDef != null)
+            {
+                Debug.LogFormat("Dropped {0} in an empty space", droppedItem.ShipComponentDef.ComponentName);
+                RemoveComponent(droppedItem);
+            }
+        }
+    }
+
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform WeaponsScrollViewContent;
@@ -965,10 +1139,13 @@ public class ShipEditor : MonoBehaviour
 
     public AreaGraphRenderer PenetrationGraph;
     public RectTransform ButtonPrototype;
+    public RectTransform PlacedItemPrototype;
     public Transform HardpointMarkerPrototype;
     public Camera ImageCam;
     public Camera ShipViewCam;
     public RawImage ShipViewBox;
+
+    public ShipEditorShipSectionsPanel ShipSectionsPanel;
 
     public Toggle[] ComponentDisplayToggleGroup;
     public Toggle[] WeaponsDisplayToggleGroup;
@@ -982,6 +1159,12 @@ public class ShipEditor : MonoBehaviour
     private ShipDummyInEditor? _currShip = null;
     [NonSerialized]
     private List<(TurretHardpoint, TurretDefinition, Transform)> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform)>();
+    [NonSerialized]
+    private Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>> _currShipComps = new Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>>();
+    [NonSerialized]
+    private Dictionary<Ship.ShipSection, string[]> _currShipComponentSlots = new Dictionary<Ship.ShipSection, string[]>();
+    [NonSerialized]
+    private Dictionary<Ship.ShipSection, ShipEditorDropTarget> _shipSectionPanels = new Dictionary<Ship.ShipSection, ShipEditorDropTarget>();
     [NonSerialized]
     private Dictionary<string, ShipDummyInEditor> _shipsCache = new Dictionary<string, ShipDummyInEditor>();
     [NonSerialized]
@@ -1019,4 +1202,16 @@ public class ShipEditor : MonoBehaviour
     }
 
     public enum EditorItemType { ShipComponent, Weapon, Ammo, TurretMod }
+
+    public enum EditorItemLocation { Production, Inventory, Ship }
+
+    [Serializable]
+    public struct ShipEditorShipSectionsPanel
+    {
+        public ShipEditorDropTarget Center;
+        public ShipEditorDropTarget Fore;
+        public ShipEditorDropTarget Aft;
+        public ShipEditorDropTarget Left;
+        public ShipEditorDropTarget Right;
+    }
 }

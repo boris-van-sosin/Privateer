@@ -304,6 +304,17 @@ public class ComponentSlotsData
         s.LeftComponentSlots = Array.ConvertAll(LeftComponentSlots, x => x);
         s.RightComponentSlots = Array.ConvertAll(RightComponentSlots, x => x);
     }
+
+    public Dictionary<Ship.ShipSection, string[]> ToDictionary()
+    {
+        Dictionary<Ship.ShipSection, string[]> res = new Dictionary<Ship.ShipSection, string[]>();
+        res.Add(Ship.ShipSection.Center, CenterComponentSlots);
+        res.Add(Ship.ShipSection.Fore, ForeComponentSlots);
+        res.Add(Ship.ShipSection.Aft, AftComponentSlots);
+        res.Add(Ship.ShipSection.Left, LeftComponentSlots);
+        res.Add(Ship.ShipSection.Right, RightComponentSlots);
+        return res;
+    }
 }
 
 [Serializable]

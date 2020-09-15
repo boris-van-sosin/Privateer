@@ -5,6 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(RectTransform))]
 public class StackingLayout : MonoBehaviour
 {
+    private void Awake()
+    {
+        AutoRefresh = true;
+    }
+
     void Start()
     {
         _rt = GetComponent<RectTransform>();
@@ -13,7 +18,10 @@ public class StackingLayout : MonoBehaviour
 
     void OnTransformChildrenChanged()
     {
-        ForceRefresh();
+        if (AutoRefresh)
+        {
+            ForceRefresh();
+        }
     }
 
     protected virtual void GeometryChanged()
@@ -99,7 +107,10 @@ public class StackingLayout : MonoBehaviour
 
     protected void OnRectTransformDimensionsChange()
     {
-        GeometryChanged();
+        if (AutoRefresh)
+        {
+            ForceRefresh();
+        }
     }
 
     public void ForceRefresh()
@@ -116,6 +127,8 @@ public class StackingLayout : MonoBehaviour
         }
         GeometryChanged();
     }
+
+    public bool AutoRefresh { get; set; }
 
     protected List<StackableUIComponent> _childElements = new List<StackableUIComponent>();
     public StackingDirection LayoutDirection;

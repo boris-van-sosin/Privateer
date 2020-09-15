@@ -22,9 +22,13 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
         {
             TargetGraphic.color = selected ? SelectedColor : DeSelectedColor;
         }
-        if (TargetObject != null)
+        if (TargetObjects != null)
         {
-            TargetObject.gameObject.SetActive(selected);
+            for (int i = 0; i < TargetObjects.Length; ++i)
+            {
+                TargetObjects[i].gameObject.SetActive(selected);
+            }
+            
         }
     }
 
@@ -32,5 +36,5 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
     public Graphic TargetGraphic;
     public Color SelectedColor;
     public Color DeSelectedColor;
-    public RectTransform TargetObject;
+    public RectTransform[] TargetObjects;
 }

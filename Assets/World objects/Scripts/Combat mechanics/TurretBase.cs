@@ -15,7 +15,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public virtual void Init(string turretSlotType)
     {
         SlotType = turretSlotType;
-        ComponentHitPoints = ComponentGlobalMaxHitPoints;
+        ComponentHitPoints = ComponentMaxHitPoints = ComponentGlobalMaxHitPoints;
         ParseMuzzles();
         AlternatingFire = DefaultAlternatingFire;
         _allowedSlotTypes = new string[] { turretSlotType };

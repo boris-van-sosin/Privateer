@@ -52,7 +52,7 @@ public class WeaponControlGroupCfgPanel : MonoBehaviour
 
     public WeaponsConfigCompiled Compile()
     {
-        WeaponsConfigCompiled res = new WeaponsConfigCompiled() { WeaponGroups = new Dictionary<int, Tuple<IEnumerable<string>, bool>>() };
+        WeaponsConfigCompiled res = new WeaponsConfigCompiled() { WeaponGroups = new Dictionary<int, Tuple<List<string>, bool>>() };
 
         WeaponCtrlCfgLine footerCfg = Footer.GetComponent<WeaponCtrlCfgLine>();
         for (int i = 0; i < 6; ++i)
@@ -70,7 +70,7 @@ public class WeaponControlGroupCfgPanel : MonoBehaviour
                     }
                 }
             }
-            res.WeaponGroups[i + 1] = new Tuple<IEnumerable<string>, bool>(hardpointsInGroup, footerCfg.WeaponGroupCheckboxes[i]);
+            res.WeaponGroups[i + 1] = new Tuple<List<string>, bool>(hardpointsInGroup, footerCfg.WeaponGroupCheckboxes[i]);
         }
 
         return res;
@@ -80,8 +80,9 @@ public class WeaponControlGroupCfgPanel : MonoBehaviour
     public RectTransform Footer;
     public Ship AttachedShip { get; set; }
 
+    [Serializable]
     public struct WeaponsConfigCompiled
     {
-        public Dictionary<int, Tuple<IEnumerable<string>, bool>> WeaponGroups;
+        public Dictionary<int, Tuple<List<string>, bool>> WeaponGroups;
     }
 }

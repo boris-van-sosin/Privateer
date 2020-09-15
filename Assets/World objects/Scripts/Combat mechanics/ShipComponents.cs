@@ -86,7 +86,7 @@ public class PowerPlant : ShipActiveComponentBase, IPeriodicActionComponent
 
     public PowerPlant(int maxHitPoints, int hitPoints, int powerOutput, int headOutput, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
         PowerOutput = powerOutput;
         HeatOutput = headOutput;
@@ -288,7 +288,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
                            int powerToRestart, int heatToRestart, float restartDelay,
                            ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
         MaxShieldPoints = maxShieldPoints;
         CurrShieldPoints = shieldPoints;
@@ -381,7 +381,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
             while (systemPointRegenLeft > 0)
             {
                 (int, bool) repairRes = _containingShip.RepairComponents(systemPointRegenLeft);
-                if (repairRes.Item2)
+                if (!repairRes.Item2)
                 {
                     break;
                 }
@@ -408,7 +408,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
                              float timeOutOfCombatToRepair,
                              ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
         HullMaxHitPointRegeneration = hullHitPointRegen;
         ArmourMaxPointRegeneration = armourPointRegen;
@@ -593,7 +593,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public ShipEngine(int maxHitPoints, int hitPoints, int energyPerThrust, int heatPerThrust, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
         EnergyPerThrust = energyPerThrust;
         HeatPerThrust = heatPerThrust;
@@ -691,7 +691,7 @@ public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledCompon
 
     public ElectromagneticClamps(int maxHitPoints, int hitPoints, int energyPerPulse, int heatPerPulse, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
         EnergyPerPulse = energyPerPulse;
         HeatPerPulse = heatPerPulse;
@@ -808,7 +808,7 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
 
     public FireControlGeneral(int maxHitPoints, int hitPoints, float weaponAccuracyFactor, int powerUsage, int heatGeneration, ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
     {
-        ComponentGlobalMaxHitPoints = maxHitPoints;
+        ComponentMaxHitPoints = ComponentGlobalMaxHitPoints = maxHitPoints;
         ComponentHitPoints = hitPoints;
         _activeBuff = new DynamicBuff()
         {

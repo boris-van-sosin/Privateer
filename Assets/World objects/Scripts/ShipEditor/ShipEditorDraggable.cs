@@ -27,6 +27,7 @@ public class ShipEditorDraggable : MonoBehaviour, IBeginDragHandler, IEndDragHan
 
     public ShipEditor ContainingEditor { get; set; }
     public ShipEditor.EditorItemType Item { get; set; }
+    public ShipEditor.EditorItemLocation CurrentLocation { get; set; }
     public string WeaponSize { get; set; }
     public string WeaponKey { get; set; }
     public ShipComponentTemplateDefinition ShipComponentDef { get; set; }
