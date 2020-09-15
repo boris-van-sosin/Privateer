@@ -89,7 +89,7 @@ public class ShipEditor : MonoBehaviour
         {
             for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
             {
-                _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(false);
+                _currShip.Value.Hardpoints[i].Item3.enabled = false;
             }
             _currShip.Value.ShipModel.gameObject.SetActive(false);
             if (_currShip.Value.Key != key)
@@ -114,7 +114,15 @@ public class ShipEditor : MonoBehaviour
         if (_shipsCache.TryGetValue(key, out s))
         {
             s.ShipModel.gameObject.SetActive(true);
+            for (int i = 0; i < s.Hardpoints.Count; ++i)
+            {
+                s.Hardpoints[i].Item3.gameObject.SetActive(false);
+            }
             ShipPhotoUtil.PositionCameraToObject(ShipViewCam, s.ShipModel, 1.2f);
+            for (int i = 0; i < s.Hardpoints.Count; ++i)
+            {
+                s.Hardpoints[i].Item3.gameObject.SetActive(true);
+            }
         }
         else
         {
@@ -142,7 +150,7 @@ public class ShipEditor : MonoBehaviour
         Sprite shipPhoto = ObjectFactory.GetObjectPhoto(s, true, ImageCam);
         s.position = Vector3.zero;
         TurretHardpoint[] hardpoints = s.GetComponentsInChildren<TurretHardpoint>();
-        List<(TurretHardpoint, Collider, Transform)> editorHardpoints = new List<(TurretHardpoint, Collider, Transform)>(hardpoints.Length);
+        List<(TurretHardpoint, Collider, MeshRenderer)> editorHardpoints = new List<(TurretHardpoint, Collider, MeshRenderer)>(hardpoints.Length);
         for (int i = 0; i < hardpoints.Length; ++i)
         {
             GameObject hardpointObj = hardpoints[i].gameObject;
@@ -150,8 +158,9 @@ public class ShipEditor : MonoBehaviour
             marker.transform.parent = hardpointObj.transform;
             marker.transform.localPosition = Vector3.zero;
             Collider coll = marker.GetComponent<Collider>();
-            editorHardpoints.Add((hardpoints[i], coll, marker));
-            marker.gameObject.SetActive(false);
+            MeshRenderer mr = marker.GetComponent<MeshRenderer>();
+            editorHardpoints.Add((hardpoints[i], coll, mr));
+            mr.enabled = false;
         }
         return (new ShipDummyInEditor() { Key = key, ShipModel = s, Hardpoints = editorHardpoints }, shipPhoto);
     }
@@ -211,23 +220,21 @@ public class ShipEditor : MonoBehaviour
     private void FilterWeapons(Func<ShipDummyInEditor, string, string, bool> filter)
     {
         float offset = 0.0f;
-        ShipEditorDraggable[] weaponItems = WeaponsScrollViewContent.GetComponentsInChildren<ShipEditorDraggable>(true);
-        for (int i = 0; i < weaponItems.Length; ++i)
+        List<ShipEditorDraggable> compItems = _allWeapons;
+        bool[] compatible = _allWeaponsComatibleFlags;
+
+        ShipComponentFilteringTag ft = ShipComponentFilteringTag.All;
+        for (int i = 0; i < WeaponsDisplayToggleGroup.Length; i++)
         {
-            if (!_currShip.HasValue || !filter(_currShip.Value, weaponItems[i].WeaponKey, weaponItems[i].WeaponSize))
+            if (WeaponsDisplayToggleGroup[i].isOn)
             {
-                //weaponItems[i].gameObject.SetActive(false);
-                weaponItems[i].GetComponent<Button>().interactable = false;
+                FilterTag ftComp = WeaponsDisplayToggleGroup[i].GetComponent<FilterTag>();
+                ft = ftComp.FilteringTag;
+                break;
             }
-            else
-            {
-                //weaponItems[i].gameObject.SetActive(true);
-                weaponItems[i].GetComponent<Button>().interactable = true;
-            }
-            RectTransform rt = weaponItems[i].GetComponent<RectTransform>();
-            float height = rt.rect.height;
-            offset -= height;
         }
+
+        FilterAndSortInner(WeaponsScrollViewContent, x => (_currShip.HasValue && filter(_currShip.Value, x.WeaponKey, x.WeaponSize)), compItems, compatible, ft, out offset);
 
         FitScrollContent(WeaponsScrollViewContent.GetComponent<RectTransform>(), offset);
         WeaponsScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
@@ -292,7 +299,7 @@ public class ShipEditor : MonoBehaviour
 
     private void FilterComponents(Func<ShipDummyInEditor, ShipComponentTemplateDefinition, bool> filter)
     {
-        float offset = 0.0f;
+        float offset ;
         List<ShipEditorDraggable> compItems = _allShipComponents;
         bool[] compatible = _allShipComponentsComatibleFlags;
 
@@ -307,70 +314,7 @@ public class ShipEditor : MonoBehaviour
             }
         }
 
-        bool compatibleOnly = ft == ShipComponentFilteringTag.CompatibleOnly;
-
-        int offsetModulus = 1;
-        int j = 0;
-        StackingLayout2D stacking2D;
-        if (ShipCompsScrollViewContent.TryGetComponent<StackingLayout2D>(out stacking2D) && stacking2D.MaxFirstDirection > 0)
-        {
-            offsetModulus = stacking2D.MaxFirstDirection;
-        }
-        float areaWidth = ShipCompsScrollViewContent.rect.width;
-
-        // Filter:
-        for (int i = 0; i < compItems.Count; ++i)
-        {
-            compatible[i] = (_currShip.HasValue && filter(_currShip.Value, compItems[i].ShipComponentDef));
-
-            compItems[i].GetComponent<Button>().interactable = compatible[i];
-            if (ft == ShipComponentFilteringTag.CompatibleOnly)
-            {
-                compItems[i].gameObject.SetActive(compatible[i]);
-            }
-            else
-            {
-                compItems[i].gameObject.SetActive(true);
-            }
-
-            if (!compatibleOnly || compatible[i])
-            {
-                if (j % offsetModulus == 0)
-                {
-                    RectTransform rt = compItems[i].GetComponent<RectTransform>();
-                    float height = rt.rect.height;
-                    offset -= height;
-                }
-                ++j;
-            }
-        }
-
-        // Sort:
-        if (ft == ShipComponentFilteringTag.CompatibleFirst)
-        {
-            int sortingIdx = 0;
-            for (int i = 0; i < compItems.Count; ++i)
-            {
-                if (compatible[i])
-                {
-                    compItems[i].transform.SetSiblingIndex(sortingIdx++);
-                }
-            }
-            for (int i = 0; i < compItems.Count; ++i)
-            {
-                if (!compatible[i])
-                {
-                    compItems[i].transform.SetSiblingIndex(sortingIdx++);
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < compItems.Count; ++i)
-            {
-                compItems[i].transform.SetSiblingIndex(i);
-            }
-        }
+        FilterAndSortInner(ShipCompsScrollViewContent, x => (_currShip.HasValue && filter(_currShip.Value, x.ShipComponentDef)), compItems, compatible, ft, out offset);
 
         FitScrollContent(ShipCompsScrollViewContent.GetComponent<RectTransform>(), offset);
         ShipCompsScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
@@ -452,24 +396,22 @@ public class ShipEditor : MonoBehaviour
 
     private void FilterAmmo(Func<TurretDefinition, string, bool> filter)
     {
-        float offset = 0.0f;
-        ShipEditorDraggable[] ammoItems = AmmoScrollViewContent.GetComponentsInChildren<ShipEditorDraggable>(true);
-        for (int i = 0; i < ammoItems.Length; ++i)
+        float offset;
+        List<ShipEditorDraggable> compItems = _allAmmoTypes;
+        bool[] compatible = _allAmmoTypesComatibleFlags;
+
+        ShipComponentFilteringTag ft = ShipComponentFilteringTag.All;
+        for (int i = 0; i < WeaponsDisplayToggleGroup.Length; i++)
         {
-            if (_currWeapon == null || !filter(_currWeapon, ammoItems[i].AmmoTypeKey))
+            if (WeaponsDisplayToggleGroup[i].isOn)
             {
-                //weaponItems[i].gameObject.SetActive(false);
-                ammoItems[i].GetComponent<Button>().interactable = false;
+                FilterTag ftComp = WeaponsDisplayToggleGroup[i].GetComponent<FilterTag>();
+                ft = ftComp.FilteringTag;
+                break;
             }
-            else
-            {
-                //weaponItems[i].gameObject.SetActive(true);
-                ammoItems[i].GetComponent<Button>().interactable = true;
-            }
-            RectTransform rt = ammoItems[i].GetComponent<RectTransform>();
-            float height = rt.rect.height;
-            offset -= height;
         }
+
+        FilterAndSortInner(AmmoScrollViewContent, x => (_currWeapon != null && filter(_currWeapon, x.AmmoTypeKey)), compItems, compatible, ft, out offset);
 
         FitScrollContent(AmmoScrollViewContent.GetComponent<RectTransform>(), offset);
         AmmoScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
@@ -512,14 +454,101 @@ public class ShipEditor : MonoBehaviour
         return Sprite.Create(res, new Rect(0, 0, res.width, res.height), Vector2.zero);
     }
 
+    private void FilterAndSortInner(RectTransform scrollViewContentBox, Func<ShipEditorDraggable, bool> filter, List<ShipEditorDraggable> items, bool[] compatible, ShipComponentFilteringTag ft, out float totalHeight)
+    {
+        bool compatibleOnly = ft == ShipComponentFilteringTag.CompatibleOnly;
+
+        totalHeight = 0;
+
+        int offsetModulus = 1;
+        int j = 0;
+        StackingLayout2D stacking2D;
+        if (scrollViewContentBox.TryGetComponent<StackingLayout2D>(out stacking2D) && stacking2D.MaxFirstDirection > 0)
+        {
+            offsetModulus = stacking2D.MaxFirstDirection;
+        }
+        float areaWidth = scrollViewContentBox.rect.width;
+
+        // Filter:
+        for (int i = 0; i < items.Count; ++i)
+        {
+            compatible[i] = filter(items[i]);
+
+            items[i].GetComponent<Button>().interactable = compatible[i];
+            if (ft == ShipComponentFilteringTag.CompatibleOnly)
+            {
+                items[i].gameObject.SetActive(compatible[i]);
+            }
+            else
+            {
+                items[i].gameObject.SetActive(true);
+            }
+
+            if (!compatibleOnly || compatible[i])
+            {
+                if (j % offsetModulus == 0)
+                {
+                    RectTransform rt = items[i].GetComponent<RectTransform>();
+                    float height = rt.rect.height;
+                    totalHeight -= height;
+                }
+                ++j;
+            }
+        }
+
+        // Sort:
+        if (ft == ShipComponentFilteringTag.CompatibleFirst)
+        {
+            int sortingIdx = 0;
+            for (int i = 0; i < items.Count; ++i)
+            {
+                if (compatible[i])
+                {
+                    items[i].transform.SetSiblingIndex(sortingIdx++);
+                }
+            }
+            for (int i = 0; i < items.Count; ++i)
+            {
+                if (!compatible[i])
+                {
+                    items[i].transform.SetSiblingIndex(sortingIdx++);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < items.Count; ++i)
+            {
+                items[i].transform.SetSiblingIndex(i);
+            }
+        }
+    }
+
+
     public void ForceReFilterComponent()
     {
         FilterComponents(ComponentsFilter);
     }
 
+    public void ForceReFilterWeapons()
+    {
+        FilterWeapons(WeaponFilter);
+        FilterAmmo(AmmoFilter);
+    }
+
     private void GetTurretDefs()
     {
-        _allTurretDefs = ObjectFactory.GetAllTurretTypes().ToArray();
+        _allTurretDefs = new Dictionary<(string, string), List<TurretDefinition>>();
+        foreach (TurretDefinition t in ObjectFactory.GetAllTurretTypes())
+        {
+            List<TurretDefinition> defsWithKey;
+            if(!_allTurretDefs.TryGetValue((t.WeaponType, t.WeaponSize), out defsWithKey))
+            {
+                defsWithKey = new List<TurretDefinition>();
+                _allTurretDefs.Add((t.WeaponType, t.WeaponSize), defsWithKey);
+            }
+            defsWithKey.Add(t);
+        }
     }
 
     private bool WeaponFilter(ShipDummyInEditor shipDef, string weaponType, string weaponSize)
@@ -598,7 +627,7 @@ public class ShipEditor : MonoBehaviour
         else if (turretDef.BehaviorType == ObjectFactory.WeaponBehaviorType.Torpedo)
         {
             Warhead w;
-            return (ObjectFactory.TryCreateWarhead(turretDef.WeaponType, ammo, out w));
+            return (ObjectFactory.TryCreateWarhead(ammo, out w));
         }
         else
         {
@@ -615,18 +644,19 @@ public class ShipEditor : MonoBehaviour
     {
         TurretDefinition res = null;
         int minWeaponNum = -1;
-        for (int i = 0; i < _allTurretDefs.Length; ++i)
+        List<TurretDefinition> compatibleTurrets;
+        if (_allTurretDefs.TryGetValue((weaponType, weaponSize), out compatibleTurrets))
         {
-            if (_allTurretDefs[i].WeaponType == weaponType && _allTurretDefs[i].WeaponSize == weaponSize)
+            foreach (TurretDefinition currTurret in compatibleTurrets)
             {
-                if (!hardpointAllowedSlots.Contains(string.Format("{0}{1}{2}", _allTurretDefs[i].TurretType, _allTurretDefs[i].WeaponNum, _allTurretDefs[i].WeaponSize)))
+                if (!hardpointAllowedSlots.Contains(string.Format("{0}{1}{2}", currTurret.TurretType, currTurret.WeaponNum, currTurret.WeaponSize)))
                 {
                     continue;
                 }
 
                 // Try to find the turret with the minimum number of weapons:
                 int currWeaponNum;
-                if (int.TryParse(_allTurretDefs[i].WeaponNum, out currWeaponNum))
+                if (int.TryParse(currTurret.WeaponNum, out currWeaponNum))
                 {
                     if (currWeaponNum <= weaponNumAbove)
                     {
@@ -635,14 +665,15 @@ public class ShipEditor : MonoBehaviour
                     if (minWeaponNum < 0 || currWeaponNum < minWeaponNum)
                     {
                         minWeaponNum = currWeaponNum;
-                        res = _allTurretDefs[i];
+                        res = currTurret;
                     }
                 }
                 else
                 {
-                    return _allTurretDefs[i];
+                    return currTurret;
                 }
             }
+
         }
         return res;
     }
@@ -676,7 +707,35 @@ public class ShipEditor : MonoBehaviour
             {
                 string[] allowedTurrets = _currShip.Value.Hardpoints[i].Item1.AllowedWeaponTypes;
                 TurretDefinition turretDef = TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize);
-                _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(turretDef != null);
+
+                Material mtl = _currShip.Value.Hardpoints[i].Item3.transform.GetComponent<MeshRenderer>().material;
+                if (null == turretDef)
+                {
+                    mtl.color = SlotIncompatibleColor;
+                }
+                else if (_currHardpoints[i].Item2 == null)
+                {
+                    mtl.color = SlotFreeColor;
+                }
+                else if (_currHardpoints[i].Item2.WeaponType == item.WeaponKey && _currHardpoints[i].Item2.WeaponSize == item.WeaponSize)
+                {
+                    int prevWeaponNum;
+                    if (int.TryParse(_currHardpoints[i].Item2.WeaponNum, out prevWeaponNum) &&
+                        TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize, prevWeaponNum) != null)
+                    {
+                        mtl.color = SlotToAddColor;
+                    }
+                    else
+                    {
+                        mtl.color = SlotOccupiedColor;
+                    }
+                }
+                else
+                {
+                    mtl.color = SlotOccupiedColor;
+                }
+                _currShip.Value.Hardpoints[i].Item3.enabled = true;
+
                 if (turretDef != null)
                 {
                     _currWeapon = turretDef;
@@ -703,7 +762,7 @@ public class ShipEditor : MonoBehaviour
                         PlaceWeapon(item, eventData);
                         for (int i = 0; i < _currShip.Value.Hardpoints.Count; ++i)
                         {
-                            _currShip.Value.Hardpoints[i].Item3.gameObject.SetActive(false);
+                            _currShip.Value.Hardpoints[i].Item3.enabled = false;
                         }
                     }
                 }
@@ -831,7 +890,7 @@ public class ShipEditor : MonoBehaviour
             Debug.LogFormat("Hit object {0}", _raycastBuf[i].collider.gameObject);
             for (int j = 0; j < _currShip.Value.Hardpoints.Count; j++)
             {
-                if (_currShip.Value.Hardpoints[j].Item3 == _raycastBuf[i].collider.transform)
+                if (_currShip.Value.Hardpoints[j].Item2 == _raycastBuf[i].collider)
                 {
                     return j;
                 }
@@ -912,6 +971,12 @@ public class ShipEditor : MonoBehaviour
     public RawImage ShipViewBox;
 
     public Toggle[] ComponentDisplayToggleGroup;
+    public Toggle[] WeaponsDisplayToggleGroup;
+
+    public Color SlotFreeColor;
+    public Color SlotIncompatibleColor;
+    public Color SlotOccupiedColor;
+    public Color SlotToAddColor;
 
     [NonSerialized]
     private ShipDummyInEditor? _currShip = null;
@@ -920,7 +985,7 @@ public class ShipEditor : MonoBehaviour
     [NonSerialized]
     private Dictionary<string, ShipDummyInEditor> _shipsCache = new Dictionary<string, ShipDummyInEditor>();
     [NonSerialized]
-    private TurretDefinition[] _allTurretDefs;
+    private Dictionary<(string, string), List<TurretDefinition>> _allTurretDefs;
     [NonSerialized]
     private RaycastHit[] _raycastBuf = new RaycastHit[100];
     [NonSerialized]
@@ -950,7 +1015,7 @@ public class ShipEditor : MonoBehaviour
         public string Key;
         public Transform ShipModel;
         public ShipHullDefinition HullDef;
-        public List<(TurretHardpoint, Collider, Transform)> Hardpoints;
+        public List<(TurretHardpoint, Collider, MeshRenderer)> Hardpoints;
     }
 
     public enum EditorItemType { ShipComponent, Weapon, Ammo, TurretMod }
