@@ -123,7 +123,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             {
                 s.Hardpoints[i].Item3.gameObject.SetActive(false);
             }
-            ShipPhotoUtil.PositionCameraToObject(ShipViewCam, s.ShipModel, 1.05f);
+            ShipPhotoUtil.PositionCameraToObject(ShipViewCam, s.ShipModel, 1.2f);
             for (int i = 0; i < s.Hardpoints.Count; ++i)
             {
                 s.Hardpoints[i].Item3.gameObject.SetActive(true);
@@ -153,6 +153,11 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     {
         Debug.LogFormat("Createing hull {0}", key);
         Transform s = ObjectFactory.CreateShipDummy(key);
+        MeshRenderer[] renderers = s.GetComponentsInChildren<MeshRenderer>();
+        for (int i = 0; i < renderers.Length; ++i)
+        {
+            renderers[i].sharedMaterial = ShipMtlInDisplay;
+        }
         Sprite shipPhoto = ObjectFactory.GetObjectPhoto(s, true, ImageCam);
         s.position = Vector3.zero;
         TurretHardpoint[] hardpoints = s.GetComponentsInChildren<TurretHardpoint>();
@@ -900,6 +905,12 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 dummyTurret.transform.rotation = q;
                 _currHardpoints[hardpointIdx] = (hardpoint, turretDef, dummyTurret);
 
+                MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < renderers.Length; ++i)
+                {
+                    renderers[i].sharedMaterial = ShipMtlInDisplay;
+                }
+
                 GetShipQualityStats();
             }
         }
@@ -1385,6 +1396,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public Color SlotIncompatibleColor;
     public Color SlotOccupiedColor;
     public Color SlotToAddColor;
+
+    public Material ShipMtlInDisplay;
 
     [NonSerialized]
     private ShipDummyInEditor? _currShip = null;

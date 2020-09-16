@@ -40,6 +40,7 @@ public static class ShipPhotoUtil
         Texture2D shipImg;
         shipImg = new Texture2D(ImgW, ImgH);
         RenderTexture rt = RenderTexture.GetTemporary(ImgW, ImgH);
+        rt.antiAliasing = 4;
         cam.enabled = true;
         cam.targetTexture = rt;
         RenderTexture orig = RenderTexture.active;
