@@ -59,8 +59,10 @@ ComponentSlots:
   - ShipSystemCenter
   ForeComponentSlots:
   - ShipSystem
+  - ShipSystem
   AftComponentSlots:
   - Engine
+  - ShipSystem
   LeftComponentSlots:
   - ShipSystem
   RightComponentSlots:

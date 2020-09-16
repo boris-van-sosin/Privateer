@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -14,6 +15,10 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         ContainingTabGroup.OnTabSelected(this);
+        if (ExtraClickEvents != null)
+        {
+            ExtraClickEvents.Invoke();
+        }
     }
 
     public void SetSelected(bool selected)
@@ -37,4 +42,5 @@ public class TabButton : MonoBehaviour, IPointerClickHandler
     public Color SelectedColor;
     public Color DeSelectedColor;
     public RectTransform[] TargetObjects;
+    public UnityEvent ExtraClickEvents;
 }

@@ -420,6 +420,7 @@ MonoBehaviour:
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
+  CenterFirstDirection: 1
   SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
@@ -736,6 +737,7 @@ MonoBehaviour:
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
+  CenterFirstDirection: 1
   SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
@@ -1079,6 +1081,7 @@ MonoBehaviour:
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
+  CenterFirstDirection: 1
   SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
@@ -1710,6 +1713,9 @@ MonoBehaviour:
   DeSelectedColor: {r: 1, g: 1, b: 1, a: 1}
   TargetObjects:
   - {fileID: 997643151}
+  ExtraClickEvents:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &344637902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2779,6 +2785,7 @@ MonoBehaviour:
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
+  CenterFirstDirection: 1
   SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
@@ -2962,7 +2969,8 @@ MonoBehaviour:
   LayoutDirection: 0
   StartPadding: 0
   ComponentPadding: 0
-  MaxFirstDirection: 3
+  MaxFirstDirection: 4
+  CenterFirstDirection: 1
   SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
@@ -3545,6 +3553,9 @@ MonoBehaviour:
   DeSelectedColor: {r: 1, g: 1, b: 1, a: 1}
   TargetObjects:
   - {fileID: 1623847641}
+  ExtraClickEvents:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &663952512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4150,6 +4161,7 @@ MonoBehaviour:
   StartPadding: 0
   ComponentPadding: 0
   MaxFirstDirection: 3
+  CenterFirstDirection: 1
   SecondLayoutDirection: 2
   SecondDirectionStartPadding: 0
   SecondDirectionComponentPadding: 0
@@ -5949,7 +5961,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1466035590}
         m_TargetAssemblyTypeName: ShipEditor, PrivateerAsmDef
-        m_MethodName: ForceReFilterComponent
+        m_MethodName: ForceRefreshShipSections
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9353,6 +9365,21 @@ MonoBehaviour:
   TargetObjects:
   - {fileID: 726548785}
   - {fileID: 1998163513}
+  ExtraClickEvents:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1466035590}
+        m_TargetAssemblyTypeName: ShipEditor, PrivateerAsmDef
+        m_MethodName: ForceRefreshShipSections
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1884141363
 CanvasRenderer:
   m_ObjectHideFlags: 0

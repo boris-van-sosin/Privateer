@@ -1112,8 +1112,9 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
             }
         }
-        foreach (var hardpoint in _currHardpoints)
+        for (int i = 0; i < _currHardpoints.Count; ++i)
         {
+            (TurretHardpoint, TurretDefinition, Transform) hardpoint = _currHardpoints[i];
             if (hardpoint.Item2 == null)
             {
                 continue;
@@ -1140,8 +1141,42 @@ public class ShipEditor : MonoBehaviour, IDropHandler
 
                 if (hardpoint.Item1.WeaponAIHint == TurretAIHint.Main)
                 {
-                    powerPerSalvoMain += powerToFire;
-                    heatPerSalvoMain += heatToFire;
+                    int oppHardpoint = FindPairedTurret(_currHardpoints, i);
+                    if (oppHardpoint >= 0)
+                    {
+                        // Paired turret:
+                        int oppPowerToFire, oppHeatToFire;
+                        float oppFiringInterval;
+                        (oppPowerToFire, oppHeatToFire, oppFiringInterval) =
+                            ObjectFactory.GetWeaponPowerConsumption(_currHardpoints[oppHardpoint].Item2.WeaponType, _currHardpoints[oppHardpoint].Item2.WeaponSize);
+                        if (oppPowerToFire >= 0)
+                        {
+                            int oppNumBarrels;
+                            if (!int.TryParse(_currHardpoints[oppHardpoint].Item2.WeaponNum, out oppNumBarrels))
+                            {
+                                oppNumBarrels = 1;
+                            }
+                            oppPowerToFire *= oppNumBarrels;
+                            oppHeatToFire *= oppNumBarrels;
+                            if (i < oppHardpoint)
+                            {
+                                powerPerSalvoMain += Mathf.Max(powerToFire, oppPowerToFire);
+                                heatPerSalvoMain += Mathf.Max(heatToFire, oppHeatToFire);
+                            }
+                        }
+                        else
+                        {
+                            // There is something invalid in the opposite turret. Add the regular power & heat.
+                            powerPerSalvoMain += powerToFire;
+                            heatPerSalvoMain += heatToFire;
+                        }
+                    }
+                    else
+                    {
+                        // Unpaired turret:
+                        powerPerSalvoMain += powerToFire;
+                        heatPerSalvoMain += heatToFire;
+                    }
                     powerForSustainedFireMain += powerSustained;
                     heatForSustainedFireMain += heatSustained;
                 }
@@ -1150,6 +1185,25 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         Debug.LogFormat("Ship stats: Power capacity: {0} Heat capacity: {1} Power generation: {2}/sec, Power consumption: {3}/sec Cooling: {4}/sec Heat generation: {5}/sec Power per salvo: main: {6} all: {7} Heat per salvo: main: {8} all: {9} Power for sustained fire: main: {10} all: {11} heat for sustained fire: main: {12} all: {13}",
                         powerCapacity, heatCapacity, powerGeneration * 4, (powerConsumption + powerWithShield) * 4, cooling * 4, (heatGeneration + heatWithShield) * 4,
                         powerPerSalvoMain, powerPerSalvoAll, heatPerSalvoMain, heatPerSalvoAll, powerForSustainedFireMain, powerForSustainedFireAll, heatForSustainedFireMain, heatForSustainedFireAll);
+    }
+
+    private int FindPairedTurret(List<(TurretHardpoint, TurretDefinition, Transform)> hardpoints, int idx)
+    {
+        if (hardpoints[idx].Item2 == null)
+        {
+            return -1;
+        }
+        for (int i = 0; i < hardpoints.Count; ++i)
+        {
+            if (i == idx || hardpoints[i].Item2 == null)
+                continue;
+
+            if (Mathf.Approximately(hardpoints[i].Item1.transform.localPosition.x, -hardpoints[idx].Item1.transform.localPosition.x) &&
+                Mathf.Approximately(hardpoints[i].Item1.transform.localPosition.y, hardpoints[idx].Item1.transform.localPosition.y) &
+                Mathf.Approximately(hardpoints[i].Item1.transform.localPosition.z, hardpoints[idx].Item1.transform.localPosition.z))
+                return i;
+        }
+        return -1;
     }
 
     private (Ship.ShipSection, int) FindOldComLocation(ShipEditorDraggable comp)
@@ -1250,11 +1304,15 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         _currShipComponentSlots = hullDef.ComponentSlots.ToDictionary();
         foreach (KeyValuePair<Ship.ShipSection, string[]> sec in _currShipComponentSlots)
         {
+            ShipEditorDropTarget compsPanel;
+            if (!_shipSectionPanels.TryGetValue(sec.Key, out compsPanel))
+            {
+                compsPanel = null;
+            }
             for (int i = 0; i < sec.Value.Length; ++i)
             {
                 _currShipComps[sec.Key].Add(null);
-                ShipEditorDropTarget compsPanel;
-                if (_shipSectionPanels.TryGetValue(sec.Key, out compsPanel))
+                if (compsPanel != null)
                 {
                     RectTransform t = Instantiate(PlacedItemPrototype);
                     t.gameObject.AddComponent<StackableUIComponent>();
@@ -1277,6 +1335,18 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             }
         }
         _currShipComps[Ship.ShipSection.Hidden].Add(null);
+    }
+
+    public void ForceRefreshShipSections()
+    {
+        foreach (ShipEditorDropTarget compsPanel in _shipSectionPanels.Values)
+        {
+            StackingLayout2D stacking;
+            if (compsPanel.TryGetComponent(out stacking))
+            {
+                stacking.ForceRefresh();
+            }
+        }
     }
 
     public void OnDrop(PointerEventData eventData)

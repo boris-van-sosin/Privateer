@@ -94,13 +94,39 @@ public class StackingLayout2D : StackingLayout
     private int FillFirstDirection(int idx, float posInSecondDir)
     {
         float offset = StartPadding;
+        float totalSz = 0;
+        int newIdx = idx;
         switch (LayoutDirection)
         {
             case StackingDirection.LeftToRight:
                 {
-                    for (int j = 0; j < MaxFirstDirection && idx < _childElements.Count; ++j)
+                    if (CenterFirstDirection)
                     {
-                        StackableUIComponent c = _childElements[idx++];
+                        // Compute the total width of the elements:
+                        for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                        {
+                            StackableUIComponent c = _childElements[newIdx++];
+                            if (!c.gameObject.activeInHierarchy)
+                            {
+                                continue;
+                            }
+                            float width = c.StackableRectTransform.rect.width;
+                            totalSz += width;
+                            if (j < MaxFirstDirection - 1 && newIdx < _childElements.Count - 1)
+                            {
+                                totalSz += ComponentPadding;
+                            }
+                        }
+
+                        // Reset the starting offset and the newIdx:
+                        offset = (_rt.rect.width - totalSz) / 2;
+                        newIdx = idx;
+                    }
+
+                    // Actually position the elements:
+                    for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                    {
+                        StackableUIComponent c = _childElements[newIdx++];
                         if (!c.gameObject.activeInHierarchy)
                         {
                             continue;
@@ -114,26 +140,78 @@ public class StackingLayout2D : StackingLayout
                 }
             case StackingDirection.RightToLeft:
                 {
-                    offset = _rt.rect.width - StartPadding;
-                    for (int j = 0; j < MaxFirstDirection && idx < _childElements.Count; ++j)
+                    if (CenterFirstDirection)
                     {
-                        StackableUIComponent c = _childElements[idx++];
+                        // Compute the total width of the elements:
+                        for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                        {
+                            StackableUIComponent c = _childElements[newIdx++];
+                            if (!c.gameObject.activeInHierarchy)
+                            {
+                                continue;
+                            }
+                            float width = c.StackableRectTransform.rect.width;
+                            totalSz += width;
+                            if (j < MaxFirstDirection - 1 && newIdx < _childElements.Count - 1)
+                            {
+                                totalSz += ComponentPadding;
+                            }
+                        }
+
+                        // Reset the starting offset and the newIdx:
+                        offset = _rt.rect.width - (_rt.rect.width - totalSz) / 2;
+                        newIdx = idx;
+                    }
+                    else
+                    {
+                        offset = _rt.rect.width - StartPadding;
+                    }
+
+                    // Actually position the elements:
+                    for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                    {
+                        StackableUIComponent c = _childElements[newIdx++];
                         if (!c.gameObject.activeInHierarchy)
                         {
                             continue;
                         }
                         float width = c.StackableRectTransform.rect.width;
                         float pivotOffset = c.StackableRectTransform.pivot.x * width;
-                        c.StackableRectTransform.anchoredPosition = new Vector2(offset + pivotOffset, posInSecondDir);
                         offset -= (width + ComponentPadding);
+                        c.StackableRectTransform.anchoredPosition = new Vector2(offset + pivotOffset, posInSecondDir);
                     }
+
                     break;
                 }
             case StackingDirection.TopToBottom:
                 {
-                    for (int j = 0; j < MaxFirstDirection && idx < _childElements.Count; ++j)
+                    if (CenterFirstDirection)
                     {
-                        StackableUIComponent c = _childElements[idx++];
+                        // Compute the total width of the elements:
+                        for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                        {
+                            StackableUIComponent c = _childElements[newIdx++];
+                            if (!c.gameObject.activeInHierarchy)
+                            {
+                                continue;
+                            }
+                            float height = c.StackableRectTransform.rect.height;
+                            totalSz += height;
+                            if (j < MaxFirstDirection - 1 && newIdx < _childElements.Count - 1)
+                            {
+                                totalSz += ComponentPadding;
+                            }
+                        }
+
+                        // Reset the starting offset and the newIdx:
+                        offset = -(_rt.rect.height - totalSz) / 2;
+                        newIdx = idx;
+                    }
+
+                    // Actually position the elements:
+                    for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                    {
+                        StackableUIComponent c = _childElements[newIdx++];
                         if (!c.gameObject.activeInHierarchy)
                         {
                             continue;
@@ -147,10 +225,37 @@ public class StackingLayout2D : StackingLayout
                 }
             case StackingDirection.BottomToTop:
                 {
-                    offset = _rt.rect.height + StartPadding;
-                    for (int j = 0; j < MaxFirstDirection && idx < _childElements.Count; ++j)
+                    if (CenterFirstDirection)
                     {
-                        StackableUIComponent c = _childElements[idx++];
+                        // Compute the total width of the elements:
+                        for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                        {
+                            StackableUIComponent c = _childElements[newIdx++];
+                            if (!c.gameObject.activeInHierarchy)
+                            {
+                                continue;
+                            }
+                            float height = c.StackableRectTransform.rect.height;
+                            totalSz += height;
+                            if (j < MaxFirstDirection - 1 && newIdx < _childElements.Count - 1)
+                            {
+                                totalSz += ComponentPadding;
+                            }
+                        }
+
+                        // Reset the starting offset and the newIdx:
+                        offset = -_rt.rect.height + (_rt.rect.height - totalSz) / 2;
+                        newIdx = idx;
+                    }
+                    else
+                    {
+                        offset = -_rt.rect.height - StartPadding;
+                    }
+
+                    // Actually position the elements:
+                    for (int j = 0; j < MaxFirstDirection && newIdx < _childElements.Count; ++j)
+                    {
+                        StackableUIComponent c = _childElements[newIdx++];
                         if (!c.gameObject.activeInHierarchy)
                         {
                             continue;
@@ -165,10 +270,11 @@ public class StackingLayout2D : StackingLayout
             default:
                 break;
         }
-        return idx;
+        return newIdx;
     }
 
     public int MaxFirstDirection;
+    public bool CenterFirstDirection;
     public StackingDirection SecondLayoutDirection;
     public float SecondDirectionStartPadding;
     public float SecondDirectionComponentPadding;
