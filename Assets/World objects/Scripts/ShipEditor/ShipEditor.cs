@@ -20,9 +20,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         FilterComponents(null);
         FilterAmmo(null);
         InitShipSections();
-        //ShipViewCam.depthTextureMode = DepthTextureMode.Depth | DepthTextureMode.DepthNormals;
-        // DEBUG:
-       // Camera.main.depthTextureMode = DepthTextureMode.Depth | DepthTextureMode.DepthNormals;
     }
 
     private void PopulateHulls()
@@ -1069,7 +1066,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
 
     private void GetShipQualityStats()
     {
-        int powerCapacity = 0, heatCapacity = 0, powerGeneration = 0, cooling = 0, powerConsumption = 0, heatGeneration = 0, powerWithShield = 0, heatWithShield = 0, powerPerSalvoMain = 0, powerPerSalvoAll = 0, heatPerSalvoMain = 0, heatPerSalvoAll = 0;
+        int powerCapacity = 0, heatCapacity = 0, powerGeneration = 0, cooling = 0, powerConsumption = 0, heatGeneration = 0, powerHigh = 0, heatHigh = 0, powerPerSalvoMain = 0, powerPerSalvoAll = 0, heatPerSalvoMain = 0, heatPerSalvoAll = 0;
         float powerForSustainedFireMain = 0, powerForSustainedFireAll = 0, heatForSustainedFireMain = 0, heatForSustainedFireAll = 0;
         foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> existingComps in _currShipComps)
         {
@@ -1086,13 +1083,13 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
                 else if (currComp.DamageControDefinition != null)
                 {
-                    powerConsumption += currComp.DamageControDefinition.PowerUsage;
-                    heatGeneration += currComp.DamageControDefinition.HeatGeneration;
+                    powerHigh += currComp.DamageControDefinition.PowerUsage;
+                    powerHigh += currComp.DamageControDefinition.HeatGeneration;
                 }
                 else if (currComp.ElectromagneticClampsDefinition != null)
                 {
-                    powerConsumption += currComp.ElectromagneticClampsDefinition.PowerUsage;
-                    heatGeneration += currComp.ElectromagneticClampsDefinition.HeatGeneration;
+                    powerHigh += currComp.ElectromagneticClampsDefinition.PowerUsage;
+                    heatHigh += currComp.ElectromagneticClampsDefinition.HeatGeneration;
                 }
                 else if (currComp.FireControlGeneralDefinition != null)
                 {
@@ -1116,8 +1113,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 {
                     powerConsumption += currComp.ShieldGeneratorDefinition.PowerUsage;
                     heatGeneration += currComp.ShieldGeneratorDefinition.HeatGeneration;
-                    powerWithShield += currComp.ShieldGeneratorDefinition.PowerPerShieldRegeneration;
-                    heatWithShield += currComp.ShieldGeneratorDefinition.HeatPerShieldRegeneration;
                 }
                 else if (currComp.ShipEngineDefinition != null)
                 {
@@ -1196,8 +1191,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
             }
         }
-        Debug.LogFormat("Ship stats: Power capacity: {0} Heat capacity: {1} Power generation: {2}/sec, Power consumption: {3}/sec Cooling: {4}/sec Heat generation: {5}/sec Power per salvo: main: {6} all: {7} Heat per salvo: main: {8} all: {9} Power for sustained fire: main: {10} all: {11} heat for sustained fire: main: {12} all: {13}",
-                        powerCapacity, heatCapacity, powerGeneration * 4, (powerConsumption + powerWithShield) * 4, cooling * 4, (heatGeneration + heatWithShield) * 4,
+        Debug.LogFormat("Ship stats: Power capacity: {0} Heat capacity: {1} Power generation: {2}/sec, Power consumption (normal): {3}/sec Power consumption (high): {4}/sec Cooling: {5}/sec Heat generation(normal): {6}/sec Heat generation(high): {7}/sec Power per salvo: main: {8} all: {9} Heat per salvo: main: {10} all: {11} Power for sustained fire: main: {12} all: {13} heat for sustained fire: main: {14} all: {15}",
+                        powerCapacity, heatCapacity, powerGeneration * 4, (powerConsumption) * 4, (powerConsumption + powerHigh) * 4, cooling * 4, (heatGeneration) * 4, (heatGeneration + heatHigh) * 4,
                         powerPerSalvoMain, powerPerSalvoAll, heatPerSalvoMain, heatPerSalvoAll, powerForSustainedFireMain, powerForSustainedFireAll, heatForSustainedFireMain, heatForSustainedFireAll);
     }
 
@@ -1374,6 +1369,43 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 RemoveComponent(droppedItem);
             }
         }
+    }
+
+    public ShipShadow CompileShip()
+    {
+        ShipShadow res = new ShipShadow()
+        {
+            ShipHullProductionKey = _currShip.Value.Key,
+            ShipComponents = new Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>>(_currShipComps),
+        };
+
+        int numWeapons = 0;
+        for (int i = 0; i < _currHardpoints.Count; ++i)
+        {
+            if (_currHardpoints[i].Item2 != null)
+            {
+                ++numWeapons;
+            }
+        }
+        res.Turrets = new ShipShadow.TurretPlacement[numWeapons];
+        int weaponIdx = 0;
+        for (int i = 0; i < _currHardpoints.Count; ++i)
+        {
+            if (_currHardpoints[i].Item2 != null)
+            {
+                res.Turrets[i].HardpointKey = _currHardpoints[i].Item1.DisplayString;
+                res.Turrets[i].TurretType = _currHardpoints[i].Item2.TurretType;
+                res.Turrets[i].WeaponType = _currHardpoints[i].Item2.WeaponType;
+                res.Turrets[i].WeaponSize = _currHardpoints[i].Item2.WeaponSize;
+                res.Turrets[i].WeaponNum = _currHardpoints[i].Item2.WeaponNum;
+                res.Turrets[i].AlternatingFire = false; //TODO: implement
+                res.Turrets[i].InstalledMod = TurretMod.None; //TODO: implement
+                res.Turrets[i].AmmoTypes = new string[] { "KineticPenetrator" }; //TODO: implement
+                ++weaponIdx;
+            }
+        }
+
+        return res;
     }
 
     public RectTransform ShipClassesScrollViewContent;

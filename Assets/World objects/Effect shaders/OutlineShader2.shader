@@ -5,9 +5,9 @@
         [HideInInspector] _MainTex("Texture", 2D) = "white" {}
         _OutlineColor("Outline Color", Color) = (0,0,0,1)
         _NormalMult("Normal Outline Multiplier", Range(0,4)) = 1
-        _NormalBias("Normal Outline Bias", Range(1,4)) = 1
+        _NormalBias("Normal Outline Bias", Range(0,4)) = 1
         _DepthMult("Depth Outline Multiplier", Range(0,4)) = 1
-        _DepthBias("Depth Outline Bias", Range(1,4)) = 1
+        _DepthBias("Depth Outline Bias", Range(0,4)) = 1
     }
 
     SubShader{
@@ -108,7 +108,7 @@
                 normalDifference = saturate(normalDifference);
                 normalDifference = pow(normalDifference, _NormalBias);
 
-                float outline = normalDifference + depthDifference;
+                float outline = saturate(normalDifference + depthDifference);
                 float4 sourceColor = tex2D(_MainTex, i.uv);
                 float4 color = lerp(sourceColor, _OutlineColor, outline);
                 return color;
