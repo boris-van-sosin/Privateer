@@ -20,6 +20,9 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         FilterComponents(null);
         FilterAmmo(null);
         InitShipSections();
+        //ShipViewCam.depthTextureMode = DepthTextureMode.Depth | DepthTextureMode.DepthNormals;
+        // DEBUG:
+       // Camera.main.depthTextureMode = DepthTextureMode.Depth | DepthTextureMode.DepthNormals;
     }
 
     private void PopulateHulls()
@@ -156,7 +159,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         MeshRenderer[] renderers = s.GetComponentsInChildren<MeshRenderer>();
         for (int i = 0; i < renderers.Length; ++i)
         {
-            renderers[i].sharedMaterial = ShipMtlInDisplay;
+            //renderers[i].sharedMaterial = ShipMtlInDisplay;
         }
         Sprite shipPhoto = ObjectFactory.GetObjectPhoto(s, true, ImageCam);
         s.position = Vector3.zero;
@@ -908,7 +911,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < renderers.Length; ++i)
                 {
-                    renderers[i].sharedMaterial = ShipMtlInDisplay;
+                    //renderers[i].sharedMaterial = ShipMtlInDisplay;
                 }
 
                 GetShipQualityStats();

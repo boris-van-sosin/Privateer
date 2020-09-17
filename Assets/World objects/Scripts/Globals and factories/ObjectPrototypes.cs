@@ -10,6 +10,7 @@ public class ObjectPrototypes : MonoBehaviour
     {
         ObjectFactory.SetPrototypes(this);
         _delayedActions = null;
+        Camera.main.depthTextureMode |= DepthTextureMode.Depth;
     }
 
     public Projectile CreateProjectile()

@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: TestMtl
   m_Shader: {fileID: 4800000, guid: 0eec46ff535f456488d98b437aef5a08, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_ShaderKeywords: _REMOVEDIAG_ON
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -35,6 +35,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DetailTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -55,38 +59,72 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _BgFade: 0.5
+    - _BgFade: 0.9
+    - _BlendOp: 0
     - _BumpScale: 1
+    - _CameraFadingEnabled: 0
+    - _CameraFarFadeDistance: 2
+    - _CameraNearFadeDistance: 1
+    - _ColorMode: 0
+    - _Cull: 2
     - _Cutoff: 0.5
+    - _DepthBias: 4
+    - _DepthMult: 4
     - _DetailNormalMapScale: 1
+    - _DistortionBlend: 0.5
+    - _DistortionEnabled: 0
+    - _DistortionStrength: 1
+    - _DistortionStrengthScaled: 0
     - _DstBlend: 0
+    - _EmissionEnabled: 0
     - _Exponent: 1
+    - _FlipbookMode: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightingEnabled: 0
     - _Metallic: 0.5
     - _Mode: 0
+    - _NormalBias: 4
+    - _NormalMult: 4
     - _OcclusionStrength: 1
     - _OutlineWidth: 3
     - _Parallax: 0.02
+    - _RemoveDiag: 1
     - _RimAmount: 0.041
     - _RimThreshold: 0.537
-    - _SampleDistance: 0.5
+    - _SampleDistance: 1
     - _Sensitivity: 0.419
     - _SmoothnessTextureChannel: 0
+    - _SoftParticlesEnabled: 0
+    - _SoftParticlesFarFadeDistance: 1
+    - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Threshold: 0.2
+    - _Threshold: 1
     - _UVSec: 0
+    - _WindQuality: 0
+    - _WireframeVal: 0.05
     - _ZWrite: 1
     m_Colors:
     - _AmbientColor: {r: 0.4, g: 0.4, b: 0.4, a: 1}
+    - _BackColor: {r: 1, g: 0.2971698, b: 0.32649082, a: 1}
     - _BgColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    - _Color: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0}
+    - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
+    - _Color: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
+    - _EdgeColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FrontColor: {r: 0.46666667, g: 1, b: 1, a: 0}
+    - _HueVariation: {r: 1, g: 0.5, b: 0, a: 0.1}
     - _OutlineColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Sensitivity: {r: 1, g: 1, b: 1, a: 1}
+    - _Sensitivity: {r: 2, g: 2, b: 2, a: 2}
+    - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   m_BuildTextureStacks: []
