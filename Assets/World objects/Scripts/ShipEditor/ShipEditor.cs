@@ -136,7 +136,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
         for (int i = 0; i < s.Hardpoints.Count; ++i)
         {
-            _currHardpoints.Add((s.Hardpoints[i].Item1, null, null));
+            _currHardpoints.Add((s.Hardpoints[i].Item1, null, null, null));
         }
         SetShipSections(s.HullDef);
 
@@ -374,6 +374,13 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             Image img = t.Find("Image").GetComponent<Image>();
             img.sprite = ammoSprite;
 
+            GroupedOnOffButton groupedBtn = t.gameObject.AddComponent<GroupedOnOffButton>();
+            Button innerBtn = t.GetComponent<Button>();
+            groupedBtn.TargetGraphic = t.GetComponent<Graphic>();
+            groupedBtn.OnColor = AmmoSelectedColor;
+            groupedBtn.OffColor = innerBtn.colors.normalColor;
+            groupedBtn.Group = AmmoToggleGroup;
+
             ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
             draggable.ContainingEditor = this;
             draggable.Item = EditorItemType.Ammo;
@@ -382,7 +389,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
 
         IReadOnlyList<string> torpedoAmmo = ObjectFactory.GetAllAmmoTypes(false, true);
-        for (int i = 0; i < gunAmmo.Count; ++i)
+        for (int i = 0; i < torpedoAmmo.Count; ++i)
         {
             Sprite ammoSprite = ObjectFactory.GetTorpedoTypeImage(torpedoAmmo[i]);
             if (ammoSprite == null)
@@ -405,6 +412,13 @@ public class ShipEditor : MonoBehaviour, IDropHandler
 
             Image img = t.Find("Image").GetComponent<Image>();
             img.sprite = ammoSprite;
+
+            GroupedOnOffButton groupedBtn = t.gameObject.AddComponent<GroupedOnOffButton>();
+            Button innerBtn = t.GetComponent<Button>();
+            groupedBtn.TargetGraphic = t.GetComponent<Graphic>();
+            groupedBtn.OnColor = AmmoSelectedColor;
+            groupedBtn.OffColor = innerBtn.colors.normalColor;
+            groupedBtn.Group = AmmoToggleGroup;
 
             ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
             draggable.ContainingEditor = this;
@@ -438,8 +452,69 @@ public class ShipEditor : MonoBehaviour, IDropHandler
 
         FilterAndSortInner(AmmoScrollViewContent, x => (_currWeapon != null && filter(_currWeapon, x.AmmoTypeKey)), compItems, compatible, ft, out offset);
 
+        if (_currWeapon == null)
+        {
+            AmmoToggleGroup.MinOn = AmmoToggleGroup.MaxOn = 0;
+            for (int i = 0; i < _allAmmoTypes.Count; ++i)
+            {
+                if (_allAmmoTypes != null)
+                {
+                    GroupedOnOffButton btn = _allAmmoTypes[i].GetComponent<GroupedOnOffButton>();
+                    btn.OffColor = Color.white;
+                    btn.Value = false;
+                }
+            }
+        }
+        else
+        {
+            AmmoToggleGroup.MinOn = 0;
+            if (_currAmmoType != null && AmmoFilter(_currWeapon, _currAmmoType))
+            {
+                AmmoToggleGroup.MaxOn = 2;
+                for (int j = 0; j < _allAmmoTypes.Count; ++j)
+                {
+                    GroupedOnOffButton btn2 = _allAmmoTypes[j].GetComponent<GroupedOnOffButton>();
+                    btn2.Value = _allAmmoTypes[j].AmmoTypeKey == _currAmmoType;
+                    Button baseBtn = _allAmmoTypes[j].GetComponent<Button>();
+                    btn2.OnColor = AmmoSelectedColor;
+                    btn2.OffColor = _allAmmoTypesComatibleFlags[j] ? baseBtn.colors.normalColor : Color.white;
+                }
+                AmmoToggleGroup.MinOn = 1;
+            }
+            else
+            {
+                for (int i = 0; i < _allAmmoTypes.Count; ++i)
+                {
+                    if (_allAmmoTypesComatibleFlags[i])
+                    {
+                        AmmoToggleGroup.MaxOn = 2;
+                        GroupedOnOffButton btn = _allAmmoTypes[i].GetComponent<GroupedOnOffButton>();
+                        btn.Value = true;
+                        for (int j = 0; j < _allAmmoTypes.Count; ++j)
+                        {
+                            GroupedOnOffButton btn2 = _allAmmoTypes[j].GetComponent<GroupedOnOffButton>();
+                            if (j != i)
+                            {
+                                btn2.Value = false;
+                            }
+                            Button baseBtn = _allAmmoTypes[j].GetComponent<Button>();
+                            btn2.OnColor = AmmoSelectedColor;
+                            btn2.OffColor = _allAmmoTypesComatibleFlags[j] ? baseBtn.colors.normalColor : Color.white;
+                        }
+                        AmmoToggleGroup.MinOn = 1;
+                        break;
+                    }
+                }
+            }
+        }
+
         FitScrollContent(AmmoScrollViewContent.GetComponent<RectTransform>(), offset);
         AmmoScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
+    }
+
+    private void PopulateTurretMods()
+    {
+        TurretMod tm;
     }
 
     private Sprite CombineSpriteTextures(Sprite s1, Sprite s2)
@@ -715,6 +790,16 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
                 break;
             case EditorItemType.Ammo:
+                _currAmmoType = item.AmmoTypeKey;
+                if (_currWeapon != null)
+                {
+                    GroupedOnOffButton btn;
+                    if (item.TryGetComponent(out btn))
+                    {
+                        btn.Value = true;
+                    }
+                    DrawPenChart(_currWeapon, _currAmmoType);
+                }
                 break;
             case EditorItemType.TurretMod:
                 break;
@@ -793,6 +878,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
                 break;
             case EditorItemType.Ammo:
+                PlaceAmmoType(item, eventData);
                 break;
             case EditorItemType.TurretMod:
                 break;
@@ -903,7 +989,18 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 dummyTurret.localPosition = Vector3.zero;
                 Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
                 dummyTurret.transform.rotation = q;
-                _currHardpoints[hardpointIdx] = (hardpoint, turretDef, dummyTurret);
+
+                string[] selectedAmmo;
+                if (AmmoToggleGroup.NumButtonsOn == 0)
+                {
+                    selectedAmmo = null;
+                }
+                else
+                {
+                    selectedAmmo = AmmoToggleGroup.ButtonsOn.Select(a => a.GetComponent<ShipEditorDraggable>().AmmoTypeKey).ToArray();
+                }
+
+                _currHardpoints[hardpointIdx] = (hardpoint, turretDef, dummyTurret, selectedAmmo);
 
                 MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < renderers.Length; ++i)
@@ -1064,6 +1161,23 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
     }
 
+    private void PlaceAmmoType(ShipEditorDraggable item, PointerEventData eventData)
+    {
+        if (item.AmmoTypeKey == null)
+        {
+            return;
+        }
+
+        int hardpointIdx = RaycastDropWeapon(eventData.position);
+        if (hardpointIdx >= 0)
+        {
+            if (null != _currHardpoints[hardpointIdx].Item2 && AmmoFilter(_currHardpoints[hardpointIdx].Item2, item.AmmoTypeKey))
+            {
+                _currHardpoints[hardpointIdx] = (_currHardpoints[hardpointIdx].Item1, _currHardpoints[hardpointIdx].Item2, _currHardpoints[hardpointIdx].Item3, new string[] { item.AmmoTypeKey });
+            }
+        }
+    }
+
     private void GetShipQualityStats()
     {
         int powerCapacity = 0, heatCapacity = 0, powerGeneration = 0, cooling = 0, powerConsumption = 0, heatGeneration = 0, powerHigh = 0, heatHigh = 0, powerPerSalvoMain = 0, powerPerSalvoAll = 0, heatPerSalvoMain = 0, heatPerSalvoAll = 0;
@@ -1123,7 +1237,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
         for (int i = 0; i < _currHardpoints.Count; ++i)
         {
-            (TurretHardpoint, TurretDefinition, Transform) hardpoint = _currHardpoints[i];
+            (TurretHardpoint, TurretDefinition, Transform, string[]) hardpoint = _currHardpoints[i];
             if (hardpoint.Item2 == null)
             {
                 continue;
@@ -1196,7 +1310,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                         powerPerSalvoMain, powerPerSalvoAll, heatPerSalvoMain, heatPerSalvoAll, powerForSustainedFireMain, powerForSustainedFireAll, heatForSustainedFireMain, heatForSustainedFireAll);
     }
 
-    private int FindPairedTurret(List<(TurretHardpoint, TurretDefinition, Transform)> hardpoints, int idx)
+    private int FindPairedTurret(List<(TurretHardpoint, TurretDefinition, Transform, string[])> hardpoints, int idx)
     {
         if (hardpoints[idx].Item2 == null)
         {
@@ -1421,6 +1535,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public Camera ImageCam;
     public Camera ShipViewCam;
     public RawImage ShipViewBox;
+    public MultiToggleGroup AmmoToggleGroup;
 
     public ShipEditorShipSectionsPanel ShipSectionsPanel;
 
@@ -1431,13 +1546,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public Color SlotIncompatibleColor;
     public Color SlotOccupiedColor;
     public Color SlotToAddColor;
+    public Color AmmoSelectedColor;
 
     public Material ShipMtlInDisplay;
 
     [NonSerialized]
     private ShipDummyInEditor? _currShip = null;
     [NonSerialized]
-    private List<(TurretHardpoint, TurretDefinition, Transform)> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform)>();
+    private List<(TurretHardpoint, TurretDefinition, Transform, string[])> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform, string[])>();
     [NonSerialized]
     private Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>> _currShipComps = new Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>>();
     [NonSerialized]

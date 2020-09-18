@@ -8,15 +8,14 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class OnOffButton : MonoBehaviour
 {
-    void Awake()
+    protected virtual void Awake()
     {
         _innerBtn = GetComponent<Button>();
         _innerBtn.onClick.AddListener(Toggle);
-        _containerImg = _innerBtn.GetComponent<Image>();
         Value = InitialValue;
     }
 
-    public bool Value
+    public virtual bool Value
     {
         get
         {
@@ -26,20 +25,16 @@ public class OnOffButton : MonoBehaviour
         {
             bool prevValue = _value;
             _value = value;
-            if (_containerImg != null)
+            if (TargetGraphic != null)
             {
                 if (_value)
                 {
-                    _containerImg.color = OnColor;
+                    TargetGraphic.color = OnColor;
                 }
                 else
                 {
-                    _containerImg.color = OffColor;
+                    TargetGraphic.color = OffColor;
                 }
-            }
-            else
-            {
-                InitialValue = value;
             }
 
             if (_value != prevValue)
@@ -55,13 +50,12 @@ public class OnOffButton : MonoBehaviour
         onValueChangedViaClick?.Invoke(Value);
     }
 
-    public Image ButtonImage;
     public Color OnColor;
     public Color OffColor;
     private bool _value;
     public bool InitialValue;
     private Button _innerBtn;
-    private Image _containerImg;
+    public Graphic TargetGraphic;
     public event Action<bool> onValueChanged;
     public event Action<bool> onValueChangedViaClick;
 }

@@ -547,6 +547,7 @@ GameObject:
   - component: {fileID: 165639011}
   - component: {fileID: 165639010}
   - component: {fileID: 165639009}
+  - component: {fileID: 165639012}
   m_Layer: 5
   m_Name: Ammo Scroll View
   m_TagString: Untagged
@@ -644,6 +645,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165639007}
   m_CullTransparentMesh: 0
+--- !u!114 &165639012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165639007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0af6a710e39baf245b0cdb97dfe5df6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MinOn: 0
+  MaxOn: 0
 --- !u!1 &179410154
 GameObject:
   m_ObjectHideFlags: 0
@@ -7598,6 +7613,7 @@ MonoBehaviour:
   ImageCam: {fileID: 839739874}
   ShipViewCam: {fileID: 1614639278}
   ShipViewBox: {fileID: 279862913}
+  AmmoToggleGroup: {fileID: 165639012}
   ShipSectionsPanel:
     Center: {fileID: 495388457}
     Fore: {fileID: 489409138}
@@ -7616,6 +7632,7 @@ MonoBehaviour:
   SlotIncompatibleColor: {r: 1, g: 0, b: 0, a: 0.2509804}
   SlotOccupiedColor: {r: 1, g: 0.50728744, b: 0, a: 0.2509804}
   SlotToAddColor: {r: 0, g: 0, b: 1, a: 0.2509804}
+  AmmoSelectedColor: {r: 0, g: 0.627451, b: 0, a: 1}
   ShipMtlInDisplay: {fileID: 2100000, guid: 2769a9d22410e82439e2c4dd41bf4918, type: 2}
 --- !u!1 &1475470044
 GameObject:
@@ -9251,7 +9268,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5, y: -34}
+  m_AnchoredPosition: {x: -5, y: -94}
   m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1863296782

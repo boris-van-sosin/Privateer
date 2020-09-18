@@ -19,7 +19,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         ParseMuzzles();
         AlternatingFire = DefaultAlternatingFire;
         _allowedSlotTypes = new string[] { turretSlotType };
-        _warheads = new Warhead[_maxWarheads];
+        _warheads = new Warhead[MaxWarheads];
     }
 
     public virtual void PostInstallTurret(ShipBase s)
@@ -656,7 +656,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public float MaxRange;
     public float FiringInterval;
     protected Warhead[] _warheads;
-    private static readonly int _maxWarheads = 2;
+    public static readonly int MaxWarheads = 2;
 
     public float ActualFiringInterval { get; protected set; }
     public string TurretWeaponSize;

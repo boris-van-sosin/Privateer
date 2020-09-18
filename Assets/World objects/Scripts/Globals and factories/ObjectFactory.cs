@@ -1390,6 +1390,15 @@ public static class ObjectFactory
         return GetSpriteSpecInner(_shipCompImagePaths, _shipCompSpriteCache, compType);
     }
 
+    public static Sprite GetSTurretModImage(string modType)
+    {
+        if (_turretModImagePaths == null)
+        {
+            LoadIcons();
+        }
+        return GetSpriteSpecInner(_turretModImagePaths, _turretModSpriteCache, modType);
+    }
+
     private static Sprite GetSpriteSpecInner(Dictionary<string, (string, int, int, int, int, int, int)> imgPathDict, Dictionary<string, Sprite> spriteDict, string key)
     {
         (string, int, int, int, int, int, int) spriteItem;
@@ -1610,6 +1619,7 @@ public static class ObjectFactory
         _ammoImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         _torpedoTypeImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         _shipCompImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
+        _turretModImagePaths = new Dictionary<string, (string, int, int, int, int, int, int)>();
         foreach (string l in lines)
         {
             string trimLn = l.Trim();
@@ -1645,6 +1655,10 @@ public static class ObjectFactory
                 {
                     _shipCompImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
                 }
+                else if (items[0] == "TurretMod")
+                {
+                    _turretModImagePaths.Add(key, (imgFile, imgW, imgH, spriteX, spriteY, spriteW, spriteH));
+                }
             }
         }
     }
@@ -1674,11 +1688,13 @@ public static class ObjectFactory
     private static Dictionary<string, (string, int, int, int, int, int, int)> _ammoImagePaths = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _torpedoTypeImagePaths = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _shipCompImagePaths = null;
+    private static Dictionary<string, (string, int, int, int, int, int, int)> _turretModImagePaths = null;
     private static Dictionary<string, Sprite> _weaponSpriteCache = new Dictionary<string, Sprite>();
     private static Dictionary<string, Sprite> _weaponSizeSpriteCache = new Dictionary<string, Sprite>();
     private static Dictionary<string, Sprite> _ammoSpriteCache = new Dictionary<string, Sprite>();
     private static Dictionary<string, Sprite> _torpedoTypeSpriteCache = new Dictionary<string, Sprite>();
     private static Dictionary<string, Sprite> _shipCompSpriteCache = new Dictionary<string, Sprite>();
+    private static Dictionary<string, Sprite> _turretModSpriteCache = new Dictionary<string, Sprite>();
     private static List<string> _shipHulls;
     private static List<(string, string)> _weaponTypesAndSizes;
     private static List<string> _weaponMountTypes;
