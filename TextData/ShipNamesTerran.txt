@@ -597,7 +597,8 @@ Sloops:
   - ShortName: Samurai
     FullName: Samurai
     Fluff: ''
-    Subcultures: []
+    Subcultures:
+    - Pirate
   - ShortName: Havoc
     FullName: Havoc
     Fluff: ''
@@ -631,7 +632,8 @@ Sloops:
   - ShortName: Elizabeth
     FullName: Elizabeth
     Fluff: ''
-    Subcultures: []
+    Subcultures:
+    - Pirate
   - ShortName: Plunder
     FullName: Plunder
     Fluff: ''
@@ -655,7 +657,8 @@ Sloops:
   - ShortName: Hellebore
     FullName: Hellebore
     Fluff: ''
-    Subcultures: []
+    Subcultures:
+    - Pirate
   - ShortName: Forlorn Hope
     FullName: Forlorn Hope
     Fluff: ''
@@ -719,7 +722,8 @@ Sloops:
   - ShortName: Vanessa
     FullName: Vanessa
     Fluff: ''
-    Subcultures: []
+    Subcultures:
+    - Pirate
   - ShortName: Harkonnen
     FullName: Harkonnen
     Fluff: ''
@@ -1734,6 +1738,11 @@ Frigates:
     Fluff: ''
     Subcultures:
     - German
+  - ShortName: Wartburg
+    FullName: Wartburg
+    Fluff: ''
+    Subcultures:
+    - German
   - ShortName: Balga
     FullName: Balga
     Fluff: ''
@@ -2517,6 +2526,16 @@ Frigates:
     - German
   - ShortName: Schwerin
     FullName: Schwerin
+    Fluff: ''
+    Subcultures:
+    - German
+  - ShortName: Bayreuth
+    FullName: Bayreuth
+    Fluff: ''
+    Subcultures:
+    - German
+  - ShortName: Ingolstadt
+    FullName: Ingolstadt
     Fluff: ''
     Subcultures:
     - German
@@ -4089,7 +4108,7 @@ Cruisers:
     Fluff: ''
     Subcultures: []
   - ShortName: Itter
-    FullName: Itter
+    FullName: Schloss Itter
     Fluff: ''
     Subcultures:
     - German
