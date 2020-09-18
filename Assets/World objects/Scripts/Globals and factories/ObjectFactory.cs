@@ -1156,6 +1156,28 @@ public static class ObjectFactory
         return _shipCompDefinitions.Values;
     }
 
+    public static TurretDefinition GetTurretTypeByKey(string turretMountType, string weaponNum, string weaponSize, string weaponType)
+    {
+        if (_turretDefinitions == null)
+        {
+            LoadTurretDefinitions();
+        }
+        TurretDefinition turretDef;
+        if (_turretDefinitions.TryGetValue((turretMountType, weaponNum, weaponSize, weaponType), out turretDef))
+        {
+            return turretDef;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static int TurretMountMaxHitPoints(string turretType)
+    {
+        return _weaponMounts[turretType].HitPoints;
+    }
+
     public static Sprite GetSprite(string key)
     {
         return _prototypes.GetSprite(key);
@@ -2046,23 +2068,4 @@ public static class ObjectFactory
 
     private static ObjectPrototypes _prototypes = null;
     private static ObjectLoader _loader = new ObjectLoader();
-}
-
-public class ShipTemplate
-{
-    public string ProductionKey;
-    public float MaxSpeed;
-    public float Mass;
-    public float Thrust;
-    public float Braking;
-    public float TurnRate;
-    public string[] CenterComponentSlots;
-    public string[] ForeComponentSlots;
-    public string[] AftComponentSlots;
-    public string[] LeftComponentSlots;
-    public string[] RightComponentSlots;
-    public int DefaultArmorFront;
-    public int DefaultArmorAft;
-    public int DefaultArmorLeft;
-    public int DefaultArmorRight;
 }

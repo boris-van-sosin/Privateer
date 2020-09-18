@@ -47,6 +47,11 @@ public static class HierarchySerializer
         return SerializeObjectInner(compTemplate, typeof(ShipComponentTemplateDefinition));
     }
 
+    static public string SerializeObject(ShipTemplate shipTemplate)
+    {
+        return SerializeObjectInner(shipTemplate, typeof(ShipTemplate));
+    }
+
     static private string SerializeObjectInner(System.Object toSerialize, Type targetType)
     {
         DynamicTypeResolver tr = new DynamicTypeResolver();

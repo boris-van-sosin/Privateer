@@ -15,10 +15,12 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         PopulateWeapons();
         PopulateShipComps();
         PopulateAmmo();
+        PopulateTurretMods();
         GetTurretDefs();
         FilterWeapons(null);
         FilterComponents(null);
         FilterAmmo(null);
+        FilterTurretMods(null);
         InitShipSections();
     }
 
@@ -101,18 +103,21 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             {
                 for (int i = 0; i < _currHardpoints.Count; ++i)
                 {
-                    if (null != _currHardpoints[i].Item3)
+                    if (null != _currHardpoints[i].TurretModel)
                     {
-                        Destroy(_currHardpoints[i].Item3.gameObject);
+                        Destroy(_currHardpoints[i].TurretModel.gameObject);
                     }
                 }
                 _currHardpoints.Clear();
                 needsReFilter = true;
+                WeaponCfgPanel.gameObject.SetActive(false);
+                _weaponCfgPanelDirty = true;
             }
         }
         else if (null == _currShip)
         {
             needsReFilter = true;
+            _weaponCfgPanelDirty = true;
         }
 
         ShipDummyInEditor s;
@@ -136,7 +141,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
         for (int i = 0; i < s.Hardpoints.Count; ++i)
         {
-            _currHardpoints.Add((s.Hardpoints[i].Item1, null, null, null));
+            _currHardpoints.Add(TurretInEditor.FromEmptyHardpoint(s.Hardpoints[i].Item1));
         }
         SetShipSections(s.HullDef);
 
@@ -470,14 +475,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             AmmoToggleGroup.MinOn = 0;
             if (_currAmmoType != null && AmmoFilter(_currWeapon, _currAmmoType))
             {
-                AmmoToggleGroup.MaxOn = 2;
+                AmmoToggleGroup.MaxOn = 1;
                 for (int j = 0; j < _allAmmoTypes.Count; ++j)
                 {
                     GroupedOnOffButton btn2 = _allAmmoTypes[j].GetComponent<GroupedOnOffButton>();
                     btn2.Value = _allAmmoTypes[j].AmmoTypeKey == _currAmmoType;
                     Button baseBtn = _allAmmoTypes[j].GetComponent<Button>();
                     btn2.OnColor = AmmoSelectedColor;
-                    btn2.OffColor = _allAmmoTypesComatibleFlags[j] ? baseBtn.colors.normalColor : Color.white;
+                    btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
                 }
                 AmmoToggleGroup.MinOn = 1;
             }
@@ -485,9 +490,9 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             {
                 for (int i = 0; i < _allAmmoTypes.Count; ++i)
                 {
-                    if (_allAmmoTypesComatibleFlags[i])
+                    if (compatible[i])
                     {
-                        AmmoToggleGroup.MaxOn = 2;
+                        AmmoToggleGroup.MaxOn = 1;
                         GroupedOnOffButton btn = _allAmmoTypes[i].GetComponent<GroupedOnOffButton>();
                         btn.Value = true;
                         for (int j = 0; j < _allAmmoTypes.Count; ++j)
@@ -499,7 +504,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                             }
                             Button baseBtn = _allAmmoTypes[j].GetComponent<Button>();
                             btn2.OnColor = AmmoSelectedColor;
-                            btn2.OffColor = _allAmmoTypesComatibleFlags[j] ? baseBtn.colors.normalColor : Color.white;
+                            btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
                         }
                         AmmoToggleGroup.MinOn = 1;
                         break;
@@ -514,7 +519,143 @@ public class ShipEditor : MonoBehaviour, IDropHandler
 
     private void PopulateTurretMods()
     {
-        TurretMod tm;
+        StackingLayout stackingBehavior = TurretModsScrollViewContent.GetComponent<StackingLayout>();
+        stackingBehavior.AutoRefresh = false;
+
+        float offset = 0.0f;
+
+        TurretMod[] turretMods = (TurretMod[]) Enum.GetValues(typeof(TurretMod));
+        _allTurretMods = new List<ShipEditorDraggable>(turretMods.Length);
+        for (int i = 0; i < turretMods.Length; ++i)
+        {
+            string turretModKey = turretMods[i].ToString();
+            Sprite turretModSprite = ObjectFactory.GetSTurretModImage(turretModKey);
+            if (turretModSprite == null)
+            {
+                continue;
+            }
+
+            RectTransform t = Instantiate(ButtonPrototype);
+            t.gameObject.AddComponent<StackableUIComponent>();
+
+            t.SetParent(TurretModsScrollViewContent, false);
+            float height = t.rect.height;
+            float pivotOffset = t.pivot.x * t.rect.width;
+            t.anchoredPosition = new Vector2(pivotOffset, 0);
+            offset -= height;
+
+            TextMeshProUGUI textElem = t.GetComponentInChildren<TextMeshProUGUI>();
+            textElem.text = turretMods[i].ToString();
+
+            Image img = t.Find("Image").GetComponent<Image>();
+            img.sprite = turretModSprite;
+
+            GroupedOnOffButton groupedBtn = t.gameObject.AddComponent<GroupedOnOffButton>();
+            Button innerBtn = t.GetComponent<Button>();
+            groupedBtn.TargetGraphic = t.GetComponent<Graphic>();
+            groupedBtn.OnColor = AmmoSelectedColor;
+            groupedBtn.OffColor = innerBtn.colors.normalColor;
+            groupedBtn.Group = TurretModToggleGroup;
+
+            ShipEditorDraggable draggable = t.gameObject.AddComponent<ShipEditorDraggable>();
+            draggable.ContainingEditor = this;
+            draggable.Item = EditorItemType.TurretMod;
+            draggable.TurretModKey = turretModKey;
+            _allTurretMods.Add(draggable);
+        }
+
+        _allTurretModsComatibleFlags = new bool[_allTurretMods.Count];
+    }
+
+    private void FilterTurretMods(Func<TurretDefinition, string, bool> filter)
+    {
+        float offset;
+        List<ShipEditorDraggable> compItems = _allTurretMods;
+        bool[] compatible = _allTurretModsComatibleFlags;
+
+        ShipComponentFilteringTag ft = ShipComponentFilteringTag.All;
+        for (int i = 0; i < WeaponsDisplayToggleGroup.Length; i++)
+        {
+            if (WeaponsDisplayToggleGroup[i].isOn)
+            {
+                FilterTag ftComp = WeaponsDisplayToggleGroup[i].GetComponent<FilterTag>();
+                ft = ftComp.FilteringTag;
+                break;
+            }
+        }
+
+        FilterAndSortInner(TurretModsScrollViewContent, x => (_currWeapon != null && filter(_currWeapon, x.TurretModKey)), compItems, compatible, ft, out offset);
+
+        if (_currWeapon == null)
+        {
+            TurretModToggleGroup.MinOn = TurretModToggleGroup.MaxOn = 0;
+            for (int i = 0; i < _allTurretMods.Count; ++i)
+            {
+                if (_allTurretMods != null)
+                {
+                    GroupedOnOffButton btn = _allTurretMods[i].GetComponent<GroupedOnOffButton>();
+                    btn.OffColor = Color.white;
+                    btn.Value = false;
+                }
+            }
+        }
+        else
+        {
+            if (_currTurretMod != null && TurretModFilter(_currWeapon, _currTurretMod))
+            {
+                TurretModToggleGroup.MaxOn = 1;
+                for (int j = 0; j < _allTurretMods.Count; ++j)
+                {
+                    GroupedOnOffButton btn2 = _allTurretMods[j].GetComponent<GroupedOnOffButton>();
+                    btn2.Value = _allTurretMods[j].TurretModKey == _currTurretMod;
+                    Button baseBtn = _allTurretMods[j].GetComponent<Button>();
+                    btn2.OnColor = AmmoSelectedColor;
+                    btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
+                }
+            }
+            else
+            {
+                bool anyCompatible = false;
+                for (int i = 0; i < _allTurretMods.Count; ++i)
+                {
+                    if (compatible[i])
+                    {
+                        TurretModToggleGroup.MaxOn = 1;
+                        GroupedOnOffButton btn = _allTurretMods[i].GetComponent<GroupedOnOffButton>();
+                        btn.Value = true;
+                        for (int j = 0; j < _allTurretMods.Count; ++j)
+                        {
+                            GroupedOnOffButton btn2 = _allTurretMods[j].GetComponent<GroupedOnOffButton>();
+                            if (j != i)
+                            {
+                                btn2.Value = false;
+                            }
+                            Button baseBtn = _allTurretMods[j].GetComponent<Button>();
+                            btn2.OnColor = AmmoSelectedColor;
+                            btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
+                        }
+                        anyCompatible = true;
+                        break;
+                    }
+                }
+
+                if (!anyCompatible)
+                {
+                    for (int j = 0; j < _allTurretMods.Count; ++j)
+                    {
+                        GroupedOnOffButton btn2 = _allTurretMods[j].GetComponent<GroupedOnOffButton>();
+                        btn2.Value = false;
+                        Button baseBtn = _allTurretMods[j].GetComponent<Button>();
+                        btn2.OnColor = AmmoSelectedColor;
+                        btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
+                    }
+                    TurretModToggleGroup.MinOn = TurretModToggleGroup.MaxOn = 0;
+                }
+            }
+        }
+
+        FitScrollContent(TurretModsScrollViewContent.GetComponent<RectTransform>(), offset);
+        TurretModsScrollViewContent.GetComponent<StackingLayout>().ForceRefresh();
     }
 
     private Sprite CombineSpriteTextures(Sprite s1, Sprite s2)
@@ -634,6 +775,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     {
         FilterWeapons(WeaponFilter);
         FilterAmmo(AmmoFilter);
+        FilterTurretMods(TurretModFilter);
     }
 
     private void GetTurretDefs()
@@ -735,6 +877,26 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
     }
 
+    private bool TurretModFilter(TurretDefinition turretDef, string turretMod)
+    {
+        if (turretMod == null || turretMod == TurretModEmptyString)
+        {
+            return true;
+        }
+        else
+        {
+            TurretMod mod;
+            if (Enum.TryParse<TurretMod>(turretMod, out mod))
+            {
+                return TurretDefinition.IsTurretModCompatible(turretDef, mod);
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
     private TurretDefinition TryMatchTurretDef(string[] hardpointAllowedSlots, string weaponType, string weaponSize)
     {
         return TryMatchTurretDef(hardpointAllowedSlots, weaponType, weaponSize, 0);
@@ -802,6 +964,15 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
                 break;
             case EditorItemType.TurretMod:
+                _currTurretMod = item.TurretModKey;
+                if (_currWeapon != null)
+                {
+                    GroupedOnOffButton btn;
+                    if (item.TryGetComponent(out btn))
+                    {
+                        btn.Value = true;
+                    }
+                }
                 break;
             default:
                 break;
@@ -823,14 +994,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 {
                     mtl.color = SlotIncompatibleColor;
                 }
-                else if (_currHardpoints[i].Item2 == null)
+                else if (_currHardpoints[i].IsEmpty)
                 {
                     mtl.color = SlotFreeColor;
                 }
-                else if (_currHardpoints[i].Item2.WeaponType == item.WeaponKey && _currHardpoints[i].Item2.WeaponSize == item.WeaponSize)
+                else if (_currHardpoints[i].TurretDef.WeaponType == item.WeaponKey && _currHardpoints[i].TurretDef.WeaponSize == item.WeaponSize)
                 {
                     int prevWeaponNum;
-                    if (int.TryParse(_currHardpoints[i].Item2.WeaponNum, out prevWeaponNum) &&
+                    if (int.TryParse(_currHardpoints[i].TurretDef.WeaponNum, out prevWeaponNum) &&
                         TryMatchTurretDef(allowedTurrets, item.WeaponKey, item.WeaponSize, prevWeaponNum) != null)
                     {
                         mtl.color = SlotToAddColor;
@@ -850,6 +1021,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 {
                     _currWeapon = turretDef;
                     FilterAmmo(AmmoFilter);
+                    FilterTurretMods(TurretModFilter);
                 }
                 if (!drawnPenChard && turretDef != null && _currAmmoType != null)
                 {
@@ -881,6 +1053,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 PlaceAmmoType(item, eventData);
                 break;
             case EditorItemType.TurretMod:
+                PlaceTurretMod(item, eventData);
                 break;
             default:
                 break;
@@ -927,6 +1100,15 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
                 break;
             case EditorItemType.TurretMod:
+                _currTurretMod = item.TurretModKey;
+                if (_currWeapon != null)
+                {
+                    GroupedOnOffButton btn;
+                    if (item.TryGetComponent(out btn))
+                    {
+                        btn.Value = true;
+                    }
+                }
                 break;
             default:
                 break;
@@ -962,9 +1144,9 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             TurretHardpoint hardpoint = _currShip.Value.Hardpoints[hardpointIdx].Item1;
             TurretDefinition turretDef;
             int prevWeaponNum;
-            if (null != _currHardpoints[hardpointIdx].Item3 &&
-                _currHardpoints[hardpointIdx].Item2.WeaponType == item.WeaponKey && _currHardpoints[hardpointIdx].Item2.WeaponSize == item.WeaponSize &&
-                int.TryParse(_currHardpoints[hardpointIdx].Item2.WeaponNum, out prevWeaponNum))
+            if (null != _currHardpoints[hardpointIdx].TurretModel &&
+                _currHardpoints[hardpointIdx].TurretDef.WeaponType == item.WeaponKey && _currHardpoints[hardpointIdx].TurretDef.WeaponSize == item.WeaponSize &&
+                int.TryParse(_currHardpoints[hardpointIdx].TurretDef.WeaponNum, out prevWeaponNum))
             {
 
                 turretDef = TryMatchTurretDef(hardpoint.AllowedWeaponTypes, item.WeaponKey, item.WeaponSize, prevWeaponNum);
@@ -977,9 +1159,9 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             if (turretDef != null)
             {
                 // Remove any existing weapon
-                if (null != _currHardpoints[hardpointIdx].Item3)
+                if (null != _currHardpoints[hardpointIdx].TurretModel)
                 {
-                    Destroy(_currHardpoints[hardpointIdx].Item3.gameObject);
+                    Destroy(_currHardpoints[hardpointIdx].TurretModel.gameObject);
                 }
 
                 // Place the new weapon
@@ -1000,7 +1182,18 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                     selectedAmmo = AmmoToggleGroup.ButtonsOn.Select(a => a.GetComponent<ShipEditorDraggable>().AmmoTypeKey).ToArray();
                 }
 
-                _currHardpoints[hardpointIdx] = (hardpoint, turretDef, dummyTurret, selectedAmmo);
+                string[] selectedTurretMods;
+                if (TurretModToggleGroup.NumButtonsOn == 0)
+                {
+                    selectedTurretMods = null;
+                }
+                else
+                {
+                    selectedTurretMods = new string[] { _currTurretMod };
+                }
+
+                _currHardpoints[hardpointIdx] = new TurretInEditor()
+                { Hardpoint = hardpoint, TurretDef = turretDef, TurretModel = dummyTurret, AmmoTypes = selectedAmmo, TurretMods = selectedTurretMods };
 
                 MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < renderers.Length; ++i)
@@ -1171,9 +1364,28 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         int hardpointIdx = RaycastDropWeapon(eventData.position);
         if (hardpointIdx >= 0)
         {
-            if (null != _currHardpoints[hardpointIdx].Item2 && AmmoFilter(_currHardpoints[hardpointIdx].Item2, item.AmmoTypeKey))
+            if (!_currHardpoints[hardpointIdx].IsEmpty && AmmoFilter(_currHardpoints[hardpointIdx].TurretDef, item.AmmoTypeKey))
             {
-                _currHardpoints[hardpointIdx] = (_currHardpoints[hardpointIdx].Item1, _currHardpoints[hardpointIdx].Item2, _currHardpoints[hardpointIdx].Item3, new string[] { item.AmmoTypeKey });
+                _currHardpoints[hardpointIdx] = _currHardpoints[hardpointIdx].ReplaceAmmo(new string[] { item.AmmoTypeKey });
+            }
+        }
+    }
+
+    private void PlaceTurretMod(ShipEditorDraggable item, PointerEventData eventData)
+    {
+        int hardpointIdx = RaycastDropWeapon(eventData.position);
+        if (hardpointIdx >= 0)
+        {
+            if (!_currHardpoints[hardpointIdx].IsEmpty && TurretModFilter(_currHardpoints[hardpointIdx].TurretDef, item.TurretModKey))
+            {
+                if (item.TurretModKey != null)
+                {
+                    _currHardpoints[hardpointIdx] = _currHardpoints[hardpointIdx].ReplaceTurretMods(new string[] { item.TurretModKey });
+                }
+                else
+                {
+                    _currHardpoints[hardpointIdx] = _currHardpoints[hardpointIdx].ReplaceTurretMods(new string[] { TurretModEmptyString });
+                }
             }
         }
     }
@@ -1237,19 +1449,19 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
         for (int i = 0; i < _currHardpoints.Count; ++i)
         {
-            (TurretHardpoint, TurretDefinition, Transform, string[]) hardpoint = _currHardpoints[i];
-            if (hardpoint.Item2 == null)
+            TurretInEditor hardpoint = _currHardpoints[i];
+            if (hardpoint.IsEmpty)
             {
                 continue;
             }
 
             int powerToFire, heatToFire;
             float firingInterval;
-            (powerToFire, heatToFire, firingInterval) = ObjectFactory.GetWeaponPowerConsumption(hardpoint.Item2.WeaponType, hardpoint.Item2.WeaponSize);
+            (powerToFire, heatToFire, firingInterval) = ObjectFactory.GetWeaponPowerConsumption(hardpoint.TurretDef.WeaponType, hardpoint.TurretDef.WeaponSize);
             if (powerToFire >= 0)
             {
                 int numBarrels;
-                if (!int.TryParse(hardpoint.Item2.WeaponNum, out numBarrels))
+                if (!int.TryParse(hardpoint.TurretDef.WeaponNum, out numBarrels))
                 {
                     numBarrels = 1;
                 }
@@ -1262,7 +1474,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 powerForSustainedFireAll += powerSustained;
                 heatForSustainedFireAll += heatSustained;
 
-                if (hardpoint.Item1.WeaponAIHint == TurretAIHint.Main)
+                if (hardpoint.Hardpoint.WeaponAIHint == TurretAIHint.Main)
                 {
                     int oppHardpoint = FindPairedTurret(_currHardpoints, i);
                     if (oppHardpoint >= 0)
@@ -1271,11 +1483,11 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                         int oppPowerToFire, oppHeatToFire;
                         float oppFiringInterval;
                         (oppPowerToFire, oppHeatToFire, oppFiringInterval) =
-                            ObjectFactory.GetWeaponPowerConsumption(_currHardpoints[oppHardpoint].Item2.WeaponType, _currHardpoints[oppHardpoint].Item2.WeaponSize);
+                            ObjectFactory.GetWeaponPowerConsumption(_currHardpoints[oppHardpoint].TurretDef.WeaponType, _currHardpoints[oppHardpoint].TurretDef.WeaponSize);
                         if (oppPowerToFire >= 0)
                         {
                             int oppNumBarrels;
-                            if (!int.TryParse(_currHardpoints[oppHardpoint].Item2.WeaponNum, out oppNumBarrels))
+                            if (!int.TryParse(_currHardpoints[oppHardpoint].TurretDef.WeaponNum, out oppNumBarrels))
                             {
                                 oppNumBarrels = 1;
                             }
@@ -1310,20 +1522,20 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                         powerPerSalvoMain, powerPerSalvoAll, heatPerSalvoMain, heatPerSalvoAll, powerForSustainedFireMain, powerForSustainedFireAll, heatForSustainedFireMain, heatForSustainedFireAll);
     }
 
-    private int FindPairedTurret(List<(TurretHardpoint, TurretDefinition, Transform, string[])> hardpoints, int idx)
+    private int FindPairedTurret(List<TurretInEditor> hardpoints, int idx)
     {
-        if (hardpoints[idx].Item2 == null)
+        if (hardpoints[idx].IsEmpty)
         {
             return -1;
         }
         for (int i = 0; i < hardpoints.Count; ++i)
         {
-            if (i == idx || hardpoints[i].Item2 == null)
+            if (i == idx || hardpoints[i].IsEmpty)
                 continue;
 
-            if (Mathf.Approximately(hardpoints[i].Item1.transform.localPosition.x, -hardpoints[idx].Item1.transform.localPosition.x) &&
-                Mathf.Approximately(hardpoints[i].Item1.transform.localPosition.y, hardpoints[idx].Item1.transform.localPosition.y) &
-                Mathf.Approximately(hardpoints[i].Item1.transform.localPosition.z, hardpoints[idx].Item1.transform.localPosition.z))
+            if (Mathf.Approximately(hardpoints[i].Hardpoint.transform.localPosition.x, -hardpoints[idx].Hardpoint.transform.localPosition.x) &&
+                Mathf.Approximately(hardpoints[i].Hardpoint.transform.localPosition.y, hardpoints[idx].Hardpoint.transform.localPosition.y) &
+                Mathf.Approximately(hardpoints[i].Hardpoint.transform.localPosition.z, hardpoints[idx].Hardpoint.transform.localPosition.z))
                 return i;
         }
         return -1;
@@ -1485,47 +1697,96 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
     }
 
-    public ShipShadow CompileShip()
+    public void ToggleWeaponControlCfgPanel()
     {
-        ShipShadow res = new ShipShadow()
+        bool prev = WeaponCfgPanel.gameObject.activeSelf;
+        if (_currShip.HasValue)
+        {
+            WeaponCfgPanel.gameObject.SetActive(!prev);
+            if (!prev && _weaponCfgPanelDirty)
+            {
+                WeaponCfgPanel.SetShipTemplate(_currShip.Value.HullDef);
+                _weaponCfgPanelDirty = false;
+            }
+        }
+        else
+        {
+            WeaponCfgPanel.gameObject.SetActive(false);
+        }
+    }
+
+    public ShipTemplate CompileShip()
+    {
+        if (!_currShip.HasValue)
+        {
+            return null;
+        }
+
+        ShipTemplate res = new ShipTemplate()
         {
             ShipHullProductionKey = _currShip.Value.Key,
-            ShipComponents = new Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>>(_currShipComps),
+            ShipComponents = new ShipTemplate.ShipComponentList[_currShipComps.Count],
         };
+
+        int idx = 0;
+        foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> shipSecComponents in _currShipComps)
+        {
+            res.ShipComponents[idx++] = new ShipTemplate.ShipComponentList() { Section = shipSecComponents.Key, Components = shipSecComponents.Value.ToArray() };
+        }
 
         int numWeapons = 0;
         for (int i = 0; i < _currHardpoints.Count; ++i)
         {
-            if (_currHardpoints[i].Item2 != null)
+            if (!_currHardpoints[i].IsEmpty)
             {
                 ++numWeapons;
             }
         }
-        res.Turrets = new ShipShadow.TurretPlacement[numWeapons];
+        res.Turrets = new ShipTemplate.TemplateTurretPlacement[numWeapons];
         int weaponIdx = 0;
         for (int i = 0; i < _currHardpoints.Count; ++i)
         {
-            if (_currHardpoints[i].Item2 != null)
+            if (!_currHardpoints[i].IsEmpty)
             {
-                res.Turrets[i].HardpointKey = _currHardpoints[i].Item1.DisplayString;
-                res.Turrets[i].TurretType = _currHardpoints[i].Item2.TurretType;
-                res.Turrets[i].WeaponType = _currHardpoints[i].Item2.WeaponType;
-                res.Turrets[i].WeaponSize = _currHardpoints[i].Item2.WeaponSize;
-                res.Turrets[i].WeaponNum = _currHardpoints[i].Item2.WeaponNum;
+                res.Turrets[i].HardpointKey = _currHardpoints[i].Hardpoint.name;
+                res.Turrets[i].TurretType = _currHardpoints[i].TurretDef.TurretType;
+                res.Turrets[i].WeaponType = _currHardpoints[i].TurretDef.WeaponType;
+                res.Turrets[i].WeaponSize = _currHardpoints[i].TurretDef.WeaponSize;
+                res.Turrets[i].WeaponNum = _currHardpoints[i].TurretDef.WeaponNum;
                 res.Turrets[i].AlternatingFire = false; //TODO: implement
-                res.Turrets[i].InstalledMod = TurretMod.None; //TODO: implement
-                res.Turrets[i].AmmoTypes = new string[] { "KineticPenetrator" }; //TODO: implement
+                res.Turrets[i].AmmoTypes = new string[_currHardpoints[i].AmmoTypes.Length];
+                _currHardpoints[i].AmmoTypes.CopyTo(res.Turrets[i].AmmoTypes, 0);
+                if (_currHardpoints[i].TurretMods == null || _currHardpoints[i].TurretMods.Length == 0)
+                {
+                    res.Turrets[i].InstalledMods = new TurretMod[] { TurretMod.None };
+                }
+                else
+                {
+                    res.Turrets[i].InstalledMods = _currHardpoints[i].TurretMods.Select(s => s != null ? (TurretMod) Enum.Parse(typeof(TurretMod), s) : TurretMod.None).ToArray();
+                }
                 ++weaponIdx;
             }
         }
 
+        res.WeaponConfig = _weaponCfgPanelDirty ? WeaponControlGroupCfgPanel.DefaultForShip(_currShip.Value.HullDef) : WeaponCfgPanel.Compile();
+
+        //DEBUG:
+        res.ShipClassName = "Boris class";
+        string yamlShip = HierarchySerializer.SerializeObject(res);
+
         return res;
+    }
+
+    public void CompileShip2()
+    {
+        CompileShip();
     }
 
     public RectTransform ShipClassesScrollViewContent;
     public RectTransform ShipHullsScrollViewContent;
     public RectTransform WeaponsScrollViewContent;
     public RectTransform AmmoScrollViewContent;
+    public RectTransform TurretModsScrollViewContent;
     public RectTransform ShipCompsScrollViewContent;
 
     public AreaGraphRenderer PenetrationGraph;
@@ -1536,8 +1797,10 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public Camera ShipViewCam;
     public RawImage ShipViewBox;
     public MultiToggleGroup AmmoToggleGroup;
+    public MultiToggleGroup TurretModToggleGroup;
 
     public ShipEditorShipSectionsPanel ShipSectionsPanel;
+    public WeaponControlGroupCfgPanel WeaponCfgPanel;
 
     public Toggle[] ComponentDisplayToggleGroup;
     public Toggle[] WeaponsDisplayToggleGroup;
@@ -1553,7 +1816,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     [NonSerialized]
     private ShipDummyInEditor? _currShip = null;
     [NonSerialized]
-    private List<(TurretHardpoint, TurretDefinition, Transform, string[])> _currHardpoints = new List<(TurretHardpoint, TurretDefinition, Transform, string[])>();
+    private List<TurretInEditor> _currHardpoints = new List<TurretInEditor>();
     [NonSerialized]
     private Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>> _currShipComps = new Dictionary<Ship.ShipSection, List<ShipComponentTemplateDefinition>>();
     [NonSerialized]
@@ -1584,11 +1847,21 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     private List<ShipEditorDraggable> _allAmmoTypes;
     [NonSerialized]
     private bool[] _allAmmoTypesComatibleFlags;
+    [NonSerialized]
+    private List<ShipEditorDraggable> _allTurretMods;
+    [NonSerialized]
+    private bool[] _allTurretModsComatibleFlags;
 
     [NonSerialized]
     private string _currAmmoType = null;
     [NonSerialized]
     private TurretDefinition _currWeapon = null;
+    [NonSerialized]
+    private string _currTurretMod = null;
+
+    private bool _weaponCfgPanelDirty = true;
+
+    private static readonly string TurretModEmptyString = TurretMod.None.ToString();
 
     private struct ShipDummyInEditor
     {
@@ -1596,6 +1869,53 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         public Transform ShipModel;
         public ShipHullDefinition HullDef;
         public List<(TurretHardpoint, Collider, MeshRenderer)> Hardpoints;
+    }
+
+    private struct TurretInEditor
+    {
+        public TurretHardpoint Hardpoint;
+        public TurretDefinition TurretDef;
+        public Transform TurretModel;
+        public string[] AmmoTypes;
+        public string[] TurretMods;
+
+        public bool IsEmpty => TurretDef == null;
+
+        public static TurretInEditor FromEmptyHardpoint(TurretHardpoint hp)
+        {
+            return new TurretInEditor()
+            {
+                Hardpoint = hp,
+                TurretDef = null,
+                TurretModel = null,
+                AmmoTypes = null,
+                TurretMods = null
+            };
+        }
+
+        public TurretInEditor ReplaceAmmo(string [] newAmmo)
+        {
+            return new TurretInEditor()
+            {
+                Hardpoint = this.Hardpoint,
+                TurretDef = this.TurretDef,
+                TurretModel = this.TurretModel,
+                AmmoTypes = newAmmo,
+                TurretMods = this.TurretMods
+            };
+        }
+
+        public TurretInEditor ReplaceTurretMods(string[] newTurretMods)
+        {
+            return new TurretInEditor()
+            {
+                Hardpoint = this.Hardpoint,
+                TurretDef = this.TurretDef,
+                TurretModel = this.TurretModel,
+                AmmoTypes = this.AmmoTypes,
+                TurretMods = newTurretMods
+            };
+        }
     }
 
     public enum EditorItemType { ShipComponent, Weapon, Ammo, TurretMod }

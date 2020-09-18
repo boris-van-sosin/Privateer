@@ -33,4 +33,29 @@ public class TurretDefinition
             BehaviorType = behaviorType
         };
     }
+
+    public static bool IsTurretModCompatible(TurretDefinition def, TurretMod turretMod)
+    {
+        switch (def.BehaviorType)
+        {
+            case ObjectFactory.WeaponBehaviorType.Gun:
+                return turretMod == TurretMod.None || 
+                       turretMod == TurretMod.Accelerator ||
+                       turretMod == TurretMod.AdvancedTargeting ||
+                       turretMod == TurretMod.DualAmmoFeed||
+                       turretMod == TurretMod.FastAutoloader ||
+                       turretMod == TurretMod.Harpax;
+            case ObjectFactory.WeaponBehaviorType.Beam:
+            case ObjectFactory.WeaponBehaviorType.ContinuousBeam:
+                return turretMod == TurretMod.None ||
+                       turretMod == TurretMod.AdvancedTargeting ||
+                       turretMod == TurretMod.ImprovedCapacitors;
+            case ObjectFactory.WeaponBehaviorType.Unknown:
+            case ObjectFactory.WeaponBehaviorType.Torpedo:
+            case ObjectFactory.WeaponBehaviorType.BomberTorpedo:
+            case ObjectFactory.WeaponBehaviorType.Special:
+            default:
+                return turretMod == TurretMod.None;
+        }
+    }
 }

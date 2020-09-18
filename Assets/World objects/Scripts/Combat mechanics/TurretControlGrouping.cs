@@ -13,31 +13,31 @@ public class TurretControlGrouping
             ControlGroupDefaultStatus = new Dictionary<int, TurretBase.TurretMode>()
         };
 
-        foreach (int i in c.WeaponGroups.Keys)
+        foreach (WeaponControlGroupCfgPanel.WeaponsConfigCompiledLine group in c.WeaponGroups)
         {
-            if (c.WeaponGroups[i].Item2)
+            if (group.DefaultAuto)
             {
-                res.ControlGroupStatus[i] = res.ControlGroupDefaultStatus[i] = TurretBase.TurretMode.Auto;
+                res.ControlGroupStatus[group.GroupNum] = res.ControlGroupDefaultStatus[group.GroupNum] = TurretBase.TurretMode.Auto;
             }
             else
             {
-                res.ControlGroupStatus[i] = res.ControlGroupDefaultStatus[i] = TurretBase.TurretMode.Off;
+                res.ControlGroupStatus[group.GroupNum] = res.ControlGroupDefaultStatus[group.GroupNum] = TurretBase.TurretMode.Off;
             }
             List<ITurret> weaponsInGroup = new List<ITurret>();
-            foreach (string k in c.WeaponGroups[i].Item1)
+            foreach (string k in group.HardpointKeys)
             {
                 foreach (TurretHardpoint hp in s.WeaponHardpoints)
                 {
                     if (hp.name == k)
                     {
                         TurretBase currTurret = hp.GetComponentInChildren<TurretBase>();
-                        currTurret.SetTurretBehavior(res.ControlGroupDefaultStatus[i]);
+                        currTurret.SetTurretBehavior(res.ControlGroupDefaultStatus[group.GroupNum]);
                         weaponsInGroup.Add(currTurret);
                         break;
                     }
                 }
             }
-            res.ControlGroups[i] = weaponsInGroup;
+            res.ControlGroups[group.GroupNum] = weaponsInGroup;
         }
         res.CacheManualTurrets();
         return res;

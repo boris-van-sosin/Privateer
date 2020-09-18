@@ -32,4 +32,5 @@ public class ShipEditorDraggable : MonoBehaviour, IBeginDragHandler, IEndDragHan
     public string WeaponKey { get; set; }
     public ShipComponentTemplateDefinition ShipComponentDef { get; set; }
     public string AmmoTypeKey { get; set; }
+    public string TurretModKey { get; set; }
 }
