@@ -1327,6 +1327,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                             placedComp.ContainingEditor = this;
                             placedComp.ShipComponentDef = comp.ShipComponentDef;
                             placedComp.CurrentLocation = EditorItemLocation.Ship;
+                            placedComp.CurrentShipSection = shipSecPanel.Key;
 
                             Image img = t.Find("Image").GetComponent<Image>();
                             img.sprite = ObjectFactory.GetShipComponentImage(comp.ShipComponentDef.ComponentType);
@@ -1337,6 +1338,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                             _currShipComps[oldSec][oldIdx] = null;
                             _currShipCompPlaceholders[oldSec][oldIdx].gameObject.SetActive(true);
                             comp.transform.SetParent(shipSecPanel.Value.transform, false);
+                            comp.CurrentShipSection = shipSecPanel.Key;
                         }
 
                         // Make sure the placeholders are last:
@@ -1545,14 +1547,17 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     {
         if (comp.CurrentLocation == EditorItemLocation.Ship)
         {
-            foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> existingComps in _currShipComps)
+            Ship.ShipSection sec = comp.CurrentShipSection;
+            if (sec == Ship.ShipSection.Hidden)
             {
-                for (int i = 0; i < existingComps.Value.Count; i++)
+                return (Ship.ShipSection.Hidden, -1);
+            }
+            List<ShipComponentTemplateDefinition> secComps = _currShipComps[sec];
+            for (int i = 0; i < secComps.Count; i++)
+            {
+                if (secComps[i] == comp.ShipComponentDef)
                 {
-                    if (existingComps.Value[i] == comp.ShipComponentDef)
-                    {
-                        return (existingComps.Key, i);
-                    }
+                    return (sec, i);
                 }
             }
         }
