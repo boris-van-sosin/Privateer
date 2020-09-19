@@ -1439,8 +1439,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 }
                 else if (currComp.ShieldGeneratorDefinition != null)
                 {
-                    powerConsumption += currComp.ShieldGeneratorDefinition.PowerUsage;
-                    heatGeneration += currComp.ShieldGeneratorDefinition.HeatGeneration;
+                    powerConsumption += currComp.ShieldGeneratorDefinition.PowerUsage + currComp.ShieldGeneratorDefinition.PowerPerShieldRegeneration;
+                    heatGeneration += currComp.ShieldGeneratorDefinition.HeatGeneration = currComp.ShieldGeneratorDefinition.HeatPerShieldRegeneration;
                 }
                 else if (currComp.ShipEngineDefinition != null)
                 {
@@ -1522,6 +1522,26 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         Debug.LogFormat("Ship stats: Power capacity: {0} Heat capacity: {1} Power generation: {2}/sec, Power consumption (normal): {3}/sec Power consumption (high): {4}/sec Cooling: {5}/sec Heat generation(normal): {6}/sec Heat generation(high): {7}/sec Power per salvo: main: {8} all: {9} Heat per salvo: main: {10} all: {11} Power for sustained fire: main: {12} all: {13} heat for sustained fire: main: {14} all: {15}",
                         powerCapacity, heatCapacity, powerGeneration * 4, (powerConsumption) * 4, (powerConsumption + powerHigh) * 4, cooling * 4, (heatGeneration) * 4, (heatGeneration + heatHigh) * 4,
                         powerPerSalvoMain, powerPerSalvoAll, heatPerSalvoMain, heatPerSalvoAll, powerForSustainedFireMain, powerForSustainedFireAll, heatForSustainedFireMain, heatForSustainedFireAll);
+
+        SystemsInfoPanel.PowerCap.text = string.Format("{0}", powerCapacity);
+        SystemsInfoPanel.PowerGen.text = string.Format("{0}/sec", powerGeneration * 4);
+        SystemsInfoPanel.PowerConsumptionInCombat.text = string.Format("{0}/sec", powerConsumption * 4);
+        SystemsInfoPanel.PowerConsumptionMax.text = string.Format("{0}/sec", (powerConsumption + powerHigh) * 4);
+
+        SystemsInfoPanel.HeatCap.text = string.Format("{0}", heatCapacity);
+        SystemsInfoPanel.Cooling.text = string.Format("{0}/sec", cooling * 4);
+        SystemsInfoPanel.HeatGenInCombat.text = string.Format("{0}/sec", heatGeneration * 4);
+        SystemsInfoPanel.HeatGenMax.text = string.Format("{0}/sec", (heatGeneration + heatHigh) * 4);
+
+        SystemsInfoPanel.MainBatteryPower.text = string.Format("{0}", powerPerSalvoMain);
+        SystemsInfoPanel.MainBatteryPowerSustained.text = string.Format("{0}/sec", powerForSustainedFireMain);
+        SystemsInfoPanel.AllWeaponsPower.text = string.Format("{0}", powerPerSalvoAll);
+        SystemsInfoPanel.AllWeaponsPowerSustained.text = string.Format("{0}/sec", powerForSustainedFireAll);
+
+        SystemsInfoPanel.MainBatteryHeat.text = string.Format("{0}", heatPerSalvoMain);
+        SystemsInfoPanel.MainBatteryHeatSustained.text = string.Format("{0}/sec", heatForSustainedFireMain);
+        SystemsInfoPanel.AllWeaponsHeat.text = string.Format("{0}", heatPerSalvoAll);
+        SystemsInfoPanel.AllWeaponsHeatSustained.text = string.Format("{0}/sec", heatForSustainedFireAll);
     }
 
     private int FindPairedTurret(List<TurretInEditor> hardpoints, int idx)
@@ -1591,6 +1611,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 _currShipComps[oldSec][oldIdx] = null;
                 _currShipCompPlaceholders[oldSec][oldIdx].gameObject.SetActive(true);
                 Destroy(comp.gameObject);
+
+                GetShipQualityStats();
             }
         }
     }
@@ -1776,13 +1798,18 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         res.WeaponConfig = _weaponCfgPanelDirty ? WeaponControlGroupCfgPanel.DefaultForShip(_currShip.Value.HullDef) : WeaponCfgPanel.Compile();
 
         //DEBUG:
-        res.ShipClassName = "Boris class";
+        res.ShipClassName = ShipClassTextbox.text;
         string yamlShip = HierarchySerializer.SerializeObject(res);
 
         return res;
     }
 
     public void CompileShip2()
+    {
+        CompileShip();
+    }
+
+    public void ExportShipDesign()
     {
         CompileShip();
     }
@@ -1815,6 +1842,10 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public Color SlotOccupiedColor;
     public Color SlotToAddColor;
     public Color AmmoSelectedColor;
+
+    public ShipInfoPanel SystemsInfoPanel;
+
+    public TMP_InputField ShipClassTextbox;
 
     public Material ShipMtlInDisplay;
 
@@ -1935,5 +1966,29 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         public ShipEditorDropTarget Aft;
         public ShipEditorDropTarget Left;
         public ShipEditorDropTarget Right;
+    }
+
+    [Serializable]
+    public struct ShipInfoPanel
+    {
+        public TextMeshProUGUI PowerGen;
+        public TextMeshProUGUI PowerCap;
+        public TextMeshProUGUI PowerConsumptionInCombat;
+        public TextMeshProUGUI PowerConsumptionMax;
+
+        public TextMeshProUGUI Cooling;
+        public TextMeshProUGUI HeatCap;
+        public TextMeshProUGUI HeatGenInCombat;
+        public TextMeshProUGUI HeatGenMax;
+
+        public TextMeshProUGUI MainBatteryPower;
+        public TextMeshProUGUI MainBatteryPowerSustained;
+        public TextMeshProUGUI AllWeaponsPower;
+        public TextMeshProUGUI AllWeaponsPowerSustained;
+
+        public TextMeshProUGUI MainBatteryHeat;
+        public TextMeshProUGUI MainBatteryHeatSustained;
+        public TextMeshProUGUI AllWeaponsHeat;
+        public TextMeshProUGUI AllWeaponsHeatSustained;
     }
 }
