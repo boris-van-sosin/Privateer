@@ -2,12 +2,12 @@ ComponentName: Damage control center - Sloop-grade
 ComponentType: Damage control center
 ComponentGlobalMaxHitPoints: 300
 MinShipSize: Sloop
-MaxShipSize: Sloop
+MaxShipSize: Frigate
 AllowedSlotTypes:
 - ShipSystem
 - ShipSystemCenter
 DamageControDefinition:
-  PowerUsage: 4
+  PowerUsage: 2
   HeatGeneration: 0
   HullMaxHitPointRegeneration: 2
   SystemMaxHitPointRegeneration: 2

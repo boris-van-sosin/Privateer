@@ -57,15 +57,19 @@ ComponentSlots:
   - ShipSystemCenter
   - ShipSystemCenter
   - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
   ForeComponentSlots:
   - ShipSystem
   - ShipSystem
   AftComponentSlots:
-  - ShipSystem
   - Engine
+  - ShipSystem
   LeftComponentSlots:
   - ShipSystem
+  - ShipSystem
   RightComponentSlots:
+  - ShipSystem
   - ShipSystem
 WeaponHardpoints:
 - HardpointNode:
