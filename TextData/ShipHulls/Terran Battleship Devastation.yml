@@ -118,7 +118,13 @@ ComponentSlots:
   - ShipSystemCenter
   - ShipSystemCenter
   - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
   ForeComponentSlots:
+  - ShipSystem
+  - ShipSystem
   - ShipSystem
   - ShipSystem
   - ShipSystem
@@ -127,11 +133,19 @@ ComponentSlots:
   - Engine
   - ShipSystem
   - ShipSystem
+  - ShipSystem
+  - ShipSystem
   LeftComponentSlots:
   - ShipSystem
   - ShipSystem
   - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
   RightComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
   - ShipSystem
   - ShipSystem
   - ShipSystem
@@ -598,20 +612,20 @@ WeaponHardpoints:
 HullProtection:
   HullHitpoints: 240000
   Armour:
-    ForeValue: 900
-    AftValue: 900
-    LeftValue: 900
-    RightValue: 900
+    ForeValue: 850
+    AftValue: 850
+    LeftValue: 850
+    RightValue: 850
   ReducedArmour:
     ForeValue: 300
     AftValue: 300
     LeftValue: 300
     RightValue: 300
   MitigationArmour:
-    ForeValue: 750
-    AftValue: 750
-    LeftValue: 750
-    RightValue: 750
+    ForeValue: 650
+    AftValue: 650
+    LeftValue: 650
+    RightValue: 650
   ArmourMitigation: 0.75
 Mass: 600
 SkeletonCrew: 35

@@ -1578,14 +1578,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         SystemsInfoPanel.HeatGenMax.text = string.Format("{0}/sec", (heatGeneration + heatHigh) * 4);
 
         SystemsInfoPanel.MainBatteryPower.text = string.Format("{0}", powerPerSalvoMain);
-        SystemsInfoPanel.MainBatteryPowerSustained.text = string.Format("{0}/sec", powerForSustainedFireMain);
+        SystemsInfoPanel.MainBatteryPowerSustained.text = string.Format("{0:0.#}/sec", powerForSustainedFireMain);
         SystemsInfoPanel.AllWeaponsPower.text = string.Format("{0}", powerPerSalvoAll);
-        SystemsInfoPanel.AllWeaponsPowerSustained.text = string.Format("{0}/sec", powerForSustainedFireAll);
+        SystemsInfoPanel.AllWeaponsPowerSustained.text = string.Format("{0:0.#}/sec", powerForSustainedFireAll);
 
         SystemsInfoPanel.MainBatteryHeat.text = string.Format("{0}", heatPerSalvoMain);
-        SystemsInfoPanel.MainBatteryHeatSustained.text = string.Format("{0}/sec", heatForSustainedFireMain);
+        SystemsInfoPanel.MainBatteryHeatSustained.text = string.Format("{0:0.#}/sec", heatForSustainedFireMain);
         SystemsInfoPanel.AllWeaponsHeat.text = string.Format("{0}", heatPerSalvoAll);
-        SystemsInfoPanel.AllWeaponsHeatSustained.text = string.Format("{0}/sec", heatForSustainedFireAll);
+        SystemsInfoPanel.AllWeaponsHeatSustained.text = string.Format("{0:0.#}/sec", heatForSustainedFireAll);
     }
 
     private int FindPairedTurret(List<TurretInEditor> hardpoints, int idx)
