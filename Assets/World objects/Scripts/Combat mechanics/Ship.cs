@@ -149,13 +149,33 @@ public class Ship : ShipBase
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _heatCapacityComps = AllComponents.Where(x => x is IHeatCapacityComponent).Select(y => y as IHeatCapacityComponent).ToArray();
-        _updateComponents = AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent).ToArray();
+        _updateComponents = SortedPeriodicActionComponents(AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent)).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
         _combatDetachments = AllComponents.Where(x => x is ShipArmoury).Select(y => y as ShipArmoury).ToArray();
         _totalMaxShield = 0;
         foreach (IShieldComponent shield in _shieldComponents)
         {
             _totalMaxShield += shield.MaxShieldPoints;
+        }
+    }
+
+    private static IEnumerable<IPeriodicActionComponent> SortedPeriodicActionComponents(IEnumerable<IPeriodicActionComponent> comps)
+    {
+        IPeriodicActionComponent[] tmpArray = comps.ToArray();
+        for (int i = 0; i < tmpArray.Length; ++i)
+        {
+            if (tmpArray[i] is HeatExchange)
+                yield return tmpArray[i];
+        }
+        for (int i = 0; i < tmpArray.Length; ++i)
+        {
+            if (tmpArray[i] is PowerPlant)
+                yield return tmpArray[i];
+        }
+        for (int i = 0; i < tmpArray.Length; ++i)
+        {
+            if (!(tmpArray[i] is HeatExchange) && !(tmpArray[i] is PowerPlant))
+                yield return tmpArray[i];
         }
     }
 
@@ -261,6 +281,10 @@ public class Ship : ShipBase
             {
                 _engine = comp as ShipEngine;
                 _engine.OnToggle += SetEngineParticleSystems;
+            }
+            if (comp is ShipComponentBase compNeedsPlacing)
+            {
+                compNeedsPlacing.SetContainingShip(this);
             }
             return true;
         }
@@ -436,6 +460,8 @@ public class Ship : ShipBase
             {
                 _updateComponents[i].PeriodicAction();
             }
+            Energy = System.Math.Min(Energy, MaxEnergy);
+            Heat = System.Math.Max(Heat, 0);
             if (_shieldCapsule)
             {
                 _shieldCapsule.SetActive(ShipTotalShields > 0);
@@ -580,7 +606,25 @@ public class Ship : ShipBase
         int newEnergy = Energy + delta;
         if (0 <= newEnergy)
         {
-            Energy = System.Math.Min(newEnergy, MaxEnergy);
+            Energy = newEnergy;
+            return true;
+        }
+        return false;
+    }
+
+    public bool TryChangeEnergy(int delta, bool allowOverflow)
+    {
+        int newEnergy = Energy + delta;
+        if (0 <= newEnergy)
+        {
+            if (!allowOverflow)
+            {
+                Energy = System.Math.Min(newEnergy, MaxEnergy);
+            }
+            else
+            {
+                Energy = newEnergy;
+            }
             return true;
         }
         return false;
@@ -591,7 +635,25 @@ public class Ship : ShipBase
         int newHeat = Heat + delta;
         if (newHeat <= MaxHeat)
         {
-            Heat = System.Math.Max(newHeat, 0);
+            Heat = newHeat;
+            return true;
+        }
+        return false;
+    }
+
+    public bool TryChangeHeat(int delta, bool allowUnderflow)
+    {
+        int newHeat = Heat + delta;
+        if (newHeat <= MaxHeat)
+        {
+            if (!allowUnderflow)
+            {
+                Heat = System.Math.Max(newHeat, 0);
+            }
+            else
+            {
+                Heat = newHeat;
+            }
             return true;
         }
         return false;
@@ -603,8 +665,35 @@ public class Ship : ShipBase
         int newHeat = Heat + deltaHeat;
         if (newEnergy >= 0 && newHeat <= MaxHeat)
         {
-            Energy = System.Math.Min(newEnergy, MaxEnergy);
-            Heat = System.Math.Max(newHeat, 0);
+            Energy = newEnergy;
+            Heat = newHeat;
+            return true;
+        }
+        return false;
+    }
+
+    public override bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat, bool allowEnergyOverflow, bool allowHeatUndeflow)
+    {
+        int newEnergy = Energy + deltaEnergy;
+        int newHeat = Heat + deltaHeat;
+        if (newEnergy >= 0 && newHeat <= MaxHeat)
+        {
+            if (!allowEnergyOverflow)
+            {
+                Energy = System.Math.Min(newEnergy, MaxEnergy);
+            }
+            else
+            {
+                Energy = newEnergy;
+            }
+            if (!allowHeatUndeflow)
+            {
+                Heat = System.Math.Max(newHeat, 0);
+            }
+            else
+            {
+                Heat = newHeat;
+            }
             return true;
         }
         return false;

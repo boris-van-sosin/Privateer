@@ -5,7 +5,12 @@ using UnityEngine;
 
 public abstract class ShipComponentBase : IShipComponent
 {
-    public ShipBase ContainingShip { get { return _containingShip; } }
+    public ShipBase ContainingShip => _containingShip;
+
+    public void SetContainingShip(Ship s)
+    {
+        _containingShip = s;
+    }
 
     public abstract IEnumerable<string> AllowedSlotTypes { get; }
 
@@ -26,7 +31,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
         {
             return _componentGlobalMaxHitPoints;
         }
-        protected set
+        set
         {
             if (value > 0)
             {
@@ -40,7 +45,7 @@ public abstract class ShipActiveComponentBase : ShipComponentBase, IShipActiveCo
         {
             return _componentMaxHitPoints;
         }
-        protected set
+        set
         {
             if (value > 0)
             {

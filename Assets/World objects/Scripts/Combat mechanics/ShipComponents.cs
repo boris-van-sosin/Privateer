@@ -305,6 +305,13 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         _shieldRequired = true;
     }
 
+    public ShieldGenerator(int maxHitPoints, int hitPoints, int maxShieldPoints,
+                       int maxShieldPointRegeneration, int powerUsage, int heatGeneration, int powerPerRegen, int heatPerRegen,
+                       int powerToRestart, int heatToRestart, float restartDelay,
+                       ObjectFactory.ShipSize minShipSize, ObjectFactory.ShipSize maxShipSize)
+        : this(maxHitPoints, hitPoints, maxShieldPoints, maxShieldPoints, maxShieldPointRegeneration, powerUsage, heatGeneration, powerPerRegen, heatPerRegen, powerToRestart, heatToRestart, restartDelay, minShipSize, maxShipSize)
+    {}
+
     public static ShieldGenerator DefaultComponent(Ship containingShip)
     {
         ShieldGenerator res = new ShieldGenerator(400, 400, 1000, 1000, 2, 2, 1, 3, 2, 20, 10, 20 * 4, ObjectFactory.ShipSize.Sloop, ObjectFactory.ShipSize.CapitalShip);
@@ -538,7 +545,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         {
             return true;
         }
-        if (ComponentIsWorking && ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration))
+        if (ComponentIsWorking && ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration, false, false))
         {
             _active = true;
             OnToggle(true);
@@ -790,7 +797,7 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
             return;
         }
 
-        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, 0))
+        if (!ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration))
         {
             return;
         }

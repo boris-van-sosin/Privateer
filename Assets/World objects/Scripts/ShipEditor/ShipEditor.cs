@@ -1880,7 +1880,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     {
         ShipTemplate template = CompileShip();
         string yamlShip = HierarchySerializer.SerializeObject(template);
-        string savePath = System.IO.Path.Combine(Application.persistentDataPath, template.ShipClassName + ".yml");
+        string savePath = System.IO.Path.Combine(Application.persistentDataPath, "ShipTemplates", template.ShipClassName + ".yml");
         System.IO.File.WriteAllText(savePath, yamlShip, System.Text.Encoding.UTF8);
     }
 

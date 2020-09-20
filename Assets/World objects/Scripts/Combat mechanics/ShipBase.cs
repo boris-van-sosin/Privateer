@@ -774,6 +774,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
 
     // Things not in use, but needed in other classes:
     public virtual bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat) { return true; }
+    public virtual bool TryChangeEnergyAndHeat(int deltaEnergy, int deltaHeat, bool allowEnergyOverflow, bool allowHeatUndeflow) { return true; }
     public virtual void NotifyInComabt() { }
     public abstract ObjectFactory.TacMapEntityType TargetableEntityType { get; }
 

@@ -9,7 +9,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        ShipDropdown.AddOptions(ObjectFactory.GetAllShipTypes().ToList());
+        ShipDropdown.AddOptions(ObjectFactory.GetAllShipClassTemplates().ToList());
         //ShipDropdown.AddOptions(ObjectFactory.GetAllStrikeCraftTypes().ToList());
         ShipDropdown.onValueChanged.AddListener(ShipSelectChanged);
         _weaponsCfgPanel = FindObjectOfType<WeaponControlGroupCfgPanel>();
@@ -22,23 +22,55 @@ public class ShipFreeCreatePanel : MonoBehaviour
         string shipKey = ShipDropdown.options[ShipDropdown.value].text;
         bool friendly = SideDropdown.value == 0;
         bool userShip = UserToggle.isOn;
-        if (ObjectFactory.GetAllShipTypes().Contains(shipKey))
+        if (ObjectFactory.GetAllShipClassTemplates().Contains(shipKey))
         {
             for (int i = 0; i < _numToSpawn; ++i)
             {
                 Vector3 offset = new Vector3(friendly ? -(i % 4) : (i % 4), 0f, -(i / 4)) * 6;
+                if (!friendly)
+                {
+                    offset += new Vector3(30, 0, 0);
+                }
                 CreateShipInner(shipKey, friendly, userShip && (i == 0), offset);
             }
-        }
-        else if (ObjectFactory.GetAllStrikeCraftTypes().Contains(shipKey))
-        {
-            CreateStrikeCraftWingInner(shipKey, friendly);
         }
     }
 
     private void CreateShipInner(string shipKey, bool friendly, bool userShip, Vector3 offset)
     {
-        Ship s = ObjectFactory.CreateShip(shipKey);
+        ShipTemplate template = ObjectFactory.GetShipClassTemplate(shipKey);
+        ShipShadow shadow = template.ToNewShip();
+
+        Faction[] factions = FindObjectsOfType<Faction>();
+        Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
+        Faction owner = friendly ? faction1 : faction2;
+
+        // Fill the parts that aren't implemeted yet:
+        ShipHullDefinition hullDef = ObjectFactory.GetShipHullDefinition(shadow.ShipHullProductionKey);
+        ObjectFactory.ShipSize sz = (ObjectFactory.ShipSize) Enum.Parse(typeof(ObjectFactory.ShipSize), hullDef.ShipSize);
+        shadow.ShipDisplayName  =
+            NamingSystem.GenShipName(ObjectFactory.GetCultureNames("Terran"),
+                                     UnityEngine.Random.Range(0, 2) == 0 ? "British" : "German",
+                                     ObjectFactory.InternalShipTypeToNameType(sz), owner.UsedNames);
+        owner.UsedNames.Add(shadow.ShipDisplayName.FullNameKey);
+        int numCrew = (hullDef.OperationalCrew + hullDef.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
+        shadow.Crew = new ShipCharacter[numCrew];
+        for (int i = 0; i < numCrew; ++i)
+        {
+            ShipCharacter currCrew = ShipCharacter.GenerateTerranShipCrew();
+            currCrew.Level = ShipCharacter.CharacterLevel.Trained;
+            shadow.Crew[i] = currCrew;
+        }
+
+        Ship s = CreateAndFitOutShip(shadow, owner, friendly && userShip);
+
+        s.transform.Translate(offset);
+
+        return;
+
+        // old creation process:
+
+        s = ObjectFactory.CreateShip(shipKey);
 
         s.PlaceComponent(Ship.ShipSection.Left, DamageControlNode.DefaultComponent(s.ShipSize, s));
         s.PlaceComponent(Ship.ShipSection.Right, DamageControlNode.DefaultComponent(s.ShipSize, s));
@@ -130,7 +162,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             }
             s.PlaceTurret(hp, t);
         }
-        int numCrew = (s.OperationalCrew + s.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
+        numCrew = (s.OperationalCrew + s.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
         for (int i = 0; i < numCrew; ++i)
         {
             ShipCharacter currCrew = ShipCharacter.GenerateTerranShipCrew();
@@ -162,8 +194,6 @@ public class ShipFreeCreatePanel : MonoBehaviour
 
         s.Activate();
 
-        Faction[] factions = FindObjectsOfType<Faction>();
-        Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
         if (friendly)
         {
             s.Owner = faction1;
@@ -201,6 +231,114 @@ public class ShipFreeCreatePanel : MonoBehaviour
 
         _cfgPanelVisible = false;
         _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
+    }
+
+    private static Ship CreateAndFitOutShip(ShipShadow shadow, Faction owner, bool userControlled)
+    {
+        Ship s = ObjectFactory.CreateShip(shadow.ShipHullProductionKey);
+
+        // Place the components:
+        foreach (KeyValuePair<Ship.ShipSection, ShipComponentDefinition[]> sectionComps in shadow.ShipComponents)
+        {
+            for (int i = 0; i < sectionComps.Value.Length; ++i)
+            {
+                if (sectionComps.Value[i] == null)
+                {
+                    continue;
+                }
+
+                ShipComponentBase comp = sectionComps.Value[i].CreateComponent();
+                if (!s.PlaceComponent(sectionComps.Key, comp))
+                {
+                    Debug.LogWarningFormat("Failed to place component on ship. Ship hull: {0}. Ship class: {1}. Section: {2}. Component: {3}",
+                        shadow.ShipHullProductionKey, shadow.ShipClassName, sectionComps.Key, comp);
+                }
+            }
+        }
+
+        // Place the weapons:
+        foreach (ShipShadow.TurretPlacement turretPlacement in shadow.Turrets)
+        {
+            TurretBase turret =
+                ObjectFactory.CreateTurret(turretPlacement.Template.TurretType,
+                                           turretPlacement.Template.WeaponNum,
+                                           turretPlacement.Template.WeaponSize,
+                                           turretPlacement.Template.WeaponType);
+
+            turret.ComponentMaxHitPoints = turretPlacement.MaxHitPoints;
+            turret.ComponentHitPoints = turretPlacement.CurrHitPoints;
+
+            if (turretPlacement.Template.InstalledMods != null && turretPlacement.Template.InstalledMods.Length > 0)
+            {
+                turret.InstalledTurretMod = turretPlacement.Template.InstalledMods[0];
+            }
+            else
+            {
+                turret.InstalledTurretMod = TurretMod.None;
+            }
+
+            if (turret is GunTurret gt)
+            {
+                for (int i = 0; i < turretPlacement.Template.AmmoTypes.Length; ++i)
+                {
+                    gt.SetAmmoType(i, turretPlacement.Template.AmmoTypes[i]);
+                }
+            }
+            else if (turret is TorpedoTurret tt)
+            {
+                tt.LoadedTorpedoType = turretPlacement.Template.AmmoTypes[0];
+            }
+
+            bool placedTurret = false;
+            foreach (TurretHardpoint hp in s.WeaponHardpoints)
+            {
+                if (hp.name == turretPlacement.Template.HardpointKey)
+                {
+                    placedTurret = s.PlaceTurret(hp, turret);
+                    break;
+                }
+            }
+            if (!placedTurret)
+            {
+                Debug.LogWarningFormat("Failed to place turret on ship. Ship hull: {0}. Ship class: {1}. Hardpoint key: {2}. Turret: {3}",
+                                       shadow.ShipHullProductionKey, shadow.ShipClassName, turretPlacement.Template.HardpointKey, turret);
+            }
+        }
+
+        // Configure the weapon control groups:
+        s.SetTurretConfig(TurretControlGrouping.FromConfig(s, shadow.WeaponConfig));
+
+        // Add the crew:
+        for (int i = 0; i < shadow.Crew.Length; ++i)
+        {
+            s.AddCrew(shadow.Crew[i]);
+        }
+
+        s.Activate();
+
+        Faction[] factions = FindObjectsOfType<Faction>();
+        Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
+        s.Owner = owner;
+        s.SetCircleToFactionColor();
+        ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
+        if (owner == faction1 && userControlled)
+        {
+            UserInput input = FindObjectOfType<UserInput>();
+            input.ControlledShip = s;
+            AIController.ControlType = ShipAIController.ShipControlType.Manual;
+        }
+        else if (owner == faction1)
+        {
+            AIController.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+        }
+        else
+        {
+            AIController.ControlType = ShipAIController.ShipControlType.Autonomous;
+        }
+
+        s.DisplayName = shadow.ShipDisplayName;
+
+        return s;
     }
 
     private void CreateStrikeCraftWingInner(string shipKey, bool friendly)
@@ -254,7 +392,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         if (_cfgPanelVisible)
         {
             string shipKey = ShipDropdown.options[i].text;
-            ShipHullDefinition s = ObjectFactory.GetShipTemplate(shipKey);
+            ShipHullDefinition s = ObjectFactory.GetShipHullDefinition(shipKey);
             if (s != null)
             {
                 _weaponsCfgPanel.Clear();

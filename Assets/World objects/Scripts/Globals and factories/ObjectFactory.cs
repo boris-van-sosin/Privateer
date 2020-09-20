@@ -733,7 +733,7 @@ public static class ObjectFactory
         return resObj.transform;
     }
 
-    public static ShipHullDefinition GetShipTemplate(string prodKey)
+    public static ShipHullDefinition GetShipHullDefinition(string prodKey)
     {
         if (_shipHullDefinitions == null)
         {
@@ -788,11 +788,10 @@ public static class ObjectFactory
         }
 
         TurretMountDataEntry md = _weaponMounts[turretDef.TurretType];
-        resTurret.GlobalMaxHitpoints = md.HitPoints;
-        //resTurret.MaxHitpoints = md.HitPoints;
-        resTurret.ComponentHitPoints = md.HitPoints;
+        resTurret.GlobalMaxHitpoints = md.HitPoints;        
         resTurret.RotationSpeed = md.RotationSpeed;
-        resTurret.ComponentHitPoints = resTurret.ComponentGlobalMaxHitPoints;
+        //resTurret.ComponentMaxHitPoints = resTurret.ComponentGlobalMaxHitPoints;
+        //resTurret.ComponentHitPoints = resTurret.ComponentGlobalMaxHitPoints;
         resTurret.Init(string.Format("{0}{1}{2}", turretMountType , weaponNum , weaponSize));
 
         return resTurret;
@@ -1441,6 +1440,41 @@ public static class ObjectFactory
         }
     }
 
+    public static void RegisterShipClassTemplate(ShipTemplate template)
+    {
+        if (_shipTemplates == null)
+        {
+            LoadShipTemplates();
+        }
+        _shipTemplates[template.ShipClassName] = template;
+    }
+
+    public static ShipTemplate GetShipClassTemplate(string key)
+    {
+        if (_shipTemplates == null)
+        {
+            LoadShipTemplates();
+        }
+        ShipTemplate res;
+        if (_shipTemplates.TryGetValue(key, out res))
+        {
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static IEnumerable<string> GetAllShipClassTemplates()
+    {
+        if (_shipTemplates == null)
+        {
+            LoadShipTemplates();
+        }
+        return _shipTemplates.Keys;
+    }
+
     public static int DefaultLayer => _defaultLayer;
     public static int ShipsLayer => _shipsLayer;
     public static int ShieldsLayer => _shieldsLayer;
@@ -1685,6 +1719,20 @@ public static class ObjectFactory
         }
     }
 
+    private static void LoadShipTemplates()
+    {
+        _shipTemplates = new Dictionary<string, ShipTemplate>();
+        string searchPath = Path.Combine(Application.persistentDataPath, "ShipTemplates");
+        foreach (string shipTemplateFile in Directory.EnumerateFiles(searchPath, "*.yml", SearchOption.TopDirectoryOnly))
+        {
+            using (StreamReader sr = new StreamReader(shipTemplateFile, Encoding.UTF8))
+            {
+                ShipTemplate shipTemplate = HierarchySerializer.LoadHierarchy<ShipTemplate>(sr);
+                _shipTemplates[shipTemplate.ShipClassName] = shipTemplate;
+            }
+        }
+    }
+
     public enum WeaponBehaviorType { Unknown, Gun, Beam, ContinuousBeam, Torpedo, BomberTorpedo, Special }
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
@@ -1720,6 +1768,8 @@ public static class ObjectFactory
     private static List<string> _shipHulls;
     private static List<(string, string)> _weaponTypesAndSizes;
     private static List<string> _weaponMountTypes;
+
+    private static Dictionary<string, ShipTemplate> _shipTemplates = null;
 
     private static readonly int _allTargetableLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft", "Torpedoes");
     private static readonly int _allShipsLayerMask = LayerMask.GetMask("Ships", "Shields", "Strike Craft");

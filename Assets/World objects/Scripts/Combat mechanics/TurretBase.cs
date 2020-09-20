@@ -678,7 +678,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     private ITargetableEntity _targetShip = null;
 
     public int GlobalMaxHitpoints;
-    private int MaxHitpoints;
+    private int _maxHitpoints;
     private int _currHitPoints;
     private ComponentStatus _status;
 
@@ -720,13 +720,13 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         get
         {
-            return MaxHitpoints;
+            return _maxHitpoints;
         }
-        protected set
+        set
         {
             if (value > 0)
             {
-                MaxHitpoints = value;
+                _maxHitpoints = value;
             }
         }
     }
