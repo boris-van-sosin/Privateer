@@ -1257,8 +1257,20 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                 Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
                 dummyTurret.transform.rotation = q;
 
+                string[] ammoTypes = null, turretMods = null;
+                if (_currTurretMods != null)
+                {
+                    turretMods = new string[_currTurretMods.Length];
+                    _currTurretMods.CopyTo(turretMods, 0);
+                }
+                if (_currAmmoTypes != null)
+                {
+                    ammoTypes = new string[_currAmmoTypes.Length];
+                    _currAmmoTypes.CopyTo(ammoTypes, 0);
+                }
+                
                 _currHardpoints[hardpointIdx] = new TurretInEditor()
-                { Hardpoint = hardpoint, TurretDef = turretDef, TurretModel = dummyTurret, AmmoTypes = _currAmmoTypes, TurretMods = _currTurretMods };
+                { Hardpoint = hardpoint, TurretDef = turretDef, TurretModel = dummyTurret, AmmoTypes = ammoTypes, TurretMods = turretMods };
 
                 MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < renderers.Length; ++i)
@@ -1906,9 +1918,11 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     public void SwapAmmoTypes()
     {
-        if (_clickedHardpoint >= 0)
+        if (_clickedHardpoint >= 0 && !_currHardpoints[_clickedHardpoint].IsEmpty)
         {
-
+            string[] ammoTypes = _currHardpoints[_clickedHardpoint].AmmoTypes;
+            Array.Reverse(ammoTypes);
+            DrawPenCharts(_currHardpoints[_clickedHardpoint].TurretDef, _currHardpoints[_clickedHardpoint].AmmoTypes);
         }
         else
         {
@@ -1979,21 +1993,21 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         {
             if (!_currHardpoints[i].IsEmpty)
             {
-                res.Turrets[i].HardpointKey = _currHardpoints[i].Hardpoint.name;
-                res.Turrets[i].TurretType = _currHardpoints[i].TurretDef.TurretType;
-                res.Turrets[i].WeaponType = _currHardpoints[i].TurretDef.WeaponType;
-                res.Turrets[i].WeaponSize = _currHardpoints[i].TurretDef.WeaponSize;
-                res.Turrets[i].WeaponNum = _currHardpoints[i].TurretDef.WeaponNum;
-                res.Turrets[i].AlternatingFire = false; //TODO: implement
-                res.Turrets[i].AmmoTypes = new string[_currHardpoints[i].AmmoTypes.Length];
-                _currHardpoints[i].AmmoTypes.CopyTo(res.Turrets[i].AmmoTypes, 0);
+                res.Turrets[weaponIdx].HardpointKey = _currHardpoints[i].Hardpoint.name;
+                res.Turrets[weaponIdx].TurretType = _currHardpoints[i].TurretDef.TurretType;
+                res.Turrets[weaponIdx].WeaponType = _currHardpoints[i].TurretDef.WeaponType;
+                res.Turrets[weaponIdx].WeaponSize = _currHardpoints[i].TurretDef.WeaponSize;
+                res.Turrets[weaponIdx].WeaponNum = _currHardpoints[i].TurretDef.WeaponNum;
+                res.Turrets[weaponIdx].AlternatingFire = false; //TODO: implement
+                res.Turrets[weaponIdx].AmmoTypes = new string[_currHardpoints[i].AmmoTypes.Length];
+                _currHardpoints[i].AmmoTypes.CopyTo(res.Turrets[weaponIdx].AmmoTypes, 0);
                 if (_currHardpoints[i].TurretMods == null || _currHardpoints[i].TurretMods.Length == 0)
                 {
-                    res.Turrets[i].InstalledMods = new TurretMod[] { TurretMod.None };
+                    res.Turrets[weaponIdx].InstalledMods = new TurretMod[] { TurretMod.None };
                 }
                 else
                 {
-                    res.Turrets[i].InstalledMods = _currHardpoints[i].TurretMods.Select(s => s != null ? (TurretMod) Enum.Parse(typeof(TurretMod), s) : TurretMod.None).ToArray();
+                    res.Turrets[weaponIdx].InstalledMods = _currHardpoints[i].TurretMods.Select(s => s != null ? (TurretMod) Enum.Parse(typeof(TurretMod), s) : TurretMod.None).ToArray();
                 }
                 ++weaponIdx;
             }
