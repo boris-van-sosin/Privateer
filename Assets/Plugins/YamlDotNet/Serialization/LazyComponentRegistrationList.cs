@@ -83,6 +83,18 @@ namespace YamlDotNet.Serialization
             throw new KeyNotFoundException(string.Format("A component registration of type '{0}' was not found.", componentType.FullName));
         }
 
+        public bool RegistrationExists(Type componentType)
+        {
+            for (int i = 0; i < entries.Count; ++i)
+            {
+                if (entries[i].ComponentType == componentType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public int Count {  get { return entries.Count; } }
 
         public IEnumerable<Func<TArgument, TComponent>> InReverseOrder

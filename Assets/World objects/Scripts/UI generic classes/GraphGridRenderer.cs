@@ -22,35 +22,37 @@ public class GraphGridRenderer : Graphic
 
     private void DrawCell(int x, int y, float cellWidth, float cellHeight, int idx, VertexHelper vh)
     {
-        float xOffset = cellWidth * x - rectTransform.rect.width, yOffset = cellHeight * y;
+        float xCorrection = rectTransform.pivot.x * rectTransform.rect.width;
+        float yCorrection = rectTransform.pivot.y * rectTransform.rect.height;
+        float xOffset = cellWidth * x - xCorrection, yOffset = cellHeight * y - yCorrection;
         UIVertex v = UIVertex.simpleVert;
         v.color = color;
 
         // Outer:
-        v.position = new Vector3(xOffset, -yOffset, 0);
+        v.position = new Vector3(xOffset, yOffset, 0);
         vh.AddVert(v);
 
-        v.position = new Vector3(xOffset, -yOffset - cellHeight, 0);
+        v.position = new Vector3(xOffset, yOffset + cellHeight, 0);
         vh.AddVert(v);
 
-        v.position = new Vector3(xOffset + cellWidth, -yOffset - cellHeight, 0);
+        v.position = new Vector3(xOffset + cellWidth, yOffset + cellHeight, 0);
         vh.AddVert(v);
 
-        v.position = new Vector3(xOffset + cellWidth, -yOffset, 0);
+        v.position = new Vector3(xOffset + cellWidth, yOffset, 0);
         vh.AddVert(v);
 
 
         // Inner:
-        v.position = new Vector3(xOffset + Thickness, -yOffset - Thickness, 0);
+        v.position = new Vector3(xOffset + Thickness, yOffset - Thickness, 0);
         vh.AddVert(v);
 
-        v.position = new Vector3(xOffset + Thickness, -yOffset - cellHeight + Thickness, 0);
+        v.position = new Vector3(xOffset + Thickness, yOffset + cellHeight + Thickness, 0);
         vh.AddVert(v);
 
-        v.position = new Vector3(xOffset + cellWidth - Thickness, -yOffset - cellHeight + Thickness, 0);
+        v.position = new Vector3(xOffset + cellWidth - Thickness, yOffset + cellHeight + Thickness, 0);
         vh.AddVert(v);
 
-        v.position = new Vector3(xOffset + cellWidth - Thickness, -yOffset - Thickness, 0);
+        v.position = new Vector3(xOffset + cellWidth - Thickness, yOffset - Thickness, 0);
         vh.AddVert(v);
 
         int idxOffset = idx * 8;

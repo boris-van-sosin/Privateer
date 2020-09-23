@@ -105,7 +105,7 @@ public class ShipComponentTemplateExportHelper : Editor
                 AllowedSlotTypes = DamageControlNode.DefaultComponent(null).AllowedSlotTypes.ToArray(),
                 MinShipSize = ObjectFactory.ShipSize.Sloop.ToString(),
                 MaxShipSize = ObjectFactory.ShipSize.CapitalShip.ToString(),
-                DamageControDefinition = new DamageControlTemplateDefinition()
+                DamageControlDefinition = new DamageControlTemplateDefinition()
                 {
                     HullMaxHitPointRegeneration = 2,
                     SystemMaxHitPointRegeneration = 2,

@@ -13,7 +13,7 @@ public class ShipComponentTemplateDefinition
     public CapacitorBankTemplateDefinition CapacitorBankDefinition { get; set; }
     public HeatSinkTemplateDefinition HeatSinkDefinition { get; set; }
     public HeatExchangeTemplateDefinition HeatExchangeDefinition { get; set; }
-    public DamageControlTemplateDefinition DamageControDefinition { get; set; }
+    public DamageControlTemplateDefinition DamageControlDefinition { get; set; }
     public ElectromagneticClampsTemplateDefinition ElectromagneticClampsDefinition { get; set; }
     public ExtraArmourTemplateDefinition ExtraArmourDefinition { get; set; }
     public FireControlGeneralTemplateDefinition FireControlGeneralDefinition { get; set; }
@@ -45,9 +45,9 @@ public class ShipComponentTemplateDefinition
         {
             return new HeatExchange(HeatExchangeDefinition.CoolignRate, minSz, maxSz);
         }
-        if (DamageControDefinition != null)
+        if (DamageControlDefinition != null)
         {
-            return new DamageControlNode(ComponentGlobalMaxHitPoints, ComponentGlobalMaxHitPoints, DamageControDefinition.HullMaxHitPointRegeneration, DamageControDefinition.ArmorMaxPointRegeneration, DamageControDefinition.ArmorMaxPointRegeneration, DamageControDefinition.PowerUsage, DamageControDefinition.HeatGeneration, DamageControDefinition.TimeOutOfCombatToRepair, minSz, maxSz);
+            return new DamageControlNode(ComponentGlobalMaxHitPoints, ComponentGlobalMaxHitPoints, DamageControlDefinition.HullMaxHitPointRegeneration, DamageControlDefinition.ArmorMaxPointRegeneration, DamageControlDefinition.ArmorMaxPointRegeneration, DamageControlDefinition.PowerUsage, DamageControlDefinition.HeatGeneration, DamageControlDefinition.TimeOutOfCombatToRepair, minSz, maxSz);
         }
         if (ElectromagneticClampsDefinition != null)
         {
@@ -96,7 +96,7 @@ public class ShipComponentTemplateDefinition
             CapacitorBankDefinition = CapacitorBankTemplateDefinition.CreateCopy(CapacitorBankDefinition),
             HeatSinkDefinition = HeatSinkTemplateDefinition.CreateCopy(HeatSinkDefinition),
             HeatExchangeDefinition = HeatExchangeTemplateDefinition.CreateCopy(HeatExchangeDefinition),
-            DamageControDefinition = DamageControlTemplateDefinition.CreateCopy(DamageControDefinition),
+            DamageControlDefinition = DamageControlTemplateDefinition.CreateCopy(DamageControlDefinition),
             ElectromagneticClampsDefinition = ElectromagneticClampsTemplateDefinition.CreateCopy(ElectromagneticClampsDefinition),
             ExtraArmourDefinition = ExtraArmourTemplateDefinition.CreateCopy(ExtraArmourDefinition),
             FireControlGeneralDefinition = FireControlGeneralTemplateDefinition.CreateCopy(FireControlGeneralDefinition),

@@ -240,7 +240,25 @@ namespace YamlDotNet.Serialization
         /// </summary>
         public SerializerBuilder EmitDefaults()
         {
+            if (emissionPhaseObjectGraphVisitorFactories.RegistrationExists(typeof(ValueTypeOnlyDefaultGraphVistor)))
+            {
+                emissionPhaseObjectGraphVisitorFactories.Remove(typeof(ValueTypeOnlyDefaultGraphVistor));
+            }
             emissionPhaseObjectGraphVisitorFactories.Remove(typeof(DefaultExclusiveObjectGraphVisitor));
+            return this;
+        }
+
+        /// <summary>
+        /// Forces every value to be serialized, even if it is the default value for that type.
+        /// </summary>
+        public SerializerBuilder EmitDefaultsForValueTypes()
+        {
+            if (emissionPhaseObjectGraphVisitorFactories.RegistrationExists(typeof(DefaultExclusiveObjectGraphVisitor)))
+            {
+                emissionPhaseObjectGraphVisitorFactories.Remove(typeof(DefaultExclusiveObjectGraphVisitor));
+            }
+            emissionPhaseObjectGraphVisitorFactories.Add(typeof(ValueTypeOnlyDefaultGraphVistor),
+                                                         args => new ValueTypeOnlyDefaultGraphVistor(args.InnerVisitor));
             return this;
         }
 

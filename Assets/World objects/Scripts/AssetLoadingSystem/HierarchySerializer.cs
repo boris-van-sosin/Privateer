@@ -58,7 +58,7 @@ public static class HierarchySerializer
 
         YamlDotNet.Serialization.SerializerBuilder builder = new SerializerBuilder();
         builder.EnsureRoundtrip();
-        builder.EmitDefaults();
+        builder.EmitDefaultsForValueTypes();
         builder.DisableAliases();
         //builder.WithTypeResolver(tr);
         YamlDotNet.Serialization.Serializer s = builder.Build();
