@@ -1215,6 +1215,10 @@ public static class ObjectFactory
 
     public static CultureNames GetCultureNames(string culture)
     {
+        if (_cultureNamingLists == null)
+        {
+            LoadNamingLists();
+        }
         return _cultureNamingLists[culture];
     }
 

@@ -48,11 +48,11 @@ public class ShipFreeCreatePanel : MonoBehaviour
         // Fill the parts that aren't implemeted yet:
         ShipHullDefinition hullDef = ObjectFactory.GetShipHullDefinition(shadow.ShipHullProductionKey);
         ObjectFactory.ShipSize sz = (ObjectFactory.ShipSize) Enum.Parse(typeof(ObjectFactory.ShipSize), hullDef.ShipSize);
-        shadow.ShipDisplayName  =
+        shadow.DisplayName  =
             NamingSystem.GenShipName(ObjectFactory.GetCultureNames("Terran"),
                                      UnityEngine.Random.Range(0, 2) == 0 ? "British" : "German",
                                      ObjectFactory.InternalShipTypeToNameType(sz), owner.UsedNames);
-        owner.UsedNames.Add(shadow.ShipDisplayName.FullNameKey);
+        owner.UsedNames.Add(shadow.DisplayName.FullNameKey);
         int numCrew = (hullDef.OperationalCrew + hullDef.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
         shadow.Crew = new ShipCharacter[numCrew];
         for (int i = 0; i < numCrew; ++i)
@@ -336,7 +336,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
             AIController.ControlType = ShipAIController.ShipControlType.Autonomous;
         }
 
-        s.DisplayName = shadow.ShipDisplayName;
+        s.DisplayName = shadow.DisplayName;
 
         return s;
     }

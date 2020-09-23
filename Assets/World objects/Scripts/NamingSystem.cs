@@ -90,6 +90,7 @@ public static class NamingSystem
             return new ShipDisplayName()
             {
                 ShortName = prefix != string.Empty ? string.Format("{0} {1}", prefix, n.ShortName) : n.ShortName,
+                ShortNameKey = n.ShortName,
                 FullName = prefix != string.Empty ? string.Format("{0} {1}", prefix, n.FullName) : n.FullName,
                 FullNameKey = n.FullName,
                 Fluff = n.Fluff
@@ -104,9 +105,11 @@ public static class NamingSystem
     public enum ShipType { Any, Merchant, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, SpecialCapitalShip }
 }
 
+[Serializable]
 public struct ShipDisplayName
 {
     public string ShortName { get; set; }
+    public string ShortNameKey { get; set; }
     public string FullName { get; set; }
     public string FullNameKey { get; set; }
     public string Fluff { get; set; }

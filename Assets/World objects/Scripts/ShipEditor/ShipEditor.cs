@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class ShipEditor : MonoBehaviour, IDropHandler
+public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
 {
     // Start is called before the first frame update
     void Start()
@@ -462,7 +462,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         else
         {
             AmmoToggleGroup.MinOn = 0;
-            if (_currAmmoType != null && AmmoFilter(_currWeapon, _currAmmoType))
+            if (_lastClickedAmmoType != null && AmmoFilter(_currWeapon, _lastClickedAmmoType))
             {
                 AmmoToggleGroup.MaxOn = 2;
                 SetNumAllowedAmmo();
@@ -471,7 +471,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 for (int j = 0; j < _allAmmoTypes.Count; ++j)
                 {
                     GroupedOnOffButton btn2 = _allAmmoTypes[j].GetComponent<GroupedOnOffButton>();
-                    if (numOn < AmmoToggleGroup.MaxOn && _allAmmoTypes[j].AmmoTypeKey == _currAmmoType)
+                    if (numOn < AmmoToggleGroup.MaxOn && _allAmmoTypes[j].AmmoTypeKey == _lastClickedAmmoType)
                     {
                         btn2.Value = true;
                         currIdx = j;
@@ -611,13 +611,13 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
         else
         {
-            if (_currTurretMod != null && TurretModFilter(_currWeapon, _currTurretMod))
+            if (_lastClickedTurretMod != null && TurretModFilter(_currWeapon, _lastClickedTurretMod))
             {
                 TurretModToggleGroup.MaxOn = 1;
                 for (int j = 0; j < _allTurretMods.Count; ++j)
                 {
                     GroupedOnOffButton btn2 = _allTurretMods[j].GetComponent<GroupedOnOffButton>();
-                    btn2.Value = _allTurretMods[j].TurretModKey == _currTurretMod;
+                    btn2.Value = _allTurretMods[j].TurretModKey == _lastClickedTurretMod;
                     Button baseBtn = _allTurretMods[j].GetComponent<Button>();
                     btn2.OnColor = AmmoSelectedColor;
                     btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
@@ -644,7 +644,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                             btn2.OnColor = AmmoSelectedColor;
                             btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
                         }
-                        _currTurretMod = _allTurretMods[i].TurretModKey;
+                        _lastClickedTurretMod = _allTurretMods[i].TurretModKey;
                         anyCompatible = true;
                         break;
                     }
@@ -661,7 +661,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                         btn2.OffColor = compatible[j] ? baseBtn.colors.normalColor : Color.white;
                     }
                     TurretModToggleGroup.MinOn = TurretModToggleGroup.MaxOn = 0;
-                    _currTurretMod = null;
+                    _lastClickedTurretMod = null;
                 }
             }
         }
@@ -961,11 +961,15 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             case EditorItemType.Weapon:
                 {
                     StartDragWeapon(item);
+                    if (_currAmmoTypes == null && _currTurretMods == null)
+                    {
+                        (_currTurretMods, _currAmmoTypes) = SelectedTurretModsAndAmmoTypes();
+                    }
                     DrawPenCharts();
                 }
                 break;
             case EditorItemType.Ammo:
-                _currAmmoType = item.AmmoTypeKey;
+                _lastClickedAmmoType = item.AmmoTypeKey;
                 if (_currWeapon != null)
                 {
                     GroupedOnOffButton btn;
@@ -973,16 +977,20 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                     {
                         btn.Value = true;
                     }
+                    (_currTurretMods, _currAmmoTypes) = SelectedTurretModsAndAmmoTypes();
                     DrawPenCharts();
                 }
                 break;
             case EditorItemType.TurretMod:
-                _currTurretMod = item.TurretModKey;
+                _lastClickedTurretMod = item.TurretModKey;
                 StartDragTurretMod(item);
+                (_currTurretMods, _currAmmoTypes) = SelectedTurretModsAndAmmoTypes();
+                DrawPenCharts();
                 break;
             default:
                 break;
         }
+        _clickedHardpoint = -1;
     }
 
     private void StartDragWeapon(ShipEditorDraggable item)
@@ -1029,7 +1037,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                     FilterTurretMods(TurretModFilter);
                     FilterAmmo(AmmoFilter);
                 }
-                if (!drawnPenChard && turretDef != null && _currAmmoType != null)
+                if (!drawnPenChard && turretDef != null && _lastClickedAmmoType != null)
                 {
                     drawnPenChard = DrawPenCharts();
                 }
@@ -1095,23 +1103,31 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             case EditorItemType.Weapon:
                 {
                     StartDragWeapon(item);
+                    if (_currAmmoTypes == null && _currTurretMods == null)
+                    {
+                        (_currTurretMods, _currAmmoTypes) = SelectedTurretModsAndAmmoTypes();
+                    }
                     DrawPenCharts();
                 }
                 break;
             case EditorItemType.Ammo:
-                _currAmmoType = item.AmmoTypeKey;
+                _lastClickedAmmoType = item.AmmoTypeKey;
                 if (_currWeapon != null)
                 {
+                    (_currTurretMods, _currAmmoTypes) = SelectedTurretModsAndAmmoTypes();
                     DrawPenCharts();
                 }
                 break;
             case EditorItemType.TurretMod:
-                _currTurretMod = item.TurretModKey;
+                _lastClickedTurretMod = item.TurretModKey;
                 StartDragTurretMod(item);
+                (_currTurretMods, _currAmmoTypes) = SelectedTurretModsAndAmmoTypes();
+                DrawPenCharts();
                 break;
             default:
                 break;
         }
+        _clickedHardpoint = -1;
     }
 
     private int SetPenCharts(TurretDefinition turretDef, string[] selectedAmmoTypes)
@@ -1120,12 +1136,19 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         {
             PenetrationGraphBoxes[0].gameObject.SetActive(false);
             PenetrationGraphBoxes[1].gameObject.SetActive(false);
+            SwapAmmoButton.gameObject.SetActive(false);
             return 0;
         }
         else
         {
             int maxPenCharts;
-            if (selectedAmmoTypes == null || selectedAmmoTypes.Length <= 1)
+            bool turretNeedsAmmoType = _allAmmoTypes.Any(a => AmmoFilter(turretDef, a.AmmoTypeKey));
+
+            if (turretNeedsAmmoType && (selectedAmmoTypes == null || selectedAmmoTypes.Length == 0))
+            {
+                maxPenCharts = 0;
+            }
+            else if (!turretNeedsAmmoType)
             {
                 maxPenCharts = 1;
             }
@@ -1133,14 +1156,21 @@ public class ShipEditor : MonoBehaviour, IDropHandler
             {
                 maxPenCharts = selectedAmmoTypes.Count(a => a != null);
             }
+
             for (int i = 0; i < PenetrationGraphBoxes.Length; ++i)
             {
                 PenetrationGraphBoxes[i].gameObject.SetActive(i < maxPenCharts);
-                if (i < maxPenCharts)
+                if (i < maxPenCharts && turretNeedsAmmoType)
                 {
+                    PenetrationGraphs[i].Item2.gameObject.SetActive(true);
                     PenetrationGraphs[i].Item2.sprite = ObjectFactory.GetAmmonImage(selectedAmmoTypes[i]);
                 }
+                else if (!turretNeedsAmmoType)
+                {
+                    PenetrationGraphs[i].Item2.gameObject.SetActive(false);
+                }
             }
+            SwapAmmoButton.gameObject.SetActive(maxPenCharts > 1);
 
             return maxPenCharts;
         }
@@ -1148,13 +1178,21 @@ public class ShipEditor : MonoBehaviour, IDropHandler
 
     private bool DrawPenCharts()
     {
-        string[] turretMods, ammoTypes;
-        (turretMods, ammoTypes) = SelectedTurretModsAndAmmoTypes();
-        int numPenChartsToDraw = SetPenCharts(_currWeapon, ammoTypes);
+        return DrawPenCharts(_currWeapon, _currAmmoTypes);
+    }
+
+    private bool DrawPenCharts(TurretDefinition turretDef, string[] ammoTypes)
+    {
+        int numPenChartsToDraw = SetPenCharts(turretDef, ammoTypes);
         bool drawnAnyPenChart = false;
         for (int i = 0; i < numPenChartsToDraw; ++i)
         {
-            if (DrawPenChart(_currWeapon, ammoTypes[i], i))
+            string currAmmoInArr = null;
+            if (ammoTypes != null && ammoTypes.Length > i)
+            {
+                currAmmoInArr = ammoTypes[i];
+            }
+            if (DrawPenChart(turretDef, currAmmoInArr, i))
             {
                 drawnAnyPenChart = true;
             }
@@ -1219,12 +1257,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler
                 Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
                 dummyTurret.transform.rotation = q;
 
-                string[] selectedTurretMods, selectedAmmo;
-
-                (selectedTurretMods, selectedAmmo) = SelectedTurretModsAndAmmoTypes();
-
                 _currHardpoints[hardpointIdx] = new TurretInEditor()
-                { Hardpoint = hardpoint, TurretDef = turretDef, TurretModel = dummyTurret, AmmoTypes = selectedAmmo, TurretMods = selectedTurretMods };
+                { Hardpoint = hardpoint, TurretDef = turretDef, TurretModel = dummyTurret, AmmoTypes = _currAmmoTypes, TurretMods = _currTurretMods };
 
                 MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < renderers.Length; ++i)
@@ -1246,7 +1280,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
         else
         {
-            selectedTurretMods = new string[] { _currTurretMod };
+            selectedTurretMods = new string[] { _lastClickedTurretMod };
         }
 
         string[] selectedAmmo;
@@ -1490,7 +1524,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     {
         if (AmmoToggleGroup.MaxOn != 0)
         {
-            AmmoToggleGroup.MaxOn = _currTurretMod == TurretModDuamAmmoString ? 2 : 1;
+            AmmoToggleGroup.MaxOn = _lastClickedTurretMod == TurretModDuamAmmoString ? 2 : 1;
         }
     }
 
@@ -1870,6 +1904,48 @@ public class ShipEditor : MonoBehaviour, IDropHandler
         }
     }
 
+    public void SwapAmmoTypes()
+    {
+        if (_clickedHardpoint >= 0)
+        {
+
+        }
+        else
+        {
+            if (_currAmmoTypes != null && _currAmmoTypes.Length > 1)
+            {
+                Array.Reverse(_currAmmoTypes);
+                DrawPenCharts();
+            }
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        int hardpointIdx = RaycastDropWeapon(eventData.position);
+        if (hardpointIdx >= 0)
+        {
+            _clickedHardpoint = hardpointIdx;
+            DrawPenCharts(_currHardpoints[hardpointIdx].TurretDef, _currHardpoints[hardpointIdx].AmmoTypes);
+        }
+    }
+
+    public void RandomShipClassName()
+    {
+        if (!_currShip.HasValue)
+        {
+            return;
+        }
+
+        ObjectFactory.ShipSize sz = (ObjectFactory.ShipSize) Enum.Parse(typeof(ObjectFactory.ShipSize), _currShip.Value.HullDef.ShipSize);
+        string[] subcultures = new string[] { "British", "German", "Russian", "Pirate" };
+        ShipDisplayName name =
+            NamingSystem.GenShipName(ObjectFactory.GetCultureNames("Terran"),
+                                     subcultures[UnityEngine.Random.Range(0, subcultures.Length)],
+                                     ObjectFactory.InternalShipTypeToNameType(sz));
+        ShipClassTextbox.text = name.ShortNameKey;
+    }
+
     public ShipTemplate CompileShip()
     {
         if (!_currShip.HasValue)
@@ -1938,8 +2014,11 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     {
         ShipTemplate template = CompileShip();
         string yamlShip = HierarchySerializer.SerializeObject(template);
-        string savePath = System.IO.Path.Combine(Application.persistentDataPath, "ShipTemplates", template.ShipClassName + ".yml");
-        System.IO.File.WriteAllText(savePath, yamlShip, System.Text.Encoding.UTF8);
+        if (template.ShipClassName != string.Empty)
+        {
+            string savePath = System.IO.Path.Combine(Application.persistentDataPath, "ShipTemplates", template.ShipClassName + ".yml");
+            System.IO.File.WriteAllText(savePath, yamlShip, System.Text.Encoding.UTF8);
+        }
     }
 
     public RectTransform ShipClassesScrollViewContent;
@@ -1958,6 +2037,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public RawImage ShipViewBox;
     public MultiToggleGroup AmmoToggleGroup;
     public MultiToggleGroup TurretModToggleGroup;
+    public Button SwapAmmoButton;
 
     public ShipEditorShipSectionsPanel ShipSectionsPanel;
     public WeaponControlGroupCfgPanel WeaponCfgPanel;
@@ -1974,8 +2054,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     public ShipInfoPanel SystemsInfoPanel;
 
     public TMP_InputField ShipClassTextbox;
-
-    public Material ShipMtlInDisplay;
 
     [NonSerialized]
     private ShipDummyInEditor? _currShip = null;
@@ -2019,11 +2097,17 @@ public class ShipEditor : MonoBehaviour, IDropHandler
     private (AreaGraphRenderer, Image)[] PenetrationGraphs;
 
     [NonSerialized]
-    private string _currAmmoType = null;
+    private string _lastClickedAmmoType = null;
+    [NonSerialized]
+    private string[] _currAmmoTypes = null;
     [NonSerialized]
     private TurretDefinition _currWeapon = null;
     [NonSerialized]
-    private string _currTurretMod = null;
+    private string _lastClickedTurretMod = null;
+    [NonSerialized]
+    private string[] _currTurretMods = null;
+    [NonSerialized]
+    private int _clickedHardpoint = -1;
 
     private bool _weaponCfgPanelDirty = true;
 

@@ -84,7 +84,7 @@ public class ShipTemplate
     public ShipShadow ToNewShip(ShipDisplayName name)
     {
         ShipShadow res = ToNewShip();
-        res.ShipDisplayName = name;
+        res.DisplayName = name;
         return res;
     }
 
@@ -127,7 +127,7 @@ public class ShipShadow
     public string ShipHullProductionKey { get; set; }
     public string ShipClassName { get; set; }
     public bool IsModifiedClass { get; set; }
-    public ShipDisplayName ShipDisplayName { get; set; }
+    public ShipDisplayName DisplayName { get; set; }
     public Dictionary<Ship.ShipSection, ShipComponentDefinition[]> ShipComponents { get; set; }
     public TurretPlacement[] Turrets { get; set; }
     public WeaponControlGroupCfgPanel.WeaponsConfigCompiled WeaponConfig { get; set; }
