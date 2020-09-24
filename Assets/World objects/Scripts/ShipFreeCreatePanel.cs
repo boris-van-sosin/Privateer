@@ -289,6 +289,8 @@ public class ShipFreeCreatePanel : MonoBehaviour
                 tt.LoadedTorpedoType = turretPlacement.Template.AmmoTypes[0];
             }
 
+            turret.AlternatingFire = turretPlacement.Template.AlternatingFire;
+
             bool placedTurret = false;
             foreach (TurretHardpoint hp in s.WeaponHardpoints)
             {

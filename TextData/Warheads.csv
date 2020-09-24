@@ -5,11 +5,11 @@
 ,,,,,,,,,,,,,,,,
 3,Light,HVGun,KineticPenetrator,30,250,8,40,80,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
 3,Light,HVGun,ShapedCharge     ,40,145,12,28,160,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Light,HVGun,ShrapnelRound    ,45,35,6,30,60,0,1,0.583333333,0.125,0.18,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+3,Light,HVGun,ShrapnelRound    ,45,35,6,30,60,0,1,0.291666667,0.125,0.18,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
 ,,,,,,,,,,,,,,,,
 3,Light,Howitzer,KineticPenetrator,25,180,6,36,60,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
 3,Light,Howitzer,ShapedCharge     ,45,175,16,34,240,0,1,0,0.075,0.017,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Light,Howitzer,ShrapnelRound    ,50,45,6,35,60,0,1,0.583333333,0.15,0.22,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+3,Light,Howitzer,ShrapnelRound    ,50,45,6,35,60,0,1,0.291666667,0.15,0.22,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
 ,,,,,,,,,,,,,,,,
 #,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,,,
 2,Light,Lance       ,25,225,10,32,8,80,1,0,0.017,,,,,
@@ -19,15 +19,15 @@
 #,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
 3,Medium,Autocannon,KineticPenetrator,11,155,9,24,60,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
 3,Medium,Autocannon,ShapedCharge     ,18,140,15,21,150,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Medium,Autocannon,ShrapnelRound    ,22,50,9,24,30,0,1,0.583333333,0.25,0.25,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+3,Medium,Autocannon,ShrapnelRound    ,22,50,9,24,30,0,1,0.291666667,0.25,0.25,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
 ,,,,,,,,,,,,,,,,
 3,Medium,HVGun,KineticPenetrator,90,500,32,240,320,0,1,0,0.1,0.045,0.35,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
 3,Medium,HVGun,ShapedCharge     ,120,280,48,112,800,0,1,0,0.15,0.035,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Medium,HVGun,ShrapnelRound    ,135,100,24,120,240,0,1,0.666666667,0.325,0.3,0.4,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+3,Medium,HVGun,ShrapnelRound    ,135,100,24,120,240,0,1,0.333333333,0.325,0.3,0.4,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
 ,,,,,,,,,,,,,,,,
 3,Medium,Howitzer,KineticPenetrator,75,380,24,144,240,0,1,0,0.1,0.035,0.35,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
 3,Medium,Howitzer,ShapedCharge     ,135,350,64,136,1200,0,1,0,0.1,0.045,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Medium,Howitzer,ShrapnelRound    ,150,130,24,140,240,0,1,0.75,0.4,0.4,0.45,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+3,Medium,Howitzer,ShrapnelRound    ,150,130,24,140,240,0,1,0.375,0.4,0.4,0.45,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
 ,,,,,,,,,,,,,,,,
 #,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,0.025,,WeaponEffectObj,,
 2,Medium,Lance       ,80,450,22,80,20,8,1,0,0.045,0.025,,,,

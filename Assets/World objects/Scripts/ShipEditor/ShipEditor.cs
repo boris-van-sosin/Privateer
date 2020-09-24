@@ -422,6 +422,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         }
 
         _allAmmoTypesComatibleFlags = new bool[_allAmmoTypes.Count];
+        _allAmmoTypeStrings = _allAmmoTypes.Select(d => d.AmmoTypeKey).ToArray();
 
         FitScrollContent(AmmoScrollViewContent.GetComponent<RectTransform>(), offset);
         stackingBehavior.AutoRefresh = true;
@@ -871,7 +872,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         return false;
     }
 
-    private bool AmmoFilter(TurretDefinition turretDef, string ammo)
+    public static bool AmmoFilter(TurretDefinition turretDef, string ammo)
     {
         if (turretDef.BehaviorType == ObjectFactory.WeaponBehaviorType.Gun)
         {
@@ -990,7 +991,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
             default:
                 break;
         }
-        _clickedHardpoint = -1;
     }
 
     private void StartDragWeapon(ShipEditorDraggable item)
@@ -1127,22 +1127,21 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
             default:
                 break;
         }
-        _clickedHardpoint = -1;
     }
 
-    private int SetPenCharts(TurretDefinition turretDef, string[] selectedAmmoTypes)
+    private static int SetPenCharts(TurretDefinition turretDef, string[] selectedAmmoTypes, (RectTransform, AreaGraphRenderer, Image)[] penGraphBoxesWithInner, Button swapButton, string[] allAmmoTypes)
     {
         if (turretDef == null)
         {
-            PenetrationGraphBoxes[0].gameObject.SetActive(false);
-            PenetrationGraphBoxes[1].gameObject.SetActive(false);
-            SwapAmmoButton.gameObject.SetActive(false);
+            penGraphBoxesWithInner[0].Item1.gameObject.SetActive(false);
+            penGraphBoxesWithInner[1].Item1.gameObject.SetActive(false);
+            swapButton.gameObject.SetActive(false);
             return 0;
         }
         else
         {
             int maxPenCharts;
-            bool turretNeedsAmmoType = _allAmmoTypes.Any(a => AmmoFilter(turretDef, a.AmmoTypeKey));
+            bool turretNeedsAmmoType = allAmmoTypes.Any(a => AmmoFilter(turretDef, a));
 
             if (turretNeedsAmmoType && (selectedAmmoTypes == null || selectedAmmoTypes.Length == 0))
             {
@@ -1157,20 +1156,20 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                 maxPenCharts = selectedAmmoTypes.Count(a => a != null);
             }
 
-            for (int i = 0; i < PenetrationGraphBoxes.Length; ++i)
+            for (int i = 0; i < penGraphBoxesWithInner.Length; ++i)
             {
-                PenetrationGraphBoxes[i].gameObject.SetActive(i < maxPenCharts);
+                penGraphBoxesWithInner[i].Item1.gameObject.SetActive(i < maxPenCharts);
                 if (i < maxPenCharts && turretNeedsAmmoType)
                 {
-                    PenetrationGraphs[i].Item2.gameObject.SetActive(true);
-                    PenetrationGraphs[i].Item2.sprite = ObjectFactory.GetAmmonImage(selectedAmmoTypes[i]);
+                    penGraphBoxesWithInner[i].Item3.gameObject.SetActive(true);
+                    penGraphBoxesWithInner[i].Item3.sprite = ObjectFactory.GetAmmonImage(selectedAmmoTypes[i]);
                 }
                 else if (!turretNeedsAmmoType)
                 {
-                    PenetrationGraphs[i].Item2.gameObject.SetActive(false);
+                    penGraphBoxesWithInner[i].Item3.gameObject.SetActive(false);
                 }
             }
-            SwapAmmoButton.gameObject.SetActive(maxPenCharts > 1);
+            swapButton.gameObject.SetActive(maxPenCharts > 1);
 
             return maxPenCharts;
         }
@@ -1178,13 +1177,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     private bool DrawPenCharts()
     {
-        return DrawPenCharts(_currWeapon, _currAmmoTypes);
+        return DrawPenCharts(_currWeapon, _currAmmoTypes, PenetrationGraphBoxes, SwapAmmoButton, _allAmmoTypeStrings) > 0;
     }
 
-    private bool DrawPenCharts(TurretDefinition turretDef, string[] ammoTypes)
+    public static int DrawPenCharts(TurretDefinition turretDef, string[] ammoTypes, RectTransform[] penGraphBoxes, Button swapButton, string[] allAmmoTypes)
     {
-        int numPenChartsToDraw = SetPenCharts(turretDef, ammoTypes);
-        bool drawnAnyPenChart = false;
+        (RectTransform, AreaGraphRenderer, Image)[] penGraphBoxesInfo = penGraphBoxes.Select(a => (a, a.GetComponentInChildren<AreaGraphRenderer>(), a.Find("Image").GetComponent<Image>())).ToArray();
+        int numPenChartsToDraw = SetPenCharts(turretDef, ammoTypes, penGraphBoxesInfo, swapButton, allAmmoTypes);
+        int actualAmmoChartsDrawn = 0;
         for (int i = 0; i < numPenChartsToDraw; ++i)
         {
             string currAmmoInArr = null;
@@ -1192,29 +1192,29 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
             {
                 currAmmoInArr = ammoTypes[i];
             }
-            if (DrawPenChart(turretDef, currAmmoInArr, i))
+            if (DrawPenChart(turretDef, currAmmoInArr, (penGraphBoxesInfo[i].Item2, penGraphBoxesInfo[i].Item3)))
             {
-                drawnAnyPenChart = true;
+                ++actualAmmoChartsDrawn;
             }
         }
-        return drawnAnyPenChart;
+        return actualAmmoChartsDrawn;
     }
 
-    private bool DrawPenChart(TurretDefinition turretDef, string ammoType, int graphIdx)
+    private static bool DrawPenChart(TurretDefinition turretDef, string ammoType, (AreaGraphRenderer, Image) graph)
     {
         switch (turretDef.BehaviorType)
         {
             case ObjectFactory.WeaponBehaviorType.Gun:
-                SetArmourPenetartionChartGun(turretDef.WeaponType, turretDef.WeaponSize, ammoType, graphIdx);
+                SetArmourPenetartionChartGun(turretDef.WeaponType, turretDef.WeaponSize, ammoType, graph);
                 return true;
             case ObjectFactory.WeaponBehaviorType.Torpedo:
             case ObjectFactory.WeaponBehaviorType.BomberTorpedo:
-                SetArmourPenetartionChartTorpedo(ammoType, graphIdx);
+                SetArmourPenetartionChartTorpedo(ammoType, graph);
                 return true;
             case ObjectFactory.WeaponBehaviorType.Beam:
             case ObjectFactory.WeaponBehaviorType.ContinuousBeam:
             case ObjectFactory.WeaponBehaviorType.Special:
-                SetArmourPenetartionChartOther(turretDef.WeaponType, turretDef.WeaponSize, graphIdx);
+                SetArmourPenetartionChartOther(turretDef.WeaponType, turretDef.WeaponSize, graph);
                 return true;
             default:
                 return false;
@@ -1268,9 +1268,16 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                     ammoTypes = new string[_currAmmoTypes.Length];
                     _currAmmoTypes.CopyTo(ammoTypes, 0);
                 }
-                
+
                 _currHardpoints[hardpointIdx] = new TurretInEditor()
-                { Hardpoint = hardpoint, TurretDef = turretDef, TurretModel = dummyTurret, AmmoTypes = ammoTypes, TurretMods = turretMods };
+                {
+                    Hardpoint = hardpoint,
+                    TurretDef = turretDef,
+                    TurretModel = dummyTurret,
+                    AmmoTypes = ammoTypes,
+                    TurretMods = turretMods,
+                    AlternatingFire = turretDef.WeaponType == "Autocannon"
+                };
 
                 MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
                 for (int i = 0; i < renderers.Length; ++i)
@@ -1368,53 +1375,53 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         }
     }
 
-    private bool SetArmourPenetartionChartGun(string weaponType, string weaponSize, string ammoType, int graphIdx)
+    private static bool SetArmourPenetartionChartGun(string weaponType, string weaponSize, string ammoType, (AreaGraphRenderer, Image) graph)
     {
         Warhead w;
         if (ObjectFactory.TryCreateWarhead(weaponType, weaponSize, ammoType, out w))
         {
-            SetArmourPenetartionChartInner(w, graphIdx);
+            SetArmourPenetartionChartInner(w, graph);
             return true;
         }
         return false;
     }
 
-    private bool SetArmourPenetartionChartTorpedo(string torpedoType, int graphIdx)
+    private static bool SetArmourPenetartionChartTorpedo(string torpedoType, (AreaGraphRenderer, Image) graph)
     {
         Warhead w;
         if (ObjectFactory.TryCreateWarhead(torpedoType, out w))
         {
-            SetArmourPenetartionChartInner(w, graphIdx);
+            SetArmourPenetartionChartInner(w, graph);
             return true;
         }
         return false;
     }
 
-    private bool SetArmourPenetartionChartOther(string weaponType, string weaponSize, int graphIdx)
+    private static bool SetArmourPenetartionChartOther(string weaponType, string weaponSize, (AreaGraphRenderer, Image) graph)
     {
         Warhead w;
         if (ObjectFactory.TryCreateWarhead(weaponType, weaponSize, out w))
         {
-            SetArmourPenetartionChartInner(w, graphIdx);
+            SetArmourPenetartionChartInner(w, graph);
             return true;
         }
         return false;
     }
 
-    private void SetArmourPenetartionChartInner(Warhead w, int graphIdx)
+    private static void SetArmourPenetartionChartInner(Warhead w, (AreaGraphRenderer, Image) graph)
     {
         ArmourPenetrationTable penetrationTable = ObjectFactory.GetArmourPenetrationTable();
         int minArmor = 0, maxArmor = 1000, samplePoints = 50;
-        PenetrationGraphs[graphIdx].Item1.DataPoints = new Vector2[samplePoints + 1];
+        graph.Item1.DataPoints = new Vector2[samplePoints + 1];
 
         float fSamplePoints = samplePoints;
         for (int i = 0; i <= samplePoints; ++i)
         {
             float currStep = i / fSamplePoints;
             float penetrationProb = penetrationTable.PenetrationProbability(Mathf.RoundToInt(Mathf.Lerp(minArmor, maxArmor, currStep)), w.ArmourPenetration);
-            PenetrationGraphs[graphIdx].Item1.DataPoints[i] = new Vector2(currStep, penetrationProb);
+            graph.Item1.DataPoints[i] = new Vector2(currStep, penetrationProb);
         }
-        PenetrationGraphs[graphIdx].Item1.RequireUpdate();
+        graph.Item1.RequireUpdate();
     }
 
     private void StartDragTurretMod(ShipEditorDraggable item)
@@ -1918,19 +1925,10 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     public void SwapAmmoTypes()
     {
-        if (_clickedHardpoint >= 0 && !_currHardpoints[_clickedHardpoint].IsEmpty)
+        if (_currAmmoTypes != null && _currAmmoTypes.Length > 1)
         {
-            string[] ammoTypes = _currHardpoints[_clickedHardpoint].AmmoTypes;
-            Array.Reverse(ammoTypes);
-            DrawPenCharts(_currHardpoints[_clickedHardpoint].TurretDef, _currHardpoints[_clickedHardpoint].AmmoTypes);
-        }
-        else
-        {
-            if (_currAmmoTypes != null && _currAmmoTypes.Length > 1)
-            {
-                Array.Reverse(_currAmmoTypes);
-                DrawPenCharts();
-            }
+            Array.Reverse(_currAmmoTypes);
+            DrawPenCharts();
         }
     }
 
@@ -1939,8 +1937,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         int hardpointIdx = RaycastDropWeapon(eventData.position);
         if (hardpointIdx >= 0)
         {
-            _clickedHardpoint = hardpointIdx;
-            DrawPenCharts(_currHardpoints[hardpointIdx].TurretDef, _currHardpoints[hardpointIdx].AmmoTypes);
+            TurretInfoPanel.OpenWithTurret(_currHardpoints[hardpointIdx], _allAmmoTypeStrings, (t) => _currHardpoints[hardpointIdx] = t); ;
         }
     }
 
@@ -1998,7 +1995,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                 res.Turrets[weaponIdx].WeaponType = _currHardpoints[i].TurretDef.WeaponType;
                 res.Turrets[weaponIdx].WeaponSize = _currHardpoints[i].TurretDef.WeaponSize;
                 res.Turrets[weaponIdx].WeaponNum = _currHardpoints[i].TurretDef.WeaponNum;
-                res.Turrets[weaponIdx].AlternatingFire = false; //TODO: implement
+                res.Turrets[weaponIdx].AlternatingFire = _currHardpoints[i].AlternatingFire;
                 res.Turrets[weaponIdx].AmmoTypes = new string[_currHardpoints[i].AmmoTypes.Length];
                 _currHardpoints[i].AmmoTypes.CopyTo(res.Turrets[weaponIdx].AmmoTypes, 0);
                 if (_currHardpoints[i].TurretMods == null || _currHardpoints[i].TurretMods.Length == 0)
@@ -2055,6 +2052,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     public ShipEditorShipSectionsPanel ShipSectionsPanel;
     public WeaponControlGroupCfgPanel WeaponCfgPanel;
+    public TurretInfoPanel TurretInfoPanel;
 
     public Toggle[] ComponentDisplayToggleGroup;
     public Toggle[] WeaponsDisplayToggleGroup;
@@ -2102,6 +2100,8 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
     [NonSerialized]
     private List<ShipEditorDraggable> _allAmmoTypes;
     [NonSerialized]
+    private string[] _allAmmoTypeStrings;
+    [NonSerialized]
     private bool[] _allAmmoTypesComatibleFlags;
     [NonSerialized]
     private List<ShipEditorDraggable> _allTurretMods;
@@ -2120,8 +2120,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
     private string _lastClickedTurretMod = null;
     [NonSerialized]
     private string[] _currTurretMods = null;
-    [NonSerialized]
-    private int _clickedHardpoint = -1;
 
     private bool _weaponCfgPanelDirty = true;
 
@@ -2136,13 +2134,14 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         public List<(TurretHardpoint, Collider, MeshRenderer)> Hardpoints;
     }
 
-    private struct TurretInEditor
+    public struct TurretInEditor
     {
         public TurretHardpoint Hardpoint;
         public TurretDefinition TurretDef;
         public Transform TurretModel;
         public string[] AmmoTypes;
         public string[] TurretMods;
+        public bool AlternatingFire;
 
         public bool IsEmpty => TurretDef == null;
 

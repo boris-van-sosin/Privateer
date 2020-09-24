@@ -897,6 +897,14 @@ public class Ship : ShipBase
                     critical = true;
                 }
             }
+
+            if (!critical)
+            {
+                if (!Crew.Any(c => c.Status == ShipCharacter.CharacterStaus.Active))
+                {
+                    critical = true;
+                }
+            }
         }
 
         if (critical)
