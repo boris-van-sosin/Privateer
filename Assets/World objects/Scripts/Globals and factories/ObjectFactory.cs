@@ -1245,7 +1245,7 @@ public static class ObjectFactory
     {
         StatusTopLevel res = CreateStatusPanel();
         RectTransform rt = res.GetComponent<RectTransform>();
-        rt.SetParent(containingPanel);
+        rt.SetParent(containingPanel, false);
         rt.offsetMin = new Vector2(0f, rt.offsetMin.y);
         rt.offsetMax = new Vector2(0f, rt.offsetMax.y);
         res.AttachShip(s);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -26,6 +27,11 @@ public class UserInput : MonoBehaviour
     void Awake()
     {
         _selectionHandler.SelectedShipPanel = SelectedShipPanel;
+        _ammoStrings = new string[TurretBase.MaxWarheads];
+        for (int i = 0; i < _ammoStrings.Length; ++i)
+        {
+            _ammoStrings[i] = ((char)('A' + i)).ToString();
+        }
     }
 
     // Update is called once per frame
@@ -208,7 +214,9 @@ public class UserInput : MonoBehaviour
             {
                 if (manualTurrets[i] is GunTurret gt)
                 {
-                    gt.CycleAmmoType();
+                    _ammoIdx = (_ammoIdx + 1) % TurretBase.MaxWarheads;
+                    gt.SwitchAmmoType(_ammoIdx);
+                    CurrAmmoTextBox.text = _ammoStrings[_ammoIdx];
                 }
             }
         }
@@ -304,11 +312,14 @@ public class UserInput : MonoBehaviour
     public ShipContextMenu ContextMenu;
     public bool DisplayContextMenu;
     public RectTransform SelectedShipPanel;
+    public TextMeshProUGUI CurrAmmoTextBox;
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;
     private float _cameraOffsetFactor = 1.0f;
     private bool _fleetMode = false;
+    private int _ammoIdx = 0;
+    private string[] _ammoStrings;
 
     private SelectionHandler _selectionHandler = new SelectionHandler();
 
