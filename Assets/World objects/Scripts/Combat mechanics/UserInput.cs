@@ -210,15 +210,15 @@ public class UserInput : MonoBehaviour
         if (Input.GetKeyDown(_keyMapping[UserOperation.SwitchAmmo]))
         {
             IReadOnlyList<ITurret> manualTurrets = _controlledShip.WeaponGroups.ManualTurrets;
+            _ammoIdx = (_ammoIdx + 1) % TurretBase.MaxWarheads;
             for (int i = 0; i < manualTurrets.Count; ++i)
             {
                 if (manualTurrets[i] is GunTurret gt)
                 {
-                    _ammoIdx = (_ammoIdx + 1) % TurretBase.MaxWarheads;
                     gt.SwitchAmmoType(_ammoIdx);
-                    CurrAmmoTextBox.text = _ammoStrings[_ammoIdx];
                 }
             }
+            CurrAmmoTextBox.text = _ammoStrings[_ammoIdx];
         }
 
         foreach (ValueTuple<UserOperation, int> cg in _controlGroupKeys)
