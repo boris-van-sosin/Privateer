@@ -122,7 +122,13 @@ ComponentSlots:
   - ShipSystemCenter
   - ShipSystemCenter
   - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
   ForeComponentSlots:
+  - ShipSystem
   - ShipSystem
   - ShipSystem
   - ShipSystem
@@ -131,6 +137,7 @@ ComponentSlots:
   - ShipSystem
   AftComponentSlots:
   - Engine
+  - ShipSystem
   - ShipSystem
   - ShipSystem
   - ShipSystem

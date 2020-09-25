@@ -1935,7 +1935,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         int hardpointIdx = RaycastDropWeapon(eventData.position);
-        if (hardpointIdx >= 0)
+        if (hardpointIdx >= 0 && !_currHardpoints[hardpointIdx].IsEmpty)
         {
             TurretInfoPanel.OpenWithTurret(_currHardpoints[hardpointIdx], _allAmmoTypeStrings, (t) => _currHardpoints[hardpointIdx] = t); ;
         }
@@ -1973,7 +1973,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         int idx = 0;
         foreach (KeyValuePair<Ship.ShipSection, List<ShipComponentTemplateDefinition>> shipSecComponents in _currShipComps)
         {
-            res.ShipComponents[idx++] = new ShipTemplate.ShipComponentList() { Section = shipSecComponents.Key, Components = shipSecComponents.Value.ToArray() };
+            res.ShipComponents[idx++] = new ShipTemplate.ShipComponentList() { Section = shipSecComponents.Key, Components = shipSecComponents.Value.Select(c => (null != c) ? c.ComponentName : null).ToArray() };
         }
 
         int numWeapons = 0;

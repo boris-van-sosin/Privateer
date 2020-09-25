@@ -16,7 +16,7 @@ public class ShipTemplate
     public struct ShipComponentList
     {
         public Ship.ShipSection Section { get; set; }
-        public ShipComponentTemplateDefinition[] Components { get; set; }
+        public string[] Components { get; set; }
     }
 
     [Serializable]
@@ -63,12 +63,20 @@ public class ShipTemplate
                 {
                     if (ShipComponents[i].Components[j] != null)
                     {
-                        currComps[j] = new ShipComponentDefinition()
+                        ShipComponentTemplateDefinition compTemplate = ObjectFactory.GetAllShipComponentByKey(ShipComponents[i].Components[j]);
+                        if (compTemplate != null)
                         {
-                            ComponentTemplate = ShipComponents[i].Components[j],
-                            MaxHitPoints = ShipComponents[i].Components[j].ComponentGlobalMaxHitPoints,
-                            CurrHitPoints = ShipComponents[i].Components[j].ComponentGlobalMaxHitPoints
-                        };
+                            currComps[j] = new ShipComponentDefinition()
+                            {
+                                ComponentTemplate = compTemplate,
+                                MaxHitPoints = compTemplate.ComponentGlobalMaxHitPoints,
+                                CurrHitPoints = compTemplate.ComponentGlobalMaxHitPoints
+                            };
+                        }
+                        else
+                        {
+                            currComps[j] = null;
+                        }
                     }
                     else
                     {

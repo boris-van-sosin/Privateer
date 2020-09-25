@@ -1155,6 +1155,23 @@ public static class ObjectFactory
         return res;
     }
 
+    public static ShipComponentTemplateDefinition GetAllShipComponentByKey(string compName)
+    {
+        if (_shipCompDefinitions == null)
+        {
+            LoadShipComponentDefinitions();
+        }
+        ShipComponentTemplateDefinition compDef;
+        if (_shipCompDefinitions.TryGetValue(compName, out compDef))
+        {
+            return compDef;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static IReadOnlyCollection<ShipComponentTemplateDefinition> GetAllShipComponents()
     {
         if (_shipCompDefinitions == null)
