@@ -12,7 +12,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         LastFire = 0f;
     }
 
-    public virtual void Init(string turretSlotType)
+    public virtual void Init(string turretSlotType, TurretMod turretMod)
     {
         SlotType = turretSlotType;
         ComponentHitPoints = ComponentMaxHitPoints = ComponentGlobalMaxHitPoints;
@@ -20,6 +20,25 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         AlternatingFire = DefaultAlternatingFire;
         _allowedSlotTypes = new string[] { turretSlotType };
         _warheads = new Warhead[MaxWarheads];
+        if (IsTurretModCombatible(turretMod))
+        {
+            _turretMod = turretMod;
+            TurretModBuffApplier applier = ObjectFactory.GetTurretModBuff(turretMod);
+            if (applier != null)
+            {
+                _turretModBuffs = new TurretModBuff[applier.TurretModBuffs.Length];
+                applier.TurretModBuffs.CopyTo(_turretModBuffs, 0);
+                _firingIntervalCoeffBuff = 0f;
+                for (int i = 0; i < _turretModBuffs.Length; ++i)
+                {
+                    if (IsTurretModBuffApplicable(i))
+                    {
+                        _firingIntervalCoeffBuff += _turretModBuffs[i].RateOfFireBuff;
+                    }
+                }
+                ApplyBuff(DynamicBuff.Default());
+            }
+        }
     }
 
     public virtual void PostInstallTurret(ShipBase s)
@@ -584,15 +603,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             return _turretMod;
         }
-        set
-        {
-            if (IsTurretModCombatible(value))
-            {
-                _turretMod = value;
-            }
-        }
     }
     protected TurretMod _turretMod;
+    protected TurretModBuff[] _turretModBuffs = null;
 
     public bool AlternatingFire
     {
@@ -614,15 +627,13 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     public virtual void ApplyBuff(DynamicBuff b)
     {
-        _firingIntervalCoeff = Mathf.Clamp(1f / (1f + b.WeaponRateOfFireFactor), 0.5f, 2f);
+        float factor = 1f + b.WeaponRateOfFireFactor + _firingIntervalCoeffBuff;
+        _firingIntervalCoeff = Mathf.Clamp(1f / factor, 0.5f, 2f);
     }
 
-    public void ApplyHitPointBuff(StaticBuff.HitPointBuff b)
+    protected virtual bool IsTurretModBuffApplicable(int idx)
     {
-        if (ComponentHitPoints > 0)
-        {
-            
-        }
+        return string.IsNullOrEmpty(_turretModBuffs[idx].ApplyToWeapon) || _turretModBuffs[idx].ApplyToWeapon == TurretWeaponType;
     }
 
     protected bool _initialized = false; // ugly hack
@@ -663,6 +674,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public string TurretWeaponType;
     protected float _firingIntervalCoeff;
     protected float _vsStrikeCraftModifier;
+    protected float _firingIntervalCoeffBuff;
 
     // Turret status:
     public int IsJammed { get; private set; }

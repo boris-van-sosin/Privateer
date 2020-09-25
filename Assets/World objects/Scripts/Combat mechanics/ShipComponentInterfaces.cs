@@ -42,7 +42,6 @@ public interface IShipActiveComponent : IShipComponent
     bool ComponentIsWorking { get; }
     ComponentStatus Status { get; }
     string SpriteKey { get; }
-    void ApplyHitPointBuff(StaticBuff.HitPointBuff b);
     event Action OnHitpointsChanged;
 }
 

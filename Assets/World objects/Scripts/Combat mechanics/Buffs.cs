@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
+[Serializable]
 public struct DynamicBuff
 {
-    public float WeaponAccuracyFactor;
-    public float WeaponRateOfFireFactor;
-    public float WeaponVsStrikeCraftFactor;
-    public float SpeedFactor;
-    public float AcceleraionFactor;
+    public float WeaponAccuracyFactor { get; set; }
+    public float WeaponRateOfFireFactor { get; set; }
+    public float WeaponVsStrikeCraftFactor { get; set; }
+    public float SpeedFactor { get; set; }
+    public float AcceleraionFactor { get; set; }
 
-    public int RepairRateModifier;
-    public int ShieldRechargeRateModifier;
+    public int RepairRateModifier { get; set; }
+    public int ShieldRechargeRateModifier { get; set; }
 
     //public HitPointBuff HitPointModifiers;
 
@@ -66,10 +68,11 @@ public struct DynamicBuff
     }
 }
 
+[Serializable]
 public class StaticBuff
 {
-    public DynamicBuff DynamicData;
-    public HitPointBuff HitPointData;
+    public DynamicBuff DynamicData { get; set; }
+    public HitPointBuff HitPointData { get; set; }
 
     public static StaticBuff Combine(IEnumerable<StaticBuff> buffs)
     {
@@ -109,9 +112,9 @@ public class StaticBuff
 
     public class HitPointBuff
     {
-        public int Hull;
-        public int Component;
-        public Dictionary<(string, string), int> TurretBuffs = new Dictionary<(string, string), int>();
+        public int Hull { get; set; }
+        public int Component { get; set; }
+        public Dictionary<string, int> TurretBuffs { get; set; }
 
         public static void CombineSingle(HitPointBuff target, HitPointBuff other)
         {
@@ -120,12 +123,12 @@ public class StaticBuff
 
             if (target.TurretBuffs == null)
             {
-                target.TurretBuffs = new Dictionary<(string, string), int>();
+                target.TurretBuffs = new Dictionary<string, int>();
             }
 
             if (other.TurretBuffs != null)
             {
-                foreach (KeyValuePair<(string, string), int> t in other.TurretBuffs)
+                foreach (KeyValuePair<string, int> t in other.TurretBuffs)
                 {
                     if (target.TurretBuffs.ContainsKey(t.Key))
                     {
@@ -152,12 +155,36 @@ public class StaticBuff
             {
                 Hull = 0,
                 Component = 0,
-                TurretBuffs = new Dictionary<(string, string), int>()
+                TurretBuffs = new Dictionary<string, int>()
             };
         }
     }
 }
 
+[Serializable]
+public struct TurretModBuff
+{
+    public string ApplyToWeapon { get; set; }
+    public string ApplyToAmmo { get; set; }
+    public float MuzzleVelocityBuff { get; set; }
+    public float DamageBuff { get; set; }
+    public float ArmourPenetrationBuff { get; set; }
+    public float AccuracyBuff { get; set; }
+    public float RateOfFireBuff { get; set; }
+    public float RangeBuff { get; set; }
+
+    public static TurretModBuff Default()
+    {
+        return new TurretModBuff()
+        {
+            MuzzleVelocityBuff = 0f,
+            DamageBuff = 0f,
+            ArmourPenetrationBuff = 0f,
+            AccuracyBuff = 0f,
+            RateOfFireBuff = 0
+        };
+    }
+}
 
 public static class StandardBuffs
 {

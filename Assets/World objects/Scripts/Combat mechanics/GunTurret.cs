@@ -8,9 +8,10 @@ public class GunTurret : DirectionalTurret
 {
     protected override void FireInner(Vector3 firingVector, int barrelIdx)
     {
-        Warhead w = _warheads[_currAmmoType];
+        Warhead w = _warheadsAfterBuffs[_currAmmoType];
+
         w.EffectVsStrikeCraft = Mathf.Clamp(w.EffectVsStrikeCraft + _vsStrikeCraftModifier, 0.05f, 0.95f);
-        Projectile p = ObjectFactory.AcquireProjectile(Muzzles[barrelIdx].position, firingVector, MuzzleVelocity, MaxRange, ProjectileScale, w, _containingShip);
+        Projectile p = ObjectFactory.AcquireProjectile(Muzzles[barrelIdx].position, firingVector, _velocityAfterBuffs[_currAmmoType], _rangeAfterBuffs[_currAmmoType], ProjectileScale, w, _containingShip);
         p.WeaponEffectKey = ObjectFactory.GetEffectKey(TurretWeaponType, TurretWeaponSize, _ammoTypes[_currAmmoType]);
         p.ProximityProjectile = w.BlastRadius > 0f;
         if (MuzzleFx[barrelIdx] != null)
@@ -19,11 +20,15 @@ public class GunTurret : DirectionalTurret
         }
     }
 
-    public override void Init(string turretSlotType)
+    public override void Init(string turretSlotType, TurretMod turretMod)
     {
-        base.Init(turretSlotType);
-        _ammoTypes = new string[_warheads.Length];
+        _ammoTypes = new string[MaxWarheads];
+        _warheadsAfterBuffs = new Warhead[MaxWarheads];
+        _velocityAfterBuffs = new float[MaxWarheads];
+        _rangeAfterBuffs = new float[MaxWarheads];
         _currAmmoType = 0;
+        base.Init(turretSlotType, turretMod);
+        CalculateTurretModBuffs();
     }
 
     public override bool IsTurretModCombatible(TurretMod m)
@@ -44,6 +49,59 @@ public class GunTurret : DirectionalTurret
         }
     }
 
+    private void CalculateTurretModBuffs()
+    {
+        for (int i = 0; i < _warheads.Length; ++i)
+        {
+            _warheadsAfterBuffs[i] = _warheads[i];
+            _velocityAfterBuffs[i] = MuzzleVelocity;
+            _rangeAfterBuffs[i] = MaxRange;
+            if (_turretModBuffs != null)
+            {
+                float velocityFactor = 1f;
+                float damageFactor = 1f;
+                float APFactor = 1f;
+                float rangeFactor = 1f;
+                for (int j = 0; j < _turretModBuffs.Length; j++)
+                {
+                    if (IsTurretModBuffApplicable(j))
+                    {
+                        velocityFactor += _turretModBuffs[j].MuzzleVelocityBuff;
+                        damageFactor += _turretModBuffs[j].DamageBuff;
+                        APFactor += _turretModBuffs[j].ArmourPenetrationBuff;
+                        rangeFactor += _turretModBuffs[j].RangeBuff;
+                    }
+                }
+                _warheadsAfterBuffs[i].ArmourPenetration = Mathf.FloorToInt(_warheadsAfterBuffs[i].ArmourPenetration * APFactor);
+                _warheadsAfterBuffs[i].ArmourDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].ArmourDamage * damageFactor);
+                _warheadsAfterBuffs[i].ShieldDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].ShieldDamage * damageFactor);
+                _warheadsAfterBuffs[i].HullDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].HullDamage * damageFactor);
+                _warheadsAfterBuffs[i].SystemDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].SystemDamage * damageFactor);
+                _velocityAfterBuffs[i] *= velocityFactor;
+                _rangeAfterBuffs[i] *= rangeFactor;
+            }
+        }
+
+        // Accuracy. This does not depend on the selected ammo type.
+        _accuracyFactorBuff = 0f;
+        if (_turretModBuffs != null)
+        {
+            for (int i = 0; i < _turretModBuffs.Length; ++i)
+            {
+                if (IsTurretModBuffApplicable(i))
+                {
+                    _accuracyFactorBuff += _turretModBuffs[i].AccuracyBuff;
+                }
+            }
+        }
+    }
+
+    protected override bool IsTurretModBuffApplicable(int idx)
+    {
+        return base.IsTurretModBuffApplicable(idx) &&
+               (string.IsNullOrEmpty(_turretModBuffs[idx].ApplyToAmmo) || _turretModBuffs[idx].ApplyToAmmo == _ammoTypes[_currAmmoType]);
+    }
+
     protected override void FireGrapplingToolInner(Vector3 firingVector, int barrelIdx)
     {
         HarpaxBehavior p = ObjectFactory.AcquireHarpaxProjectile(Muzzles[_nextBarrel].position, firingVector, MuzzleVelocity, MaxRange, ProjectileScale, _containingShip);
@@ -56,7 +114,7 @@ public class GunTurret : DirectionalTurret
     public override void ApplyBuff(DynamicBuff b)
     {
         base.ApplyBuff(b);
-        _inaccuracyCoeff = Mathf.Max(1f - b.WeaponAccuracyFactor, 0.05f);
+        _inaccuracyCoeff = Mathf.Max(1f - b.WeaponAccuracyFactor - _accuracyFactorBuff, 0.05f);
         _vsStrikeCraftModifier = b.WeaponVsStrikeCraftFactor;
     }
 
@@ -77,6 +135,7 @@ public class GunTurret : DirectionalTurret
     {
         _ammoTypes[idx] = ammoType;
         _warheads[idx] = w;
+        CalculateTurretModBuffs();
     }
 
     public void SwitchAmmoType(int idx)
@@ -108,4 +167,9 @@ public class GunTurret : DirectionalTurret
     public float MuzzleVelocity;
     private string[] _ammoTypes;
     private int _currAmmoType;
+
+    private Warhead[] _warheadsAfterBuffs;
+    private float[] _rangeAfterBuffs;
+    private float[] _velocityAfterBuffs;
+    private float _accuracyFactorBuff;
 }

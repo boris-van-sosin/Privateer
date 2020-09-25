@@ -42,6 +42,10 @@ public static class ObjectFactory
         {
             LoadIcons();
         }
+        if (_turretModAppliers == null)
+        {
+            LoadTurretModBuffs();
+        }
     }
 
     private static Projectile CreateProjectile()
@@ -749,6 +753,11 @@ public static class ObjectFactory
 
     public static TurretBase CreateTurret(string turretMountType, string weaponNum, string weaponSize, string weaponType)
     {
+        return CreateTurret(turretMountType, weaponNum, weaponSize, weaponType, TurretMod.None);
+    }
+
+    public static TurretBase CreateTurret(string turretMountType, string weaponNum, string weaponSize, string weaponType, TurretMod installTurretMod)
+    {
         if (_turretDefinitions == null)
         {
             LoadTurretDefinitions();
@@ -792,7 +801,7 @@ public static class ObjectFactory
         resTurret.RotationSpeed = md.RotationSpeed;
         //resTurret.ComponentMaxHitPoints = resTurret.ComponentGlobalMaxHitPoints;
         //resTurret.ComponentHitPoints = resTurret.ComponentGlobalMaxHitPoints;
-        resTurret.Init(string.Format("{0}{1}{2}", turretMountType , weaponNum , weaponSize));
+        resTurret.Init(string.Format("{0}{1}{2}", turretMountType , weaponNum , weaponSize), installTurretMod);
 
         return resTurret;
     }
@@ -1479,6 +1488,24 @@ public static class ObjectFactory
         return _shipTemplates.Keys;
     }
 
+    public static TurretModBuffApplier GetTurretModBuff(TurretMod key)
+    {
+        if (_turretModAppliers == null)
+        {
+            LoadTurretModBuffs();
+        }
+        int keyNum = (int) key;
+        TurretModBuffApplier res;
+        if (_turretModAppliers.TryGetValue(keyNum, out res))
+        {
+            return res;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static int DefaultLayer => _defaultLayer;
     public static int ShipsLayer => _shipsLayer;
     public static int ShieldsLayer => _shieldsLayer;
@@ -1723,6 +1750,21 @@ public static class ObjectFactory
         }
     }
 
+    private static void LoadTurretModBuffs()
+    {
+        _turretModAppliers = new Dictionary<int, TurretModBuffApplier>();
+        string searchPath = Path.Combine("TextData", "TurretModBuffs");
+        foreach (string turretModFile in Directory.EnumerateFiles(searchPath, "*.yml", SearchOption.TopDirectoryOnly))
+        {
+            using (StreamReader sr = new StreamReader(turretModFile, Encoding.UTF8))
+            {
+                TurretModBuffApplier curr = HierarchySerializer.LoadHierarchy<TurretModBuffApplier>(sr);
+                int key = (int) curr.TurretModKey;
+                _turretModAppliers[key] = curr;
+            }
+        }
+    }
+
     private static void LoadShipTemplates()
     {
         _shipTemplates = new Dictionary<string, ShipTemplate>();
@@ -1757,6 +1799,7 @@ public static class ObjectFactory
     private static Dictionary<(string, string, string, string), TurretDefinition> _turretDefinitions = null; // Key: MountType, WeaponNum, WeaponSize, WeaponType
     private static Dictionary<string, ShipHullDefinition> _shipHullDefinitions = null;
     private static Dictionary<string, ShipComponentTemplateDefinition> _shipCompDefinitions = null;
+    private static Dictionary<int, TurretModBuffApplier> _turretModAppliers = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _weaponImagePaths = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _weaponSizeImagePaths = null;
     private static Dictionary<string, (string, int, int, int, int, int, int)> _ammoImagePaths = null;

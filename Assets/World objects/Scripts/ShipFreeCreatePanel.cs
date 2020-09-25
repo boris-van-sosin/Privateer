@@ -65,172 +65,6 @@ public class ShipFreeCreatePanel : MonoBehaviour
         Ship s = CreateAndFitOutShip(shadow, owner, friendly && userShip);
 
         s.transform.Translate(offset);
-
-        return;
-
-        // old creation process:
-
-        s = ObjectFactory.CreateShip(shipKey);
-
-        s.PlaceComponent(Ship.ShipSection.Left, DamageControlNode.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Right, DamageControlNode.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Center, CapacitorBank.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, HeatSink.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Fore, HeatExchange.DefaultComponent(s));
-        s.PlaceComponent(Ship.ShipSection.Center, ShieldGenerator.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
-        s.PlaceComponent(Ship.ShipSection.Aft, ShipEngine.DefaultComponent(s.ShipSize, s));
-        if (s.ShipSize == ObjectFactory.ShipSize.Destroyer)
-        {
-            s.PlaceComponent(Ship.ShipSection.Left, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Right, HeatSink.DefaultComponent(s));
-        }
-        else if (s.ShipSize == ObjectFactory.ShipSize.Cruiser)
-        {
-            s.PlaceComponent(Ship.ShipSection.Left, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Aft, CapacitorBank.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Right, HeatSink.DefaultComponent(s));
-        }
-        else if (s.ShipSize == ObjectFactory.ShipSize.CapitalShip)
-        {
-            s.PlaceComponent(Ship.ShipSection.Left, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Right, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Center, HeatExchange.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Fore, ShieldGenerator.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
-            //s.PlaceComponent(Ship.ShipSection.Center, PowerPlant.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Left, CapacitorBank.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Right, CapacitorBank.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Aft, FireControlGeneral.DefaultComponent(s.ShipSize, s));
-            s.PlaceComponent(Ship.ShipSection.Fore, HeatSink.DefaultComponent(s));
-            s.PlaceComponent(Ship.ShipSection.Aft, HeatSink.DefaultComponent(s));
-        }
-        foreach (TurretHardpoint hp in s.WeaponHardpoints)
-        {
-            TurretBase t;
-            (string, string, string) currBest;
-            if (hp.AllowedWeaponTypes.Contains("LightBarbette1Light") ||
-                hp.AllowedWeaponTypes.Contains("LightBarbette2Light"))
-            {
-                currBest = BestWeapon(hp.AllowedWeaponTypes);
-                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "HVGun"); // was Autocannon
-            }
-            else if (hp.AllowedWeaponTypes.Contains("TorpedoTube"))
-            {
-                currBest = ("TorpedoTube", "", "");
-                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "TorpedoWeapon");
-                (t as TorpedoTurret).LoadedTorpedoType = "Tracking";
-            }
-            else
-            {
-                currBest = BestWeapon(hp.AllowedWeaponTypes);
-                t = ObjectFactory.CreateTurret(currBest.Item1, currBest.Item2, currBest.Item3, "Howitzer");
-            }
-            if (t == null)
-            {
-                Debug.LogErrorFormat("Failed to create turret. Ship: {0}. Hardpoint: {1}. Turret key: {2}", s.name, hp.name, currBest);
-            }
-            t.TargetPriorityList = ObjectFactory.GetDefaultTargetPriorityList(t.TurretWeaponType, t.TurretWeaponSize);
-            GunTurret gt = t as GunTurret;
-            if (gt != null)
-            {
-                if (gt.TurretWeaponSize == "Light" && gt.TurretWeaponType == "Autocannon")
-                {
-                    gt.SetAmmoType(0, "ShrapnelRound");
-                }
-                else if (gt.TurretWeaponType == "HVGun")
-                {
-                    gt.SetAmmoType(0, "KineticPenetrator");
-                }
-                else
-                {
-                    gt.SetAmmoType(0, "ShapedCharge");
-                }
-                if (s.ShipSize != ObjectFactory.ShipSize.Sloop && gt.TurretWeaponSize == "Light")
-                {
-                    gt.InstalledTurretMod = TurretMod.DualAmmoFeed;
-                    gt.SetAmmoType(0, "ShrapnelRound");
-                    gt.SetAmmoType(1, "KineticPenetrator");
-                    gt.AlternatingFire = true;
-                }
-                else
-                {
-                    t.InstalledTurretMod = TurretMod.Harpax;
-                }
-            }
-            s.PlaceTurret(hp, t);
-        }
-        numCrew = (s.OperationalCrew + s.MaxCrew) / 2;//userShip ? (s.OperationalCrew + s.MaxCrew) / 2 : (s.OperationalCrew + s.SkeletonCrew) / 2;
-        for (int i = 0; i < numCrew; ++i)
-        {
-            ShipCharacter currCrew = ShipCharacter.GenerateTerranShipCrew();
-            currCrew.Level = ShipCharacter.CharacterLevel.Trained;
-            s.AddCrew(currCrew);
-        }
-        if (friendly && userShip)
-        {
-            ShipArmoury d = ShipArmoury.DefaultComponent(s.ShipSize, s);
-            s.PlaceComponent(Ship.ShipSection.Center, d);
-
-            if (_cfgPanelVisible)
-            {
-                s.SetTurretConfig(TurretControlGrouping.FromConfig(s, _weaponsCfgPanel.Compile()));
-            }
-        }
-        else
-        {
-            s.SetTurretConfigAllAuto();
-        }
-
-        if (friendly)
-        {
-            for (int i = 0; i < 100; ++i)
-            {
-                s.AddCrew(ShipCharacter.GenerateTerranCombatCrew(30));
-            }
-        }
-
-        s.Activate();
-
-        if (friendly)
-        {
-            s.Owner = faction1;
-        }
-        else
-        {
-            s.Owner = faction2;
-            s.transform.Translate(30, 0, 0);
-        }
-        s.SetCircleToFactionColor();
-        ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
-        if (friendly && userShip)
-        {
-            UserInput input = FindObjectOfType<UserInput>();
-            input.ControlledShip = s;
-            AIController.ControlType = ShipAIController.ShipControlType.Manual;
-        }
-        else if (friendly)
-        {
-            AIController.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
-        }
-        else
-        {
-            AIController.ControlType = ShipAIController.ShipControlType.Autonomous;
-        }
-
-        s.DisplayName =
-            NamingSystem.GenShipName(ObjectFactory.GetCultureNames("Terran"),
-            UnityEngine.Random.Range(0,2) == 0 ? "British" : "German",
-            ObjectFactory.InternalShipTypeToNameType(s.ShipSize), s.Owner.UsedNames);
-        s.Owner.UsedNames.Add(s.DisplayName.FullNameKey);
-
-        s.transform.Translate(offset);
-        //s.transform.Rotate(Vector3.up, UnityEngine.Random.Range(0f, 360f), Space.World);
-
-        _cfgPanelVisible = false;
-        _weaponsCfgPanel.gameObject.SetActive(_cfgPanelVisible);
     }
 
     private static Ship CreateAndFitOutShip(ShipShadow shadow, Faction owner, bool userControlled)
@@ -259,23 +93,21 @@ public class ShipFreeCreatePanel : MonoBehaviour
         // Place the weapons:
         foreach (ShipShadow.TurretPlacement turretPlacement in shadow.Turrets)
         {
+            TurretMod turretModToInstall = TurretMod.None;
+            if (turretPlacement.Template.InstalledMods != null && turretPlacement.Template.InstalledMods.Length > 0)
+            {
+                turretModToInstall = turretPlacement.Template.InstalledMods[0];
+            }
+
             TurretBase turret =
                 ObjectFactory.CreateTurret(turretPlacement.Template.TurretType,
                                            turretPlacement.Template.WeaponNum,
                                            turretPlacement.Template.WeaponSize,
-                                           turretPlacement.Template.WeaponType);
+                                           turretPlacement.Template.WeaponType,
+                                           turretModToInstall);
 
             turret.ComponentMaxHitPoints = turretPlacement.MaxHitPoints;
             turret.ComponentHitPoints = turretPlacement.CurrHitPoints;
-
-            if (turretPlacement.Template.InstalledMods != null && turretPlacement.Template.InstalledMods.Length > 0)
-            {
-                turret.InstalledTurretMod = turretPlacement.Template.InstalledMods[0];
-            }
-            else
-            {
-                turret.InstalledTurretMod = TurretMod.None;
-            }
 
             if (turret is GunTurret gt)
             {

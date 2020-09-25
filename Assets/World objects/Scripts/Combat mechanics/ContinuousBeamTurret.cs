@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ContinuousBeamTurret : GeneralBeamTurret
 {
-    public override void Init(string turretSlotType)
+    public override void Init(string turretSlotType, TurretMod turretMod)
     {
-        base.Init(turretSlotType);
+        base.Init(turretSlotType, turretMod);
         _pulseDelay = new WaitForSeconds(BeamPulseTime);
         _warheads[0] = ObjectFactory.CreateWarhead(TurretWeaponType, TurretWeaponSize);
     }

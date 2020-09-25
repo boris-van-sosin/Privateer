@@ -14,6 +14,7 @@ public class Ship : ShipBase
         //MaxHeat = 100;
         InitDamageEffects();
         _speedOnTurningCoefficient = 0.5f;
+        InherentBuff = DynamicBuff.Default();
     }
 
     public override void PostAwake()
@@ -37,7 +38,6 @@ public class Ship : ShipBase
         _crewNumBuff = DynamicBuff.Default();
         SetCrewNumBuff();
         _manualTurrets = new HashSet<ITurret>(_turrets);
-        ApplyHitPointBuffs();
         _shipAI = GetComponent<ShipAIController>();
         SetMinEergyToAct();
         SetMaxEnergyAndHeat();
@@ -485,18 +485,6 @@ public class Ship : ShipBase
             if (_turrets[i] != null)
             {
                 _turrets[i].ApplyBuff(CombinedBuff);
-            }
-        }
-    }
-
-    private void ApplyHitPointBuffs()
-    {
-        if (InherentBuff != null)
-        {
-            MaxHullHitPoints += InherentBuff.HitPointData.Hull;
-            foreach (IShipActiveComponent comp in AllComponents.OfType<IShipActiveComponent>())
-            {
-                comp.ApplyHitPointBuff(InherentBuff.HitPointData);
             }
         }
     }
@@ -1400,12 +1388,9 @@ public class Ship : ShipBase
     private DynamicBuff AllBuffsCombined()
     {
         DynamicBuff res = DynamicBuff.Default();
+        res.Combine(InherentBuff);
         res.Combine(_crewNumBuff);
         res.Combine(_crewExperienceBuff);
-        if (InherentBuff != null)
-        {
-            res.Combine(InherentBuff.DynamicData);
-        }
         foreach (Tuple<string, IShipComponent>[] compArr in _componentSlotsOccupied.Values)
         {
             for (int i = 0; i < compArr.Length; ++i)
@@ -1479,7 +1464,7 @@ public class Ship : ShipBase
     private bool _brakingBackwards = false;
 
     // Buff/debuff mechanic
-    public StaticBuff InherentBuff { get; set; }
+    public DynamicBuff InherentBuff { get; set; }
     private DynamicBuff _crewNumBuff;
     private DynamicBuff _crewExperienceBuff;
 

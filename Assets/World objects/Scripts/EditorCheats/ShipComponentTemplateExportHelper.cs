@@ -253,6 +253,22 @@ public class ShipComponentTemplateExportHelper : Editor
             window.SetText(yaml);
         }
 
+        if (GUILayout.Button("Serialize Turret Mod Buff"))
+        {
+            TurretModBuffApplier buff = new TurretModBuffApplier()
+            {
+                Name = "Placeholder",
+                TurretModKey = TurretMod.None
+            };
+            TurretModBuff innerBuff = TurretModBuff.Default();
+            innerBuff.ApplyToWeapon = "Weapon";
+            innerBuff.ApplyToAmmo = "Ammo";
+            buff.TurretModBuffs = new TurretModBuff[] { innerBuff };
+            string yaml = HierarchySerializer.SerializeObject(buff);
+            SerializationDisplayWindow window = EditorWindow.CreateWindow<SerializationDisplayWindow>();
+            window.SetText(yaml);
+        }
+
         GUILayout.EndVertical();
     }
 }
