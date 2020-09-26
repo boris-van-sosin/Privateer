@@ -73,10 +73,10 @@ public class StrikeCraft : ShipBase
 
         if (HullHitPoints <= 0)
         {
-            ParticleSystem ps = ObjectFactory.CreateWeaponEffect(ObjectFactory.WeaponEffect.SmallExplosion, transform.position);
-            ps.transform.localScale = GlobalDistances.ShipExplosionSizeStrikeCraft;
-            ps.Play();
-            Destroy(ps.gameObject, 1.0f);
+            ParticleSystem explosion = ObjectFactory.AcquireParticleSystem("AssetBundles\\StandaloneWindows\\effects", "SmallExplosionEffect", transform.position);
+            explosion.transform.localScale = GlobalDistances.ShipExplosionSizeStrikeCraft;
+            explosion.Play();
+            ObjectFactory.ReleaseParticleSystem("AssetBundles\\StandaloneWindows\\effects", "SmallExplosionEffect", explosion, 2.0f);
             Destroy(this.gameObject);
         }
     }

@@ -1,21 +1,21 @@
 Name: Acceleration booster
 TurretModKey: Accelerator
 TurretModBuffs:
-- ApplyToAmmo: KineticPenetrator
+- ApplyToAmmo: AP round
   MuzzleVelocityBuff: 0.05
   DamageBuff: 0.1025
   ArmourPenetrationBuff: 0.1025
   AccuracyBuff: 0
   RateOfFireBuff: 0
   RangeBuff: 0.1
-- ApplyToAmmo: ShapedCharge
+- ApplyToAmmo: HE round
   MuzzleVelocityBuff: 0.05
   DamageBuff: 0
   ArmourPenetrationBuff: 0
   AccuracyBuff: 0
   RateOfFireBuff: 0
   RangeBuff: 0.1
-- ApplyToAmmo: ShrapnelRound
+- ApplyToAmmo: Frag round
   MuzzleVelocityBuff: 0.05
   DamageBuff: 0
   ArmourPenetrationBuff: 0

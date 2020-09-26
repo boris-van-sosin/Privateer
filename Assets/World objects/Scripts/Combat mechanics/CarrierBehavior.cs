@@ -93,14 +93,30 @@ public class CarrierBehavior : MonoBehaviour
 
         _inLaunch = true;
 
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
+
+        bool finishedClosing = false;
+        while (!finishedClosing)
+        {
+            bool allClosed = true;
+            for (int j = 0; j < CarrierHangerAnim.Length; ++j)
+            {
+                if (CarrierHangerAnim[j].ComponentState != GenericOpenCloseAnim.State.Closed)
+                {
+                    allClosed = false;
+                    break;
+                }
+            }
+            finishedClosing = allClosed;
+            yield return _endOfFrameWait;
+        }
 
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation(strikeCraftKey);
         formation.DestroyOnEmpty = false;
         _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>(formation, formation.GetComponent<StrikeCraftFormationAIController>(), strikeCraftKey));
 
         onLaunchStart?.Invoke(this);
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
 
         StrikeCraft[] currLaunchingStrikeCraft = new StrikeCraft[CarrierHangerAnim.Length];
 
@@ -155,11 +171,11 @@ public class CarrierBehavior : MonoBehaviour
                 float launchSpeed = Vector3.Dot(_launchTransform[i].up, _ship.ActualVelocity);
                 if (launchSpeed > 0)
                 {
-                    currLaunchingStrikeCraft[i].StartManeuver(m, launchSpeed);
+                    currStrikeCraft.StartManeuver(m, launchSpeed);
                 }
                 else
                 {
-                    currLaunchingStrikeCraft[i].StartManeuver(m);
+                    currStrikeCraft.StartManeuver(m);
                 }
                 ++numLaunched;
                 if (numLaunched == formation.Positions.Length)
@@ -178,13 +194,13 @@ public class CarrierBehavior : MonoBehaviour
             }
             else
             {
-                yield return new WaitForEndOfFrame();
+                yield return _endOfFrameWait;
             }
         }
 
         _inLaunch = false;
 
-        yield return new WaitForEndOfFrame();
+        yield return _endOfFrameWait;
         onLaunchFinish?.Invoke(this);
         PostLaunchAndRecovery();
 

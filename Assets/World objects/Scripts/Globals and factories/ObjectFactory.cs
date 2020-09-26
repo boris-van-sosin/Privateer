@@ -927,7 +927,7 @@ public static class ObjectFactory
         if (t is GunTurret)
         {
             GunTurret gt = t as GunTurret;
-            gt.SetAmmoType(0, "KineticPenetrator");
+            gt.SetAmmoType(0, "AP round");
             gt.DefaultAlternatingFire = weaponType.Contains("Auto");
         }
         else if (t is BomberTorpedoLauncher)
@@ -1692,8 +1692,8 @@ public static class ObjectFactory
         };
         WarheadDataEntry3[] d3 = new WarheadDataEntry3[]
         {
-            new WarheadDataEntry3 { LaunchWeaponSize = "Light", LaunchWeaponType = "Autocannon", Ammo = "KineticPenetrator", WarheadData = dummyWarhead },
-            new WarheadDataEntry3 { LaunchWeaponSize = "Light", LaunchWeaponType = "Autocannon", Ammo = "ShapedCharge", WarheadData = dummyWarhead },
+            new WarheadDataEntry3 { LaunchWeaponSize = "Light", LaunchWeaponType = "Autocannon", Ammo = "AP round", WarheadData = dummyWarhead },
+            new WarheadDataEntry3 { LaunchWeaponSize = "Light", LaunchWeaponType = "Autocannon", Ammo = "HE round", WarheadData = dummyWarhead },
         };
         WarheadDataEntry2[] d2 = new WarheadDataEntry2[]
         {

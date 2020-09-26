@@ -254,8 +254,7 @@ public class Ship : ShipBase
         // Only ship systems and engines are placed using this function
         if (comp.AllowedSlotTypes.All(x => x != "ShipSystem" &&
                                       x != "ShipSystemCenter" &&
-                                      x != "Engine" &&
-                                      x != "BoardingForce"))
+                                      x != "Engine"))
         {
             return false;
         }
@@ -1023,7 +1022,7 @@ public class Ship : ShipBase
         {
             for (int i = 0; i < comps.Length; ++i)
             {
-                if (comps[i] != null && comps[i] is IShipActiveComponent activeComp)
+                if (comps[i] != null && comps[i].Item2 is IShipActiveComponent activeComp)
                 {
                     neededRepair = neededRepair || activeComp.ComponentMaxHitPoints != activeComp.ComponentHitPoints;
                     if (activeComp.ComponentMaxHitPoints - activeComp.ComponentHitPoints <= repairPoints)
