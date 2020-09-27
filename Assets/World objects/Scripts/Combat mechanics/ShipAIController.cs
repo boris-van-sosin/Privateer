@@ -39,15 +39,24 @@ public class ShipAIController : MonoBehaviour
 	}
 
     protected virtual int TargetsToFollowLayerMask => ObjectFactory.NavBoxesLayerMask;
+    protected virtual int TargetsToAttackLayerMask => ObjectFactory.NavBoxesAllLayerMask;
 
     private void AcquireTarget()
     {
-        int numHits = Physics.OverlapSphereNonAlloc(transform.position, 30, _collidersCache, TargetsToFollowLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, 30, _collidersCache, TargetsToAttackLayerMask);
         ShipBase foundTarget = null;
+        bool staticAttack = false;
         _currAttackBehavior = ShipAttackPattern.Aggressive;
         for (int i = 0; i < numHits; ++i)
         {
+            int colliderLayer = 1 << _collidersCache[i].gameObject.layer;
+            bool validFollowTarget = (colliderLayer & TargetsToFollowLayerMask) != 0;
+            bool validStaticAttackTarget = (colliderLayer & TargetsToAttackLayerMask) != 0;
             ShipBase s = ShipBase.FromCollider(_collidersCache[i]);
+            if (Torpedo.FromCollider(_collidersCache[i]) != null)
+            {
+                staticAttack = true;
+            }
             if (s == null)
             {
                 continue;
@@ -56,11 +65,11 @@ public class ShipAIController : MonoBehaviour
             {
                 continue;
             }
-            if (_controlledShip.Owner.IsEnemy(s.Owner))
+            if (validFollowTarget && _controlledShip.Owner.IsEnemy(s.Owner))
             {
                 foundTarget = s;
             }
-            else
+            else if (validFollowTarget)
             {
                 if (s != _controlledShip && s is Ship alliedShip && _controlledShip is Ship currShip)
                 {
@@ -71,6 +80,10 @@ public class ShipAIController : MonoBehaviour
                     }
                 }
             }
+            else if (validStaticAttackTarget && _controlledShip.Owner.IsEnemy(s.Owner))
+            {
+                staticAttack = true;
+            }
         }
 
         if (foundTarget != null)
@@ -79,6 +92,13 @@ public class ShipAIController : MonoBehaviour
             {
                 TargetShip = foundTarget;
             }
+            foreach (ITurret t in _controlledShip.Turrets)
+            {
+                t.SetTurretBehavior(TurretBase.TurretMode.Auto);
+            }
+        }
+        else if (staticAttack)
+        {
             foreach (ITurret t in _controlledShip.Turrets)
             {
                 t.SetTurretBehavior(TurretBase.TurretMode.Auto);

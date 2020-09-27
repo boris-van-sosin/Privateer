@@ -38,13 +38,21 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         Transform navBox = transform.Find("NavBox");
         if (navBox != null && HullObject != null)
         {
-            BoxCollider navBoxCollider = navBox.gameObject.AddComponent<BoxCollider>();
             Bounds bbox = HullObject.GetComponent<MeshFilter>().mesh.bounds;
             Vector3 tmpSz = bbox.size * NavBoxExpandFactor * HullObject.localScale.x;
             bbox.size = new Vector3(tmpSz.x, tmpSz.z, tmpSz.y);
+            /* Old box collider implemetation: */
+            /*
+            BoxCollider navBoxCollider = navBox.gameObject.AddComponent<BoxCollider>();
             navBoxCollider.center = bbox.center;
             navBoxCollider.size = bbox.size;
             navBoxCollider.isTrigger = true;
+            */
+
+            /* New sphere collider implemetation: */
+            SphereCollider navSphereCollider = navBox.gameObject.AddComponent<SphereCollider>();
+            navSphereCollider.center = bbox.center;
+            navSphereCollider.radius = Mathf.Max(bbox.size.x, Mathf.Max(bbox.size.y, bbox.size.z)) / 2f;
         }
     }
 

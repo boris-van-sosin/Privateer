@@ -592,7 +592,7 @@ public static class ObjectFactory
         GameObject navBoxObj = _loader.CreateObjectEmpty();
         navBoxObj.name = "NavBox";
         navBoxObj.layer = NavCollidersLayer;
-        navBoxObj.transform.parent = resObj.transform;
+        navBoxObj.transform.SetParent(resObj.transform, false);
         navBoxObj.transform.localPosition = Vector3.zero;
         navBoxObj.transform.localRotation = Quaternion.identity;
         navBoxObj.transform.localScale = Vector3.one;

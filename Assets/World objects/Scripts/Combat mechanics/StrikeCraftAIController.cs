@@ -25,7 +25,7 @@ public class StrikeCraftAIController : ShipAIController
         if (CurrActivity == ShipActivity.StartingRecovery)
         {
             Vector3 vecToRecovery = _recoveryTarget.RecoveryStart.position - transform.position;
-            Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
+            //Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
             if (vecToRecovery.sqrMagnitude <= GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAIRecoveryDist)
             {
                 RecoveryStartClimb();
@@ -70,13 +70,13 @@ public class StrikeCraftAIController : ShipAIController
             //Vector3 Rear = -Front;
             Vector3 vecToTarget = enemyShip.transform.position - transform.position;
             float distToTarget = vecToTarget.magnitude;
-            float turningCircleRadius = MathUtils.TurningCircleRadius(_controlledCraft.CurrSpeed, _controlledCraft.TurnRate);
-            if (_hitAndRunPhase && distToTarget < turningCircleRadius)
+            //float turningCircleRadius = MathUtils.TurningCircleRadius(_controlledCraft.CurrSpeed, _controlledCraft.TurnRate);
+            if (_hitAndRunPhase && distToTarget < minRange * GlobalDistances.StrikeCraftAIAttackPosRangeHitFactor / _numAttackDistances)
             {
                 // Run
                 _hitAndRunPhase = false;
             }
-            else if (!_hitAndRunPhase && distToTarget > 2f * turningCircleRadius)
+            else if (!_hitAndRunPhase && distToTarget > minRange * GlobalDistances.StrikeCraftAIAttackPosRangeRunFactor)
             {
                 // Hit
                 _hitAndRunPhase = true;
@@ -115,7 +115,7 @@ public class StrikeCraftAIController : ShipAIController
                     // Run
                     for (int j = 0; j < _numAttackDistances; ++j)
                     {
-                        float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeRunFactor * (j + 1) / _numAttackDistances;
+                        float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeRunFactor * (j + 1);
                         _attackPositions[k] = enemyShip.transform.position + dir * dist;
                         _attackPositionWeights[k] = currWeight;
                         ++k;
