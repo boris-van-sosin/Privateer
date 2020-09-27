@@ -38,9 +38,11 @@ public class ShipAIController : MonoBehaviour
         }
 	}
 
+    protected virtual int TargetsToFollowLayerMask => ObjectFactory.NavBoxesLayerMask;
+
     private void AcquireTarget()
     {
-        int numHits = Physics.OverlapSphereNonAlloc(transform.position, 30, _collidersCache, ObjectFactory.NavBoxesLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(transform.position, 30, _collidersCache, TargetsToFollowLayerMask);
         ShipBase foundTarget = null;
         _currAttackBehavior = ShipAttackPattern.Aggressive;
         for (int i = 0; i < numHits; ++i)

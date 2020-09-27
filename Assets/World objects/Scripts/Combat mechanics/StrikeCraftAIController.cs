@@ -12,6 +12,7 @@ public class StrikeCraftAIController : ShipAIController
         _formation = (StrikeCraftFormation)(_controlledCraft.ContainingFormation);
         _formationAI = _formation.GetComponent<StrikeCraftFormationAIController>();
         ControlType = ShipControlType.Autonomous;
+        _hitAndRunPhase = true; // Hit
     }
 
     protected override void Update()
@@ -51,6 +52,8 @@ public class StrikeCraftAIController : ShipAIController
         //_bug0Alg.NavTarget = transform.position + vecToTarget;
     }
 
+    protected override int TargetsToFollowLayerMask => ObjectFactory.NavBoxesAllLayerMask;
+
     protected override Vector3 AttackPosition(ShipBase enemyShip)
     {
         float minRange = _controlledShip.TurretsGetAttackRange(_turretsAll);
@@ -65,6 +68,20 @@ public class StrikeCraftAIController : ShipAIController
             //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
             //Vector3 Right = -Left;
             //Vector3 Rear = -Front;
+            Vector3 vecToTarget = enemyShip.transform.position - transform.position;
+            float distToTarget = vecToTarget.magnitude;
+            float turningCircleRadius = MathUtils.TurningCircleRadius(_controlledCraft.CurrSpeed, _controlledCraft.TurnRate);
+            if (_hitAndRunPhase && distToTarget < turningCircleRadius)
+            {
+                // Run
+                _hitAndRunPhase = false;
+            }
+            else if (!_hitAndRunPhase && distToTarget > 2f * turningCircleRadius)
+            {
+                // Hit
+                _hitAndRunPhase = true;
+            }
+
             int k = 0;
             for (int i = 0; i < _numAttackAngles; ++i)
             {
@@ -82,12 +99,27 @@ public class StrikeCraftAIController : ShipAIController
                 {
                     currWeight = 1f / 2.5f;
                 }
-                for (int j = 0; j < _numAttackDistances; ++j)
+                if (_hitAndRunPhase)
                 {
-                    float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeFactor * (j + 1) / _numAttackDistances;
-                    _attackPositions[k] = enemyShip.transform.position + dir * dist;
-                    _attackPositionWeights[k] = currWeight;
-                    ++k;
+                    // Hit
+                    for (int j = 0; j < _numAttackDistances; ++j)
+                    {
+                        float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeHitFactor * (j + 1) / _numAttackDistances;
+                        _attackPositions[k] = enemyShip.transform.position + dir * dist;
+                        _attackPositionWeights[k] = currWeight;
+                        ++k;
+                    }
+                }
+                else
+                {
+                    // Run
+                    for (int j = 0; j < _numAttackDistances; ++j)
+                    {
+                        float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeRunFactor * (j + 1) / _numAttackDistances;
+                        _attackPositions[k] = enemyShip.transform.position + dir * dist;
+                        _attackPositionWeights[k] = currWeight;
+                        ++k;
+                    }
                 }
             }
 
@@ -292,6 +324,7 @@ public class StrikeCraftAIController : ShipAIController
     private StrikeCraftFormation _formation;
     private StrikeCraftFormationAIController _formationAI;
     private CarrierBehavior.RecoveryTransforms _recoveryTarget;
+    private bool _hitAndRunPhase;
 
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
 }

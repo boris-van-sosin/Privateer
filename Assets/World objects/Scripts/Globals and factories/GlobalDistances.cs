@@ -53,7 +53,8 @@ public static class GlobalDistances
     public static readonly float Bug0WallFollowRangeDiffFactor = 0.2f;
     public static readonly float Bug0ForwardCastDistFactor = 2f;
 
-    public static readonly float StrikeCraftAIAttackPosRangeFactor = 0.75f;
+    public static readonly float StrikeCraftAIAttackPosRangeHitFactor = 0.75f;
+    public static readonly float StrikeCraftAIAttackPosRangeRunFactor = 3f;
     public static readonly float StrikeCraftAIVsStrikeCrafRangeFactor = 0.01f;
     public static readonly float StrikeCraftAICarrierFollowDistFactor = 0.95f;
 
