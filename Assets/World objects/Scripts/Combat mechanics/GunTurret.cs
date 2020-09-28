@@ -118,6 +118,52 @@ public class GunTurret : DirectionalTurret
         _vsStrikeCraftModifier = b.WeaponVsStrikeCraftFactor;
     }
 
+    protected override ITargetableEntity AcquireTarget()
+    {
+        ITargetableEntity res = base.AcquireTarget();
+        if (_turretMod == TurretMod.DualAmmoFeed)
+        {
+            int bestAmmoType = _currAmmoType;
+            if (res is Ship shipTarget)
+            {
+                for (int i = 0; i < _warheads.Length; ++i)
+                {
+                    if (i == bestAmmoType)
+                    {
+                        continue;
+                    }
+                    else if (shipTarget.ShipTotalShields < _warheads[i].ShieldDamage &&
+                        _warheads[i].ArmourPenetration > _warheads[bestAmmoType].ArmourPenetration)
+                    {
+                        bestAmmoType = i;
+                    }
+                    else if (shipTarget.ShipTotalShields > _warheads[i].ShieldDamage &&
+                             (shipTarget.ShipTotalShields > _warheads[bestAmmoType].ShieldDamage) &&
+                             _warheads[i].ShieldDamage > _warheads[bestAmmoType].ShieldDamage)
+                    {
+                        bestAmmoType = i;
+                    }
+                }
+            }
+            else if (res is Torpedo || res is StrikeCraft)
+            {
+                for (int i = 0; i < _warheads.Length; ++i)
+                {
+                    if (i == bestAmmoType)
+                    {
+                        continue;
+                    }
+                    else if (_warheads[i].EffectVsStrikeCraft > _warheads[bestAmmoType].EffectVsStrikeCraft)
+                    {
+                        bestAmmoType = i;
+                    }
+                }
+            }
+            SwitchAmmoType(bestAmmoType);
+        }
+        return res;
+    }
+
     public ValueTuple<float, float, float> DebugGetDPS()
     {
         int numBarrels = FindMuzzles(transform).Count();

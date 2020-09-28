@@ -198,7 +198,34 @@ public class StrikeCraftAIController : ShipAIController
 
     protected override void OnDrawGizmos()
     {
-        base.OnDrawGizmos();
+        switch (CurrActivity)
+        {
+            case ShipActivity.Idle:
+            case ShipActivity.ControllingPosition:
+            case ShipActivity.ForceMoving:
+            case ShipActivity.Defending:
+            case ShipActivity.Launching:
+            case ShipActivity.NavigatingToRecovery:
+            case ShipActivity.StartingRecovery:
+            case ShipActivity.Recovering:
+            case ShipActivity.Attacking:
+                if (_hitAndRunPhase)
+                {
+                    Gizmos.color = Color.red;
+                }
+                else
+                {
+                    Gizmos.color = DbgOrange;
+                }
+                Gizmos.DrawLine(transform.position, _navTarget);
+                break;
+            case ShipActivity.Following:
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(transform.position, _followTarget.transform.position);
+                break;
+            default:
+                break;
+        }
     }
 
     public void OrderStartNavigatenToHost()
@@ -327,4 +354,6 @@ public class StrikeCraftAIController : ShipAIController
     private bool _hitAndRunPhase;
 
     private static readonly WaitForEndOfFrame _endOfFrameWait = new WaitForEndOfFrame();
+
+    private static readonly Color DbgOrange = new Color(200, 200, 0);
 }
