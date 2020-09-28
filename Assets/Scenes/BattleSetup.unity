@@ -889,6 +889,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3030371949752097196, guid: 1b37eb1107e2c434c99498ab237c180d,
+        type: 3}
+      propertyPath: ImageCam
+      value: 
+      objectReference: {fileID: 367911401}
     - target: {fileID: 3287384937511128558, guid: 1b37eb1107e2c434c99498ab237c180d,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1087,7 +1092,7 @@ PrefabInstance:
     - target: {fileID: 7340668510256941844, guid: 1b37eb1107e2c434c99498ab237c180d,
         type: 3}
       propertyPath: m_Name
-      value: PlayerFleetPanel (1)
+      value: EnemyFleetPanel
       objectReference: {fileID: 0}
     - target: {fileID: 8163647113789855606, guid: 1b37eb1107e2c434c99498ab237c180d,
         type: 3}
@@ -1313,6 +1318,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3030371949752097196, guid: 1b37eb1107e2c434c99498ab237c180d,
+        type: 3}
+      propertyPath: ImageCam
+      value: 
+      objectReference: {fileID: 367911401}
     - target: {fileID: 3287384937511128558, guid: 1b37eb1107e2c434c99498ab237c180d,
         type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -1396,6 +1396,16 @@ public static class ObjectFactory
     }
     private static Dictionary<Transform, Sprite> _objectPhotos = new Dictionary<Transform, Sprite>();
 
+    public static bool GetGenericPhoto(string key, out Sprite s)
+    {
+        return _genericPhotos.TryGetValue(key, out s);
+    }
+    public static void RegisterGenericPhoto(string key, Sprite s)
+    {
+        _genericPhotos[key] = s;
+    }
+    private static Dictionary<string, Sprite> _genericPhotos = new Dictionary<string, Sprite>();
+
     public static Sprite GetWeaponImage(string weaponType)
     {
         if (_weaponImagePaths == null)

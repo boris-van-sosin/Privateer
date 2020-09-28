@@ -147,11 +147,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
     {
         Debug.LogFormat("Createing hull {0}", key);
         Transform s = ObjectFactory.CreateShipDummy(key);
-        MeshRenderer[] renderers = s.GetComponentsInChildren<MeshRenderer>();
-        for (int i = 0; i < renderers.Length; ++i)
-        {
-            //renderers[i].sharedMaterial = ShipMtlInDisplay;
-        }
         Sprite shipPhoto = ObjectFactory.GetObjectPhoto(s, true, ImageCam);
         s.position = Vector3.zero;
         TurretHardpoint[] hardpoints = s.GetComponentsInChildren<TurretHardpoint>();
@@ -1278,12 +1273,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                     TurretMods = turretMods,
                     AlternatingFire = turretDef.WeaponType == "Autocannon"
                 };
-
-                MeshRenderer[] renderers = dummyTurret.GetComponentsInChildren<MeshRenderer>();
-                for (int i = 0; i < renderers.Length; ++i)
-                {
-                    //renderers[i].sharedMaterial = ShipMtlInDisplay;
-                }
 
                 GetShipQualityStats();
             }
