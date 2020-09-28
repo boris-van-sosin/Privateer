@@ -829,6 +829,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     public ObjectFactory.ShipSize MinShipSize { get { return ObjectFactory.ShipSize.Sloop; } }
     public ObjectFactory.ShipSize MaxShipSize { get { return ObjectFactory.ShipSize.CapitalShip; } }
 
+    public int NumBarrels => Muzzles.Length;
+
     private string[] _allowedSlotTypes;
 
     protected bool _flippedX = false;

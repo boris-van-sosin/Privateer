@@ -207,6 +207,8 @@ public class GunTurret : DirectionalTurret
             SwitchAmmoType((_currAmmoType + 1) % _warheads.Length);
     }
 
+    public string SelectedAmmoType => _ammoTypes[_currAmmoType];
+
     public override ObjectFactory.WeaponBehaviorType BehaviorType => ObjectFactory.WeaponBehaviorType.Gun;
 
     public float ProjectileScale;

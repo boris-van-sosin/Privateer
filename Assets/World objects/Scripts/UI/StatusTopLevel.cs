@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using TMPro;
 using System;
+using System.Text;
 
 public class StatusTopLevel : MonoBehaviour
 {
@@ -70,36 +71,8 @@ public class StatusTopLevel : MonoBehaviour
             EnergyBar.MaxValue = _attachedShip.MaxEnergy;
             HeatBar.MaxValue = _attachedShip.MaxHeat;
 
-            SetStrikeCraftStatus();
+            SetWeaponsText();
         }
-        else // _attachedShip == null
-        {
-            _attachedCarrier = null;
-        }
-    }
-
-    private void SetStrikeCraftStatus()
-    {
-        _attachedCarrier = _attachedShip.GetComponent<CarrierBehavior>();
-        if (_attachedCarrier == null)
-        {
-            HangerPanel.gameObject.SetActive(false);
-            return;
-        }
-        HangerPanel.gameObject.SetActive(true);
-        if (_attachedCarrier.ActiveFormations != null)
-        {
-            NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
-        }
-        else
-        {
-            NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", 0, _attachedCarrier.MaxFormations);
-        }
-        _attachedCarrier.onLaunchStart += CarrierEventWrapper;
-        _attachedCarrier.onLaunchFinish += CarrierEventWrapper;
-        _attachedCarrier.onRecoveryStart += CarrierEventWrapper;
-        _attachedCarrier.onRecoveryFinish += CarrierEventWrapper;
-        _attachedCarrier.onFormationRemoved += CarrierFormationEventWrapper;
     }
 
     public void SetName(ShipDisplayName dn)
@@ -112,15 +85,6 @@ public class StatusTopLevel : MonoBehaviour
     public void DetachShip()
     {
         _turretProgressBars.Clear();
-        if (_attachedCarrier != null)
-        {
-            _attachedCarrier.onLaunchStart -= CarrierEventWrapper;
-            _attachedCarrier.onLaunchFinish -= CarrierEventWrapper;
-            _attachedCarrier.onRecoveryStart -= CarrierEventWrapper;
-            _attachedCarrier.onRecoveryFinish -= CarrierEventWrapper;
-            _attachedCarrier.onFormationRemoved -= CarrierFormationEventWrapper;
-            _attachedCarrier = null;
-        }
     }
 
     public void ForceUpdateTurretModes()
@@ -147,27 +111,31 @@ public class StatusTopLevel : MonoBehaviour
                     break;
             }
         }
+        SetWeaponsText();
     }
 
-    private void ForceUpdateHangerStatus()
+    private void SetWeaponsText()
     {
-        NumActiveStrikeCraftBox.text = string.Format("{0}/{1}", _attachedCarrier.ActiveFormations.Count(), _attachedCarrier.MaxFormations);
-    }
-
-    private void CarrierEventWrapper(CarrierBehavior c)
-    {
-        if (c == _attachedCarrier)
+        _weaponsTextBuf.Clear();
+        foreach (TurretBase t in _turretProgressBars.Keys)
         {
-            ForceUpdateHangerStatus();
+            if (t.Mode == TurretBase.TurretMode.Manual)
+            {
+                if (t is GunTurret gt)
+                {
+                    _weaponsTextBuf.AppendFormat("{0}x {1} {2}, {3}", gt.NumBarrels, gt.TurretWeaponSize, gt.TurretWeaponType, gt.SelectedAmmoType).AppendLine();
+                }
+                else if (t is TorpedoTurret tt)
+                {
+                    _weaponsTextBuf.AppendFormat("{0}, {1}", tt.TurretWeaponType, tt.LoadedTorpedoType).AppendLine();
+                }
+                else
+                {
+                    _weaponsTextBuf.AppendFormat("{0}x {1} {2}", t.NumBarrels, t.TurretWeaponSize, t.TurretWeaponType).AppendLine();
+                }
+            }
         }
-        else
-        {
-            Debug.LogWarning("Got update from carrier other than the one attached. This is probably incorrect.");
-        }
-    }
-    private void CarrierFormationEventWrapper(CarrierBehavior c, StrikeCraftFormation f)
-    {
-        CarrierEventWrapper(c);
+        WeaponsBox.text = _weaponsTextBuf.ToString();
     }
 
     void Update()
@@ -185,8 +153,8 @@ public class StatusTopLevel : MonoBehaviour
     public Ship AttachedShip { get { return _attachedShip; } }
 
     private Ship _attachedShip = null;
-    private CarrierBehavior _attachedCarrier = null;
     private Dictionary<TurretBase, StatusProgressBar> _turretProgressBars = new Dictionary<TurretBase, StatusProgressBar>();
+    private StringBuilder _weaponsTextBuf = new StringBuilder();
     public UnityEngine.UI.Image ShipPhoto;
     public GradientBar HealthBar;
     public GradientBar ShieldBar;
@@ -196,10 +164,7 @@ public class StatusTopLevel : MonoBehaviour
     public TextMeshProUGUI ShortNameBox;
     public TextMeshProUGUI FullNameBox;
     public TextMeshProUGUI FluffBox;
-    public TextMeshProUGUI NumActiveStrikeCraftBox;
-    public TextMeshProUGUI NumFightersBox;
-    public TextMeshProUGUI NumBombersBox;
-    public Transform HangerPanel;
+    public TextMeshProUGUI WeaponsBox;
     private static readonly Color _autoTurretColor = new Color(83f / 255f, 198f / 255f, 255f / 255f);
     private static readonly Color _manualTurretColor = new Color(0f / 255f, 0f / 255f, 120f / 255f);
     private static readonly Color _offTurretColor = Color.black;

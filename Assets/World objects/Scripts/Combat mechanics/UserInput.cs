@@ -218,7 +218,7 @@ public class UserInput : MonoBehaviour
                     gt.SwitchAmmoType(_ammoIdx);
                 }
             }
-            CurrAmmoTextBox.text = _ammoStrings[_ammoIdx];
+            _statusTopLevelDisplay.ForceUpdateTurretModes();
         }
 
         foreach (ValueTuple<UserOperation, int> cg in _controlGroupKeys)
@@ -312,7 +312,6 @@ public class UserInput : MonoBehaviour
     public ShipContextMenu ContextMenu;
     public bool DisplayContextMenu;
     public RectTransform SelectedShipPanel;
-    public TextMeshProUGUI CurrAmmoTextBox;
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;
