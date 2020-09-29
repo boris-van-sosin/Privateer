@@ -1200,6 +1200,10 @@ public static class ObjectFactory
 
     public static int TurretMountMaxHitPoints(string turretType)
     {
+        if (_weaponMounts == null)
+        {
+            LoadWeaponMounts();
+        }
         return _weaponMounts[turretType].HitPoints;
     }
 
