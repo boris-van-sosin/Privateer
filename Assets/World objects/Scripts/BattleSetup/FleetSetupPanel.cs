@@ -187,6 +187,8 @@ public class FleetSetupPanel : MonoBehaviour
 
             shadow.DisplayName = _selectedShipName;
 
+            shadow.ShipSpriteKey = _availableShipClasses[_selectedShipKey].SpriteKey;
+
             RectTransform t = Instantiate(SelectedShipItemTemplate);
 
             t.SetParent(SelectedShipsScrollContent, false);

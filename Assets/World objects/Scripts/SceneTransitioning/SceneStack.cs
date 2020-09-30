@@ -27,6 +27,12 @@ public static class SceneStack
 
     public static T GetSceneParams<T>() where T : ISceneParams
     {
+        if (_stack.Count == 0)
+        {
+            Debug.LogWarningFormat("Attempted to get parameters from empty stack in scene {0}", SceneManager.GetActiveScene().name);
+            return default;
+        }
+
         ISceneParams topOfStack = _stack.Peek();
         if (topOfStack is T t)
         {

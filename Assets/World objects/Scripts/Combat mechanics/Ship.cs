@@ -542,7 +542,6 @@ public class Ship : ShipBase
         base.ApplyBrakingInner();
     }
 
-
     protected override bool CanDoAcceleration()
     {
         return _engine.RequestEngine();
@@ -905,6 +904,7 @@ public class Ship : ShipBase
                 Debug.LogFormat("Ship {0} {1} destroyed!", this, DisplayName.ShortName);
             }
             ShipDisabled = true;
+            OnShipDisabled?.Invoke(this);
         }
         if (!_engine.ComponentIsWorking || (noPower && Energy < _engine.EnergyPerTick))
         {
@@ -1258,6 +1258,8 @@ public class Ship : ShipBase
     private Dictionary<ShipSection, string[]> _componentsSlotTypes = new Dictionary<ShipSection, string[]>(SectionEqComparer);
     private Dictionary<ShipSection, Tuple<string, IShipComponent>[]> _componentSlotsOccupied = new Dictionary<ShipSection, Tuple<string, IShipComponent>[]>(SectionEqComparer);
     private Dictionary<ShipSection, List<Tuple<string, IShipComponent>>> _turretSlotsOccupied = new Dictionary<ShipSection, List<Tuple<string, IShipComponent>>>(SectionEqComparer);
+
+    public event Action<Ship> OnShipDisabled;
 
     private IEnumerable<IShipComponent> AllComponentsInSection(ShipSection sec, bool includeTurrets)
     {

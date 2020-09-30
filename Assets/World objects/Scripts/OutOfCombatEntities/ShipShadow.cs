@@ -140,6 +140,7 @@ public class ShipShadow
     public TurretPlacement[] Turrets { get; set; }
     public WeaponControlGroupCfgPanel.WeaponsConfigCompiled WeaponConfig { get; set; }
     public ShipCharacter[] Crew { get; set; }
+    public string ShipSpriteKey { get; set; }
 
     [Serializable]
     public struct TurretPlacement
