@@ -252,7 +252,7 @@ public class FleetSetupPanel : MonoBehaviour
 
     private IEnumerable<string> AllUsedShipNames => _selectedFleet.Select(s => s.Shadow.DisplayName.FullNameKey);
 
-    public IReadOnlyList<ShipInFleetItem> SelectedFleet => _selectedFleet;
+    public IEnumerable<ShipShadow> SelectedFleet => _selectedFleet.Select(s => s.Shadow);
 
     public TMP_Dropdown CultureDropdown;
     public RectTransform AvailableShipsScrollContent;
@@ -282,7 +282,7 @@ public class FleetSetupPanel : MonoBehaviour
         public ShipTemplate Template;
     }
 
-    public struct ShipInFleetItem
+    private struct ShipInFleetItem
     {
         public RectTransform ShipButtonInScrollView;
         public ShipShadow Shadow;

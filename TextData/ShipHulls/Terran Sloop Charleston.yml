@@ -27,10 +27,10 @@ CollisionMesh:
   MeshPath: ''
   DoCombine: false
 MovementData:
-  MaxSpeed: 0.9
-  Thrust: 0.1
-  Braking: 0.8
-  TurnRate: 30
+  MaxSpeed: 0.92
+  Thrust: 0.11
+  Braking: 0.82
+  TurnRate: 35
 TeamColorComponents:
 - Name: TeamColor
   Position:
@@ -218,12 +218,12 @@ WeaponHardpoints:
       y: 3
       z: 1
 HullProtection:
-  HullHitpoints: 7500
+  HullHitpoints: 6500
   Armour:
-    ForeValue: 150
-    AftValue: 125
-    LeftValue: 150
-    RightValue: 150
+    ForeValue: 120
+    AftValue: 110
+    LeftValue: 110
+    RightValue: 110
   ReducedArmour:
     ForeValue: 0
     AftValue: 0
@@ -236,10 +236,10 @@ HullProtection:
     RightValue: 80
   ArmourMitigation: 0.2
 Mass: 6
-SkeletonCrew: 4
-OperationalCrew: 14
-MaxCrew: 40
-MaxSpecialCharacters: 3
+SkeletonCrew: 3
+OperationalCrew: 8
+MaxCrew: 20
+MaxSpecialCharacters: 1
 Shield:
   Name: Shield
   Position:
