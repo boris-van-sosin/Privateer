@@ -13,6 +13,8 @@ public static class ObjectFactory
         {
             _prototypes = p;
             GameObject.DontDestroyOnLoad(_prototypes);
+            GameObject.DontDestroyOnLoad(_prototypes.ShipStatusPanelCamera);
+            GameObject.DontDestroyOnLoad(_prototypes.SelectionBoxCanvas);
         }
         if (_gunWarheads == null || _otherWarheads == null || _torpedoWarheads == null)
         {
@@ -279,22 +281,6 @@ public static class ObjectFactory
         _objCache.TorpedoCache.Release(t);
     }
 
-    public static ParticleSystem CreateWeaponEffect(WeaponEffect e, Vector3 position)
-    {
-        if (e == WeaponEffect.None)
-        {
-            return null;
-        }
-        if (_prototypes != null)
-        {
-            return _prototypes.CreateWeaponEffect(e, position);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     public static ParticleSystem AcquireParticleSystem(string assetBundleSource, string asset, Vector3 position)
     {
         if (_prototypes != null)
@@ -370,6 +356,11 @@ public static class ObjectFactory
         }
     }
     */
+
+    public static void ClearBattleSceneCache()
+    {
+        _objCache.ClearAll();
+    }
 
     public static T GetRandom<T>(IEnumerable<T> lst)
     {

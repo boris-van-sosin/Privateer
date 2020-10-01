@@ -59,6 +59,19 @@ public class ObjectCache
         }
     }
 
+    public void ClearAll()
+    {
+        ShipCards.Clear();
+        ProjectileCache.Clear();
+        HarpaxCableCache.Clear();
+        TorpedoCache.Clear();
+        HarpaxCache.Clear();
+        foreach (CacheWithRecycler<ParticleSystem> particleSysCache in _particleSystemCache.Values)
+        {
+            particleSysCache.Clear();
+        } 
+    }
+
     public class SpecificCache<T>
     {
         public T Acquire()
@@ -71,6 +84,11 @@ public class ObjectCache
         public void Release(T t)
         {
             _cache.Enqueue(t);
+        }
+
+        public void Clear()
+        {
+            _cache.Clear();
         }
 
         private Queue<T> _cache = new Queue<T>();
@@ -121,6 +139,12 @@ public class ObjectCache
                     _recycler.Remove();
                 }
             }
+        }
+
+        public void Clear()
+        {
+            _cache.Clear();
+            _recycler.Clear();
         }
 
         public int Count => _cache.Count;

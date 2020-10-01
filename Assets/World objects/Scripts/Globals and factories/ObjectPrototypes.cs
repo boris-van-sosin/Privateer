@@ -46,97 +46,6 @@ public class ObjectPrototypes : MonoBehaviour
         return res;
     }
 
-    public ParticleSystem CreateWeaponEffect(ObjectFactory.WeaponEffect e, Vector3 position)
-    {
-        if (_weaponEffectsDictionary == null)
-        {
-            _weaponEffectsDictionary = new Dictionary<ObjectFactory.WeaponEffect, ParticleSystem>()
-            {
-                { ObjectFactory.WeaponEffect.SmallExplosion, SmallExplosion },
-                { ObjectFactory.WeaponEffect.BigExplosion, BigExplosion },
-                { ObjectFactory.WeaponEffect.KineticImpactSparks, KineticImpactSparks },
-                { ObjectFactory.WeaponEffect.FlakBurst, FlakBurst},
-                { ObjectFactory.WeaponEffect.PlasmaExplosion, PlasmsExplosion },
-                { ObjectFactory.WeaponEffect.DamageElectricSparks, DamageElectricSparks},
-            };
-        }
-        ParticleSystem res = Instantiate(_weaponEffectsDictionary[e]);
-        res.transform.position = position;
-        ParticleSystem.MainModule m = res.main;
-        m.playOnAwake = true;
-        m.loop = false;
-        
-        return res;
-    }
-
-    public Ship CreateShip(string prodKey)
-    {
-        Ship res;
-        if (_shipPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        foreach (Ship s in ShipPrototypes)
-        {
-            _shipPrototypeDictionary[s.ProductionKey] = s;
-        }
-        if (_shipPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public string[] GetAllShipTypes()
-    {
-        if (_shipPrototypeDictionary.Count == 0)
-        {
-            foreach (Ship s in ShipPrototypes)
-            {
-                _shipPrototypeDictionary[s.ProductionKey] = s;
-            }
-        }
-        return _shipPrototypeDictionary.Keys.ToArray();
-    }
-
-    public TurretBase CreateTurret(string prodKey)
-    {
-        TurretBase res;
-        if (_turretPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        foreach (TurretBase t in TurretPrototypes)
-        {
-            string turretKey = t.TurretType.ToString() + t.TurretWeaponType.ToString();
-            _turretPrototypeDictionary[turretKey] = t;
-        }
-        if (_turretPrototypeDictionary.TryGetValue(prodKey, out res))
-        {
-            return Instantiate(res);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public string[] GetAllTurretTypes()
-    {
-        if (_turretPrototypeDictionary.Count == 0)
-        {
-            foreach (TurretBase t in TurretPrototypes)
-            {
-                string turretKey = t.TurretType.ToString() + t.TurretWeaponType.ToString();
-                _turretPrototypeDictionary[turretKey] = t;
-            }
-        }
-        return _turretPrototypeDictionary.Keys.ToArray();
-    }
-
     public StrikeCraft CreateStrikeCraft(string prodKey)
     {
         StrikeCraftWithFormationSize res = FindStrikeCraftPrototype(prodKey);
@@ -310,47 +219,13 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate(SelectionRing);
     }
 
-    public void QueueDelayedAction(Action<float> a, float actionTime)
-    {
-        _delayedActionQueue.Add(a, actionTime);
-        if (_delayedActions == null)
-        {
-            _delayedActions = StartCoroutine(DelayedActions());
-        }
-    }
-
-    private IEnumerator DelayedActions()
-    {
-        WaitUntil waitEmptyQueue = new WaitUntil(() => _delayedActionQueue.Count > 0);
-        while (true)
-        {
-            if (_delayedActionQueue.Count == 0)
-            {
-                yield return waitEmptyQueue;
-            }
-            (Action<float>, float) next = _delayedActionQueue.RemoveWithCost();
-            float t = Time.time;
-            yield return new WaitForSeconds(next.Item2 - t);
-            next.Item1(t);
-            yield return null;
-        }
-    }
-
     public Projectile ProjectileTemplate;
     public Projectile PlasmaProjectileTemplate;
     public HarpaxBehavior HarpaxTemplate;
     public CableBehavior HarpaxCableTemplate;
     public Torpedo TorpedoTemplate;
-    public ParticleSystem BigExplosion;
-    public ParticleSystem SmallExplosion;
-    public ParticleSystem FlakBurst;
-    public ParticleSystem KineticImpactSparks;
-    public ParticleSystem PlasmsExplosion;
-    public ParticleSystem DamageElectricSparks;
-    public Ship[] ShipPrototypes;
     public StrikeCraftWithFormationSize[] StrikeCraftPrototypes;
     public StrikeCraftFormation StrikeCraftFormationPrototype;
-    public TurretBase[] TurretPrototypes;
     public StatusTopLevel StatusPanelPrototype;
     public WeaponCtrlCfgLine WeaponCtrlCfgLinePrototype;
     public BspPath[] Paths;
@@ -404,13 +279,5 @@ public class ObjectPrototypes : MonoBehaviour
     {
         public StrikeCraft CraftType;
         public int FormationSize;
-    }
-
-    private class DelayedActionComparer : IComparer<(float, Action)>
-    {
-        public int Compare((float, Action) x, (float, Action) y)
-        {
-            return x.Item1.CompareTo(y.Item1);
-        }
     }
 }

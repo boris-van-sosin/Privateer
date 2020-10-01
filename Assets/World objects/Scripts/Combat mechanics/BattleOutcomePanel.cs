@@ -51,7 +51,7 @@ public class BattleOutcomePanel : MonoBehaviour
             else if (item.Item1.ShipDisabled)
             {
                 status = "Disabled";
-                textElem.color = new Color(180f / 255f, 180f / 255f, 0f);
+                textElem.color = new Color(255f / 255f, 85f / 255f, 0f);
             }
             else
             {
@@ -78,7 +78,8 @@ public class BattleOutcomePanel : MonoBehaviour
 
     public void Finish()
     {
-
+        ObjectFactory.ClearBattleSceneCache();
+        SceneStack.ReturnFromScene<BattleSceneParamsReader.BattleSceneParams>();
     }
 
     public TextMeshProUGUI OutcomeTextBox;
