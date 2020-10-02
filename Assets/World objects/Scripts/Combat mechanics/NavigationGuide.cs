@@ -135,6 +135,8 @@ public class NavigationGuide : MonoBehaviour
             (!_navAgent.hasPath || _navAgent.velocity.sqrMagnitude == 0f);
     }
 
+    public MovementBase AttachedEntity => _attachedObject;
+
     public float FollowDistance;
     public float SlowdownCoefficient;
     public float StoppingDistance;

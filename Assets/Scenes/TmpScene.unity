@@ -2568,6 +2568,7 @@ MonoBehaviour:
   UserToggle: {fileID: 460784009}
   SliderNumToSpawn: {fileID: 1585174313}
   TextNumToSpawn: {fileID: 519248533}
+  ShipsAIControl: {fileID: 1544174805}
 --- !u!114 &796719070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3903,7 +3904,7 @@ GameObject:
   - component: {fileID: 1243081520}
   - component: {fileID: 1243081519}
   m_Layer: 0
-  m_Name: GlobalObjects
+  m_Name: BattleSceneGlobalObjects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3931,30 +3932,6 @@ MonoBehaviour:
     type: 3}
   TorpedoTemplate: {fileID: 114015823544847988, guid: b8ce70c255723b2418df6b4cb14e03e2,
     type: 3}
-  BigExplosion: {fileID: 198000012777718758, guid: acf39d9f4addf294d93fa56fa373961b,
-    type: 3}
-  SmallExplosion: {fileID: 198000012942003240, guid: ecdd96beb7f93494880c052dfccf9dc1,
-    type: 3}
-  FlakBurst: {fileID: 198063292261448746, guid: 7c671bf8178a4ca4fa750271994a0bf8,
-    type: 3}
-  KineticImpactSparks: {fileID: 198227421610416534, guid: 7f385a8773efdd44ebea30093fec8e6e,
-    type: 3}
-  PlasmsExplosion: {fileID: 198000010585806678, guid: 96730f8640590934eacb6f860058e7f9,
-    type: 3}
-  DamageElectricSparks: {fileID: 198000012283690144, guid: 96b2ec0239d11fa4b9792311efceb8ed,
-    type: 3}
-  ShipPrototypes:
-  - {fileID: 114294262926575966, guid: 6f0d8fd7419104546a22cc523434b56a, type: 3}
-  - {fileID: 114919541509226048, guid: 0b731f3e21b40bd48a5ddda31916ec60, type: 3}
-  - {fileID: 114658742019267748, guid: 3ce29f4c0dd345b45851a2f1e7b83e6a, type: 3}
-  - {fileID: 8083917751974581549, guid: b335863579f883744baf15e440818b46, type: 3}
-  - {fileID: 114206441389797348, guid: c0b7d06ee4002964e85857b6bcfb7500, type: 3}
-  - {fileID: 114248074947831548, guid: da22b26bf4e774b459b0267183a20e4e, type: 3}
-  - {fileID: 114932092806717634, guid: 979aa53004b071949b979e9701ef4052, type: 3}
-  - {fileID: 4453604849776833899, guid: 91c96f33a3129b5468e5029ef117edbb, type: 3}
-  - {fileID: 114298267387497442, guid: 0f51071563df82746bb0d023195a867f, type: 3}
-  - {fileID: 114298267387497442, guid: 64585c44ad74345449b7491bc7ebad32, type: 3}
-  - {fileID: 721809839773014396, guid: 5d4818057b195874c93ca22a2018afb8, type: 3}
   StrikeCraftPrototypes:
   - CraftType: {fileID: 114275050688803318, guid: 68ee3588e1f7eea43b7bccae32b105b2,
       type: 3}
@@ -3964,78 +3941,6 @@ MonoBehaviour:
     FormationSize: 2
   StrikeCraftFormationPrototype: {fileID: 1647051583425452302, guid: 7ef6728918f07f149b59a0b301b7f597,
     type: 3}
-  TurretPrototypes:
-  - {fileID: 114088224525879660, guid: 26f3785b44fd76f4cab8d1fd708aad08, type: 3}
-  - {fileID: 114336544468533872, guid: 4c3312bc6f5c96c41b671a1336bedaca, type: 3}
-  - {fileID: 114206377714256386, guid: 31b0f9d38d19885499105b172665d0fc, type: 3}
-  - {fileID: 114889933642452080, guid: 340a8f5cd25b8ee4c9ca676a08967e41, type: 3}
-  - {fileID: 114113600098446004, guid: f8ba8506f7438944ea409c009670a0fe, type: 3}
-  - {fileID: 114476560340543598, guid: cff6f6fb85ed6c74eb4883f35c141c07, type: 3}
-  - {fileID: 114759024176127414, guid: adc1ba5b3d9f1ce4fbce7e87fd460af4, type: 3}
-  - {fileID: 114655287161981434, guid: e8a150570df2bf041b615b718d6be3af, type: 3}
-  - {fileID: 114746716113576822, guid: 3bf3532085dc49e4ab1c2c0d3a605a31, type: 3}
-  - {fileID: 114033246838914228, guid: 6cdc5d5ce4fb2a74496cb92d82802a10, type: 3}
-  - {fileID: 114435323833664434, guid: 3132b71c531951f4cab2a67db25c0d25, type: 3}
-  - {fileID: 114241898639476872, guid: 8fa757c9d9afda344aaaa85a7764d4f0, type: 3}
-  - {fileID: 114208071184418650, guid: 18f780204b6dbcc4b805129ed61e1db1, type: 3}
-  - {fileID: 114492619622495868, guid: bf60919aea486994c965a43e4fa13568, type: 3}
-  - {fileID: 114708709309942522, guid: ebdd5d0b964efe545a6ac7b3c8f73bd1, type: 3}
-  - {fileID: 114829999788868714, guid: df63a1906cead45449e9255a97e56a56, type: 3}
-  - {fileID: 114270436708938828, guid: a15ca5029a077f44fb35f6bd17f633f7, type: 3}
-  - {fileID: 114035741950492650, guid: 20b786542ed24c144bbaaae6101296fc, type: 3}
-  - {fileID: 114827423304962798, guid: 93dddebe18113aa46b76d37cb6cf625a, type: 3}
-  - {fileID: 114976747950547482, guid: 707158e01d31bd849a0817781f45c9de, type: 3}
-  - {fileID: 114449254752706426, guid: 8d003090dde577042af5adacfe80567e, type: 3}
-  - {fileID: 114888564537563304, guid: 64262e99d9a0fc44384a2b9bfe31e167, type: 3}
-  - {fileID: 114751668696136842, guid: 9e9561e0f8d75a0418a0f3943929278e, type: 3}
-  - {fileID: 114623183599900698, guid: ad941b1513584c84fb385dcd58ca5a5d, type: 3}
-  - {fileID: 114074289828023264, guid: 0090d82761118144c87ec9b2a13376ac, type: 3}
-  - {fileID: 114474091619278440, guid: 3abf0cd0a8268c142acb6518824ff62e, type: 3}
-  - {fileID: 114396231870451598, guid: e14197aa98014614f80d201c2eb73949, type: 3}
-  - {fileID: 114708052628369450, guid: e31a5ce14fd370a4183778440a812ec3, type: 3}
-  - {fileID: 114991054000859748, guid: 9e6873038b4e74448b7f7ac91179040e, type: 3}
-  - {fileID: 114593654599753496, guid: 226d5abd6f0125343988099c9aee2af6, type: 3}
-  - {fileID: 114722149327103878, guid: 559c992fe452dc74e8224e4b87122a5f, type: 3}
-  - {fileID: 114784083802151058, guid: a72a48815b601ce4696bd73a505e5582, type: 3}
-  - {fileID: 114072335160160652, guid: a35a78098418654499c7c3e2e8711d0e, type: 3}
-  - {fileID: 114150492595623326, guid: 4add7934aebd4524c9a25a56be78b1c0, type: 3}
-  - {fileID: 114179790763064494, guid: a1be38c39c123f4429b90dc05178576c, type: 3}
-  - {fileID: 114860932655318798, guid: 2389c701a30be3144a536e7f94e90879, type: 3}
-  - {fileID: 114498264796501972, guid: 3810c4819b62ff742b1c2557567a52c7, type: 3}
-  - {fileID: 114858693673198648, guid: 797b7c2044ff25f4b93b739f165f2d04, type: 3}
-  - {fileID: 114254788807771318, guid: 60bed877e65667b4d87d3b864aaf4d75, type: 3}
-  - {fileID: 114373802594785548, guid: f4f8e6ce566563540908bdc51d789a2f, type: 3}
-  - {fileID: 114033538379735286, guid: d8677ae79aaa8c249baceec70218c71c, type: 3}
-  - {fileID: 114455630379959052, guid: bb3c18248aabd6c41a473e4ce5930f76, type: 3}
-  - {fileID: 114745866755004358, guid: 092af68cb82fb344d96bbc8e08a83608, type: 3}
-  - {fileID: 114927037587181676, guid: 35d4a79c7b0eda54f94772d30c927458, type: 3}
-  - {fileID: 114250995623124418, guid: 6ba4f63e5cd2b9b4d84ec9860236b3aa, type: 3}
-  - {fileID: 114032492516578362, guid: c5f08285ce23e464bb42209bbbd050fa, type: 3}
-  - {fileID: 114534927676177204, guid: b23f0950e4a827a4896b3ef746741941, type: 3}
-  - {fileID: 114597658826856118, guid: 9e81dd7cb46e1d648b3a5c6452576758, type: 3}
-  - {fileID: 114487962127709588, guid: 9e882f5d7602b394d9f63961c99595fc, type: 3}
-  - {fileID: 114715002940072634, guid: e38b099d9f50da24382702fc3a8af421, type: 3}
-  - {fileID: 114781614574335622, guid: f96b3e881862dc245be3c6dcc0b73098, type: 3}
-  - {fileID: 114766159312001830, guid: 2f2bfb4a481774442bb69f8d9ff6d596, type: 3}
-  - {fileID: 114050570144579890, guid: 1997dce5096805c48a9eafaa4b6f61fb, type: 3}
-  - {fileID: 114774037791996114, guid: a5cd5f6941e3d3d488ffd6a458a7cbf6, type: 3}
-  - {fileID: 114892721670656786, guid: 01e229aa3b0b8934098c62727e6364d5, type: 3}
-  - {fileID: 114083390960304048, guid: 34ae2146c726dc94ba2072501752ece4, type: 3}
-  - {fileID: 114012281993773334, guid: c8acef96f20d4894fac87269f9dfbbb9, type: 3}
-  - {fileID: 114486302167710632, guid: 227f0e6979e885c4787314d7be333178, type: 3}
-  - {fileID: 114848235472779022, guid: 78456a87ad6d1094e85723d38c0e1b65, type: 3}
-  - {fileID: 114624451925560912, guid: daf70844fa53c4a47b48e3aa74b72b51, type: 3}
-  - {fileID: 114917505967805762, guid: d827333fe15384c40a9aecf95b4a9cc8, type: 3}
-  - {fileID: 114860518885474220, guid: 4b3a7d597606aca4b85ac7cad049677c, type: 3}
-  - {fileID: 114634995974760544, guid: cfa103ec8358d344d84059d21c18bdb9, type: 3}
-  - {fileID: 114446645580098450, guid: 6b936adab2dc746459696ebcf467b25a, type: 3}
-  - {fileID: 114823216693775974, guid: acc95dae141ca7b4c9cc02df331cfa59, type: 3}
-  - {fileID: 114896360864804128, guid: 266b0ac5633b6ee4084dca965f366b86, type: 3}
-  - {fileID: 114071742926028826, guid: 168a20a7e442d784db06192c86836d6b, type: 3}
-  - {fileID: 114985430129715974, guid: 2283caa0c8064df40b398b409b913e8c, type: 3}
-  - {fileID: 114965264039824604, guid: 5658713b448e79344abdb1f4dea7ece5, type: 3}
-  - {fileID: 3299613814892315986, guid: b5949d1fa676c7f4e92ba333f4a2851f, type: 3}
-  - {fileID: 226919434485579225, guid: a527491392f561147ae212bf4501bdd2, type: 3}
   StatusPanelPrototype: {fileID: 114422423568609670, guid: d7c4ee0ec74e1884784dc0eae076eb44,
     type: 3}
   WeaponCtrlCfgLinePrototype: {fileID: 114809578661190334, guid: 234f89d7609c6ac47a7448da4c991b57,
@@ -4923,8 +4828,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1544174804}
   - component: {fileID: 1544174803}
+  - component: {fileID: 1544174805}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: BattleScenesParamsObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4944,6 +4850,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InputControl: {fileID: 280517690}
   OutcomePanel: {fileID: 3615315117928843237}
+  ShipsAIControl: {fileID: 1544174805}
 --- !u!4 &1544174804
 Transform:
   m_ObjectHideFlags: 0
@@ -4958,6 +4865,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1544174805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544174802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb407d52bb2477f4f8448235ef7b7487, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1585174311
 GameObject:
   m_ObjectHideFlags: 0

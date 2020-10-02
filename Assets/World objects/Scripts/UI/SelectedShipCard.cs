@@ -89,8 +89,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
         img.sprite = ObjectFactory.GetShipPhoto(s);
 
         _controlledShip = s;
-        _controlledShipAI = s.GetComponent<ShipAIController>();
-        AIButton.Value = _controlledShipAI.ControlType == ShipAIController.ShipControlType.Autonomous;
+        _controlledShipAI = s.GetComponent<ShipAIHandle>();
+        AIButton.Value = _controlledShipAI.AIHandle.GetControlType(s) == ShipAIController.ShipControlType.Autonomous;
     }
 
     private void ImageClicked()
@@ -190,17 +190,18 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
     private void AIButtonClicked(bool val)
     {
-        if (val && _controlledShipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+        ShipAIController.ShipControlType currControlType = _controlledShipAI.AIHandle.GetControlType(_controlledShip);
+        if (val && currControlType == ShipAIController.ShipControlType.SemiAutonomous)
         {
-            _controlledShipAI.ControlType = ShipAIController.ShipControlType.Autonomous;
+            _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Autonomous);
         }
-        else if (!val && _controlledShipAI.ControlType == ShipAIController.ShipControlType.Autonomous)
+        else if (!val && currControlType == ShipAIController.ShipControlType.Autonomous)
         {
-            _controlledShipAI.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+            _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.SemiAutonomous);
         }
-        else if (val && _controlledShipAI.ControlType == ShipAIController.ShipControlType.Manual)
+        else if (val && currControlType == ShipAIController.ShipControlType.Manual)
         {
-            _controlledShipAI.ControlType = ShipAIController.ShipControlType.Autonomous;
+            _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Autonomous);
         }
     }
 
@@ -243,8 +244,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
     private Tuple<MaskableGraphic, float>[] _figterPanelImages;
     private Tuple<MaskableGraphic, float>[] _bomberPanelImages;
 
-    private ShipBase _controlledShip;
-    private ShipAIController _controlledShipAI;
+    private Ship _controlledShip;
+    private ShipAIHandle _controlledShipAI;
     private CarrierBehavior _controlledCarrierModule;
 
     public OnOffButton AIButton;

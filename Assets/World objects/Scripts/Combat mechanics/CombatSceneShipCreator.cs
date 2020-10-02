@@ -107,6 +107,9 @@ public static class CombatSceneShipCreator
 
         s.Owner = owner;
         s.SetCircleToFactionColor();
+
+        // Old AI control:
+        /*
         ShipAIController AIController = s.gameObject.AddComponent<ShipAIController>();
         if (owner.PlayerFaction && inputController != null)
         {
@@ -120,6 +123,14 @@ public static class CombatSceneShipCreator
         else
         {
             AIController.ControlType = ShipAIController.ShipControlType.Autonomous;
+        }
+        */
+        ShipAIHandle AIHandle = s.gameObject.AddComponent<ShipAIHandle>();
+        AIHandle.ControlledShip = s;
+
+        if (owner.PlayerFaction && inputController != null)
+        {
+            inputController.ControlledShip = s;
         }
 
         s.DisplayName = shadow.DisplayName;

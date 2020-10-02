@@ -367,7 +367,7 @@ public static class ObjectFactory
         int numElems = lst.Count();
         if (numElems == 0)
         {
-            return lst.ElementAt(10000);
+            throw new InvalidOperationException("Sequence contains no elements");
         }
         return lst.ElementAt(UnityEngine.Random.Range(0, numElems));
     }

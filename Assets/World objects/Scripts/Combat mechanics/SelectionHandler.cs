@@ -70,13 +70,14 @@ public class SelectionHandler
 
     public void ClickOrder(Vector3 target)
     {
-        foreach (ValueTuple<ShipBase, ShipAIController> s2 in ControllableShips())
+        foreach (ValueTuple<ShipBase, ShipAIHandle> s2 in ControllableShips())
         {
-            if (s2.Item2.ControlType == ShipAIController.ShipControlType.Manual)
+            Ship s2AsShip = s2.Item1 as Ship;
+            if (s2.Item2.AIHandle.GetControlType(s2AsShip) == ShipAIController.ShipControlType.Manual)
             {
-                s2.Item2.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+                s2.Item2.AIHandle.SetControlType(s2AsShip, ShipAIController.ShipControlType.SemiAutonomous);
             }
-            s2.Item2.UserNavigateTo(target);
+            s2.Item2.AIHandle.UserNavigateTo(s2AsShip, target);
         }
     }
     public void ClickOrder(ShipBase targetShip, OrderType order)
@@ -84,19 +85,20 @@ public class SelectionHandler
         if (true && order == OrderType.Follow)
         {
             ShipBase prevShip = null;
-            foreach (ValueTuple<ShipBase, ShipAIController> s2 in ControllableShips())
+            foreach (ValueTuple<ShipBase, ShipAIHandle> s2 in ControllableShips())
             {
-                if (s2.Item2.ControlType == ShipAIController.ShipControlType.Manual)
+                Ship s2AsShip = s2.Item1 as Ship;
+                if (s2.Item2.AIHandle.GetControlType(s2AsShip) == ShipAIController.ShipControlType.Manual)
                 {
-                    s2.Item2.ControlType = ShipAIController.ShipControlType.SemiAutonomous;
+                    s2.Item2.AIHandle.SetControlType(s2AsShip, ShipAIController.ShipControlType.SemiAutonomous);
                 }
                 if (prevShip == null)
                 {
-                    s2.Item2.Follow(targetShip);
+                    s2.Item2.AIHandle.Follow(s2AsShip, targetShip);
                 }
                 else
                 {
-                    s2.Item2.Follow(prevShip);
+                    s2.Item2.AIHandle.Follow(s2AsShip, prevShip);
                 }
                 prevShip = s2.Item1;
             }
@@ -121,14 +123,14 @@ public class SelectionHandler
         _fleetSelectedShips.Clear();
     }
 
-    private IEnumerable<ValueTuple<ShipBase, ShipAIController>> ControllableShips()
+    private IEnumerable<ValueTuple<ShipBase, ShipAIHandle>> ControllableShips()
     {
         foreach (Ship s2 in _fleetSelectedShips)
         {
-            ShipAIController controller = s2.GetComponent<ShipAIController>();
+            ShipAIHandle controller = s2.GetComponent<ShipAIHandle>();
             if (controller != null && !s2.ShipDisabled && !s2.ShipSurrendered)
             {
-                yield return new ValueTuple<ShipBase, ShipAIController>(s2, controller);
+                yield return new ValueTuple<ShipBase, ShipAIHandle>(s2, controller);
             }
         }
     }
