@@ -90,7 +90,7 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
         _controlledShip = s;
         _controlledShipAI = s.GetComponent<ShipAIHandle>();
-        AIButton.Value = _controlledShipAI.AIHandle.GetControlType(s) == ShipAIController.ShipControlType.Autonomous;
+        AIButton.Value = _controlledShipAI.GetControlType() == ShipAIController.ShipControlType.Autonomous;
     }
 
     private void ImageClicked()
@@ -190,18 +190,18 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
     private void AIButtonClicked(bool val)
     {
-        ShipAIController.ShipControlType currControlType = _controlledShipAI.AIHandle.GetControlType(_controlledShip);
+        ShipAIController.ShipControlType currControlType = _controlledShipAI.GetControlType();
         if (val && currControlType == ShipAIController.ShipControlType.SemiAutonomous)
         {
-            _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Autonomous);
+            _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Autonomous);
         }
         else if (!val && currControlType == ShipAIController.ShipControlType.Autonomous)
         {
-            _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.SemiAutonomous);
+            _controlledShipAI.SetControlType(ShipAIController.ShipControlType.SemiAutonomous);
         }
         else if (val && currControlType == ShipAIController.ShipControlType.Manual)
         {
-            _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Autonomous);
+            _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Autonomous);
         }
     }
 

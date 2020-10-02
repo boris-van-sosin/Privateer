@@ -26,8 +26,15 @@ public class NavigationGuide : MonoBehaviour
 
     public bool SetDestination(Vector3 dest)
     {
-        SetPositionToAttached();
-        return _navAgent.SetDestination(dest);
+        try
+        {
+            SetPositionToAttached();
+            return _navAgent.SetDestination(dest);
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     public void SetTargetSpeed(float speed)

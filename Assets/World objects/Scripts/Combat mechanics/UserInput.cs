@@ -118,56 +118,56 @@ public class UserInput : MonoBehaviour
             }
             if (!EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButtonDown(1))
             {
-                ShipAIController.ShipControlType currcControlType = _controlledShipAI.AIHandle.GetControlType(_controlledShip);
+                ShipAIController.ShipControlType currcControlType = _controlledShipAI.GetControlType();
                 if (currcControlType == ShipAIController.ShipControlType.Manual)
                 {
-                    _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.SemiAutonomous);
+                    _controlledShipAI.SetControlType(ShipAIController.ShipControlType.SemiAutonomous);
                 }
-                if (_controlledShipAI.AIHandle.GetControlType(_controlledShip) == ShipAIController.ShipControlType.SemiAutonomous)
+                if (_controlledShipAI.GetControlType() == ShipAIController.ShipControlType.SemiAutonomous)
                 {
-                    _controlledShipAI.AIHandle.UserNavigateTo(_controlledShip, clickPt.Value);
+                    _controlledShipAI.UserNavigateTo(clickPt.Value);
                 }
             }
         }
 
         if (Input.GetKey(_keyMapping[UserOperation.Forward]))
         {
-            if (_controlledShipAI.AIHandle.GetControlType(_controlledShip) != ShipAIController.ShipControlType.Manual)
+            if (_controlledShipAI.GetControlType() != ShipAIController.ShipControlType.Manual)
             {
-                _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Manual);
+                _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Manual);
             }
             _controlledShip.MoveForward();
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Backward]))
         {
-            if (_controlledShipAI.AIHandle.GetControlType(_controlledShip) != ShipAIController.ShipControlType.Manual)
+            if (_controlledShipAI.GetControlType() != ShipAIController.ShipControlType.Manual)
             {
-                _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Manual);
+                _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Manual);
             }
             _controlledShip.MoveBackward();
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Break]))
         {
-            if (_controlledShipAI.AIHandle.GetControlType(_controlledShip) != ShipAIController.ShipControlType.Manual)
+            if (_controlledShipAI.GetControlType() != ShipAIController.ShipControlType.Manual)
             {
-                _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Manual);
+                _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Manual);
             }
             _controlledShip.ApplyBraking();
         }
 
         if (Input.GetKey(_keyMapping[UserOperation.Left]))
         {
-            if (_controlledShipAI.AIHandle.GetControlType(_controlledShip) != ShipAIController.ShipControlType.Manual)
+            if (_controlledShipAI.GetControlType() != ShipAIController.ShipControlType.Manual)
             {
-                _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Manual);
+                _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Manual);
             }
             _controlledShip.ApplyTurning(true);
         }
         else if (Input.GetKey(_keyMapping[UserOperation.Right]))
         {
-            if (_controlledShipAI.AIHandle.GetControlType(_controlledShip) != ShipAIController.ShipControlType.Manual)
+            if (_controlledShipAI.GetControlType() != ShipAIController.ShipControlType.Manual)
             {
-                _controlledShipAI.AIHandle.SetControlType(_controlledShip, ShipAIController.ShipControlType.Manual);
+                _controlledShipAI.SetControlType(ShipAIController.ShipControlType.Manual);
             }
             _controlledShip.ApplyTurning(false);
         }

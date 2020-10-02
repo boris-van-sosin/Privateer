@@ -72,12 +72,11 @@ public class SelectionHandler
     {
         foreach (ValueTuple<ShipBase, ShipAIHandle> s2 in ControllableShips())
         {
-            Ship s2AsShip = s2.Item1 as Ship;
-            if (s2.Item2.AIHandle.GetControlType(s2AsShip) == ShipAIController.ShipControlType.Manual)
+            if (s2.Item2.GetControlType() == ShipAIController.ShipControlType.Manual)
             {
-                s2.Item2.AIHandle.SetControlType(s2AsShip, ShipAIController.ShipControlType.SemiAutonomous);
+                s2.Item2.SetControlType(ShipAIController.ShipControlType.SemiAutonomous);
             }
-            s2.Item2.AIHandle.UserNavigateTo(s2AsShip, target);
+            s2.Item2.UserNavigateTo(target);
         }
     }
     public void ClickOrder(ShipBase targetShip, OrderType order)
@@ -88,17 +87,17 @@ public class SelectionHandler
             foreach (ValueTuple<ShipBase, ShipAIHandle> s2 in ControllableShips())
             {
                 Ship s2AsShip = s2.Item1 as Ship;
-                if (s2.Item2.AIHandle.GetControlType(s2AsShip) == ShipAIController.ShipControlType.Manual)
+                if (s2.Item2.GetControlType() == ShipAIController.ShipControlType.Manual)
                 {
-                    s2.Item2.AIHandle.SetControlType(s2AsShip, ShipAIController.ShipControlType.SemiAutonomous);
+                    s2.Item2.SetControlType(ShipAIController.ShipControlType.SemiAutonomous);
                 }
                 if (prevShip == null)
                 {
-                    s2.Item2.AIHandle.Follow(s2AsShip, targetShip);
+                    s2.Item2.Follow(targetShip);
                 }
                 else
                 {
-                    s2.Item2.AIHandle.Follow(s2AsShip, prevShip);
+                    s2.Item2.Follow(prevShip);
                 }
                 prevShip = s2.Item1;
             }

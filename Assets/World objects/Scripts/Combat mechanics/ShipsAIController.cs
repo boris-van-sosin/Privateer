@@ -46,6 +46,7 @@ public class ShipsAIController : MonoBehaviour
 
     private IEnumerator NavUpdate()
     {
+        yield return _targetAcquirePulseDelay;
         while (true)
         {
             int i = 0;
@@ -122,12 +123,22 @@ public class ShipsAIController : MonoBehaviour
 
     public void NavigateTo(Ship s, Vector3 target)
     {
-        NavigateTo(_controlledShips[_controlledShipsLookup[s]], target, null);
+        int idx;
+        if (!_controlledShipsLookup.TryGetValue(s, out idx))
+        {
+            return;
+        }
+        NavigateTo(_controlledShips[idx], target, null);
     }
 
     public void UserNavigateTo(Ship s, Vector3 target)
     {
-        ShipAIData ai = _controlledShips[_controlledShipsLookup[s]];
+        int idx;
+        if (!_controlledShipsLookup.TryGetValue(s, out idx))
+        {
+            return;
+        }
+        ShipAIData ai = _controlledShips[idx];
         ai.CurrActivity = ShipAIController.ShipActivity.ControllingPosition;
         ai.DoFollow = false;
         ai.DoNavigate = true;
@@ -146,7 +157,12 @@ public class ShipsAIController : MonoBehaviour
 
     public void Follow(Ship s, ShipBase followTarget)
     {
-        ShipAIData ai = _controlledShips[_controlledShipsLookup[s]];
+        int idx;
+        if (!_controlledShipsLookup.TryGetValue(s, out idx))
+        {
+            return;
+        }
+        ShipAIData ai = _controlledShips[idx];
         if (followTarget == ai.ControlledShip)
         {
             return;
@@ -169,6 +185,7 @@ public class ShipsAIController : MonoBehaviour
 
     private IEnumerator TacticsUpdate()
     {
+        yield return _targetAcquirePulseDelay;
         while (true)
         {
             int i = 0;
@@ -179,6 +196,7 @@ public class ShipsAIController : MonoBehaviour
                 {
                     if (!shipAI.ControlledShip.ShipControllable)
                     {
+                        ++i;
                         continue;
                     }
 
@@ -366,10 +384,10 @@ public class ShipsAIController : MonoBehaviour
         }
 
         int minPos = 0;
-        float minScore = (shipAI.AttackPositions[minPos] - transform.position).sqrMagnitude - shipAI.AttackPositionWeights[minPos];
+        float minScore = (shipAI.AttackPositions[minPos] - shipAI.ControlledShip.transform.position).sqrMagnitude - shipAI.AttackPositionWeights[minPos];
         for (int i = 1; i < shipAI.AttackPositions.Length; ++i)
         {
-            float currScore = (shipAI.AttackPositions[i] - transform.position).sqrMagnitude - shipAI.AttackPositionWeights[i];
+            float currScore = (shipAI.AttackPositions[i] - shipAI.ControlledShip.transform.position).sqrMagnitude - shipAI.AttackPositionWeights[i];
             if (currScore < minScore)
             {
                 minPos = i;
@@ -384,7 +402,7 @@ public class ShipsAIController : MonoBehaviour
         ShipBase enemyShip = shipAI.TargetShip;
         float attackRange = shipAI.ControlledShip.TurretsGetAttackRange(_turretsMainAndSecondary);
         float mainEnemyRange = enemyShip.TurretsGetAttackRange(_turretsAll, false);
-        Vector3 attackVec = enemyShip.transform.position - transform.position;
+        Vector3 attackVec = enemyShip.transform.position - shipAI.ControlledShip.transform.position;
         //Vector3 attackVecNormalized = attackVec.normalized;
 
         int numHits = Physics.OverlapSphereNonAlloc(enemyShip.transform.position, attackRange, _collidersCache, ObjectFactory.NavBoxesLayerMask);
@@ -431,17 +449,17 @@ public class ShipsAIController : MonoBehaviour
             }
             else if (friendlyCount > 0)
             {
-                return transform.position + (attackVec.normalized * Mathf.Min(attackRange, threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient));
+                return shipAI.ControlledShip.transform.position + (attackVec.normalized * Mathf.Min(attackRange, threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient));
             }
             else
             {
                 enemyShipsCentroid = enemyShipsCentroid / (enemyCount + 1);
-                return transform.position - ((enemyShipsCentroid - transform.position).normalized * threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient);
+                return shipAI.ControlledShip.transform.position - ((enemyShipsCentroid - shipAI.ControlledShip.transform.position).normalized * threatMaxRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient);
             }
         }
         else
         {
-            return transform.position + (attackVec.normalized * Mathf.Min(attackRange, mainEnemyRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient));
+            return shipAI.ControlledShip.transform.position + (attackVec.normalized * Mathf.Min(attackRange, mainEnemyRange * GlobalDistances.ShipAIArtilleryKeepDistCoefficient));
         }
     }
 
@@ -492,7 +510,7 @@ public class ShipsAIController : MonoBehaviour
             Vector3 scaledFightVec = fightVec.normalized * attackRange * GlobalDistances.ShipAIHitAndRunAttackRangeCoefficient;
             Vector3 attackPt1 = enemyShip.transform.position + (q1 * scaledFightVec);
             Vector3 attackPt2 = enemyShip.transform.position + (q2 * scaledFightVec);
-            if ((transform.position - attackPt1).sqrMagnitude < (transform.position - attackPt2).sqrMagnitude)
+            if ((shipAI.ControlledShip.transform.position - attackPt1).sqrMagnitude < (shipAI.ControlledShip.transform.position - attackPt2).sqrMagnitude)
             {
                 return attackPt1;
             }
@@ -508,7 +526,7 @@ public class ShipsAIController : MonoBehaviour
             Vector3 scaledFightVec = fightVec.normalized * shipAI.ControlledShip.ShipLength * GlobalDistances.ShipAIAntiClumpLengthFactor;
             Vector3 retreatPt1 = friendlyCentroid + (q1 * scaledFightVec);
             Vector3 retreatPt2 = friendlyCentroid - (q1 * scaledFightVec);
-            if ((transform.position - retreatPt1).sqrMagnitude < (transform.position - retreatPt2).sqrMagnitude)
+            if ((shipAI.ControlledShip.transform.position - retreatPt1).sqrMagnitude < (shipAI.ControlledShip.transform.position - retreatPt2).sqrMagnitude)
             {
                 return retreatPt1;
             }
@@ -547,7 +565,7 @@ public class ShipsAIController : MonoBehaviour
         }
         else
         {
-            Vector3 vecToFollowTarget = (shipAI.FollowTarget.transform.position - transform.position).normalized * shipAI.FollowDist;
+            Vector3 vecToFollowTarget = (shipAI.FollowTarget.transform.position - shipAI.ControlledShip.transform.position).normalized * shipAI.FollowDist;
             shipAI.NavGuide.SetDestination(shipAI.FollowTarget.transform.position - vecToFollowTarget);
         }
         AcquireTarget(shipAI);
@@ -558,7 +576,7 @@ public class ShipsAIController : MonoBehaviour
 
     private void AcquireTarget(ShipAIData shipAI)
     {
-        int numHits = Physics.OverlapSphereNonAlloc(transform.position, 30, _collidersCache, TargetsToAttackLayerMask);
+        int numHits = Physics.OverlapSphereNonAlloc(shipAI.ControlledShip.transform.position, 30, _collidersCache, TargetsToAttackLayerMask);
         ShipBase foundTarget = null;
         bool staticAttack = false;
         shipAI.AttackPattern = ShipAIController.ShipAttackPattern.Aggressive;
@@ -656,12 +674,25 @@ public class ShipsAIController : MonoBehaviour
 
     public ShipAIController.ShipControlType GetControlType(Ship s)
     {
-        return _controlledShips[_controlledShipsLookup[s]].ControlType;
+        int idx;
+        if (_controlledShipsLookup.TryGetValue(s, out idx))
+        {
+            return _controlledShips[idx].ControlType;
+        }
+        else
+        {
+            return ShipAIController.ShipControlType.SemiAutonomous;
+        }   
     }
 
     public void SetControlType(Ship s, ShipAIController.ShipControlType controlType)
     {
-        ShipAIData shipAI = _controlledShips[_controlledShipsLookup[s]];
+        int idx;
+        if (!_controlledShipsLookup.TryGetValue(s, out idx))
+        {
+            return;
+        }
+        ShipAIData shipAI = _controlledShips[idx];
         bool changeControlType = shipAI.ControlType != controlType;
         //ShipAIController.ShipControlType prevControlType = shipAI.ControlType;
         shipAI.ControlType = controlType;
