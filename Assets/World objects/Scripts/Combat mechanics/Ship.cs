@@ -38,7 +38,7 @@ public class Ship : ShipBase
         _crewNumBuff = DynamicBuff.Default();
         SetCrewNumBuff();
         _manualTurrets = new HashSet<ITurret>(_turrets);
-        _shipAI = GetComponent<ShipAIController>();
+        _shipAI = GetComponent<ShipAIHandle>();
         SetMinEergyToAct();
         SetMaxEnergyAndHeat();
     }

@@ -31,8 +31,8 @@ public class BattleSceneParamsReader : MonoBehaviour
             if (idx1 < args.Faction1Ships.Count)
             {
                 Vector3 offset = new Vector3(-(idx1 % 4), 0f, -(idx1 / 4)) * 6;
-                Ship s = CombatSceneShipCreator.CreateAndFitOutShip(args.Faction1Ships[idx1], faction1, idx1 == 0 ? InputControl : null, offset);
-                AttachShipToAI(s, idx1 == 0 ? ShipAIController.ShipControlType.Manual : ShipAIController.ShipControlType.SemiAutonomous);
+                Ship s = BattleSceneShipCreator.CreateAndFitOutShip(args.Faction1Ships[idx1], faction1, idx1 == 0 ? InputControl : null, offset);
+                AttachShipToAI(s, idx1 == 0 ? ShipControlType.Manual : ShipControlType.SemiAutonomous);
 
                 s.OnShipDisabled += UpdateShipStatus;
                 _faction1Ships[idx1] = (s, true, args.Faction1Ships[idx1].ShipSpriteKey);
@@ -43,8 +43,8 @@ public class BattleSceneParamsReader : MonoBehaviour
             if (idx2 < args.Faction2Ships.Count)
             {
                 Vector3 offset = new Vector3(7 + (idx2 % 4), 0f, -(idx2 / 4)) * 6;
-                Ship s = CombatSceneShipCreator.CreateAndFitOutShip(args.Faction2Ships[idx2], faction2, null, offset);
-                AttachShipToAI(s, ShipAIController.ShipControlType.Autonomous);
+                Ship s = BattleSceneShipCreator.CreateAndFitOutShip(args.Faction2Ships[idx2], faction2, null, offset);
+                AttachShipToAI(s, ShipControlType.Autonomous);
 
                 s.OnShipDisabled += UpdateShipStatus;
                 _faction2Ships[idx2] = (s, true, args.Faction2Ships[idx2].ShipSpriteKey);
@@ -103,14 +103,12 @@ public class BattleSceneParamsReader : MonoBehaviour
         }
     }
 
-    private void AttachShipToAI(Ship s, ShipAIController.ShipControlType behavior)
+    private void AttachShipToAI(Ship s, ShipControlType behavior)
     {
         if (null != ShipsAIControl)
         {
             ShipAIHandle AIHandle = s.gameObject.GetComponent<ShipAIHandle>();
-            ShipsAIControl.AddShip(s);
-            AIHandle.AIHandle = ShipsAIControl;
-            ShipsAIControl.SetControlType(s, behavior);
+            AIHandle.AIHandle.SetControlType(s, behavior);
         }
     }
 

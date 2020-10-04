@@ -67,31 +67,26 @@ public class ShipFreeCreatePanel : MonoBehaviour
         {
             input = FindObjectOfType<UserInput>();
         }
-        Ship s = CombatSceneShipCreator.CreateAndFitOutShip(shadow, owner, input);
+        Ship s = BattleSceneShipCreator.CreateAndFitOutShip(shadow, owner, input);
 
         s.transform.Translate(offset);
 
-        if (null != ShipsAIControl)
+        ShipControlType behavior;
+        if (friendly && userShip)
         {
-            ShipAIController.ShipControlType behavior;
-            if (friendly && userShip)
-            {
-                behavior = ShipAIController.ShipControlType.Manual;
-            }
-            else if (friendly)
-            {
-                behavior = ShipAIController.ShipControlType.SemiAutonomous;
-            }
-            else
-            {
-                behavior = ShipAIController.ShipControlType.Autonomous;
-            }
-
-            ShipAIHandle AIHandle = s.gameObject.GetComponent<ShipAIHandle>();
-            ShipsAIControl.AddShip(s);
-            AIHandle.AIHandle = ShipsAIControl;
-            ShipsAIControl.SetControlType(s, behavior);
+            behavior = ShipControlType.Manual;
         }
+        else if (friendly)
+        {
+            behavior = ShipControlType.SemiAutonomous;
+        }
+        else
+        {
+            behavior = ShipControlType.Autonomous;
+        }
+
+        ShipAIHandle AIHandle = s.gameObject.GetComponent<ShipAIHandle>();
+        ShipsAIControl.SetControlType(s, behavior);
     }
 
     private void CreateStrikeCraftWingInner(string shipKey, bool friendly)

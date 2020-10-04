@@ -3,33 +3,56 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ShipsAIController : MonoBehaviour
 {
     void Start()
     {
+        _tacticsDelay = new WaitUntil(NextTacticsPulse);
+        _nextTacticsPulse = Time.time + 0.01f;
         StartCoroutine(NavUpdate());
         StartCoroutine(TacticsUpdate());
     }
 
-    public void AddShip(Ship s)
+    public static void AddShip(Ship s)
+    {
+        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        ShipAIData AIData = instance.AddShipInner(s);
+        if (AIData != null)
+        {
+            ShipAIHandle AIHandle = s.GetComponent<ShipAIHandle>();
+            AIHandle.AIHandle = instance;
+            AIHandle.NavGuide = AIData.NavGuide;
+        }
+    }
+
+    private ShipAIData AddShipInner(Ship s)
     {
         if (_controlledShipsLookup.ContainsKey(s))
         {
             Debug.LogWarningFormat("Attempted to add ship to AI control more than once: {0}", s);
-            return;
+            return null;
         }
 
-        ShipAIController.ShipControlType controlType = ShipAIController.ShipControlType.Manual;
+        ShipControlType controlType = ShipControlType.Manual;
 
         NavigationGuide navGuide = ObjectFactory.CreateNavGuide(s.transform.position, s.transform.forward);
         navGuide.Attach(s);
-        navGuide.ManualControl = controlType == ShipAIController.ShipControlType.Manual;
-        _controlledShips.Add(new ShipAIData(s, navGuide, controlType));
+        navGuide.ManualControl = controlType == ShipControlType.Manual;
+        ShipAIData AIData = new ShipAIData(s, navGuide, controlType);
+        _controlledShips.Add(AIData);
         _controlledShipsLookup[s] = _controlledShips.Count - 1;
+        return AIData;
     }
 
-    public void ReactivateShip(Ship s, NavigationGuide navGuide)
+    public static void ReactivateShip(Ship s, NavigationGuide navGuide)
+    {
+        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        instance.ReactivateShipInner(s, navGuide);
+    }
+
+    private void ReactivateShipInner(Ship s, NavigationGuide navGuide)
     {
         if (navGuide == null || navGuide.AttachedEntity != s)
         {
@@ -37,16 +60,74 @@ public class ShipsAIController : MonoBehaviour
             return;
         }
 
-        ShipAIController.ShipControlType controlType = ShipAIController.ShipControlType.Manual;
+        ShipControlType controlType = ShipControlType.Manual;
 
-        navGuide.ManualControl = controlType == ShipAIController.ShipControlType.Manual;
+        navGuide.ManualControl = controlType == ShipControlType.Manual;
         _controlledShips.Add(new ShipAIData(s, navGuide, controlType));
         _controlledShipsLookup[s] = _controlledShips.Count - 1;
     }
 
+    public static void AddStrikeCraft(StrikeCraft s)
+    {
+        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        StrikeCraftAIData AIData = instance.AddStrikeCraftInner(s);
+        if (AIData != null)
+        {
+            ShipAIHandle AIHandle = s.GetComponent<ShipAIHandle>();
+            AIHandle.AIHandle = instance;
+            AIHandle.NavGuide = AIData.NavGuide;
+        }
+    }
+
+    private StrikeCraftAIData AddStrikeCraftInner(StrikeCraft s)
+    {
+        if (_controlledShipsLookup.ContainsKey(s))
+        {
+            Debug.LogWarningFormat("Attempted to add strike craft to AI control more than once: {0}", s);
+            return null;
+        }
+
+        NavigationGuide navGuide = ObjectFactory.CreateNavGuide(s.transform.position, s.transform.forward);
+        navGuide.Attach(s);
+        navGuide.ManualControl = false;
+        StrikeCraftAIData AIData = new StrikeCraftAIData(s, navGuide);
+        _controlledShips.Add(AIData);
+        _controlledShipsLookup[s] = _controlledShips.Count - 1;
+        return AIData;
+    }
+
+    public static void AddStrikeCraftFormation(StrikeCraftFormation f)
+    {
+        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        StrikeCraftFormationAIData AIData = instance.AddStrikeCraftFormationInner(f);
+        if (AIData != null)
+        {
+            FormationAIHandle AIHandle = f.GetComponent<FormationAIHandle>();
+            AIHandle.AIHandle = instance;
+            AIHandle.NavGuide = AIData.NavGuide;
+        }
+    }
+
+    private StrikeCraftFormationAIData AddStrikeCraftFormationInner(StrikeCraftFormation f)
+    {
+        if (_controlledFormationsLookup.ContainsKey(f))
+        {
+            Debug.LogWarningFormat("Attempted to add formation to AI control more than once: {0}", f);
+            return null;
+        }
+
+        NavigationGuide navGuide = ObjectFactory.CreateNavGuide(f.transform.position, f.transform.forward);
+        navGuide.Attach(f);
+        navGuide.ManualControl = false;
+        StrikeCraftFormationAIData AIData = new StrikeCraftFormationAIData(f, navGuide);
+        _controlledFormations.Add(AIData);
+        _controlledFormationsLookup[f] = _controlledFormations.Count - 1;
+        return AIData;
+    }
+
     private IEnumerator NavUpdate()
     {
-        yield return _targetAcquirePulseDelay;
+        yield return _navDelay;
         while (true)
         {
             int i = 0;
@@ -55,7 +136,7 @@ public class ShipsAIController : MonoBehaviour
                 ShipAIData shipAI = _controlledShips[i];
                 try
                 {
-                    if (!shipAI.ControlledShip.ShipControllable)
+                    if ((shipAI.ControlledShip == null) || shipAI.ControlledShip.ShipDisabled)
                     {
                         _controlledShips.RemoveAt(i);
                         _controlledShipsLookup.Remove(shipAI.ControlledShip);
@@ -66,9 +147,16 @@ public class ShipsAIController : MonoBehaviour
                         continue;
                     }
 
-                    if (shipAI.DoNavigate || shipAI.DoFollow)
+                    if (!shipAI.IsStrikeCraft)
                     {
-                        AdvanceToTarget(shipAI);
+                        if (shipAI.DoNavigate || shipAI.DoFollow)
+                        {
+                            AdvanceToTarget(shipAI);
+                        }
+                    }
+                    else if (shipAI is StrikeCraftAIData strikeCraftAI)
+                    {
+                        StrikeCraftNavigateStep(strikeCraftAI);
                     }
                 }
                 catch (Exception exc)
@@ -78,9 +166,70 @@ public class ShipsAIController : MonoBehaviour
                 ++i;
                 yield return _navDelay;
             }
-            if (_controlledShips.Count == 0)
+            
+            i = 0;
+            while (i < _controlledFormations.Count)
+            {
+                StrikeCraftFormationAIData formationAI = _controlledFormations[i];
+                try
+                {
+                    if (formationAI.ControlledFormation == null)
+                    {
+                        _controlledFormations.RemoveAt(i);
+                        _controlledFormationsLookup.Remove(formationAI.ControlledFormation);
+                        for (int j = 0; j < _controlledFormations.Count; j++)
+                        {
+                            _controlledFormationsLookup[_controlledFormations[j].ControlledFormation] = j;
+                        }
+                        continue;
+                    }
+
+                    FormationStep(formationAI);
+                }
+                catch (Exception exc)
+                {
+                    Debug.LogWarningFormat("Got exception for navigation: {0}", exc);
+                }
+                ++i;
+                yield return _navDelay;
+            }
+
+            if (_controlledShips.Count == 0 && _controlledFormations.Count == 0)
             {
                 yield return _navDelay;
+            }
+        }
+    }
+
+    private void StrikeCraftNavigateStep(StrikeCraftAIData strikeCraftAI)
+    {
+        if (strikeCraftAI.NextCycleRecoveryFinalPhase)
+        {
+            strikeCraftAI.NextCycleRecoveryFinalPhase = false;
+            strikeCraftAI.InRecoveryFinalPhase = true;
+        }
+        else if (strikeCraftAI.InRecoveryFinalPhase)
+        {
+            strikeCraftAI.ControlledStrikeCraft.BeginRecoveryFinalPhase(strikeCraftAI.RecoveryTarget.RecoveryEnd, strikeCraftAI.RecoveryTarget.Idx);
+        }
+        else
+        {
+            if (strikeCraftAI.DoNavigate || strikeCraftAI.DoFollow)
+            {
+                AdvanceToTarget(strikeCraftAI);
+            }
+            if (!strikeCraftAI.ControlledStrikeCraft.ShipControllable)
+            {
+                return;
+            }
+            if (strikeCraftAI.CurrActivity == ShipActivity.StartingRecovery)
+            {
+                Vector3 vecToRecovery = strikeCraftAI.RecoveryTarget.RecoveryStart.position - strikeCraftAI.ControlledStrikeCraft.transform.position;
+                //Vector3 vecToRecoveryFlat = new Vector3(vecToRecovery.x, 0, vecToRecovery.z);
+                if (vecToRecovery.sqrMagnitude <= GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAIRecoveryDist)
+                {
+                    StrikeCraftRecoveryStartClimb(strikeCraftAI);
+                }
             }
         }
     }
@@ -100,14 +249,14 @@ public class ShipsAIController : MonoBehaviour
             vecToTarget = shipAI.NavTarget - shipAI.ControlledShip.transform.position;
             return true;
         }
-        else if (shipAI.DoFollow && shipAI.CurrActivity == ShipAIController.ShipActivity.Following)
+        else if (shipAI.DoFollow && shipAI.CurrActivity == ShipActivity.Following)
         {
             vecToTarget = shipAI.FollowTarget.transform.position - shipAI.ControlledShip.transform.position;
             Vector3 dirToTarget = vecToTarget.normalized;
             vecToTarget -= dirToTarget * shipAI.FollowDist;
             return true;
         }
-        else if (shipAI.DoFollow && shipAI.CurrActivity != ShipAIController.ShipActivity.Following)
+        else if (shipAI.DoFollow && shipAI.CurrActivity != ShipActivity.Following)
         {
             vecToTarget = shipAI.FollowTransform.position - shipAI.ControlledShip.transform.position;
             Vector3 dirToTarget = vecToTarget.normalized;
@@ -121,7 +270,7 @@ public class ShipsAIController : MonoBehaviour
         }
     }
 
-    public void NavigateTo(Ship s, Vector3 target)
+    public void NavigateTo(ShipBase s, Vector3 target)
     {
         int idx;
         if (!_controlledShipsLookup.TryGetValue(s, out idx))
@@ -139,7 +288,7 @@ public class ShipsAIController : MonoBehaviour
             return;
         }
         ShipAIData ai = _controlledShips[idx];
-        ai.CurrActivity = ShipAIController.ShipActivity.ControllingPosition;
+        ai.CurrActivity = ShipActivity.ControllingPosition;
         ai.DoFollow = false;
         ai.DoNavigate = true;
         NavigateTo(ai, target, null);
@@ -155,6 +304,26 @@ public class ShipsAIController : MonoBehaviour
         }
     }
 
+    public void NavigateTo(StrikeCraftFormation formation, Vector3 target)
+    {
+        int idx;
+        if (!_controlledFormationsLookup.TryGetValue(formation, out idx))
+        {
+            return;
+        }
+        NavigateTo(_controlledShips[idx], target, null);
+    }
+
+    private static void NavigateTo(StrikeCraftFormationAIData formationAI, Vector3 target, Action onCompleteNavigation)
+    {
+        formationAI.FollowTarget = null;
+        formationAI.DoFollow = false;
+        formationAI.NavTarget = target;
+        formationAI.OrderCallback = onCompleteNavigation;
+        formationAI.NavGuide.SetDestination(target);
+        formationAI.DoNavigate = true;
+    }
+
     public void Follow(Ship s, ShipBase followTarget)
     {
         int idx;
@@ -168,33 +337,46 @@ public class ShipsAIController : MonoBehaviour
             return;
         }
         SetFollowTarget(ai, followTarget, ShipBase.FormationHalfSpacing(ai.ControlledShip) + ShipBase.FormationHalfSpacing(followTarget));
-        ai.CurrActivity = ShipAIController.ShipActivity.Following;
+        ai.CurrActivity = ShipActivity.Following;
     }
 
-    private void SetFollowTarget(ShipAIData shipAI, ShipBase followTarget, float dist)
+    private void SetFollowTarget(BaseAIData AI, ShipBase followTarget, float dist)
     {
         // Cancel navigate order, if there is one:
-        shipAI.DoNavigate = false;
-        shipAI.OrderCallback = null;
+        AI.DoNavigate = false;
+        AI.OrderCallback = null;
 
-        shipAI.FollowTarget = followTarget;
-        shipAI.FollowTransform = null;
-        shipAI.FollowDist = dist;
-        shipAI.DoFollow = true;
+        AI.FollowTarget = followTarget;
+        AI.FollowTransform = null;
+        AI.FollowDist = dist;
+        AI.DoFollow = true;
+    }
+
+    private void SetFollowTransform(BaseAIData AI, Transform followTr, float dist)
+    {
+        // Cancel navigate order, if there is one:
+        AI.DoNavigate = false;
+        AI.OrderCallback = null;
+
+        AI.FollowTarget = null;
+        AI.FollowTransform = followTr;
+        AI.FollowDist = dist;
+        AI.DoFollow = true;
     }
 
     private IEnumerator TacticsUpdate()
     {
-        yield return _targetAcquirePulseDelay;
+        yield return _tacticsDelay;
         while (true)
         {
+            _nextTacticsPulse = Time.time + 0.25f;
             int i = 0;
             while (i < _controlledShips.Count)
             {
                 ShipAIData shipAI = _controlledShips[i];
                 try
                 {
-                    if (!shipAI.ControlledShip.ShipControllable)
+                    if ((shipAI.ControlledShip == null) || !shipAI.ControlledShip.ShipControllable)
                     {
                         ++i;
                         continue;
@@ -202,10 +384,10 @@ public class ShipsAIController : MonoBehaviour
 
                     switch (shipAI.ControlType)
                     {
-                        case ShipAIController.ShipControlType.SemiAutonomous:
+                        case ShipControlType.SemiAutonomous:
                             SemiAutonomousBehaviorPulse(shipAI);
                             break;
-                        case ShipAIController.ShipControlType.Autonomous:
+                        case ShipControlType.Autonomous:
                             AutonomousBehaviorPulse(shipAI);
                             break;
                         default:
@@ -219,7 +401,28 @@ public class ShipsAIController : MonoBehaviour
                 yield return _navDelay;
                 ++i;
             }
-            yield return _targetAcquirePulseDelay;
+
+            i = 0;
+            while (i < _controlledFormations.Count)
+            {
+                try
+                {
+                    StrikeCraftFormationAIData formationAI = _controlledFormations[i];
+                    if (formationAI.ControlledFormation == null)
+                    {
+                        ++i;
+                        continue;
+                    }
+                    FormationPulse(formationAI);
+                }
+                catch (Exception exc)
+                {
+                    Debug.LogWarningFormat("Got exception for tactics: {0}", exc);
+                }
+                yield return _navDelay;
+                ++i;
+            }
+            yield return _tacticsDelay;
         }
     }
 
@@ -241,19 +444,32 @@ public class ShipsAIController : MonoBehaviour
 
                 if (shipAI.CyclesToRecomputePath == 0)
                 {
-                    switch (shipAI.AttackPattern)
+                    if (!shipAI.IsStrikeCraft)
                     {
-                        case ShipAIController.ShipAttackPattern.Aggressive:
-                            NormalAttackBehavior(shipAI);
-                            break;
-                        case ShipAIController.ShipAttackPattern.Artillery:
-                            ArtilleryAttackBehavior(shipAI);
-                            break;
-                        case ShipAIController.ShipAttackPattern.HitAndRun:
-                            HitAndRunBehavior(shipAI);
-                            break;
-                        default:
-                            break;
+                        switch (shipAI.AttackPattern)
+                        {
+                            case ShipAttackPattern.Aggressive:
+                                NormalAttackBehavior(shipAI);
+                                break;
+                            case ShipAttackPattern.Artillery:
+                                ArtilleryAttackBehavior(shipAI);
+                                break;
+                            case ShipAttackPattern.HitAndRun:
+                                HitAndRunBehavior(shipAI);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        if (shipAI.TargetShip != null)
+                        {
+                            StrikeCraftAttackPosition(shipAI as StrikeCraftAIData);
+                        }
+                        {
+                            NavigateWithoutTarget(shipAI as StrikeCraftAIData);
+                        }
                     }
                     shipAI.CyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
                 }
@@ -266,6 +482,10 @@ public class ShipsAIController : MonoBehaviour
             {
                 if (shipAI.CyclesToRecomputePath == 0)
                 {
+                    if (shipAI is StrikeCraftAIData strikeCraftAI)
+                    {
+                        NavigateWithoutTarget(strikeCraftAI);
+                    }
                     //NavigateWithoutTarget(shipAI); nothing? really?
                     shipAI.CyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
                 }
@@ -283,12 +503,16 @@ public class ShipsAIController : MonoBehaviour
         {
             if (shipAI.CyclesToRecomputePath == 0)
             {
-                if (shipAI.CurrActivity == ShipAIController.ShipActivity.Following)
+                if (shipAI.CurrActivity == ShipActivity.Following)
                 {
                     NavigateInFormation(shipAI);
                 }
                 else
                 {
+                    if (shipAI is StrikeCraftAIData strikeCraftAI)
+                    {
+                        NavigateWithoutTarget(strikeCraftAI);
+                    }
                     //NavigateWithoutTarget(shipAI); nothing? really?
                 }
                 shipAI.CyclesToRecomputePath = UnityEngine.Random.Range(3, 7);
@@ -304,16 +528,16 @@ public class ShipsAIController : MonoBehaviour
     {
         switch (shipAI.CurrActivity)
         {
-            case ShipAIController.ShipActivity.Idle:
-            case ShipAIController.ShipActivity.ControllingPosition:
-            case ShipAIController.ShipActivity.Defending:
+            case ShipActivity.Idle:
+            case ShipActivity.ControllingPosition:
+            case ShipActivity.Defending:
                 return true;
-            case ShipAIController.ShipActivity.ForceMoving:
-            case ShipAIController.ShipActivity.Attacking:
-            case ShipAIController.ShipActivity.Following:
-            case ShipAIController.ShipActivity.Launching:
-            case ShipAIController.ShipActivity.NavigatingToRecovery:
-            case ShipAIController.ShipActivity.StartingRecovery:
+            case ShipActivity.ForceMoving:
+            case ShipActivity.Attacking:
+            case ShipActivity.Following:
+            case ShipActivity.Launching:
+            case ShipActivity.NavigatingToRecovery:
+            case ShipActivity.StartingRecovery:
                 return false;
             default:
                 break;
@@ -423,7 +647,7 @@ public class ShipsAIController : MonoBehaviour
                 {
                     //enemyShipsCentroid += currShip.transform.position;
                     float threatRange = currShip.Turrets.Select(x => x.GetMaxRange).Max();
-                    Vector3 threatVec = (transform.position - currShip.transform.position).normalized * threatRange;
+                    Vector3 threatVec = (shipAI.ControlledShip.transform.position - currShip.transform.position).normalized * threatRange;
                     Vector3 threatThresholdVec = Vector3.Project(-threatVec, attackVec);
                     if (threatThresholdVec.sqrMagnitude > threatMaxRange)
                     {
@@ -542,7 +766,7 @@ public class ShipsAIController : MonoBehaviour
         if (shipAI.FollowTarget == null)
         {
             shipAI.DoFollow = false;
-            shipAI.CurrActivity = ShipAIController.ShipActivity.ControllingPosition;
+            shipAI.CurrActivity = ShipActivity.ControllingPosition;
         }
         else if (!shipAI.FollowTarget.ShipActiveInCombat)
         {
@@ -551,7 +775,7 @@ public class ShipsAIController : MonoBehaviour
             if (shipAI.FollowTarget is Ship followingShip && _controlledShipsLookup.TryGetValue(followingShip, out followingShipIdx))
             {
                 ShipAIData followingShipAI = _controlledShips[followingShipIdx];
-                if (followingShipAI.CurrActivity == ShipAIController.ShipActivity.Following)
+                if (followingShipAI.CurrActivity == ShipActivity.Following)
                 {
                     nextFollowTarget = followingShipAI.FollowTarget;
                 }
@@ -560,7 +784,7 @@ public class ShipsAIController : MonoBehaviour
             if (shipAI.FollowTarget == null)
             {
                 shipAI.DoFollow = false;
-                shipAI.CurrActivity = ShipAIController.ShipActivity.ControllingPosition;
+                shipAI.CurrActivity = ShipActivity.ControllingPosition;
             }
         }
         else
@@ -579,7 +803,7 @@ public class ShipsAIController : MonoBehaviour
         int numHits = Physics.OverlapSphereNonAlloc(shipAI.ControlledShip.transform.position, 30, _collidersCache, TargetsToAttackLayerMask);
         ShipBase foundTarget = null;
         bool staticAttack = false;
-        shipAI.AttackPattern = ShipAIController.ShipAttackPattern.Aggressive;
+        shipAI.AttackPattern = ShipAttackPattern.Aggressive;
         for (int i = 0; i < numHits; ++i)
         {
             int colliderLayer = 1 << _collidersCache[i].gameObject.layer;
@@ -609,7 +833,7 @@ public class ShipsAIController : MonoBehaviour
                     if (currShip.ShipSize == ObjectFactory.ShipSize.Destroyer &&
                         (alliedShip.ShipSize == ObjectFactory.ShipSize.Cruiser || alliedShip.ShipSize == ObjectFactory.ShipSize.CapitalShip))
                     {
-                        shipAI.AttackPattern = ShipAIController.ShipAttackPattern.HitAndRun;
+                        shipAI.AttackPattern = ShipAttackPattern.HitAndRun;
                     }
                 }
             }
@@ -648,7 +872,7 @@ public class ShipsAIController : MonoBehaviour
 
     private bool ShouldFollowTarget(ShipAIData shipAI, ShipBase target)
     {
-        return target is Ship;
+        return shipAI.IsStrikeCraft || target is Ship;
     }
 
     private void SemiAutonomousBehaviorPulse(ShipAIData shipAI)
@@ -660,7 +884,7 @@ public class ShipsAIController : MonoBehaviour
 
         if (shipAI.CyclesToRecomputePath == 0)
         {
-            if (shipAI.CurrActivity == ShipAIController.ShipActivity.Following)
+            if (shipAI.CurrActivity == ShipActivity.Following)
             {
                 NavigateInFormation(shipAI);
             }
@@ -672,7 +896,7 @@ public class ShipsAIController : MonoBehaviour
         }
     }
 
-    public ShipAIController.ShipControlType GetControlType(Ship s)
+    public ShipControlType GetControlType(Ship s)
     {
         int idx;
         if (_controlledShipsLookup.TryGetValue(s, out idx))
@@ -681,11 +905,11 @@ public class ShipsAIController : MonoBehaviour
         }
         else
         {
-            return ShipAIController.ShipControlType.SemiAutonomous;
+            return ShipControlType.SemiAutonomous;
         }   
     }
 
-    public void SetControlType(Ship s, ShipAIController.ShipControlType controlType)
+    public void SetControlType(Ship s, ShipControlType controlType)
     {
         int idx;
         if (!_controlledShipsLookup.TryGetValue(s, out idx))
@@ -694,21 +918,21 @@ public class ShipsAIController : MonoBehaviour
         }
         ShipAIData shipAI = _controlledShips[idx];
         bool changeControlType = shipAI.ControlType != controlType;
-        //ShipAIController.ShipControlType prevControlType = shipAI.ControlType;
+        //ShipControlType prevControlType = shipAI.ControlType;
         shipAI.ControlType = controlType;
         if (shipAI.NavGuide != null)
-            shipAI.NavGuide.ManualControl = controlType == ShipAIController.ShipControlType.Manual;
+            shipAI.NavGuide.ManualControl = controlType == ShipControlType.Manual;
 
         if (changeControlType)
         {
-            if (shipAI.ControlType == ShipAIController.ShipControlType.Manual)
+            if (shipAI.ControlType == ShipControlType.Manual)
             {
                 foreach (ITurret t in shipAI.ControlledShip.Turrets)
                 {
                     t.SetTurretBehavior(TurretBase.TurretMode.Manual);
                 }
             }
-            else if (shipAI.ControlType == ShipAIController.ShipControlType.SemiAutonomous)
+            else if (shipAI.ControlType == ShipControlType.SemiAutonomous)
             {
                 foreach (ITurret t in shipAI.ControlledShip.Turrets)
                 {
@@ -718,17 +942,523 @@ public class ShipsAIController : MonoBehaviour
         }
     }
 
-    private Dictionary<Ship, int> _controlledShipsLookup = new Dictionary<Ship, int>();
+    public ShipBase GetCurrentTarget(ShipBase s)
+    {
+        int idx;
+        if (!_controlledShipsLookup.TryGetValue(s, out idx))
+        {
+            return null;
+        }
+        ShipAIData shipAI = _controlledShips[idx];
+        return shipAI.TargetShip;
+    }
+
+    #region
+    private void StrikeCraftRecoveryStartClimb(StrikeCraftAIData strikeCraftAI)
+    {
+        Vector3 carrierVelocity = strikeCraftAI.ContainingFormation.HostCarrier.Velocity;
+        if (strikeCraftAI.ContainingFormation.HostCarrier.RecoveryTryStartSingle(strikeCraftAI.ControlledStrikeCraft,
+                                                                                 strikeCraftAI.RecoveryTarget.Idx,
+                                                                                 strikeCraftAI.ControlledStrikeCraft.OnRecoveryHangerOpen))
+        {
+            strikeCraftAI.ControlledStrikeCraft.IgnoreHits = true;
+            Maneuver m = CreateClimbForRecoveryManeuver(strikeCraftAI, strikeCraftAI.RecoveryTarget.RecoveryStart.transform, carrierVelocity);
+            m.OnManeuverFinish += (mm => SetNextRecoveryFinalPhase(strikeCraftAI));
+            strikeCraftAI.ControlledStrikeCraft.StartManeuver(m);
+            strikeCraftAI.CurrActivity = ShipActivity.Recovering;
+        }
+    }
+
+    private static IEnumerable<ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>> PathFixes(Transform currEntityTr, BspPath rawPath, Transform carrierRecoveryHint, float speedHint, Vector3 carrierVelocity)
+    {
+        int numPathPts = rawPath.Points.Length;
+        Matrix4x4 ptTransform = Matrix4x4.TRS(currEntityTr.position, currEntityTr.rotation, Vector3.one);
+
+        float maneuverTime = (carrierRecoveryHint.position - currEntityTr.position).magnitude / speedHint;
+        //Matrix4x4 dirTransform = Matrix4x4.TRS(Vector3.zero, currLaunchTr.rotation, Vector3.one);
+        for (int i = 0; i < numPathPts; i++)
+        {
+            if (i < numPathPts - 2)
+            {
+                yield return
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => ptTransform.MultiplyPoint3x4(p),
+                        v => ptTransform.MultiplyVector(v));
+            }
+            else if (i == numPathPts - 2)
+            {
+                yield return
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity) - (GlobalDistances.StrikeCraftAIRecoveryPathFixSize * carrierRecoveryHint.up),
+                        v => carrierRecoveryHint.up);
+            }
+            else if (i == numPathPts - 1)
+            {
+                yield return
+                    new ValueTuple<Func<Vector3, Vector3>, Func<Vector3, Vector3>>(
+                        p => carrierRecoveryHint.position + (maneuverTime * carrierVelocity),
+                        v => carrierRecoveryHint.up);
+            }
+        }
+    }
+
+    private Maneuver CreateClimbForRecoveryManeuver(StrikeCraftAIData strikeCraftAI, Transform carrierRecoveryHint, Vector3 carrierVelocity)
+    {
+        BspPath launchPath = ObjectFactory.GetPath("Strike craft carrier climb");
+        //float expectedTime = (carrierRecoveryHint.position - transform.position).magnitude / _controlledCraft.CurrSpeed;
+        float speedHint = strikeCraftAI.ControlledStrikeCraft.CurrSpeed;
+        Maneuver.AccelerationModifier acc = null;
+        if (strikeCraftAI.ControlledStrikeCraft.CurrSpeed < strikeCraftAI.ControlledStrikeCraft.MaxSpeed * 0.75f)
+        {
+            acc = new Maneuver.SelfAccelerateToTargetSpeedFraction() { TargetSpeedFrac = 0.75f };
+            speedHint = strikeCraftAI.ControlledStrikeCraft.MaxSpeed * 0.75f;
+        }
+
+        // DEBUG:
+        if (acc == null)
+        {
+            Debug.LogFormat("Creating recovery climb path. Initial speed: {0}. Will not accelerate.", strikeCraftAI.ControlledStrikeCraft.CurrSpeed);
+        }
+        else
+        {
+            Debug.LogFormat("Creating recovery climb path. Initial speed: {0}. Will accelerate to {1}.", strikeCraftAI.ControlledStrikeCraft.CurrSpeed, speedHint);
+        }
+
+        Maneuver.BsplinePathSegmnet seg = new Maneuver.BsplinePathSegmnet()
+        {
+            AccelerationBehavior = acc,
+            Path = launchPath.ExractLightweightPath(PathFixes(strikeCraftAI.ControlledStrikeCraft.transform, launchPath, carrierRecoveryHint, speedHint, carrierVelocity))
+        };
+        return new Maneuver(seg);
+    }
+
+    private static void SetNextRecoveryFinalPhase(StrikeCraftAIData strikeCraftAI)
+    {
+        strikeCraftAI.NextCycleRecoveryFinalPhase = true;
+    }
+
+    public void OrderStartNavigatenToHost(StrikeCraft strikeCraft)
+    {
+        int idx;
+        if (_controlledShipsLookup.TryGetValue(strikeCraft, out idx))
+        {
+            _controlledShips[idx].CurrActivity = ShipActivity.NavigatingToRecovery;
+        }
+    }
+
+    public void OrderReturnToHost(StrikeCraft strikeCraft, CarrierBehavior.RecoveryTransforms recoveryPositions)
+    {
+        int idx;
+        if (_controlledShipsLookup.TryGetValue(strikeCraft, out idx))
+        {
+            StrikeCraftAIData strikeCraftAI = _controlledShips[idx] as StrikeCraftAIData;
+            strikeCraftAI.CurrActivity = ShipActivity.NavigatingToRecovery;
+            if (strikeCraftAI.CurrActivity == ShipActivity.StartingRecovery ||
+                strikeCraftAI.CurrActivity == ShipActivity.Recovering)
+            {
+                return;
+            }
+            strikeCraftAI.CurrActivity = ShipActivity.StartingRecovery;
+            strikeCraftAI.RecoveryTarget = recoveryPositions;
+            Vector3 vecToRecovery = recoveryPositions.RecoveryStart.position - strikeCraft.transform.position;
+            float m = vecToRecovery.magnitude;
+            if (m < GlobalDistances.StrikeCraftAIRecoveryDist)
+            {
+                Debug.Log("Too close for recovery?");
+                StrikeCraftRecoveryStartClimb(strikeCraftAI);
+            }
+            else
+            {
+                Vector3 dirToRecovery = vecToRecovery / m;
+                SetFollowTransform(strikeCraftAI, recoveryPositions.RecoveryStart, GlobalDistances.StrikeCraftAIRecoveryDist * GlobalDistances.StrikeCraftAICarrierFollowDistFactor);
+            }
+        }
+    }
+
+    private void NavigateWithoutTarget(StrikeCraftAIData strikeCraftAI)
+    {
+        if (strikeCraftAI.DoFollow)
+        {
+            Vector3 followVec;
+            GetCurrMovementTarget(strikeCraftAI, out followVec);
+            NavigateTo(strikeCraftAI.ControlledStrikeCraft, strikeCraftAI.ControlledStrikeCraft.transform.position + followVec);
+        }
+        else if (null != strikeCraftAI.ContainingFormation && null != strikeCraftAI.FormationAI && DoMaintainFormation(strikeCraftAI.FormationAI))
+        {
+            Vector3 navTarget;
+            if (strikeCraftAI.ControlledStrikeCraft.AheadOfPositionInFormation())
+            {
+                navTarget = strikeCraftAI.ContainingFormation.GetPosition(strikeCraftAI.ControlledStrikeCraft) + (strikeCraftAI.ContainingFormation.transform.up * GlobalDistances.StrikeCraftAIAheadOfFormationNavDist);
+
+            }
+            else
+            {
+                navTarget = strikeCraftAI.ContainingFormation.GetPosition(strikeCraftAI.ControlledStrikeCraft) - (strikeCraftAI.ContainingFormation.transform.up * GlobalDistances.StrikeCraftAIBehindFormationNavDist);
+            }
+            NavigateTo(strikeCraftAI.ControlledStrikeCraft, navTarget);
+        }
+    }
+
+    private Vector3 StrikeCraftAttackPosition(StrikeCraftAIData strikeCraftAI)
+    {
+        ShipBase enemyShip = strikeCraftAI.TargetShip;
+        float minRange = strikeCraftAI.ControlledStrikeCraft.TurretsGetAttackRange(_turretsAll);
+        Vector3 Front = enemyShip.transform.forward;
+
+        if (enemyShip is StrikeCraft)
+        {
+            return enemyShip.transform.position - Front * GlobalDistances.StrikeCraftAIVsStrikeCrafRangeFactor * minRange;
+        }
+        else
+        {
+            //Vector3 Left = enemmyShip.transform.right.normalized * minRange * 0.95f;
+            //Vector3 Right = -Left;
+            //Vector3 Rear = -Front;
+            Vector3 vecToTarget = enemyShip.transform.position - strikeCraftAI.ControlledStrikeCraft.transform.position;
+            float distToTarget = vecToTarget.magnitude;
+            //float turningCircleRadius = MathUtils.TurningCircleRadius(_controlledCraft.CurrSpeed, _controlledCraft.TurnRate);
+            if (strikeCraftAI.HitAndRunPhase && distToTarget < minRange * GlobalDistances.StrikeCraftAIAttackPosRangeHitFactor / _numAttackDistances)
+            {
+                // Run
+                strikeCraftAI.HitAndRunPhase = false;
+            }
+            else if (!strikeCraftAI.HitAndRunPhase && distToTarget > minRange * GlobalDistances.StrikeCraftAIAttackPosRangeRunFactor)
+            {
+                // Hit
+                strikeCraftAI.HitAndRunPhase = true;
+            }
+
+            int k = 0;
+            for (int i = 0; i < _numAttackAngles; ++i)
+            {
+                Vector3 dir = Quaternion.AngleAxis((float)i / _numAttackAngles * 360, Vector3.up) * Front;
+                float currWeight;
+                if (Vector3.Angle(dir, Front) < 45f)
+                {
+                    currWeight = 1f / 5f;
+                }
+                else if (Vector3.Angle(dir, Front) > 135f)
+                {
+                    currWeight = 1f / 10f;
+                }
+                else
+                {
+                    currWeight = 1f / 2.5f;
+                }
+                if (strikeCraftAI.HitAndRunPhase)
+                {
+                    // Hit
+                    for (int j = 0; j < _numAttackDistances; ++j)
+                    {
+                        float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeHitFactor * (j + 1) / _numAttackDistances;
+                        strikeCraftAI.AttackPositions[k] = enemyShip.transform.position + dir * dist;
+                        strikeCraftAI.AttackPositionWeights[k] = currWeight;
+                        ++k;
+                    }
+                }
+                else
+                {
+                    // Run
+                    for (int j = 0; j < _numAttackDistances; ++j)
+                    {
+                        float dist = minRange * GlobalDistances.StrikeCraftAIAttackPosRangeRunFactor * (j + 1);
+                        strikeCraftAI.AttackPositions[k] = enemyShip.transform.position + dir * dist;
+                        strikeCraftAI.AttackPositionWeights[k] = currWeight;
+                        ++k;
+                    }
+                }
+            }
+
+            int minPos = 0;
+            float minScore = (strikeCraftAI.AttackPositions[minPos] - strikeCraftAI.ControlledStrikeCraft.transform.position).sqrMagnitude * strikeCraftAI.AttackPositionWeights[minPos];
+            for (int i = 1; i < strikeCraftAI.AttackPositions.Length; ++i)
+            {
+                float currScore = (strikeCraftAI.AttackPositions[i] - strikeCraftAI.ControlledStrikeCraft.transform.position).sqrMagnitude * strikeCraftAI.AttackPositionWeights[i];
+                if (currScore < minScore)
+                {
+                    minPos = i;
+                    minScore = currScore;
+                }
+            }
+            return strikeCraftAI.AttackPositions[minPos];
+        }
+    }
+
+    public void AssignStrikeCraftToFormation(StrikeCraft s, StrikeCraftFormation f)
+    {
+        int strikeCraftIdx, formationIdx;
+        if (_controlledShipsLookup.TryGetValue(s, out strikeCraftIdx) && _controlledFormationsLookup.TryGetValue(f, out formationIdx))
+        {
+            StrikeCraftAIData strikeCraftAI = _controlledShips[strikeCraftIdx] as StrikeCraftAIData;
+            strikeCraftAI.FormationAI = _controlledFormations[formationIdx];
+            strikeCraftAI.ContainingFormation = f;
+        }
+    }
+    #endregion
+
+    #region
+    private void FormationPulse(StrikeCraftFormationAIData formationAI)
+    {
+        if (formationAI.ControlledFormation.DestroyOnEmpty && formationAI.ControlledFormation.AllOutOfAmmo())
+        {
+            CarrierBehavior c = formationAI.ControlledFormation.HostCarrier;
+            if (c != null)
+            {
+                OrderReturnToHost(formationAI.ControlledFormation, c.transform);
+                return;
+            }
+        }
+        if (formationAI.TargetShip == null)
+        {
+            StrikeCraftFormationAcquireTarget(formationAI);
+        }
+        if (formationAI.TargetShip != null)
+        {
+            if (formationAI.TargetShip.ShipDisabled)
+            {
+                formationAI.TargetShip = null;
+                return;
+            }
+            Vector3 attackPos = StrikeCraftFormationAttackPosition(formationAI);
+            NavigateTo(formationAI, attackPos, null);
+        }
+    }
+
+    private static bool DoMaintainFormation(StrikeCraftFormationAIData formationAI)
+    {
+        return formationAI.CurrState != StrikeCraftFormationState.InCombat;
+    }
+
+    private void FormationStep(StrikeCraftFormationAIData formationAI)
+    {
+        if (formationAI.CurrState == StrikeCraftFormationState.ReturningToHost)
+        {
+            formationAI.CurrState = StrikeCraftFormationState.Recovering;
+            formationAI.DoNavigate = false;
+            formationAI.ControlledFormation.HostCarrier.RecoveryTryStart(formationAI.ControlledFormation);
+            foreach (StrikeCraft craft in formationAI.ControlledFormation.AllStrikeCraft())
+            {
+                OrderReturnToHost(craft, formationAI.ControlledFormation.HostCarrier.GetRecoveryTransforms());
+            }
+        }
+        if (formationAI.DoNavigate || formationAI.DoFollow)
+        {
+            StrikeCraftFormationAdvance(formationAI);
+        }
+    }
+
+    private void StrikeCraftFormationAdvance(StrikeCraftFormationAIData formationAI)
+    {
+        Vector3 vecToTarget;
+        if (formationAI.DoNavigate)
+        {
+            vecToTarget = formationAI.NavTarget - formationAI.ControlledFormation.transform.position;
+        }
+        else if (formationAI.DoFollow)
+        {
+            Vector3 followPos = GetFollowPosition(formationAI);
+            vecToTarget = followPos - formationAI.ControlledFormation.transform.position;
+            if (Time.time >= formationAI.NextUpdateFollowTime)
+            {
+                formationAI.NavGuide.SetDestination(followPos);
+                formationAI.NextUpdateFollowTime = Time.time + UnityEngine.Random.Range(1f, 2f);
+            }
+            else
+            {
+                if (formationAI.InnerNavAgent.isOnNavMesh && formationAI.InnerNavAgent.remainingDistance < 0.1f)
+                {
+                    formationAI.FollowPosIdx = 1 - formationAI.FollowPosIdx;
+                    formationAI.NextUpdateFollowTime = Time.time;
+                }
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        if (formationAI.TargetShip != null && vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIAttackDist * GlobalDistances.StrikeCraftAIAttackDist))
+        {
+            formationAI.CurrState = StrikeCraftFormationState.InCombat;
+        }
+        else if (vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
+        {
+            formationAI.ControlledFormation.ApplyBraking();
+            if (formationAI.ControlledFormation.ActualVelocity.sqrMagnitude < (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
+            {
+                if (formationAI.DoNavigate)
+                {
+                    formationAI.DoNavigate = false;
+                    formationAI.OrderCallback?.Invoke();
+                    Debug.LogWarningFormat("Strike craft formation stopped at destination. This is highly unlikely.");
+                }
+            }
+        }
+        else
+        {
+            SetFormationSpeed(formationAI);
+        }
+    }
+
+    private static Vector3 GetFollowPosition(StrikeCraftFormationAIData formationAI)
+    {
+        if (formationAI.FollowPosIdx == 0)
+        {
+            return formationAI.FollowTransform.position + (formationAI.FollowTransform.right * formationAI.FollowDist);
+        }
+        else
+        {
+            return formationAI.FollowTransform.position - (formationAI.FollowTransform.right * formationAI.FollowDist);
+        }
+    }
+
+    private static void SetFormationSpeed(StrikeCraftFormationAIData formationAI)
+    {
+        if (formationAI.ControlledFormation.AllInFormation())
+        {
+            formationAI.NavGuide.SetTargetSpeed(formationAI.ControlledFormation.MaxSpeed);
+            foreach (StrikeCraft s in formationAI.ControlledFormation.AllStrikeCraft())
+            {
+                s.TargetSpeed = s.MaxSpeed;
+            }
+        }
+        else
+        {
+            formationAI.NavGuide.SetTargetSpeed(formationAI.ControlledFormation.MaxSpeed * formationAI.ControlledFormation.MaintainFormationSpeedCoefficient);
+            foreach (ValueTuple<StrikeCraft, bool> s in formationAI.ControlledFormation.InFormationStatus())
+            {
+                if (s.Item2)
+                {
+                    s.Item1.TargetSpeed = s.Item1.MaxSpeed * formationAI.ControlledFormation.MaintainFormationSpeedCoefficient;
+                }
+                else if (s.Item1.AheadOfPositionInFormation())
+                {
+                    s.Item1.TargetSpeed = s.Item1.MaxSpeed * formationAI.ControlledFormation.MaintainFormationSpeedCoefficient * formationAI.ControlledFormation.MaintainFormationSpeedCoefficient;
+                }
+                else
+                {
+                    s.Item1.TargetSpeed = s.Item1.MaxSpeed;
+                }
+            }
+
+        }
+    }
+
+    public void OrderReturnToHost(StrikeCraftFormation formation)
+    {
+        CarrierBehavior c = formation.HostCarrier;
+        if (null != c)
+        {
+            OrderReturnToHost(formation, c.transform);
+        }
+    }
+
+    public void OrderReturnToHost(StrikeCraftFormation formation, Transform recoveryPosition)
+    {
+        //
+        int idx;
+        if (_controlledFormationsLookup.TryGetValue(formation, out idx))
+        {
+            StrikeCraftFormationAIData formationAI = _controlledFormations[idx];
+
+            formationAI.CurrState = StrikeCraftFormationState.ReturningToHost;
+            foreach (StrikeCraft craft in formationAI.ControlledFormation.AllStrikeCraft())
+            {
+                StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
+                if (ctl != null)
+                {
+                    ctl.OrderStartNavigatenToHost();
+                }
+            }
+            //
+            Vector3 vecToRecovery = recoveryPosition.position - formationAI.ControlledFormation.transform.position;
+            float m = vecToRecovery.magnitude;
+            if (m < GlobalDistances.StrikeCraftAIFormationRecoveryTargetDist)
+            {
+                bool isFacingHost = Vector3.Dot(vecToRecovery, formationAI.ControlledFormation.transform.up) >= 0f;
+                if (!isFacingHost)
+                {
+                    Vector3 dirToRecovery = vecToRecovery / m;
+                    Vector3 halfTurn = Quaternion.AngleAxis(90, Vector3.up) * dirToRecovery;
+                    float radius = 1f;
+                    NavigateTo(formationAI, formationAI.ControlledFormation.transform.position + radius * halfTurn, null);
+                }
+            }
+            else
+            {
+                SetFollowTransform(formationAI, recoveryPosition, GlobalDistances.StrikeCraftAIFormationRecoveryTargetDist);
+            }
+        }
+    }
+
+    public void OrderEscort(StrikeCraftFormation formation, ShipBase s)
+    {
+        int idx;
+        if (_controlledFormationsLookup.TryGetValue(formation, out idx))
+        {
+            StrikeCraftFormationAIData formationAI = _controlledFormations[idx];
+            SetFollowTransform(formationAI, s.transform, GlobalDistances.StrikeCraftAIFormationEscortDist);
+        }
+    }
+
+    private void StrikeCraftFormationAcquireTarget(StrikeCraftFormationAIData formationAI)
+    {
+        int numHits = Physics.OverlapSphereNonAlloc(formationAI.ControlledFormation.transform.position, GlobalDistances.StrikeCraftAIFormationAggroDist, _collidersCache, ObjectFactory.AllShipsLayerMask);
+        ShipBase foundTarget = null;
+        for (int i = 0; i < numHits; ++i)
+        {
+            ShipBase s = ShipBase.FromCollider(_collidersCache[i]);
+            if (s == null)
+            {
+                continue;
+            }
+            else if (!s.ShipActiveInCombat)
+            {
+                continue;
+            }
+            if (formationAI.ControlledFormation.Owner.IsEnemy(s.Owner))
+            {
+                foundTarget = s;
+            }
+        }
+
+        if (foundTarget != null)
+        {
+            if (foundTarget is Ship)
+            {
+                formationAI.TargetShip = foundTarget;
+            }
+        }
+        else
+        {
+            if (formationAI.CurrState == StrikeCraftFormationState.InCombat)
+            {
+                formationAI.CurrState = StrikeCraftFormationState.Idle;
+            }
+        }
+    }
+
+    private static Vector3 StrikeCraftFormationAttackPosition(StrikeCraftFormationAIData formationAI)
+    {
+        ShipBase enemyShip = formationAI.TargetShip;
+        Vector3 vecToTarget = formationAI.ControlledFormation.transform.position - enemyShip.transform.position;
+        Vector3 unitVecToTarget = vecToTarget.normalized;
+        return enemyShip.transform.position - unitVecToTarget * GlobalDistances.StrikeCraftAIAttackDist;
+    }
+    #endregion
+
+    private bool NextTacticsPulse() => Time.time >= _nextTacticsPulse;
+
+    private Dictionary<ShipBase, int> _controlledShipsLookup = new Dictionary<ShipBase, int>();
     private List<ShipAIData> _controlledShips = new List<ShipAIData>();
 
-    private class ShipAIData
+    private Dictionary<StrikeCraftFormation, int> _controlledFormationsLookup = new Dictionary<StrikeCraftFormation, int>();
+    private List<StrikeCraftFormationAIData> _controlledFormations = new List<StrikeCraftFormationAIData>();
+
+    private abstract class BaseAIData
     {
-        public ShipAIData(Ship s, NavigationGuide navGuide, ShipAIController.ShipControlType controlType)
+        public BaseAIData(NavigationGuide navGuide)
         {
-            ControlledShip = s;
-            ControlType = controlType;
-            CurrActivity = ShipAIController.ShipActivity.Idle;
-            AttackPattern = ShipAIController.ShipAttackPattern.Aggressive;
             NavGuide = navGuide;
             AttackPositions = new Vector3[_numAttackAngles * _numAttackDistances];
             AttackPositionWeights = new float[_numAttackAngles * _numAttackDistances];
@@ -744,11 +1474,7 @@ public class ShipsAIController : MonoBehaviour
             CyclesToRecomputePath = 0;
         }
 
-        public Ship ControlledShip;
         public NavigationGuide NavGuide;
-        public ShipAIController.ShipControlType ControlType;
-        public ShipAIController.ShipActivity CurrActivity;
-        public ShipAIController.ShipAttackPattern AttackPattern;
         public Vector3[] AttackPositions;
         public float[] AttackPositionWeights;
         public ShipBase TargetShip;
@@ -763,9 +1489,67 @@ public class ShipsAIController : MonoBehaviour
         public int CyclesToRecomputePath;
     }
 
+    private class ShipAIData : BaseAIData
+    {
+        public ShipAIData(ShipBase s, NavigationGuide navGuide, ShipControlType controlType)
+            : base(navGuide)
+        {
+            ControlledShip = s;
+            ControlType = controlType;
+            CurrActivity = ShipActivity.Idle;
+            AttackPattern = ShipAttackPattern.Aggressive;
+        }
+
+        public ShipBase ControlledShip;
+        public ShipControlType ControlType;
+        public ShipActivity CurrActivity;
+        public ShipAttackPattern AttackPattern;
+        public virtual bool IsStrikeCraft => false;
+    }
+
+    private class StrikeCraftAIData : ShipAIData
+    {
+        public StrikeCraftAIData(StrikeCraft s, NavigationGuide navGuide) : base(s, navGuide, ShipControlType.Autonomous)
+        {
+            ControlledStrikeCraft = s;
+            ContainingFormation = (StrikeCraftFormation)(s.ContainingFormation);
+            HitAndRunPhase = true;
+            NextCycleRecoveryFinalPhase = false;
+            InRecoveryFinalPhase = false;
+        }
+
+        public StrikeCraft ControlledStrikeCraft;
+        public StrikeCraftFormation ContainingFormation;
+        public StrikeCraftFormationAIData FormationAI;
+        public CarrierBehavior.RecoveryTransforms RecoveryTarget;
+        public bool HitAndRunPhase;
+        public bool NextCycleRecoveryFinalPhase;
+        public bool InRecoveryFinalPhase;
+
+        public override bool IsStrikeCraft => true;
+    }
+
+    private class StrikeCraftFormationAIData : BaseAIData
+    {
+        public StrikeCraftFormationAIData(StrikeCraftFormation formation, NavigationGuide navGuide)
+            : base(navGuide)
+        {
+            ControlledFormation = formation;
+            CurrState = StrikeCraftFormationState.Idle;
+            InnerNavAgent = navGuide.GetComponent<NavMeshAgent>();
+        }
+
+        public StrikeCraftFormation ControlledFormation;
+        public StrikeCraftFormationState CurrState;
+        public int FollowPosIdx;
+        public NavMeshAgent InnerNavAgent;
+        public float NextUpdateFollowTime;
+    }
+
+    private float _nextTacticsPulse = 0;
     private Collider[] _collidersCache = new Collider[1024];
     private static readonly WaitForEndOfFrame _navDelay = new WaitForEndOfFrame();
-    private static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
+    private WaitUntil _tacticsDelay;
     private static readonly int _numAttackAngles = 12;
     private static readonly int _numAttackDistances = 3;
 }

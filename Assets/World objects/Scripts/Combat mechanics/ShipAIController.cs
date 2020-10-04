@@ -722,39 +722,39 @@ public class ShipAIController : MonoBehaviour
 
     private Coroutine _autoBehaviorCoroutine = null, _semiAutoBehaviorCoroutine = null;
 
-    public enum ShipActivity
-    {
-        Idle,
-        ControllingPosition,
-        Attacking,
-        ForceMoving,
-        Following,
-        Defending,
-        Launching,
-        NavigatingToRecovery,
-        StartingRecovery,
-        Recovering
-    }
-
-    public enum ShipAttackPattern
-    {
-        None,
-        Aggressive,
-        Artillery,
-        HitAndRun
-    }
-
-    public enum ShipControlType
-    {
-        Manual,
-        SemiAutonomous,
-        Autonomous
-    }
-
     public ShipActivity CurrActivity { get; protected set; }
 
     // Ugly optimization:
     protected Collider[] _collidersCache = new Collider[1024];
 
     protected static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
+}
+
+public enum ShipActivity
+{
+    Idle,
+    ControllingPosition,
+    Attacking,
+    ForceMoving,
+    Following,
+    Defending,
+    Launching,
+    NavigatingToRecovery,
+    StartingRecovery,
+    Recovering
+}
+
+public enum ShipAttackPattern
+{
+    None,
+    Aggressive,
+    Artillery,
+    HitAndRun
+}
+
+public enum ShipControlType
+{
+    Manual,
+    SemiAutonomous,
+    Autonomous
 }

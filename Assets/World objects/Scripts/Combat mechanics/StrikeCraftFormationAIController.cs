@@ -16,15 +16,15 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         _navGuide.ManualControl = false;
         _innerNavAgent = _navGuide.GetComponent<NavMeshAgent>();
         StartCoroutine(AcquireTargetPulse());
-        _currState = FormationState.Idle;
+        _currState = StrikeCraftFormationState.Idle;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (_currState == FormationState.ReturningToHost)
+        if (_currState == StrikeCraftFormationState.ReturningToHost)
         {
-            _currState = FormationState.Recovering;
+            _currState = StrikeCraftFormationState.Recovering;
             _doNavigate = false;
             _controlledFormation.HostCarrier.RecoveryTryStart(_controlledFormation);
             foreach (StrikeCraft craft in _controlledFormation.AllStrikeCraft())
@@ -72,9 +72,9 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
         else
         {
-            if (_currState == FormationState.InCombat)
+            if (_currState == StrikeCraftFormationState.InCombat)
             {
-                _currState = FormationState.Idle;
+                _currState = StrikeCraftFormationState.Idle;
             }
         }
     }
@@ -131,7 +131,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
         if (_targetShip != null && vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIAttackDist * GlobalDistances.StrikeCraftAIAttackDist))
         {
-            _currState = FormationState.InCombat;
+            _currState = StrikeCraftFormationState.InCombat;
         }
         else if (vecToTarget.sqrMagnitude <= (GlobalDistances.StrikeCraftAIDistEps * GlobalDistances.StrikeCraftAIDistEps))
         {
@@ -245,11 +245,9 @@ public class StrikeCraftFormationAIController : MonoBehaviour
         }
     }
 
-    private enum FormationState { Idle, Launching, ReturningToHost, Recovering, Defending, Moving, InCombat };
-
     public bool DoMaintainFormation()
     {
-        return _currState != FormationState.InCombat;
+        return _currState != StrikeCraftFormationState.InCombat;
     }
 
     public void OrderReturnToHost()
@@ -264,7 +262,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     public void OrderReturnToHost(Transform recoveryPosition)
     {
         //
-        _currState = FormationState.ReturningToHost;
+        _currState = StrikeCraftFormationState.ReturningToHost;
         foreach (StrikeCraft craft in _controlledFormation.AllStrikeCraft())
         {
             StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
@@ -332,7 +330,7 @@ public class StrikeCraftFormationAIController : MonoBehaviour
     protected bool _doFollow = false;
     protected NavigationGuide _navGuide;
     protected NavMeshAgent _innerNavAgent;
-    private FormationState _currState;
+    private StrikeCraftFormationState _currState;
 
     // Visual debug:
     private Vector3[] _dbgObstacleCorners = new Vector3[5];
@@ -345,3 +343,5 @@ public class StrikeCraftFormationAIController : MonoBehaviour
 
     private static readonly WaitForSeconds _targetAcquirePulseDelay = new WaitForSeconds(0.25f);
 }
+
+public enum StrikeCraftFormationState { Idle, Launching, ReturningToHost, Recovering, Defending, Moving, InCombat };

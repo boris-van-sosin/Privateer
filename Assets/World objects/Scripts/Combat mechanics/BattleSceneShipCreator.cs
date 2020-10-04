@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public static class CombatSceneShipCreator
+public static class BattleSceneShipCreator
 {
     public static Ship CreateAndFitOutShip(ShipShadow shadow, Faction owner)
     {
@@ -127,6 +127,7 @@ public static class CombatSceneShipCreator
         */
         ShipAIHandle AIHandle = s.gameObject.AddComponent<ShipAIHandle>();
         AIHandle.ControlledShip = s;
+        ShipsAIController.AddShip(s);
 
         if (owner.PlayerFaction && inputController != null)
         {
@@ -138,4 +139,3 @@ public static class CombatSceneShipCreator
         return s;
     }
 }
-

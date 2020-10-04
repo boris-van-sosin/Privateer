@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 
-public class ShipAIHandle : MonoBehaviour
+public class FormationAIHandle : MonoBehaviour
 {
-    public ShipBase ControlledShip { get; set; }
+    public StrikeCraftFormation ControlledFormation { get; set; }
     public ShipsAIController AIHandle { get; set; }
     public NavigationGuide NavGuide { get; set; }
-
     void OnDestroy()
     {
         if (NavGuide != null)

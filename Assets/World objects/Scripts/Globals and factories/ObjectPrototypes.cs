@@ -9,7 +9,6 @@ public class ObjectPrototypes : MonoBehaviour
     void Awake()
     {
         ObjectFactory.SetPrototypes(this);
-        _delayedActions = null;
     }
 
     public Projectile CreateProjectile()
@@ -249,16 +248,11 @@ public class ObjectPrototypes : MonoBehaviour
 
     public LineRenderer SelectionRing;
 
-    private Dictionary<string, Ship> _shipPrototypeDictionary = new Dictionary<string, Ship>();
     private Dictionary<string, StrikeCraftWithFormationSize> _strikeCraftPrototypeDictionary = new Dictionary<string, StrikeCraftWithFormationSize>();
-    private Dictionary<string, TurretBase> _turretPrototypeDictionary = new Dictionary<string, TurretBase>();
-    private Dictionary<ObjectFactory.WeaponEffect, ParticleSystem> _weaponEffectsDictionary = null;
     private Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
     private Dictionary<string, BspPath> _paths = new Dictionary<string, BspPath>();
     private Dictionary<string, Material> _materials = new Dictionary<string, Material>();
 
-    private Coroutine _delayedActions;
-    private StagPoint.Collections.BinaryMinHeap<Action<float>, float> _delayedActionQueue = new StagPoint.Collections.BinaryMinHeap<Action<float>, float>();
 
     [Serializable]
     public struct SprikeKeyValue

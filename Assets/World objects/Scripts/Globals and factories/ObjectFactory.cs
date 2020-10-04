@@ -984,7 +984,7 @@ public static class ObjectFactory
         return _prototypes.GetAllStrikeCraftTypes();
     }
 
-    public static StrikeCraft CreateStrikeCraft(string prodKey)
+    private static StrikeCraft CreateStrikeCraft(string prodKey)
     {
         StrikeCraft res = _prototypes.CreateStrikeCraft(prodKey);
         res.PostAwake();
@@ -1029,7 +1029,8 @@ public static class ObjectFactory
                 s.PlaceTurret(hp, t);
             }
         }
-        s.gameObject.AddComponent<StrikeCraftAIController>();
+        s.gameObject.AddComponent<ShipAIHandle>().ControlledShip = s;
+        ShipsAIController.AddStrikeCraft(s);
         return s;
     }
 
@@ -1037,7 +1038,8 @@ public static class ObjectFactory
     {
         StrikeCraftFormation res = _prototypes.CreateStrikeCraftFormation(prodKey);
         res.SetFormationType(FormationBase.FormationType.Vee);
-        res.gameObject.AddComponent<StrikeCraftFormationAIController>();
+        res.gameObject.AddComponent<FormationAIHandle>().ControlledFormation = res;
+        ShipsAIController.AddStrikeCraftFormation(res);
         return res;
     }
 

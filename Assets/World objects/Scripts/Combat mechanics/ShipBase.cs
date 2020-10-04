@@ -699,7 +699,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             if (_shipAI == null)
                 return null;
 
-            return _shipAI.TargetShip;
+            return _shipAI.GetTargetShip();
         }
     }
 
@@ -847,7 +847,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
     protected float AccelerationWBuf => Mathf.Max(Thrust * 0.25f, Thrust * (1f + CombinedBuff.AcceleraionFactor));
 
     // AI:
-    protected ShipAIController _shipAI;
+    protected ShipAIHandle _shipAI;
 
     private static readonly float NavBoxExpandFactor = 1.1f;
 }

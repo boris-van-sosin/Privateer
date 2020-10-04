@@ -24,7 +24,7 @@ public class StrikeCraft : ShipBase
         }
         _recoverySpeed = MaxSpeed * 1f;
         _trail = GetComponent<TrailRenderer>();
-        _shipAI = GetComponent<StrikeCraftAIController>();
+        _shipAI = GetComponent<ShipAIHandle>();
     }
 
     protected override void Update()
@@ -101,6 +101,7 @@ public class StrikeCraft : ShipBase
         }
         ContainingFormation = f;
         ((StrikeCraftFormation)ContainingFormation).AddStrikeCraft(this);
+        f.GetComponent<FormationAIHandle>().AssignStrikeCraft(this);
     }
 
     public override void RemoveFromFormation()

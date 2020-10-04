@@ -14,7 +14,7 @@ public class CarrierBehavior : MonoBehaviour
         _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
         _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
         _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
-        _formations = new List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>>(MaxFormations);
+        _formations = new List<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>>(MaxFormations);
         _actionQueue = new LinkedList<(string, bool)>();
         foreach (string prodKey in ObjectFactory.GetAllStrikeCraftTypes())
         {
@@ -113,7 +113,7 @@ public class CarrierBehavior : MonoBehaviour
 
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation(strikeCraftKey);
         formation.DestroyOnEmpty = false;
-        _formations.Add(new ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>(formation, formation.GetComponent<StrikeCraftFormationAIController>(), strikeCraftKey));
+        _formations.Add(new ValueTuple<StrikeCraftFormation, FormationAIHandle, string>(formation, formation.GetComponent<FormationAIHandle>(), strikeCraftKey));
 
         onLaunchStart?.Invoke(this);
         yield return _endOfFrameWait;
@@ -157,7 +157,7 @@ public class CarrierBehavior : MonoBehaviour
                     {
                         formation.transform.position = formation.AllStrikeCraft().First().transform.position;
                         formation.transform.rotation = formation.AllStrikeCraft().First().transform.rotation;
-                        formation.GetComponent<StrikeCraftFormationAIController>().OrderEscort(_ship);
+                        formation.GetComponent<FormationAIHandle>().OrderEscort(_ship);
                         currStrikeCraft.IgnoreHits = false;
                     };
                 }
@@ -231,7 +231,7 @@ public class CarrierBehavior : MonoBehaviour
 
     public bool StartRecallFormation(string strikeCraftType)
     {
-        StrikeCraftFormationAIController c =
+        FormationAIHandle c =
             _formations.Where(f1 => f1.Item3 == strikeCraftType).Select(f2 => f2.Item2).FirstOrDefault();
         if (c != null)
         {
@@ -350,7 +350,7 @@ public class CarrierBehavior : MonoBehaviour
         };
     }
 
-    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>> ActiveFormationsOfType(string strikeCraftKey)
+    public IEnumerable<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>> ActiveFormationsOfType(string strikeCraftKey)
     {
         return _formations.Where(f => f.Item3 == strikeCraftKey);
     }
@@ -426,8 +426,8 @@ public class CarrierBehavior : MonoBehaviour
     private StrikeCraftFormation _currRecovering = null;
     private int _lastRecoveryHanger = 0;
 
-    private List<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>> _formations;
-    public IEnumerable<ValueTuple<StrikeCraftFormation, StrikeCraftFormationAIController, string>> ActiveFormations => _formations;
+    private List<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>> _formations;
+    public IEnumerable<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>> ActiveFormations => _formations;
     private Dictionary<string, int> _lockFormationNum = new Dictionary<string, int>();
 
     private LinkedList<ValueTuple<string, bool>> _actionQueue = new LinkedList<(string, bool)>();
