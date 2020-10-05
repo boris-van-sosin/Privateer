@@ -807,7 +807,7 @@ public class ShipsAIController : MonoBehaviour
         for (int i = 0; i < numHits; ++i)
         {
             int colliderLayer = 1 << _collidersCache[i].gameObject.layer;
-            bool validFollowTarget = (colliderLayer & TargetsToFollowLayerMask) != 0;
+            bool validFollowTarget = shipAI.IsStrikeCraft ? ((colliderLayer & TargetsToAttackLayerMask) != 0) : ((colliderLayer & TargetsToFollowLayerMask) != 0);
             bool validStaticAttackTarget = (colliderLayer & TargetsToAttackLayerMask) != 0;
             ShipBase s = ShipBase.FromCollider(_collidersCache[i]);
             if (Torpedo.FromCollider(_collidersCache[i]) != null)
@@ -1447,6 +1447,54 @@ public class ShipsAIController : MonoBehaviour
     }
     #endregion
 
+    void OnDrawGizmos()
+    {
+        for (int i = 0; i < _controlledShips.Count; ++i)
+        {
+            ShipAIData shipAI = _controlledShips[i];
+            if ((shipAI.ControlledShip == null) || !shipAI.ControlledShip.ShipControllable)
+            {
+                continue;
+            }
+
+            if (shipAI is StrikeCraftAIData strikeCraftAI)
+            {
+                if (strikeCraftAI.HitAndRunPhase)
+                {
+                    Gizmos.color = Color.red;
+                }
+                else
+                {
+                    Gizmos.color = DbgOrange;
+                }
+            }
+            else
+            {
+                Gizmos.color = Color.red;
+            }
+
+            switch (shipAI.CurrActivity)
+            {
+                case ShipActivity.Idle:
+                case ShipActivity.ControllingPosition:
+                case ShipActivity.ForceMoving:
+                case ShipActivity.Defending:
+                case ShipActivity.Launching:
+                case ShipActivity.NavigatingToRecovery:
+                case ShipActivity.StartingRecovery:
+                case ShipActivity.Recovering:
+                case ShipActivity.Attacking:
+                    Gizmos.DrawLine(shipAI.ControlledShip.transform.position, shipAI.NavTarget);
+                    break;
+                case ShipActivity.Following:
+                    Gizmos.DrawLine(shipAI.ControlledShip.transform.position, shipAI.FollowTarget.transform.position);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     private bool NextTacticsPulse() => Time.time >= _nextTacticsPulse;
 
     private Dictionary<ShipBase, int> _controlledShipsLookup = new Dictionary<ShipBase, int>();
@@ -1552,4 +1600,5 @@ public class ShipsAIController : MonoBehaviour
     private WaitUntil _tacticsDelay;
     private static readonly int _numAttackAngles = 12;
     private static readonly int _numAttackDistances = 3;
+    private static readonly Color DbgOrange = new Color(200, 200, 0);
 }
