@@ -23,7 +23,7 @@ public class StrikeCraft : ShipBase
             }
         }
         _recoverySpeed = MaxSpeed * 1f;
-        _trail = GetComponent<TrailRenderer>();
+        _trail = GetComponentInChildren<TrailRenderer>();
         _shipAI = GetComponent<ShipAIHandle>();
     }
 
@@ -205,6 +205,15 @@ public class StrikeCraft : ShipBase
         if (_trail != null)
         {
             _trail.enabled = true;
+        }
+    }
+
+    public void SetTrailColor(Color c)
+    {
+        if (_trail != null)
+        {
+            _trail.startColor = c;
+            _trail.endColor = c;
         }
     }
 

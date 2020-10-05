@@ -5,6 +5,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.AI;
 
+[Obsolete("Individal AI controllers are obsolete. Use ShipsAIController.")]
 public class StrikeCraftFormationAIController : MonoBehaviour
 {
     // Use this for initialization

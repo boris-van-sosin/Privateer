@@ -199,14 +199,6 @@ public class UserInput : MonoBehaviour
                 c.LaunchDbg();
             }
         }
-        else if (Input.GetKeyDown(KeyCode.R))
-        {
-            StrikeCraftFormationAIController sc = FindObjectOfType<StrikeCraftFormationAIController>();
-            if (sc != null)
-            {
-                sc.OrderReturnToHost();
-            }
-        }
 
         if (Input.GetKeyDown(_keyMapping[UserOperation.SwitchAmmo]))
         {

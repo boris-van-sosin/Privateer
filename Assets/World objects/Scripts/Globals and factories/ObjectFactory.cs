@@ -1343,7 +1343,29 @@ public static class ObjectFactory
     {
         _objCache.ShipCards.Release(c);
     }
-    private static ObjectCache _objCache = new ObjectCache();
+
+    public static StrikeCraftCard AcquireStrikeCraftCard(StrikeCraftFormation formation)
+    {
+        StrikeCraftCard res;
+        if (_objCache.StrikeCraftCards.Count > 0)
+        {
+            res = _objCache.StrikeCraftCards.Acquire();
+        }
+        else
+        {
+            res = _prototypes.CreateStrikeCraftCard();
+            RectTransform cardRT = res.GetComponent<RectTransform>();
+            cardRT.anchorMin = new Vector2(0f, 1f);
+            cardRT.anchorMax = new Vector2(0f, 1f);
+        }
+        res.AttachFormation(formation);
+        res.gameObject.SetActive(true);
+        return res;
+    }
+    public static void ReleaseStrikeCraftCard(StrikeCraftCard c)
+    {
+        _objCache.StrikeCraftCards.Release(c);
+    }
 
     public static Sprite GetShipPhoto(Ship s)
     {
@@ -1807,6 +1829,8 @@ public static class ObjectFactory
     public enum WeaponEffect { None, SmallExplosion, BigExplosion, FlakBurst, KineticImpactSparks, PlasmaExplosion, DamageElectricSparks }
     public enum ShipSize { Sloop = 0, Frigate = 1, Destroyer = 2, Cruiser = 3, CapitalShip = 4 }
     public enum TacMapEntityType { Torpedo, StrikeCraft, Sloop, Frigate, Destroyer, Cruiser, CapitalShip, StaticDefence }
+
+    private static ObjectCache _objCache = new ObjectCache();
 
     private static Dictionary<(string, string, string), WarheadDataEntry3> _gunWarheads = null;
     private static Dictionary<(string, string), WarheadDataEntry2> _otherWarheads = null;

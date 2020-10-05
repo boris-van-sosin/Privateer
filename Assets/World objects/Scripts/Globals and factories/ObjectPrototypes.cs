@@ -213,6 +213,11 @@ public class ObjectPrototypes : MonoBehaviour
         return Instantiate(ShipCard);
     }
 
+    public StrikeCraftCard CreateStrikeCraftCard()
+    {
+        return Instantiate(StrikeCraftSelectionCard);
+    }
+
     public LineRenderer CreateSelectionRing()
     {
         return Instantiate(SelectionRing);
@@ -245,6 +250,7 @@ public class ObjectPrototypes : MonoBehaviour
     public Camera ShipStatusPanelCamera;
 
     public SelectedShipCard ShipCard;
+    public StrikeCraftCard StrikeCraftSelectionCard;
 
     public LineRenderer SelectionRing;
 

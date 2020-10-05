@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+[Obsolete("Individal AI controllers are obsolete. Use ShipsAIController.")]
 public class StrikeCraftAIController : ShipAIController
 {
     protected override void Start()

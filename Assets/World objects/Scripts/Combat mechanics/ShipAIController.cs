@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.AI;
 using System;
 
+[Obsolete("Individal AI controllers are obsolete. Use ShipsAIController.")]
 public class ShipAIController : MonoBehaviour
 {
     // Use this for initialization

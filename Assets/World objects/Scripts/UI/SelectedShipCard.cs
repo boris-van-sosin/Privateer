@@ -88,7 +88,6 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
         Image img = CardImage.GetComponentsInChildren<Image>(false).Where(x => x.gameObject != CardImage.gameObject).First();
         img.sprite = ObjectFactory.GetShipPhoto(s);
 
-        _controlledShip = s;
         _controlledShipAI = s.GetComponent<ShipAIHandle>();
         AIButton.Value = _controlledShipAI.GetControlType() == ShipControlType.Autonomous;
     }
@@ -230,6 +229,15 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
             StopCoroutine(_openCloseCoroutine);
         }
         _openCloseCoroutine = StartCoroutine(SlowOpenClose(_open));
+    }
+
+    private void OpenStrikeCraftCards()
+    {
+        IReadOnlyList<(StrikeCraftFormation, FormationAIHandle, string)> formations = _controlledCarrierModule.ActiveFormations;
+        for (int i = 0; i < formations.Count; ++i)
+        {
+
+        } 
     }
 
     public TextMeshProUGUI ShipNameBox;

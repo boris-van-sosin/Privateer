@@ -140,6 +140,7 @@ public class CarrierBehavior : MonoBehaviour
                 s.AddToFormation(formation);
                 s.Activate();
                 s.AttachToHangerElevator(_elevatorBed[i]);
+                s.SetTrailColor(_ship.Owner.FactionColor);
                 formation.MaxSpeed = s.MaxSpeed * GlobalOtherConstants.StrikeCraftFormtionMaxSpeedFactor;
                 formation.TurnRate = s.TurnRate * GlobalOtherConstants.StrikeCraftFormtionTurnRateFactor;
                 currLaunchingStrikeCraft[i] = s;
@@ -427,7 +428,7 @@ public class CarrierBehavior : MonoBehaviour
     private int _lastRecoveryHanger = 0;
 
     private List<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>> _formations;
-    public IEnumerable<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>> ActiveFormations => _formations;
+    public IReadOnlyList<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>> ActiveFormations => _formations;
     private Dictionary<string, int> _lockFormationNum = new Dictionary<string, int>();
 
     private LinkedList<ValueTuple<string, bool>> _actionQueue = new LinkedList<(string, bool)>();

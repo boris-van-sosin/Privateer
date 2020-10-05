@@ -1364,11 +1364,7 @@ public class ShipsAIController : MonoBehaviour
             formationAI.CurrState = StrikeCraftFormationState.ReturningToHost;
             foreach (StrikeCraft craft in formationAI.ControlledFormation.AllStrikeCraft())
             {
-                StrikeCraftAIController ctl = craft.GetComponent<StrikeCraftAIController>();
-                if (ctl != null)
-                {
-                    ctl.OrderStartNavigatenToHost();
-                }
+                OrderStartNavigatenToHost(craft);
             }
             //
             Vector3 vecToRecovery = recoveryPosition.position - formationAI.ControlledFormation.transform.position;

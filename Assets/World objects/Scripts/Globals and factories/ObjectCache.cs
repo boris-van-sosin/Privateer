@@ -8,6 +8,7 @@ public class ObjectCache
     public ObjectCache()
     {
         ShipCards = new SpecificCache<SelectedShipCard>();
+        StrikeCraftCards = new SpecificCache<StrikeCraftCard>();
         ProjectileCache = new SpecificCache<Projectile>();
         HarpaxCache = new SpecificCache<HarpaxBehavior>();
         TorpedoCache = new SpecificCache<Torpedo>();
@@ -15,6 +16,7 @@ public class ObjectCache
     }
 
     public SpecificCache<SelectedShipCard> ShipCards { get; private set; }
+    public SpecificCache<StrikeCraftCard> StrikeCraftCards { get; private set; }
     private Dictionary<(string, string), CacheWithRecycler<ParticleSystem>> _particleSystemCache = new Dictionary<(string, string), CacheWithRecycler<ParticleSystem>>();
 
     public SpecificCache<Projectile> ProjectileCache { get; private set; }
@@ -62,6 +64,7 @@ public class ObjectCache
     public void ClearAll()
     {
         ShipCards.Clear();
+        StrikeCraftCards.Clear();
         ProjectileCache.Clear();
         HarpaxCableCache.Clear();
         TorpedoCache.Clear();
