@@ -55,6 +55,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
         AIButton.onValueChangedViaClick += AIButtonClicked;
 
+        onClosed += ClearStrikeCraftCards;
+
         _fighterPanelEnabled = _bomberPanelEnabled = true;
         _open = false;
         _currPhase = 0f;
@@ -73,6 +75,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
         _currPhase = 0f;
         _rt.sizeDelta = new Vector2(_closedWidth, _rt.sizeDelta.y);
 
+        onOpened -= OpenStrikeCraftCards;
+
         _openWidth = _closedWidth + CommandPanel.GetComponent<RectTransform>().sizeDelta.x;
         if ((_controlledCarrierModule = s.GetComponent<CarrierBehavior>()) != null)
         {
@@ -80,6 +84,10 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
             _openWidth += BomberPanel.GetComponent<RectTransform>().sizeDelta.x;
             FighterPanel.Attach(_controlledCarrierModule, "Fed Fighter");
             BomberPanel.Attach(_controlledCarrierModule, "Fed Torpedo Bomber");
+            onOpened += OpenStrikeCraftCards;
+            _controlledCarrierModule.onLaunchStart += OpenStrikeCraftCards;
+            _controlledCarrierModule.onRecoveryFinish += OpenStrikeCraftCards;
+            _controlledCarrierModule.onFormationRemoved += OpenStrikeCraftCards;
         }
         _fighterPanelEnabled = _bomberPanelEnabled = (_controlledCarrierModule != null);
 
@@ -90,6 +98,21 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
         _controlledShipAI = s.GetComponent<ShipAIHandle>();
         AIButton.Value = _controlledShipAI.GetControlType() == ShipControlType.Autonomous;
+    }
+
+    public void Detach()
+    {
+        onOpened -= OpenStrikeCraftCards;
+        _controlledCarrierModule.onLaunchStart -= OpenStrikeCraftCards;
+        _controlledCarrierModule.onRecoveryFinish -= OpenStrikeCraftCards;
+        _controlledCarrierModule.onFormationRemoved -= OpenStrikeCraftCards;
+        if (_controlledCarrierModule != null)
+        {
+            ClearStrikeCraftCards();
+        }
+        _controlledCarrierModule = null;
+        _controlledShip = null;
+        _controlledShipAI = null;
     }
 
     private void ImageClicked()
@@ -231,13 +254,49 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
         _openCloseCoroutine = StartCoroutine(SlowOpenClose(_open));
     }
 
+    private void OpenStrikeCraftCards(ICollapsable carrierPanel)
+    {
+        OpenStrikeCraftCards();
+    }
+
+    private void OpenStrikeCraftCards(CarrierBehavior carrier)
+    {
+        OpenStrikeCraftCards();
+    }
+
+    private void OpenStrikeCraftCards(CarrierBehavior carrier, StrikeCraftFormation formation)
+    {
+        OpenStrikeCraftCards();
+    }
+
     private void OpenStrikeCraftCards()
     {
+        ClearStrikeCraftCards();
         IReadOnlyList<(StrikeCraftFormation, FormationAIHandle, string)> formations = _controlledCarrierModule.ActiveFormations;
         for (int i = 0; i < formations.Count; ++i)
         {
+            StrikeCraftFormation formation = formations[i].Item1;
+            StrikeCraftCard card = ObjectFactory.AcquireStrikeCraftCard(formation);
+            if (card.transform.parent == null)
+            {
+                card.transform.SetParent(StrikeCraftPanel);
+            }
+        }
+    }
 
-        } 
+    private void ClearStrikeCraftCards(ICollapsable carrierPanel)
+    {
+        ClearStrikeCraftCards();
+    }
+
+    private void ClearStrikeCraftCards()
+    {
+        StrikeCraftCard[] cards = StrikeCraftPanel.GetComponentsInChildren<StrikeCraftCard>();
+        for (int i = 0; i < cards.Length; ++i)
+        {
+            cards[i].gameObject.SetActive(false);
+            ObjectFactory.ReleaseStrikeCraftCard(cards[i]);
+        }
     }
 
     public TextMeshProUGUI ShipNameBox;
@@ -257,6 +316,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
     private CarrierBehavior _controlledCarrierModule;
 
     public OnOffButton AIButton;
+
+    public RectTransform StrikeCraftPanel { get; set; }
 
     private bool _open;
     private float _closedWidth;

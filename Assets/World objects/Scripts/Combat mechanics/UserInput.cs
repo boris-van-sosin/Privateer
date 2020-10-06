@@ -27,6 +27,7 @@ public class UserInput : MonoBehaviour
     void Awake()
     {
         _selectionHandler.SelectedShipPanel = SelectedShipPanel;
+        _selectionHandler.SelectedStrikeCraftPanel = SelectedStrikeCraftPanel;
         _ammoStrings = new string[TurretBase.MaxWarheads];
         for (int i = 0; i < _ammoStrings.Length; ++i)
         {
@@ -305,6 +306,7 @@ public class UserInput : MonoBehaviour
     public ShipContextMenu ContextMenu;
     public bool DisplayContextMenu;
     public RectTransform SelectedShipPanel;
+    public RectTransform SelectedStrikeCraftPanel;
 
     private Camera _userCamera;
     private Vector3 _cameraOffset;

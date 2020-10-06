@@ -38,11 +38,15 @@ public class SelectionHandler
         if (SelectedShipPanel != null)
         {
             SelectedShipCard card = ObjectFactory.AcquireShipCard(s);
-            card.transform.SetParent(SelectedShipPanel);
-            RectTransform cardRT = card.GetComponent<RectTransform>();
-            float height = cardRT.rect.height;
-            float pivotOffset = (1f - cardRT.pivot.y) * height;
-            cardRT.anchoredPosition = new Vector2(cardRT.anchoredPosition.x, -pivotOffset);
+            if (card.StrikeCraftPanel == null)
+            {
+                card.transform.SetParent(SelectedShipPanel, false);
+                card.StrikeCraftPanel = SelectedStrikeCraftPanel;
+            }
+            //RectTransform cardRT = card.GetComponent<RectTransform>();
+            //float height = cardRT.rect.height;
+            //float pivotOffset = (1f - cardRT.pivot.y) * height;
+            //cardRT.anchoredPosition = new Vector2(cardRT.anchoredPosition.x, -pivotOffset);
             _selectedShipCards.Add(card);
         }
     }
@@ -114,8 +118,9 @@ public class SelectionHandler
         {
             foreach (SelectedShipCard card in _selectedShipCards)
             {
+                card.Detach();
                 ObjectFactory.ReleaseShipCard(card);
-                card.transform.SetParent(null);
+                card.gameObject.SetActive(false);
             }
             _selectedShipCards.Clear();
         }
@@ -138,6 +143,7 @@ public class SelectionHandler
     private List<SelectedShipCard> _selectedShipCards = new List<SelectedShipCard>();
 
     public RectTransform SelectedShipPanel { get; set; }
+    public RectTransform SelectedStrikeCraftPanel { get; set; }
 
     // Ugly optimization:
     private Collider[] _collidersCache = new Collider[1024];
