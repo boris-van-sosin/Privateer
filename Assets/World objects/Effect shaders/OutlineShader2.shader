@@ -8,6 +8,7 @@
         _NormalBias("Normal Outline Bias", Range(0,4)) = 1
         _DepthMult("Depth Outline Multiplier", Range(0,4)) = 1
         _DepthBias("Depth Outline Bias", Range(0,4)) = 1
+        _Threshold("Threshold", Range(0,1)) = 0.1
     }
 
     SubShader{
@@ -39,6 +40,7 @@
             float _NormalBias;
             float _DepthMult;
             float _DepthBias;
+            float _Threshold;
 
             //the object data that's put into the vertex shader
             struct appdata {
@@ -109,8 +111,9 @@
                 normalDifference = pow(normalDifference, _NormalBias);
 
                 float outline = saturate(normalDifference + depthDifference);
+                float outlineStep = step(_Threshold, outline);
                 float4 sourceColor = tex2D(_MainTex, i.uv);
-                float4 color = lerp(sourceColor, _OutlineColor, outline);
+                float4 color = lerp(sourceColor, _OutlineColor, outline * outlineStep);
                 return color;
             }
             ENDCG
