@@ -14,6 +14,30 @@ public class SelectionHandler
         Attack
     }
 
+    public void RegisterShip(Ship s)
+    {
+        if (_fleet.Any(x => x.SelectedShip == s))
+        {
+            Debug.LogWarningFormat("Attempted to add ship {0} to selection handler more than once.", s);
+            return;
+        }
+        SelectedShipCard card = ObjectFactory.AcquireShipCard(s);
+        if (card.StrikeCraftPanel == null)
+        {
+            card.transform.SetParent(SelectedShipPanel, false);
+            card.StrikeCraftPanel = SelectedStrikeCraftPanel;
+            card.ShipSelectionHandler = this;
+        }
+        ShipSelectionInfo shipItem = new ShipSelectionInfo()
+        {
+            SelectedShip = s,
+            ShipCard = card,
+            ShipAI = s.GetComponent<ShipAIHandle>(),
+            Selected = false
+        };
+        _fleet.Add(shipItem);
+    }
+
     public void ClickSelect(Collider colliderHit)
     {
         if (colliderHit != null)
@@ -22,32 +46,19 @@ public class SelectionHandler
             if (s2 != null && s2 is Ship)
             {
                 ClearSelection();
-                _fleetSelectedShips.Add(s2);
-                AddSelectedShipCard((Ship)s2);
-                s2.SetCircleSelectStatus(true);
+                for (int j = 0; j < _fleet.Count; ++j)
+                {
+                    if (_fleet[j].SelectedShip == s2)
+                    {
+                        _fleet[j] = SelectDeSelectShip(_fleet[j], true);
+                        break;
+                    }
+                }
             }
         }
         else
         {
             ClearSelection();
-        }
-    }
-
-    private void AddSelectedShipCard(Ship s)
-    {
-        if (SelectedShipPanel != null)
-        {
-            SelectedShipCard card = ObjectFactory.AcquireShipCard(s);
-            if (card.StrikeCraftPanel == null)
-            {
-                card.transform.SetParent(SelectedShipPanel, false);
-                card.StrikeCraftPanel = SelectedStrikeCraftPanel;
-            }
-            //RectTransform cardRT = card.GetComponent<RectTransform>();
-            //float height = cardRT.rect.height;
-            //float pivotOffset = (1f - cardRT.pivot.y) * height;
-            //cardRT.anchoredPosition = new Vector2(cardRT.anchoredPosition.x, -pivotOffset);
-            _selectedShipCards.Add(card);
         }
     }
 
@@ -65,9 +76,39 @@ public class SelectionHandler
             ShipBase s2 = ShipBase.FromCollider(_collidersCache[i]);
             if (s2 != null && s2 is Ship)
             {
-                _fleetSelectedShips.Add(s2);
-                AddSelectedShipCard((Ship)s2);
-                s2.SetCircleSelectStatus(true);
+                for (int j = 0; j < _fleet.Count; ++j)
+                {
+                    if (_fleet[j].SelectedShip == s2)
+                    {
+                        _fleet[j] = SelectDeSelectShip(_fleet[j], true);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void SelectDeSelectFromPanel(Ship s, bool select)
+    {
+        SelectDeSelectFromPanel(s, select, false);
+    }
+
+    public void SelectDeSelectFromPanel(Ship s, bool select, bool thisCardOnly)
+    {
+        for (int j = 0; j < _fleet.Count; ++j)
+        {
+            if (!thisCardOnly && _fleet[j].SelectedShip == s)
+            {
+                _fleet[j] = SelectDeSelectShip(_fleet[j], select, false);
+                break;
+            }
+            else if (select && thisCardOnly)
+            {
+                _fleet[j] = SelectDeSelectShip(_fleet[j], _fleet[j].SelectedShip == s, false);
+                if (_fleet[j].SelectedShip != s)
+                {
+                    _fleet[j].ShipCard.DeSelectCard();
+                }
             }
         }
     }
@@ -110,41 +151,63 @@ public class SelectionHandler
 
     private void ClearSelection()
     {
-        foreach (ShipBase sb in _fleetSelectedShips)
+        for (int i = 0; i < _fleet.Count; ++i)
         {
-            sb.SetCircleSelectStatus(false);
+            _fleet[i] = SelectDeSelectShip(_fleet[i], false);
         }
-        if (SelectedShipPanel != null)
+    }
+
+    private static ShipSelectionInfo SelectDeSelectShip(ShipSelectionInfo item, bool select)
+    {
+        return SelectDeSelectShip(item, select, true);
+    }
+
+    private static ShipSelectionInfo SelectDeSelectShip(ShipSelectionInfo item, bool select, bool needToUpdatePanel)
+    {
+        ShipSelectionInfo res = new ShipSelectionInfo()
         {
-            foreach (SelectedShipCard card in _selectedShipCards)
-            {
-                card.Detach();
-                ObjectFactory.ReleaseShipCard(card);
-                card.gameObject.SetActive(false);
-            }
-            _selectedShipCards.Clear();
+            SelectedShip = item.SelectedShip,
+            ShipAI = item.ShipAI,
+            ShipCard = item.ShipCard,
+            Selected = select
+        };
+        item.SelectedShip.SetCircleSelectStatus(select);
+        if (select && needToUpdatePanel)
+        {
+            item.ShipCard.SelectCard();
         }
-        _fleetSelectedShips.Clear();
+        else if (!select && needToUpdatePanel)
+        {
+            item.ShipCard.DeSelectCard();
+        }
+        return res;
     }
 
     private IEnumerable<ValueTuple<ShipBase, ShipAIHandle>> ControllableShips()
     {
-        foreach (Ship s2 in _fleetSelectedShips)
+        foreach (ShipSelectionInfo item in _fleet)
         {
-            ShipAIHandle controller = s2.GetComponent<ShipAIHandle>();
-            if (controller != null && !s2.ShipDisabled && !s2.ShipSurrendered)
+            ShipAIHandle controller = item.ShipAI;
+            if (item.Selected && controller != null && !item.SelectedShip.ShipDisabled && !item.SelectedShip.ShipSurrendered)
             {
-                yield return new ValueTuple<ShipBase, ShipAIHandle>(s2, controller);
+                yield return new ValueTuple<ShipBase, ShipAIHandle>(item.SelectedShip, controller);
             }
         }
     }
 
-    private List<ShipBase> _fleetSelectedShips = new List<ShipBase>();
-    private List<SelectedShipCard> _selectedShipCards = new List<SelectedShipCard>();
+    private List<ShipSelectionInfo> _fleet = new List<ShipSelectionInfo>();
 
     public RectTransform SelectedShipPanel { get; set; }
     public RectTransform SelectedStrikeCraftPanel { get; set; }
 
     // Ugly optimization:
     private Collider[] _collidersCache = new Collider[1024];
+
+    private struct ShipSelectionInfo
+    {
+        public Ship SelectedShip;
+        public SelectedShipCard ShipCard;
+        public ShipAIHandle ShipAI;
+        public bool Selected;
+    }
 }

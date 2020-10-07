@@ -11,7 +11,7 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
     void Awake()
     {
         _rt = GetComponent<RectTransform>();
-        CardImage.onClick.AddListener(ImageClicked);
+        CardImage.Clicked += CardClicked;
         _closedWidth = _openWidth = CardImage.GetComponent<RectTransform>().sizeDelta.x;
 
         _commandPanelImages = CommandPanel.GetComponentsInChildren<MaskableGraphic>(true).Select(x => new Tuple<MaskableGraphic, float>(x, x.color.a)).ToArray();
@@ -115,7 +115,55 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
         _controlledShipAI = null;
     }
 
-    private void ImageClicked()
+    public void SelectCard()
+    {
+        _selected = true;
+        BorderHighlight.gameObject.SetActive(true);
+        ShipSelectionHandler.SelectDeSelectFromPanel(_controlledShip, _selected);
+    }
+
+    public void SelectThisCardOnly()
+    {
+        _selected = true;
+        BorderHighlight.gameObject.SetActive(true);
+        ShipSelectionHandler.SelectDeSelectFromPanel(_controlledShip, _selected, true);
+    }
+
+    public void DeSelectCard()
+    {
+        _selected = false;
+        if (_open)
+        {
+            Close();
+        }
+        BorderHighlight.gameObject.SetActive(false);
+        ShipSelectionHandler.SelectDeSelectFromPanel(_controlledShip, _selected);
+    }
+
+    private void CardClicked(ExtendedClickListener.ClickModifier modifier)
+    {
+        if ((modifier & ExtendedClickListener.ClickModifier.Shift) != ExtendedClickListener.ClickModifier.None)
+        {
+            if (_selected)
+            {
+                DeSelectCard();
+            }
+            else
+            {
+                SelectCard();
+            }
+        }
+        else if (modifier == ExtendedClickListener.ClickModifier.None)
+        {
+            if (!_selected)
+            {
+                SelectThisCardOnly();
+            }
+            ToggleCardOpen();
+        }
+    }
+
+    private void ToggleCardOpen()
     {
         if (_open)
         {
@@ -252,6 +300,21 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
             StopCoroutine(_openCloseCoroutine);
         }
         _openCloseCoroutine = StartCoroutine(SlowOpenClose(_open));
+        if (_open)
+        {
+            if (_controlledCarrierModule != null)
+            {
+                OpenStrikeCraftCards();
+            }
+            AIButton.Value = _controlledShipAI.GetControlType() == ShipControlType.Autonomous;
+        }
+        else
+        {
+            if (_controlledCarrierModule != null)
+            {
+                ClearStrikeCraftCards();
+            }
+        }
     }
 
     private void OpenStrikeCraftCards(ICollapsable carrierPanel)
@@ -271,15 +334,18 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
     private void OpenStrikeCraftCards()
     {
-        ClearStrikeCraftCards();
-        IReadOnlyList<(StrikeCraftFormation, FormationAIHandle, string)> formations = _controlledCarrierModule.ActiveFormations;
-        for (int i = 0; i < formations.Count; ++i)
+        if (_selected)
         {
-            StrikeCraftFormation formation = formations[i].Item1;
-            StrikeCraftCard card = ObjectFactory.AcquireStrikeCraftCard(formation);
-            if (card.transform.parent == null)
+            ClearStrikeCraftCards();
+            IReadOnlyList<(StrikeCraftFormation, FormationAIHandle, string)> formations = _controlledCarrierModule.ActiveFormations;
+            for (int i = 0; i < formations.Count; ++i)
             {
-                card.transform.SetParent(StrikeCraftPanel);
+                StrikeCraftFormation formation = formations[i].Item1;
+                StrikeCraftCard card = ObjectFactory.AcquireStrikeCraftCard(formation);
+                if (card.transform.parent == null)
+                {
+                    card.transform.SetParent(StrikeCraftPanel);
+                }
             }
         }
     }
@@ -300,7 +366,8 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
     }
 
     public TextMeshProUGUI ShipNameBox;
-    public Button CardImage;
+    public ExtendedClickListener CardImage;
+    public RectTransform BorderHighlight;
     public RectTransform CommandPanel;
     public StrikeCraftCommandPanel FighterPanel;
     public StrikeCraftCommandPanel BomberPanel;
@@ -317,8 +384,10 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
 
     public OnOffButton AIButton;
 
+    public SelectionHandler ShipSelectionHandler { get; set; }
     public RectTransform StrikeCraftPanel { get; set; }
 
+    private bool _selected;
     private bool _open;
     private float _closedWidth;
     private float _openWidth;

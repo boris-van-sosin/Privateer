@@ -28,6 +28,7 @@ public class UserInput : MonoBehaviour
     {
         _selectionHandler.SelectedShipPanel = SelectedShipPanel;
         _selectionHandler.SelectedStrikeCraftPanel = SelectedStrikeCraftPanel;
+
         _ammoStrings = new string[TurretBase.MaxWarheads];
         for (int i = 0; i < _ammoStrings.Length; ++i)
         {
@@ -297,6 +298,9 @@ public class UserInput : MonoBehaviour
                 _controlledShipAI = null;
         }
     }
+
+    public SelectionHandler ShipSelectionHandler => _selectionHandler;
+
     private Ship _controlledShip;
     private ShipAIHandle _controlledShipAI;
     private bool _grapplingMode = false; // temporary

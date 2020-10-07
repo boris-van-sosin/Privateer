@@ -7,13 +7,8 @@ using System;
 [RequireComponent(typeof(ShipBase))]
 public class CarrierBehavior : MonoBehaviour
 {
-    private void Start()
+    void Awake()
     {
-        _ship = GetComponent<ShipBase>();
-        _launchTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierLaunchTr")).ToArray();
-        _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
-        _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
-        _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
         _formations = new List<ValueTuple<StrikeCraftFormation, FormationAIHandle, string>>(MaxFormations);
         _actionQueue = new LinkedList<(string, bool)>();
         foreach (string prodKey in ObjectFactory.GetAllStrikeCraftTypes())
@@ -23,6 +18,15 @@ public class CarrierBehavior : MonoBehaviour
         }
         _inLaunch = false;
         _inRecovery = false;
+    }
+
+    void Start()
+    {
+        _ship = GetComponent<ShipBase>();
+        _launchTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierLaunchTr")).ToArray();
+        _recoveryStartTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryStartTr")).ToArray();
+        _recoveryEndTransform = CarrierHangerAnim.Select(t => t.transform.Find("CarrierRecoveryEndTr")).ToArray();
+        _elevatorBed = CarrierHangerAnim.Select(t => t.transform.Find("Elevator")).ToArray();
     }
 
     public void LaunchDbg()

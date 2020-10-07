@@ -37,6 +37,7 @@ public class BattleSceneParamsReader : MonoBehaviour
                 s.OnShipDisabled += UpdateShipStatus;
                 _faction1Ships[idx1] = (s, true, args.Faction1Ships[idx1].ShipSpriteKey);
                 ++idx1;
+                InputControl.ShipSelectionHandler.RegisterShip(s);
                 yield return _waitFrame;
             }
 
@@ -48,6 +49,10 @@ public class BattleSceneParamsReader : MonoBehaviour
 
                 s.OnShipDisabled += UpdateShipStatus;
                 _faction2Ships[idx2] = (s, true, args.Faction2Ships[idx2].ShipSpriteKey);
+
+                // Debug only:
+                InputControl.ShipSelectionHandler.RegisterShip(s);
+
                 ++idx2;
                 yield return _waitFrame;
             }
