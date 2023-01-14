@@ -63,10 +63,10 @@ public static class HierarchySerializer
 
         YamlDotNet.Serialization.SerializerBuilder builder = new SerializerBuilder();
         builder.EnsureRoundtrip();
-        builder.EmitDefaultsForValueTypes();
+        builder.ConfigureDefaultValuesHandling(DefaultValuesHandling.Preserve);//.EmitDefaultsForValueTypes();
         builder.DisableAliases();
         //builder.WithTypeResolver(tr);
-        YamlDotNet.Serialization.Serializer s = builder.Build();
+        YamlDotNet.Serialization.ISerializer s = builder.Build();
 
         System.IO.StringWriter tw = new System.IO.StringWriter();
         s.Serialize(tw, toSerialize, targetType);
