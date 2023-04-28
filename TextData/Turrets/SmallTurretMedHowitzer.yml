@@ -1,0 +1,122 @@
+Geometry:
+  Name: Small turret
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 0
+    y: 0
+    z: 0
+  Scale:
+    x: 1
+    y: 1
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Turret
+    Position:
+      x: 0
+      y: -0
+      z: 0
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 1
+      y: 1
+      z: 1
+    NodeMesh:
+      AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+      AssetPath: 'guns new'
+      MeshPath: Small turret
+      DoCombine: true
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes:
+    - Name: Howitzer sleeve L
+      Position:
+        x: 0
+        y: 0.004
+        z: 0.002
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1.33333325
+        y: 1.33333325
+        z: 1.33333325
+      NodeMesh:
+        AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+        AssetPath: 'guns new'
+        MeshPath: Howitzer sleeve L
+        DoCombine: true
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes:
+      - Name: Howitzer barrel
+        Position:
+          x: 0
+          y: -0.0005
+          z: 0
+        Rotation:
+          x: 0
+          y: 0
+          z: 0
+        Scale:
+          x: 1
+          y: 1
+          z: 1
+        NodeMesh:
+          AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
+          AssetPath: 'guns new'
+          MeshPath: Howitzer barrel L
+          DoCombine: true
+        NodeParticleSystem: 
+        OpenCloseData: 
+        SubNodes:
+        - Name: Muzzle1
+          Position:
+            x: 0
+            y: 0.00462913606
+            z: 0
+          Rotation:
+            x: 0
+            y: 0
+            z: 0
+          Scale:
+            x: 1
+            y: 1
+            z: 1
+          NodeMesh: 
+          NodeParticleSystem: 
+          SubNodes:
+          - Name: MuzzleFlashEffect
+            Position:
+              x: 0
+              y: 0.0023
+              z: 0
+            Rotation:
+              x: 0
+              y: 0
+              z: 90
+            Scale:
+              x: 0.1
+              y: 0.1
+              z: 0.1
+            NodeMesh: 
+            NodeParticleSystem:
+              AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'
+              AssetPath: 'MuzzleFlashMediumEffect'
+              ParticleSystemPath: ''
+            SubNodes: []
+TurretAxis: YAxis
+TurretType: LightTurret
+WeaponNum: 1
+WeaponSize: Medium
+WeaponType: Howitzer
+BehaviorType: Gun

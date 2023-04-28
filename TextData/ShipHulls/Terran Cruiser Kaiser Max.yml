@@ -1,0 +1,1193 @@
+HullName: Kaiser Max
+ShipSize: Cruiser
+ShipType: Light Cruiser
+Geometry:
+  Name: Hull
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - cruiser kaiser max
+    MeshPath: Kaiser Max hull
+    DoCombine: true
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes: []
+CollisionMesh:
+  AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+  AssetPath: terran - cruiser kaiser max collision
+  MeshPath: ''
+  DoCombine: false
+MovementData:
+  MaxSpeed: 0.83
+  Thrust: 0.085
+  Braking: 0.83
+  TurnRate: 26
+TeamColorComponents:
+- Name: Team color
+  Position:
+    x: 0
+    y: 0
+    z: -0.14
+  Rotation:
+    x: 270
+    y: 0
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh:
+    AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+    AssetPath: terran - cruiser kaiser max
+    MeshPath: Kaiser Max teamcolor
+    DoCombine: false
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes: []
+ComponentSlots:
+  CenterComponentSlots:
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  - ShipSystemCenter
+  ForeComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  AftComponentSlots:
+  - Engine
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  LeftComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+  RightComponentSlots:
+  - ShipSystem
+  - ShipSystem
+  - ShipSystem
+WeaponHardpoints:
+- HardpointNode:
+    Name: Barbette A
+    Position:
+      x: 0
+      y: 0.11
+      z: 0.7533
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Fore Barbette
+    MinRotation: 60
+    MaxRotation: 300
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumBarbette2Medium
+    LocationOnShip: Fore
+    WeaponAIHint: Main
+    DefaultGroup: 1
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Barbette X
+    Position:
+      x: 0
+      y: 0.1
+      z: -0.98
+    Rotation:
+      x: 270
+      y: 0
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Aft Barbette
+    MinRotation: 260
+    MaxRotation: 100
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumBarbette2Medium
+    LocationOnShip: Aft
+    WeaponAIHint: Main
+    DefaultGroup: 1
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Single med gun R1
+    Position:
+      x: 0.336
+      y: 0.025
+      z: 0.33
+    Rotation:
+      x: 270
+      y: 225
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Gun 1
+    MinRotation: 185
+    MaxRotation: 290
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightTurret1Medium
+    LocationOnShip: Right
+    WeaponAIHint: Main
+    DefaultGroup: 2
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Single med gun L1
+    Position:
+      x: -0.336
+      y: 0.025
+      z: 0.33
+    Rotation:
+      x: 270
+      y: 135
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Left Gun 1
+    MinRotation: 70
+    MaxRotation: 175
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightTurret1Medium
+    LocationOnShip: Left
+    WeaponAIHint: Main
+    DefaultGroup: 3
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Dual med gun R1
+    Position:
+      x: 0.295
+      y: 0.025
+      z: 0.1684
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Guns (dual) 2
+    MinRotation: 250
+    MaxRotation: 290
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Right
+    WeaponAIHint: Main
+    DefaultGroup: 2
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Dual med gun L1
+    Position:
+      x: -0.295
+      y: 0.025
+      z: 0.1684
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Left Guns (dual) 2
+    MinRotation: 70
+    MaxRotation: 110
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Left
+    WeaponAIHint: Main
+    DefaultGroup: 3
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Dual med gun R2
+    Position:
+      x: 0.295
+      y: 0.025
+      z: -0.06
+    Rotation:
+      x: 270
+      y: 270
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Guns (dual) 3
+    MinRotation: 250
+    MaxRotation: 290
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Right
+    WeaponAIHint: Main
+    DefaultGroup: 3
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Dual med gun L2
+    Position:
+      x: -0.295
+      y: 0.025
+      z: -0.06
+    Rotation:
+      x: 270
+      y: 90
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Left Guns (dual) 3
+    MinRotation: 70
+    MaxRotation: 110
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - MediumTurret2Medium
+    LocationOnShip: Left
+    WeaponAIHint: Main
+    DefaultGroup: 3
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Single med gun R2
+    Position:
+      x: 0.336
+      y: 0.025
+      z: -0.233
+    Rotation:
+      x: 270
+      y: 315
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Gun 4
+    MinRotation: 250
+    MaxRotation: 355
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightTurret1Medium
+    LocationOnShip: Right
+    WeaponAIHint: Main
+    DefaultGroup: 2
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Single med gun L2
+    Position:
+      x: -0.336
+      y: 0.025
+      z: -0.233
+    Rotation:
+      x: 270
+      y: 45
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Left Gun 4
+    MinRotation: 5
+    MaxRotation: 110
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightTurret1Medium
+    LocationOnShip: Left
+    WeaponAIHint: Main
+    DefaultGroup: 3
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Light gun R1
+    Position:
+      x: 0.24
+      y: 0.1
+      z: 0.27
+    Rotation:
+      x: 270
+      y: 315
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Light Gun 1
+    MinRotation: 235
+    MaxRotation: 340
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Right
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Light gun L1
+    Position:
+      x: -0.24
+      y: 0.1
+      z: 0.27
+    Rotation:
+      x: 270
+      y: 135
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Light Gun 1
+    MinRotation: 20
+    MaxRotation: 125
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Left
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Light gun R2
+    Position:
+      x: 0.24
+      y: 0.1
+      z: -0.37
+    Rotation:
+      x: 270
+      y: 315
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Light Gun 2
+    MinRotation: 195
+    MaxRotation: 315
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Right
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Light gun L2
+    Position:
+      x: -0.24
+      y: 0.1
+      z: -0.37
+    Rotation:
+      x: 270
+      y: 45
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint:
+    DisplayString: Right Light Gun 1
+    MinRotation: 45
+    MaxRotation: 165
+    DeadZoneAngles: []
+    TreatAsFixed: false
+    AllowedWeaponTypes:
+    - LightBarbette1Light
+    LocationOnShip: Left
+    WeaponAIHint: CloseIn
+    DefaultGroup: 4
+  TorpedoHardpoint: 
+- HardpointNode:
+    Name: Torpedo tube R
+    Position:
+      x: 0.31
+      y: 0
+      z: 0.575
+    Rotation:
+      x: 354.1
+      y: 90
+      z: 90
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint: 
+  TorpedoHardpoint:
+    HardpointBaseDefinition:
+      DisplayString: Torp R
+      MinRotation: 170
+      MaxRotation: 330
+      DeadZoneAngles: []
+      TreatAsFixed: false
+      AllowedWeaponTypes:
+      - TorpedoTube
+      LocationOnShip: Right
+      WeaponAIHint: Secondary
+      DefaultGroup: 5
+    LaunchVector:
+      x: 0.1
+      y: 1
+      z: 0.3
+- HardpointNode:
+    Name: Torpedo tube L
+    Position:
+      x: -0.31
+      y: 0
+      z: 0.575
+    Rotation:
+      x: 354.1
+      y: 270
+      z: 270
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData: 
+    SubNodes: []
+  TurretHardpoint: 
+  TorpedoHardpoint:
+    HardpointBaseDefinition:
+      DisplayString: Torp R
+      MinRotation: 30
+      MaxRotation: 190
+      DeadZoneAngles: []
+      TreatAsFixed: false
+      AllowedWeaponTypes:
+      - TorpedoTube
+      LocationOnShip: Left
+      WeaponAIHint: Secondary
+      DefaultGroup: 5
+    LaunchVector:
+      x: -0.1
+      y: 1
+      z: 0.3
+HullProtection:
+  HullHitpoints: 100000
+  Armour:
+    ForeValue: 675
+    AftValue: 650
+    LeftValue: 675
+    RightValue: 675
+  ReducedArmour:
+    ForeValue: 230
+    AftValue: 220
+    LeftValue: 230
+    RightValue: 230
+  MitigationArmour:
+    ForeValue: 425
+    AftValue: 325
+    LeftValue: 425
+    RightValue: 425
+  ArmourMitigation: 0.65
+Mass: 0
+SkeletonCrew: 22
+OperationalCrew: 85
+MaxCrew: 120
+MaxSpecialCharacters: 3
+Shield:
+  Name: Shield
+  Position:
+    x: 0
+    y: 0.117
+    z: -0.054
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.87541008
+    y: 1.51067853
+    z: 0.833175123
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes: []
+MagneticField:
+  Name: MagneticField
+  Position:
+    x: 0
+    y: 0
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 0.414899975
+    y: 1.35433519
+    z: 1
+  NodeMesh: 
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: MagneticField
+    ParticleSystemPath: ''
+  OpenCloseData: 
+  SubNodes: []
+DamageSmoke:
+  Name: Damage smoke effect
+  Position:
+    x: 0
+    y: 0.01
+    z: -1.333
+  Rotation:
+    x: 0
+    y: 270
+    z: 0
+  Scale:
+    x: 0.2
+    y: 0.2
+    z: 0.2
+  NodeMesh: 
+  NodeParticleSystem:
+    AssetBundlePath: AssetBundles\StandaloneWindows\effects
+    AssetPath: Damage smoke effect
+    ParticleSystemPath: ''
+  OpenCloseData: 
+  SubNodes: []
+EngineExhaustOn:
+  Name: Engine exhaust on
+  Position:
+    x: 0
+    y: 0.01
+    z: -1.2995
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.006
+      y: -0.0221
+      z: -0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.14
+      y: 0.14
+      z: 0.14
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust R Small 1
+    Position:
+      x: -0.0131356
+      y: -0.00776
+      z: -0.0035
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust R Small 2
+    Position:
+      x: -0.0146356
+      y: -0.0082
+      z: 0.00189
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.006
+      y: -0.0221
+      z: -0.002
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.14
+      y: 0.14
+      z: 0.14
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L Small 1
+    Position:
+      x: 0.0131356
+      y: -0.00776
+      z: -0.0035
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L Small 2
+    Position:
+      x: 0.0146356
+      y: -0.0082
+      z: 0.00189
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.07
+      y: 0.07
+      z: 0.07
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+EngineExhaustIdle:
+  Name: Engine exhaust idle
+  Position:
+    x: 0
+    y: 0.01
+    z: -1.2995
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.006
+      y: -0.0066
+      z: -0.0015
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.06
+      y: 0.06
+      z: 0.06
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust R Small 1
+    Position:
+      x: -0.0131356
+      y: -0.0015
+      z: -0.0026
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust R Small 2
+    Position:
+      x: -0.0146356
+      y: -0.0015
+      z: 0.0019
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.006
+      y: -0.0066
+      z: -0.0015
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.06
+      y: 0.06
+      z: 0.06
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L Small 1
+    Position:
+      x: 0.0131356
+      y: -0.0015
+      z: -0.0026
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L Small 2
+    Position:
+      x: 0.0146356
+      y: -0.0015
+      z: 0.0019
+    Rotation:
+      x: 90
+      y: 0
+      z: 0
+    Scale:
+      x: 0.025
+      y: 0.025
+      z: 0.025
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+EngineExhaustBrake:
+  Name: Engine exhaust brake
+  Position:
+    x: 0
+    y: 0.0081535
+    z: -0.74
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes:
+  - Name: Engine exhaust R
+    Position:
+      x: -0.033
+      y: 0.0038
+      z: 0
+    Rotation:
+      x: 283.419342
+      y: 270
+      z: 270
+    Scale:
+      x: 0.14
+      y: 0.14
+      z: 0.14
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+  - Name: Engine exhaust L
+    Position:
+      x: 0.033
+      y: 0.0038
+      z: 0
+    Rotation:
+      x: 283.418945
+      y: 90
+      z: 90
+    Scale:
+      x: 0.14
+      y: 0.14
+      z: 0.14
+    NodeMesh: 
+    NodeParticleSystem:
+      AssetBundlePath: AssetBundles\StandaloneWindows\effects
+      AssetPath: Engine exhaust
+      ParticleSystemPath: ''
+    OpenCloseData: 
+    SubNodes: []
+StatusRing:
+  Name: StatusRing
+  Position:
+    x: 0
+    y: -0.15
+    z: 0
+  Rotation:
+    x: 270
+    y: 180
+    z: 0
+  Scale:
+    x: 10
+    y: 10
+    z: 10
+  NodeMesh: 
+  NodeParticleSystem: 
+  OpenCloseData: 
+  SubNodes: []
+CarrierModuleData:
+  MaxFormations: 1
+  HangerRootNodes:
+  - Name: CarrierHanger1
+    Position:
+      x: 0
+      y: 0.15
+      z: -0.686999977
+    Rotation:
+      x: 270
+      y: 180
+      z: 0
+    Scale:
+      x: 10
+      y: 10
+      z: 10
+    NodeMesh: 
+    NodeParticleSystem: 
+    OpenCloseData:
+      AnimComponentPaths:
+      - Cover
+      - Elevator
+      ClosedState:
+        Positions:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: -0.01335
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 0
+      OpenState:
+        Positions:
+        - x: 0
+          y: 0.034
+          z: -0.0055
+        - x: 0
+          y: 0
+          z: 0
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 1.5
+      AnimWaypoints:
+      - Positions:
+        - x: 0
+          y: 0
+          z: -0.0055
+        - x: 0
+          y: 0
+          z: -0.01335
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 0.1
+      - Positions:
+        - x: 0
+          y: 0.034
+          z: -0.0055
+        - x: 0
+          y: 0
+          z: -0.01335
+        Rotations:
+        - x: 0
+          y: 0
+          z: 0
+        - x: 0
+          y: 0
+          z: 0
+        Duration: 0.9
+    SubNodes:
+    - Name: Cover
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+        AssetPath: terran - cruiser kaiser max
+        MeshPath: Kaiser Max elevator
+        DoCombine: false
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+    - Name: Elevator
+      Position:
+        x: 0
+        y: 0
+        z: -0.01335
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh:
+        AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
+        AssetPath: terran - cruiser kaiser max
+        MeshPath: Kaiser Max elevator cover
+        DoCombine: false
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+    - Name: CarrierLaunchTr
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 180
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh: 
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+    - Name: CarrierRecoveryEndTr
+      Position:
+        x: 0
+        y: 0
+        z: 0
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh: 
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []
+    - Name: CarrierRecoveryStartTr
+      Position:
+        x: 0
+        y: -0.0839948952
+        z: 0.053
+      Rotation:
+        x: 0
+        y: 0
+        z: 0
+      Scale:
+        x: 1
+        y: 1
+        z: 1
+      NodeMesh: 
+      NodeParticleSystem: 
+      OpenCloseData: 
+      SubNodes: []

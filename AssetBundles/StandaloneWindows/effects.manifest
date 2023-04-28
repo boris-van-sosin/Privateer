@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 765398361
+CRC: 3111539578
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b101d1dddca4e4127dbccc5a397457a5
+    Hash: 7697ab75e866b434e9444f76f9d90a29
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b70b9d9803317659e8894411ef7323cb
+    Hash: 064e993a90fc97f51102a44c2e45bb25
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,23 +27,24 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 199
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/EffectExamples/Misc Effects/Prefabs/ElectricalSparksEffect.prefab
 - Assets/EffectExamples/Engine Effects/Engine exhaust.prefab
-- Assets/EffectExamples/Misc Effects/Prefabs/BlueLightning.prefab
-- Assets/EffectExamples/Shared/Prefabs/ParticlesLight.prefab
-- Assets/EffectExamples/FireExplosionEffects/Prefabs/PlasmaExplosionEffect.prefab
-- Assets/EffectExamples/WeaponEffects/Prefabs/BulletImpactMetalEffect no Decal.prefab
-- Assets/EffectExamples/Misc Effects/Prefabs/Damage smoke effect.prefab
+- Assets/EffectExamples/WeaponEffects/Prefabs/MuzzleFlashMediumEffect.prefab
 - Assets/EffectExamples/WeaponEffects/Prefabs/PlasmaProjectile.prefab
-- Assets/EffectExamples/WeaponEffects/Materials/MuzzleFlashParticle.mat
+- Assets/EffectExamples/Misc Effects/Prefabs/ElectricalSparksEffect.prefab
+- Assets/EffectExamples/Shared/Prefabs/ParticlesLight.prefab
+- Assets/EffectExamples/Misc Effects/Prefabs/BlueLightning.prefab
+- Assets/EffectExamples/FireExplosionEffects/Prefabs/PlasmaExplosionEffect.prefab
+- Assets/EffectExamples/Misc Effects/Prefabs/GasVentEffect.prefab
+- Assets/EffectExamples/FireExplosionEffects/Prefabs/BigExplosionEffect.prefab
+- Assets/EffectExamples/FireExplosionEffects/Prefabs/SmallExplosionEffect.prefab
 - Assets/EffectExamples/WeaponEffects/Prefabs/MuzzleFlashSmallEffect.prefab
+- Assets/EffectExamples/WeaponEffects/Prefabs/BulletImpactMetalEffect no Decal.prefab
+- Assets/EffectExamples/WeaponEffects/Materials/MuzzleFlashParticle.mat
+- Assets/EffectExamples/WeaponEffects/Prefabs/MuzzleFlashLargeEffect.prefab
+- Assets/EffectExamples/Misc Effects/Prefabs/Damage smoke effect.prefab
 - Assets/EffectExamples/FireExplosionEffects/Prefabs/FlakSmallExplosionEffect.prefab
 - Assets/EffectExamples/Misc Effects/Prefabs/MagneticField.prefab
 - Assets/EffectExamples/WeaponEffects/Textures/FlashParticle.tif
-- Assets/EffectExamples/WeaponEffects/Prefabs/MuzzleFlashMediumEffect.prefab
-- Assets/EffectExamples/Misc Effects/Prefabs/GasVentEffect.prefab
-- Assets/EffectExamples/WeaponEffects/Prefabs/MuzzleFlashLargeEffect.prefab
-- Assets/EffectExamples/FireExplosionEffects/Prefabs/SmallExplosionEffect.prefab
-- Assets/EffectExamples/FireExplosionEffects/Prefabs/BigExplosionEffect.prefab
 Dependencies: []
