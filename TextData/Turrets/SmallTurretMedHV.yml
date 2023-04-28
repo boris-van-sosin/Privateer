@@ -37,7 +37,7 @@ Geometry:
     NodeParticleSystem: 
     OpenCloseData: 
     SubNodes:
-    - Name: Howitzer sleeve L
+    - Name: Sleeve1
       Position:
         x: 0
         y: 0.004
@@ -53,15 +53,15 @@ Geometry:
       NodeMesh:
         AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
         AssetPath: 'guns new'
-        MeshPath: Howitzer sleeve L
+        MeshPath: HV gun sleeve L
         DoCombine: true
       NodeParticleSystem: 
       OpenCloseData: 
       SubNodes:
-      - Name: Howitzer barrel
+      - Name: Barrel1
         Position:
           x: 0
-          y: -0.0005
+          y: -0.0009
           z: 0
         Rotation:
           x: 0
@@ -74,7 +74,7 @@ Geometry:
         NodeMesh:
           AssetBundlePath: 'AssetBundles\StandaloneWindows\weapons'
           AssetPath: 'guns new'
-          MeshPath: Howitzer barrel L
+          MeshPath: HV gun barrel L
           DoCombine: true
         NodeParticleSystem: 
         OpenCloseData: 
@@ -82,7 +82,7 @@ Geometry:
         - Name: Muzzle1
           Position:
             x: 0
-            y: 0.00462913606
+            y: 0.006625
             z: 0
           Rotation:
             x: 0
@@ -118,5 +118,5 @@ TurretAxis: YAxis
 TurretType: LightTurret
 WeaponNum: 1
 WeaponSize: Medium
-WeaponType: Howitzer
+WeaponType: HVGun
 BehaviorType: Gun

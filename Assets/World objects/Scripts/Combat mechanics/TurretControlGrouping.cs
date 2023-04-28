@@ -31,8 +31,16 @@ public class TurretControlGrouping
                     if (hp.name == k)
                     {
                         TurretBase currTurret = hp.GetComponentInChildren<TurretBase>();
-                        currTurret.SetTurretBehavior(res.ControlGroupDefaultStatus[group.GroupNum]);
-                        weaponsInGroup.Add(currTurret);
+                        if (currTurret != null)
+                        {
+                            currTurret.SetTurretBehavior(res.ControlGroupDefaultStatus[group.GroupNum]);
+                            weaponsInGroup.Add(currTurret);
+                        }
+                        else
+                        {
+                            Debug.LogWarningFormat("Tried to bind empty weapon hardpoint {0} to weapon control group {1}.: {0}.",
+                                                   hp.DisplayString, group.GroupNum);
+                        }
                         break;
                     }
                 }
