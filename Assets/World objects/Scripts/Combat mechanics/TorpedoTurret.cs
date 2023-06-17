@@ -8,7 +8,7 @@ public class TorpedoTurret : TurretBase
 {
     protected override void SetDefaultAngle()
     {
-        _defaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
+        DefaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
     }
 
     protected override void ParseMuzzles()
@@ -44,7 +44,7 @@ public class TorpedoTurret : TurretBase
         return FindMuzzles(transform).FirstOrDefault();
     }
 
-    public override void ManualTarget(Vector3 target)
+    public override void ManualTarget(Vector3 target, bool idle)
     {
         if (!_initialized)
         {

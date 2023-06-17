@@ -58,7 +58,7 @@ public class BomberTorpedoLauncher : TurretBase
         _warheads[0] = launchData.Item4;
     }
 
-    public override void ManualTarget(Vector3 target)
+    public override void ManualTarget(Vector3 target, bool idle)
     {
         if (!_initialized)
         {
@@ -190,7 +190,7 @@ public class BomberTorpedoLauncher : TurretBase
 
     protected override void SetDefaultAngle()
     {
-        _defaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
+        DefaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
     }
 
     private Vector3 LaunchVector

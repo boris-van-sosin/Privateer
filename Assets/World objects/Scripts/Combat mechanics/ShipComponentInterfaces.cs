@@ -48,6 +48,7 @@ public interface IShipActiveComponent : IShipComponent
 public interface ITurret : IShipActiveComponent
 {
     void ManualTarget(Vector3 target);
+    void ManualTarget(Vector3 target, bool idle);
     void Fire(Vector3 target);
     bool HasGrapplingTool();
     void FireGrapplingTool(Vector3 target);

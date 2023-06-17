@@ -5,25 +5,41 @@ public abstract class DirectionalTurret : TurretBase
 {
     protected override void SetDefaultAngle()
     {
-        _defaultDirection = _containingShip.transform.InverseTransformDirection(-transform.forward);
+        DefaultDirection = _containingShip.transform.InverseTransformDirection(-transform.forward);
     }
 
     protected override void Update()
     {
-        if (CanRotate && Mode != TurretMode.Off)
+        if (CanRotate && Mode != TurretMode.Off && !_rotationAtIdle)
         {
             float maxRotation = RotationSpeed * Time.deltaTime;
             float angleToRotate = Mathf.Abs(Mathf.MoveTowardsAngle(0, _targetAngle - CurrLocalAngle, maxRotation));
-            transform.localRotation = transform.localRotation * Quaternion.AngleAxis(angleToRotate * _rotationDir, TurretAxisVector);
+            if (angleToRotate > GlobalOtherConstants.TurretAngleEps)
+            {
+                transform.localRotation = transform.localRotation * Quaternion.AngleAxis(angleToRotate * _rotationDir, TurretAxisVector);
+            }
+            else if (Mathf.Abs(CurrLocalAngle - _defaultAngle) < GlobalOtherConstants.TurretAngleEps)
+            {
+                _rotationAtIdle = true;
+            }
         }
         base.Update();
     }
 
-    public override void ManualTarget(Vector3 target)
+    public override void ManualTarget(Vector3 target, bool idle)
     {
         if (!_initialized || !CanRotate)
         {
-            // Do something smarted with the legal angle?
+            // Do something smart with the legal angle?
+            return;
+        }
+
+        if (!idle && _rotationAtIdle)
+        {
+            _rotationAtIdle = false;
+        }
+        else if (idle && _rotationAtIdle)
+        {
             return;
         }
 
@@ -207,6 +223,7 @@ public abstract class DirectionalTurret : TurretBase
     private float _inaccuracy;
     protected float _inaccuracyCoeff = 1f;
     protected static float _maxInaccuracy = 45f;
+    protected bool _rotationAtIdle = false;
 
     private float _rotationDir;
 }

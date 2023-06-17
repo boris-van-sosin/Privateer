@@ -185,7 +185,11 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    public abstract void ManualTarget(Vector3 target);
+    public virtual void ManualTarget(Vector3 target)
+    {
+        ManualTarget(target, false);
+    }
+    public abstract void ManualTarget(Vector3 target, bool idle);
 
     protected abstract bool TargetInFiringArc(Vector3 target, float tolerance);
 
@@ -546,7 +550,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                     }
                     else
                     {
-                        ManualTarget(transform.position + _containingShip.transform.TransformDirection(_defaultDirection));
+                        ManualTarget(transform.position + _containingShip.transform.TransformDirection(_defaultDirection), true);
                         //Debug.DrawLine(transform.position, transform.position + (_containingShip.transform.TransformDirection(_defaultDirection) * 1), Color.magenta, 0.1f);
                     }
                     break;
@@ -647,7 +651,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected float _targetAngle;
     protected Vector3 _vectorToTarget;
 
-    protected Vector3 _defaultDirection;
+    private Vector3 _defaultDirection;
+    protected Vector3 DefaultDirection { get { return _defaultDirection; } set { _defaultDirection = value; _defaultAngle = LocalDirToShipHeading(_defaultDirection); } }
+    protected float _defaultAngle;
     private string[] _deadZoneAngleStrings;
     private ValueTuple<float, float>[] _deadZoneAngleRanges;
     public RotationAxis TurretAxis;
