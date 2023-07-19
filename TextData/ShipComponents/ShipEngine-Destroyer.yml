@@ -1,10 +1,10 @@
 ComponentName: Ship engine - Destroyer-grade
 ComponentType: Ship engine
-ComponentGlobalMaxHitPoints: 900
+ComponentGlobalMaxHitPoints: 600
 MinShipSize: Destroyer
 MaxShipSize: Destroyer
 AllowedSlotTypes:
-- Engine
+- ShipSystemAft
 ShipEngineDefinition:
   PowerUsage: 2
   HeatGeneration: 2

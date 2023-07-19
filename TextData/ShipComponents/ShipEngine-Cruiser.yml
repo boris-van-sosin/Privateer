@@ -1,10 +1,10 @@
 ComponentName: Ship engine - Cruiser-grade
 ComponentType: Ship engine
-ComponentGlobalMaxHitPoints: 1200
+ComponentGlobalMaxHitPoints: 800
 MinShipSize: Cruiser
 MaxShipSize: Cruiser
 AllowedSlotTypes:
-- Engine
+- ShipSystemAft
 ShipEngineDefinition:
-  PowerUsage: 3
-  HeatGeneration: 3
+  PowerUsage: 2
+  HeatGeneration: 2

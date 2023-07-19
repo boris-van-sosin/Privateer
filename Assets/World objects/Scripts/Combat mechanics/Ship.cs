@@ -15,6 +15,8 @@ public class Ship : ShipBase
         InitDamageEffects();
         _speedOnTurningCoefficient = 0.5f;
         InherentBuff = DynamicBuff.Default();
+        _engines = ShipEngineArray.Init();
+        _engines.OnToggle += SetEngineParticleSystems;
     }
 
     public override void PostAwake()
@@ -254,7 +256,7 @@ public class Ship : ShipBase
         // Only ship systems and engines are placed using this function
         if (comp.AllowedSlotTypes.All(x => x != "ShipSystem" &&
                                       x != "ShipSystemCenter" &&
-                                      x != "Engine"))
+                                      x != "ShipSystemAft"))
         {
             return false;
         }
@@ -278,8 +280,7 @@ public class Ship : ShipBase
             _componentSlotsOccupied[sec][availableSlotIdx] = new Tuple<string, IShipComponent>(occupiedSlot, comp);
             if (comp is ShipEngine)
             {
-                _engine = comp as ShipEngine;
-                _engine.OnToggle += SetEngineParticleSystems;
+                _engines.AddEngine(comp as ShipEngine);
             }
             if (comp is ShipComponentBase compNeedsPlacing)
             {
@@ -459,6 +460,7 @@ public class Ship : ShipBase
             {
                 _updateComponents[i].PeriodicAction();
             }
+            _engines.PeriodicAction();
             Energy = System.Math.Min(Energy, MaxEnergy);
             Heat = System.Math.Max(Heat, 0);
             if (_shieldCapsule)
@@ -517,12 +519,12 @@ public class Ship : ShipBase
 
     protected override void ApplyThrust()
     {
-        if (_engine != null)
+        if (_engines.HasAnyEngines)
         {
-            _engine.ComponentActive = true;
+            _engines.ComponentActive = true;
         }
         _thrustCoefficient = GlobalOtherConstants.ShipEngineUndamagedThrustCoeff;
-        if (_engine.Status == ComponentStatus.LightlyDamaged)
+        /*if (_engine.Status == ComponentStatus.LightlyDamaged)
         {
             _thrustCoefficient = GlobalOtherConstants.ShipEngineLightDamageThrustCoeff;
         }
@@ -530,33 +532,35 @@ public class Ship : ShipBase
         {
             _thrustCoefficient = GlobalOtherConstants.ShipEngineHeavyDamageThrustCoeff;
         }
+        */
         base.ApplyThrust();
     }
 
     protected override void ApplyBrakingInner()
     {
-        if (_engine != null)
+        if (_engines.HasAnyEngines)
         {
-            _engine.SetBraking();
+            _engines.SetBraking();
         }
         base.ApplyBrakingInner();
     }
 
     protected override bool CanDoAcceleration()
     {
-        return _engine.RequestEngine();
+        return _engines.RequestEngine();
     }
 
     public override void ApplyTurning(bool left)
     {
-        if (_engine != null)
+        if (_engines.HasAnyEngines)
         {
-            if (!_engine.RequestEngine())
+            if (!_engines.RequestEngine())
             {
                 return;
             }
         }
         _turnCoefficient = GlobalOtherConstants.ShipEngineUndamagedTurnCoeff;
+        /*
         if (_engine.Status == ComponentStatus.LightlyDamaged)
         {
             _turnCoefficient = GlobalOtherConstants.ShipEngineLightDamageTurnCoeff;
@@ -565,6 +569,7 @@ public class Ship : ShipBase
         {
             _turnCoefficient = GlobalOtherConstants.ShipEngineHeavyDamageTurnCoeff;
         }
+        */
         ApplyBrakingInner();
         ApplyBrakingCoefficients(GlobalOtherConstants.ShipTurnBrakeFactor, GlobalOtherConstants.ShipTurnTargetSpeedFactor);
         base.ApplyTurning(left);
@@ -572,7 +577,7 @@ public class Ship : ShipBase
 
     protected override bool CanDoTurning()
     {
-        return _engine.RequestEngine();
+        return _engines.RequestEngine();
     }
 
     public void SetRequiredHeading(Vector3 targetPoint)
@@ -906,7 +911,7 @@ public class Ship : ShipBase
             ShipDisabled = true;
             OnShipDisabled?.Invoke(this);
         }
-        if (!_engine.ComponentIsWorking || (noPower && Energy < _engine.EnergyPerTick))
+        if (!_engines.AnyWorkingEngines || (noPower && Energy < _engines.EnergyPerTick))
         {
             ShipImmobilized = true;
             _speed = Mathf.Min(_speed, MaxSpeed / 2f);
@@ -1425,7 +1430,8 @@ public class Ship : ShipBase
     private IShieldComponent[] _shieldComponents;
     private ShipArmoury[] _combatDetachments;
     private bool _useShields = true;
-    private ShipEngine _engine;
+    private ShipEngineArray _engines;
+    private ShipEngine[] _engineComps;
 
     private ElectromagneticClamps _electromagneticClamps;
     private ParticleSystem _electromagneticClampsEffect;

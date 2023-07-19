@@ -1858,7 +1858,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                     {
                         img.color = new Color(0, 0, 1);
                     }
-                    else if (sec.Value[i] == "Engine")
+                    else if (sec.Value[i] == "ShipSystemAft")
                     {
                         img.color = new Color(1, 0, 1);
                     }

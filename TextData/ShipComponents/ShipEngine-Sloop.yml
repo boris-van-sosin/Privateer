@@ -1,10 +1,10 @@
 ComponentName: Ship engine - Sloop-grade
 ComponentType: Ship engine
-ComponentGlobalMaxHitPoints: 450
+ComponentGlobalMaxHitPoints: 300
 MinShipSize: Sloop
 MaxShipSize: Destroyer
 AllowedSlotTypes:
-- Engine
+- ShipSystemAft
 ShipEngineDefinition:
   PowerUsage: 2
   HeatGeneration: 2

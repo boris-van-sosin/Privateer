@@ -63,8 +63,9 @@ ComponentSlots:
   - ShipSystem
   - ShipSystem
   AftComponentSlots:
-  - Engine
-  - ShipSystem
+  - ShipSystemAft
+  - ShipSystemAft
+  - ShipSystemAft
   LeftComponentSlots:
   - ShipSystem
   - ShipSystem

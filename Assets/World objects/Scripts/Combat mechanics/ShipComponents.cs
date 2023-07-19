@@ -159,7 +159,7 @@ public class CapacitorBank : ShipComponentBase, IEnergyCapacityComponent
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }
 
 public class HeatSink : ShipComponentBase, IHeatCapacityComponent
@@ -184,7 +184,7 @@ public class HeatSink : ShipComponentBase, IHeatCapacityComponent
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }
 public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent, IShieldComponent
 {
@@ -347,7 +347,7 @@ public class ShieldGenerator : ShipActiveComponentBase, IPeriodicActionComponent
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }
 
 public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionComponent
@@ -462,7 +462,7 @@ public class DamageControlNode : ShipActiveComponentBase, IPeriodicActionCompone
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }
 
 public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
@@ -492,7 +492,7 @@ public class HeatExchange : ShipComponentBase, IPeriodicActionComponent
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }
 
 public class ExtraArmour : ShipComponentBase
@@ -509,7 +509,7 @@ public class ExtraArmour : ShipComponentBase
         MaxShipSize = maxShipSize;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemAft" };
 }
 
 public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -548,7 +548,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         if (ComponentIsWorking && ContainingShip.TryChangeEnergyAndHeat(-PowerUsage, HeatGeneration, false, false))
         {
             _active = true;
-            OnToggle(true);
+            OnToggle?.Invoke(true);
             return true;
         }
         else
@@ -642,7 +642,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "Engine" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystemAft" };
 }
 
 public class ElectromagneticClamps : ShipActiveComponentBase, IUserToggledComponent, IPeriodicActionComponent
@@ -778,7 +778,7 @@ public class ShipArmoury : ShipComponentBase
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }
 
 public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionComponent
@@ -869,5 +869,5 @@ public class FireControlGeneral : ShipActiveComponentBase, IPeriodicActionCompon
         return res;
     }
 
-    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter" };
+    private static readonly string[] _allowedSlotTypes = new string[] { "ShipSystem", "ShipSystemCenter", "ShipSystemAft" };
 }

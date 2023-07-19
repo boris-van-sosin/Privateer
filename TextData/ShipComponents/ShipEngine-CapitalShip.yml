@@ -1,10 +1,10 @@
 ComponentName: Ship engine - Capital ship grade
 ComponentType: Ship engine
-ComponentGlobalMaxHitPoints: 1650
+ComponentGlobalMaxHitPoints: 1110
 MinShipSize: CapitalShip
 MaxShipSize: CapitalShip
 AllowedSlotTypes:
-- Engine
+- ShipSystemAft
 ShipEngineDefinition:
-  PowerUsage: 4
-  HeatGeneration: 4
+  PowerUsage: 2
+  HeatGeneration: 2
