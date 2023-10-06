@@ -1,7 +1,32 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static UnityEngine.EventSystems.EventTrigger;
+using UnityEngine;
+
+public class FloatEpsComparer : IComparer<float>
+{
+    public FloatEpsComparer()
+    {
+        _eps = Mathf.Epsilon;
+    }
+
+    public FloatEpsComparer(float eps)
+    {
+        _eps = eps;
+    }
+
+    public int Compare(float x, float y)
+    {
+        if (Math.Abs(x - y) < _eps)
+            return 0;
+        else if (x < y)
+            return -1;
+        else
+            return 1;
+    }
+
+    private readonly float _eps;
+}
 
 public struct ShipEngineArray : IUserToggledComponent, IPeriodicActionComponent
 {
@@ -124,11 +149,33 @@ public struct ShipEngineArray : IUserToggledComponent, IPeriodicActionComponent
         }
     }
 
-    public double TotalWorkingEnginePower
+    public float SumInnerEnginePower
     {
         get
         {
-            return 0.0;
+            float _enginePowerSum = 0.0f;
+            for (int i = 0; i < _engineComps.Count; ++i)
+                _enginePowerSum += _engineComps[i].EnginePower;
+            return _enginePowerSum;
+        }
+    }
+
+    public float TotalWorkingEnginePower
+    {
+        get
+        {
+            float _enginePowerSum = SumInnerEnginePower, res;
+
+            if (_enginePowerSqrtCache.TryGetValue(_enginePowerSum, out res))
+            {
+                return res;
+            }
+            else
+            {
+                res = Mathf.Sqrt(_enginePowerSum) * 0.1f;
+                _enginePowerSqrtCache[_enginePowerSum] = res;
+                return res;
+            }
         }
     }
 
@@ -217,6 +264,8 @@ public struct ShipEngineArray : IUserToggledComponent, IPeriodicActionComponent
     private List<ShipEngine> _engineComps;
     private bool _active, _nextDeactivate, _nextBrake;
     private int _storedMinEnergyPerTick;
+
+    private static SortedDictionary<float, float> _enginePowerSqrtCache = new SortedDictionary<float, float>(new FloatEpsComparer());
 
     private static DynamicBuff _dummyBuff = DynamicBuff.Default();
 }

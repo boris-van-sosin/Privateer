@@ -517,6 +517,7 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
 
     public int PowerUsage;
     public int HeatGeneration;
+    private float _enignePowerBase = 1.2f;
     private bool _active;
 
     public bool ComponentActive
@@ -560,6 +561,24 @@ public class ShipEngine : ShipActiveComponentBase, IUserToggledComponent, IPerio
     public void SetBraking()
     {
         _nextBrake = true;
+    }
+
+    public float EnginePower
+    {
+        get
+        {
+            switch (Status)
+            {
+                case ComponentStatus.Undamaged:
+                    return _enignePowerBase;
+                case ComponentStatus.LightlyDamaged:
+                    return _enignePowerBase * (2f / 3f);
+                case ComponentStatus.HeavilyDamaged:
+                    return _enignePowerBase * (1f / 3f);
+                default:
+                    return 0.0f;
+            }
+        }
     }
 
     public void PeriodicAction()

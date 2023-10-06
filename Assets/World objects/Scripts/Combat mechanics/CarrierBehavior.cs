@@ -145,8 +145,8 @@ public class CarrierBehavior : MonoBehaviour
                 s.Activate();
                 s.AttachToHangerElevator(_elevatorBed[i]);
                 s.SetTrailColor(_ship.Owner.FactionColor);
-                formation.MaxSpeed = s.MaxSpeed * GlobalOtherConstants.StrikeCraftFormtionMaxSpeedFactor;
-                formation.TurnRate = s.TurnRate * GlobalOtherConstants.StrikeCraftFormtionTurnRateFactor;
+                formation.BaseMaxSpeed = s.MaxSpeed * GlobalOtherConstants.StrikeCraftFormtionMaxSpeedFactor;
+                formation.BaseTurnRate = s.TurnRate * GlobalOtherConstants.StrikeCraftFormtionTurnRateFactor;
                 currLaunchingStrikeCraft[i] = s;
                 CarrierHangerAnim[i].Open();
                 ++numCreated;

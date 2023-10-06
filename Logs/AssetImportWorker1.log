@@ -1,0 +1,1989 @@
+Using pre-set license
+Built from '2023.1/staging' branch; Version is '2023.1.0f1 (a008fa768e6c) revision 10488058'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 11  (10.0.22621) 64bit Professional' Language: 'en' Physical Memory: 32556 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\2023.1.0f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker1
+-projectPath
+C:/Users/boris/Documents/Privateer
+-logFile
+Logs/AssetImportWorker1.log
+-srvPort
+54268
+Successfully changed project path to: C:/Users/boris/Documents/Privateer
+C:/Users/boris/Documents/Privateer
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [4324] Host "[IP] 192.168.1.132 [Port] 0 [Flags] 2 [Guid] 4204950160 [EditorId] 4204950160 [Version] 1048832 [Id] WindowsEditor(7,Kremlin2) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+
+Player connection [4324] Host "[IP] 192.168.1.132 [Port] 0 [Flags] 2 [Guid] 4204950160 [EditorId] 4204950160 [Version] 1048832 [Id] WindowsEditor(7,Kremlin2) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+
+Library Redirect Path: Library/Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Refreshing native plugins compatible for Editor in 11.63 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2023.1.0f1 (a008fa768e6c)
+[Subsystems] Discovering subsystems at path C:/Program Files/2023.1.0f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/boris/Documents/Privateer/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA Quadro RTX 3000 (ID=0x1f36)
+    Vendor:   NVIDIA
+    VRAM:     5968 MB
+    Driver:   31.0.15.3742
+Initialize mono
+Mono path[0] = 'C:/Program Files/2023.1.0f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/2023.1.0f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/2023.1.0f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56728
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/2023.1.0f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/2023.1.0f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003294 seconds.
+- Loaded All Assemblies, in  0.408 seconds
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+- Finished resetting the current domain, in  0.316 seconds
+Domain Reload Profiling: 723ms
+	BeginReloadAssembly (123ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (37ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (48ms)
+	LoadAllAssembliesAndSetupDomain (186ms)
+		LoadAssemblies (121ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (182ms)
+			TypeCache.Refresh (180ms)
+				TypeCache.ScanAssembly (165ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (317ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (269ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (10ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (9ms)
+			ProcessInitializeOnLoadAttributes (188ms)
+			ProcessInitializeOnLoadMethodAttributes (55ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.943 seconds
+Refreshing native plugins compatible for Editor in 6.54 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.796 seconds
+Domain Reload Profiling: 1736ms
+	BeginReloadAssembly (323ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (8ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (38ms)
+	RebuildCommonClasses (39ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (43ms)
+	LoadAllAssembliesAndSetupDomain (522ms)
+		LoadAssemblies (294ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (322ms)
+			TypeCache.Refresh (294ms)
+				TypeCache.ScanAssembly (270ms)
+			ScanForSourceGeneratedMonoScriptInfo (24ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (797ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (562ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (96ms)
+			ProcessInitializeOnLoadAttributes (268ms)
+			ProcessInitializeOnLoadMethodAttributes (182ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Refreshing native plugins compatible for Editor in 12.14 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3124 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 86 unused Assets / (1.1 MB). Loaded Objects now: 3664.
+Memory consumption went from 158.1 MB to 157.1 MB.
+Total: 16.627100 ms (FindLiveObjects: 0.544500 ms CreateObjectMapping: 0.526900 ms MarkObjects: 14.933900 ms  DeleteObjects: 0.620200 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.937 seconds
+Refreshing native plugins compatible for Editor in 7.74 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.928 seconds
+Domain Reload Profiling: 1862ms
+	BeginReloadAssembly (383ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (52ms)
+	RebuildCommonClasses (36ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (468ms)
+		LoadAssemblies (271ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (289ms)
+			TypeCache.Refresh (280ms)
+				TypeCache.ScanAssembly (264ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (928ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (505ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (85ms)
+			ProcessInitializeOnLoadAttributes (239ms)
+			ProcessInitializeOnLoadMethodAttributes (165ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 6.60 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3668.
+Memory consumption went from 147.7 MB to 146.6 MB.
+Total: 8.490700 ms (FindLiveObjects: 0.235200 ms CreateObjectMapping: 0.251900 ms MarkObjects: 7.733400 ms  DeleteObjects: 0.268800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.893 seconds
+Refreshing native plugins compatible for Editor in 7.36 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.917 seconds
+Domain Reload Profiling: 1806ms
+	BeginReloadAssembly (371ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (45ms)
+	RebuildCommonClasses (36ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (24ms)
+	LoadAllAssembliesAndSetupDomain (444ms)
+		LoadAssemblies (271ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (266ms)
+			TypeCache.Refresh (261ms)
+				TypeCache.ScanAssembly (247ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (917ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (504ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (77ms)
+			ProcessInitializeOnLoadAttributes (237ms)
+			ProcessInitializeOnLoadMethodAttributes (177ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.10 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3672.
+Memory consumption went from 148.7 MB to 147.7 MB.
+Total: 8.277900 ms (FindLiveObjects: 0.244800 ms CreateObjectMapping: 0.273200 ms MarkObjects: 7.492800 ms  DeleteObjects: 0.265800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.006 seconds
+Refreshing native plugins compatible for Editor in 8.02 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.078 seconds
+Domain Reload Profiling: 2081ms
+	BeginReloadAssembly (383ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (44ms)
+	RebuildCommonClasses (44ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (28ms)
+	LoadAllAssembliesAndSetupDomain (533ms)
+		LoadAssemblies (297ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (327ms)
+			TypeCache.Refresh (294ms)
+				TypeCache.ScanAssembly (276ms)
+			ScanForSourceGeneratedMonoScriptInfo (27ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1079ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (606ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (101ms)
+			ProcessInitializeOnLoadAttributes (285ms)
+			ProcessInitializeOnLoadMethodAttributes (205ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (10ms)
+Refreshing native plugins compatible for Editor in 8.99 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3676.
+Memory consumption went from 149.8 MB to 148.8 MB.
+Total: 8.963400 ms (FindLiveObjects: 0.376900 ms CreateObjectMapping: 0.409600 ms MarkObjects: 7.895700 ms  DeleteObjects: 0.279800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  8.522 seconds
+Refreshing native plugins compatible for Editor in 7.01 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  5.391 seconds
+Domain Reload Profiling: 13912ms
+	BeginReloadAssembly (4868ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (43ms)
+	RebuildCommonClasses (35ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (25ms)
+	LoadAllAssembliesAndSetupDomain (3579ms)
+		LoadAssemblies (3424ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (241ms)
+			TypeCache.Refresh (234ms)
+				TypeCache.ScanAssembly (221ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (5392ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (507ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (82ms)
+			ProcessInitializeOnLoadAttributes (232ms)
+			ProcessInitializeOnLoadMethodAttributes (179ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.47 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3680.
+Memory consumption went from 150.8 MB to 149.8 MB.
+Total: 8.076100 ms (FindLiveObjects: 0.247100 ms CreateObjectMapping: 0.272800 ms MarkObjects: 7.281600 ms  DeleteObjects: 0.273200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.870 seconds
+Refreshing native plugins compatible for Editor in 7.46 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.926 seconds
+Domain Reload Profiling: 1794ms
+	BeginReloadAssembly (361ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (44ms)
+	RebuildCommonClasses (35ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (25ms)
+	LoadAllAssembliesAndSetupDomain (432ms)
+		LoadAssemblies (268ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (252ms)
+			TypeCache.Refresh (247ms)
+				TypeCache.ScanAssembly (233ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (927ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (521ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (89ms)
+			ProcessInitializeOnLoadAttributes (244ms)
+			ProcessInitializeOnLoadMethodAttributes (174ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.28 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3684.
+Memory consumption went from 151.9 MB to 150.8 MB.
+Total: 10.128600 ms (FindLiveObjects: 0.247300 ms CreateObjectMapping: 0.259300 ms MarkObjects: 9.346500 ms  DeleteObjects: 0.274300 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.934 seconds
+Refreshing native plugins compatible for Editor in 8.79 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.968 seconds
+Domain Reload Profiling: 1900ms
+	BeginReloadAssembly (376ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (56ms)
+	RebuildCommonClasses (37ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (25ms)
+	LoadAllAssembliesAndSetupDomain (477ms)
+		LoadAssemblies (271ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (296ms)
+			TypeCache.Refresh (291ms)
+				TypeCache.ScanAssembly (277ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (968ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (546ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (81ms)
+			ProcessInitializeOnLoadAttributes (255ms)
+			ProcessInitializeOnLoadMethodAttributes (196ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.62 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3688.
+Memory consumption went from 152.9 MB to 151.9 MB.
+Total: 8.112900 ms (FindLiveObjects: 0.285800 ms CreateObjectMapping: 0.293800 ms MarkObjects: 7.246600 ms  DeleteObjects: 0.285800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1570156.603643 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Fed - torpedo bomber.prefab
+  artifactKey: Guid(ed759e12a878bc34e8d9d0f13dde2ff6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Fed - torpedo bomber.prefab using Guid(ed759e12a878bc34e8d9d0f13dde2ff6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '35c2771c64c61ffd29467b9fe0e1035e') in 0.130431 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 66
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c01e1515e43d8399e0dccedda946949') in 0.318192 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a8ee2c85092172f5a66f8bcbc1eecbb') in 0.220631 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0eb6f9a91f6ca70a3a92d4aa54106d17') in 0.042853 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '22a9fcc3ecc35f9c761611bdbc5d584e') in 0.048470 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab
+  artifactKey: Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab using Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1382bfa252039b24da5b68988dc645a6') in 0.059259 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 269
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ea3a2655f8096d2a4597df2af91a343b') in 0.043922 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab
+  artifactKey: Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab using Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d79abe3132642da24219a77c759eaa4') in 0.043096 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 330
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.988 seconds
+Refreshing native plugins compatible for Editor in 8.58 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.181 seconds
+Domain Reload Profiling: 2167ms
+	BeginReloadAssembly (379ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (47ms)
+	RebuildCommonClasses (50ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (517ms)
+		LoadAssemblies (302ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (316ms)
+			TypeCache.Refresh (310ms)
+				TypeCache.ScanAssembly (294ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1181ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (642ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (101ms)
+			ProcessInitializeOnLoadAttributes (297ms)
+			ProcessInitializeOnLoadMethodAttributes (230ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Refreshing native plugins compatible for Editor in 9.45 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3701.
+Memory consumption went from 154.1 MB to 153.0 MB.
+Total: 9.608500 ms (FindLiveObjects: 0.285300 ms CreateObjectMapping: 0.295500 ms MarkObjects: 8.733700 ms  DeleteObjects: 0.292000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.013 seconds
+Refreshing native plugins compatible for Editor in 7.66 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.972 seconds
+Domain Reload Profiling: 1983ms
+	BeginReloadAssembly (424ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (46ms)
+	RebuildCommonClasses (45ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (25ms)
+	LoadAllAssembliesAndSetupDomain (502ms)
+		LoadAssemblies (311ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (295ms)
+			TypeCache.Refresh (290ms)
+				TypeCache.ScanAssembly (275ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (973ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (536ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (10ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (83ms)
+			ProcessInitializeOnLoadAttributes (253ms)
+			ProcessInitializeOnLoadMethodAttributes (182ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.64 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3705.
+Memory consumption went from 155.3 MB to 154.3 MB.
+Total: 8.774100 ms (FindLiveObjects: 0.272700 ms CreateObjectMapping: 0.287000 ms MarkObjects: 7.921200 ms  DeleteObjects: 0.291800 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.980 seconds
+Refreshing native plugins compatible for Editor in 8.32 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.936 seconds
+Domain Reload Profiling: 1913ms
+	BeginReloadAssembly (397ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (45ms)
+	RebuildCommonClasses (36ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (27ms)
+	LoadAllAssembliesAndSetupDomain (503ms)
+		LoadAssemblies (309ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (296ms)
+			TypeCache.Refresh (288ms)
+				TypeCache.ScanAssembly (271ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (937ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (512ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (84ms)
+			ProcessInitializeOnLoadAttributes (239ms)
+			ProcessInitializeOnLoadMethodAttributes (172ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.87 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3709.
+Memory consumption went from 156.4 MB to 155.4 MB.
+Total: 8.448000 ms (FindLiveObjects: 0.314100 ms CreateObjectMapping: 0.301800 ms MarkObjects: 7.546700 ms  DeleteObjects: 0.283900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1075.261408 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c633895ae84895d028ff17d15395f41b') in 0.148957 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0323e88b6115ce5ad6b80d82978b975c') in 0.027468 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000033 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ddb4b9301bc77cc027e1ec3e30076f39') in 0.042965 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Charleston.prefab
+  artifactKey: Guid(a0d24c935b300bd4eb9b394cab7f8307) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Charleston.prefab using Guid(a0d24c935b300bd4eb9b394cab7f8307) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7a1be62f426012d0e4d92373f03f95ad') in 0.035006 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 171
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a97ce8b8dd9c652802ca9474b11bce36') in 0.043383 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab
+  artifactKey: Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab using Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '901861004eb06a7c73a87a50345c4640') in 0.055511 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 174
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab
+  artifactKey: Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab using Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1bdc95ab5eb14a3f00ff392ad467e0f7') in 0.042023 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 268
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.281 seconds
+Refreshing native plugins compatible for Editor in 9.96 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.474 seconds
+Domain Reload Profiling: 2753ms
+	BeginReloadAssembly (587ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (10ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (65ms)
+	RebuildCommonClasses (49ms)
+	RebuildNativeTypeToScriptingClass (26ms)
+	initialDomainReloadingComplete (38ms)
+	LoadAllAssembliesAndSetupDomain (578ms)
+		LoadAssemblies (354ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (347ms)
+			TypeCache.Refresh (337ms)
+				TypeCache.ScanAssembly (319ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (1475ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (924ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (105ms)
+			ProcessInitializeOnLoadAttributes (451ms)
+			ProcessInitializeOnLoadMethodAttributes (352ms)
+			AfterProcessingInitializeOnLoad (5ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (10ms)
+Script is not up to date after domain reload: guid(cbe28cf94e9332b45acc258c7c677c32) path("Assets/World objects/Scripts/Combat mechanics/Ship.cs") state(2)
+Refreshing native plugins compatible for Editor in 11.36 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3713.
+Memory consumption went from 157.5 MB to 156.5 MB.
+Total: 11.330500 ms (FindLiveObjects: 0.344900 ms CreateObjectMapping: 0.388700 ms MarkObjects: 10.194300 ms  DeleteObjects: 0.401000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 11.045382 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Kaiser Max.prefab
+  artifactKey: Guid(ef4e61f571f66a44e9236c8a861bfc96) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Kaiser Max.prefab using Guid(ef4e61f571f66a44e9236c8a861bfc96) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '82c746de12ecaac229f587dd8b9a2289') in 0.243042 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 321
+========================================================================
+Received Import Request.
+  Time since last request: 0.000041 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '21b44ef2e9b8f8aff2bc09ec579db1da') in 0.063455 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000032 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'de3511c268b92e323db19d1464ea250f') in 0.057980 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000031 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7cbf1545d4c0a6e1913a4a7bf69ff9d3') in 0.091660 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c42c8c2b1e20dd36396786c98bd6b99c') in 0.056166 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab
+  artifactKey: Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab using Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8c3f50434e2c3fbcbf4b6704a0bd28ab') in 0.051765 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 174
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab
+  artifactKey: Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab using Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c869872f2f1f20cb8520caadd76512ea') in 0.047519 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 330
+========================================================================
+Received Import Request.
+  Time since last request: 4.691844 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd05667aac5154f9168021fd669eaf3e6') in 0.046725 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ed37dda9c3054b4f50a1cbbd8c5a12ba') in 0.032813 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cf583c63a09dc1cf597a632c42d2ae3a') in 0.039153 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000043 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab
+  artifactKey: Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab using Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b365b2e2f2d83f8bc60fcca2f17b64fc') in 0.032927 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 174
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab
+  artifactKey: Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab using Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1fcaf72569e9092e506784781aef8a52') in 0.048177 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 268
+========================================================================
+Received Import Request.
+  Time since last request: 2.463717 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3bbda068a00b99bc1a7e8ab8f13e5eb4') in 0.051684 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a379e2d7fd9a8e5258136d5e3b132ab5') in 0.042721 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8b7bc5f857a9424451f17635786e4cfd') in 0.036845 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '020c2a074345e5a8fd08e90d56acf03f') in 0.038401 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.587 seconds
+Refreshing native plugins compatible for Editor in 9.76 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.008 seconds
+Domain Reload Profiling: 2581ms
+	BeginReloadAssembly (665ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (10ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (95ms)
+	RebuildCommonClasses (59ms)
+	RebuildNativeTypeToScriptingClass (31ms)
+	initialDomainReloadingComplete (37ms)
+	LoadAllAssembliesAndSetupDomain (781ms)
+		LoadAssemblies (444ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (481ms)
+			TypeCache.Refresh (473ms)
+				TypeCache.ScanAssembly (453ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1008ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (566ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (85ms)
+			ProcessInitializeOnLoadAttributes (267ms)
+			ProcessInitializeOnLoadMethodAttributes (199ms)
+			AfterProcessingInitializeOnLoad (5ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Refreshing native plugins compatible for Editor in 9.41 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 75 unused Assets / (1.0 MB). Loaded Objects now: 3718.
+Memory consumption went from 158.8 MB to 157.8 MB.
+Total: 10.577500 ms (FindLiveObjects: 0.295900 ms CreateObjectMapping: 0.296100 ms MarkObjects: 9.634300 ms  DeleteObjects: 0.348200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 45.554101 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6641cf7ccee3564923492830f27587db') in 0.139232 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7eff278f94ef30b9964d05b35e403be2') in 0.039036 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '38b0376b5f28cfca2d3a00de290f7c5c') in 0.040867 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2cfca86eea795069792252b5f70e6dd') in 0.042179 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Import Request.
+  Time since last request: 21.880758 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2cf76248607564fc4226349ce7345ffb') in 0.050234 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a3e3597851114a4052199b987a67887e') in 0.041851 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000031 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'be4783c0ecad4dc5c44318aa591820c2') in 0.042826 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7ae8747d2bc22d8b791a92d30e75ebd2') in 0.041331 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Import Request.
+  Time since last request: 5.270834 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c91913c6aa60c64dd42117bab8202c14') in 0.042625 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0a2e05fe2540c639f9bbf300cf6f1e66') in 0.027296 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4f8d13bae026ee635da2c535aad901eb') in 0.033809 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab
+  artifactKey: Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab using Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bce59f62a3b0165e9ead91e9aa209b7a') in 0.037332 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 269
+========================================================================
+Received Import Request.
+  Time since last request: 0.000030 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab
+  artifactKey: Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab using Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '33782f7466ab70b7dcc6ab53840f2b49') in 0.068669 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 330
+========================================================================
+Received Import Request.
+  Time since last request: 50.721667 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f48564808ff740095de336d08eeff53a') in 0.046503 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '76e7952bf73e466d710e4bee730c5c9f') in 0.031869 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e24e47ef4093647dec92690940363a38') in 0.040697 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab
+  artifactKey: Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab using Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2014646337e4acaca19f71a63541536e') in 0.032915 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 269
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab
+  artifactKey: Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab using Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1816dbb7783029784a5c71c990e3d1e0') in 0.036461 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 330
+========================================================================
+Received Import Request.
+  Time since last request: 115.531737 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab
+  artifactKey: Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation.prefab using Guid(0f51071563df82746bb0d023195a867f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8588d20afd18b4e56e61a841d8683f4f') in 0.043127 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 343
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Kaiser Max.prefab
+  artifactKey: Guid(ef4e61f571f66a44e9236c8a861bfc96) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Kaiser Max.prefab using Guid(ef4e61f571f66a44e9236c8a861bfc96) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0277aa1068644f3b0580771d8927d418') in 0.043779 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 321
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1d4ec1cc5177d02da1988ecd277617bf') in 0.032006 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Charleston.prefab
+  artifactKey: Guid(a0d24c935b300bd4eb9b394cab7f8307) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Charleston.prefab using Guid(a0d24c935b300bd4eb9b394cab7f8307) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '79a7b751980afb4dbb2a0e91991b405c') in 0.030910 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 171
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5f0d6b3ebd72f75c5e158aef1ff6ee2') in 0.052687 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab
+  artifactKey: Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab using Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '971102ffc08620da609392753fd78338') in 0.028269 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 174
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab
+  artifactKey: Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab using Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '44c9b26aed45abc652b2bac41cf3358d') in 0.035852 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 268
+========================================================================
+Received Import Request.
+  Time since last request: 6.284403 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c3d992fbff5e964cdfb0c69f01c7b393') in 0.046135 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Kaiser Max.prefab
+  artifactKey: Guid(ef4e61f571f66a44e9236c8a861bfc96) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Kaiser Max.prefab using Guid(ef4e61f571f66a44e9236c8a861bfc96) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ccf75f2b9e345a5b8d20f9b40c8420b4') in 0.037919 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 321
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9fba6a979392303ecfea5c7d10b4e03f') in 0.042138 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9f65f1de47f3389f6cea79085aee39ba') in 0.033492 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9039a42ac6f5a67c487ddba02d3ae1cd') in 0.031842 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Import Request.
+  Time since last request: 9.450074 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cf397868a4bb46a1f28c499c9c8fe2e9') in 0.047301 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000023 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e04821825d33e18d7b8a18d28e9970e0') in 0.030232 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5c6057d69dc0fbc669c9de7e0e690e9b') in 0.037845 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab
+  artifactKey: Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab using Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd728dfd9ccc7bc405c877e70a9483792') in 0.026346 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 174
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab
+  artifactKey: Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab using Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3687182f6211978a2e12d504a560ba38') in 0.041598 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 330
+========================================================================
+Received Import Request.
+  Time since last request: 10.273504 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e0c7c8e0107755813edd1078d5dd3821') in 0.060005 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7dd525fe1719da4274a4276039a86996') in 0.039082 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Charleston.prefab
+  artifactKey: Guid(a0d24c935b300bd4eb9b394cab7f8307) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Charleston.prefab using Guid(a0d24c935b300bd4eb9b394cab7f8307) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '09d9e0673ef0a367552f3d8a32257e96') in 0.028433 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 171
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab
+  artifactKey: Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Destroyer Sachsen.prefab using Guid(c0b7d06ee4002964e85857b6bcfb7500) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7c056a155c2935e745d5d5f8940f971e') in 0.036526 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 269
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab
+  artifactKey: Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - cuiser Aurora med.prefab using Guid(da22b26bf4e774b459b0267183a20e4e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ea76d44ec30600563f9b8758bd825fb3') in 0.034022 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 330
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.048 seconds
+Refreshing native plugins compatible for Editor in 12.64 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.355 seconds
+Domain Reload Profiling: 2400ms
+	BeginReloadAssembly (421ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (7ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (53ms)
+	RebuildCommonClasses (45ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (537ms)
+		LoadAssemblies (330ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (323ms)
+			TypeCache.Refresh (315ms)
+				TypeCache.ScanAssembly (297ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1356ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (811ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (123ms)
+			ProcessInitializeOnLoadAttributes (419ms)
+			ProcessInitializeOnLoadMethodAttributes (254ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 8.10 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 75 unused Assets / (1.0 MB). Loaded Objects now: 3722.
+Memory consumption went from 160.0 MB to 159.0 MB.
+Total: 9.511700 ms (FindLiveObjects: 0.394200 ms CreateObjectMapping: 0.466400 ms MarkObjects: 8.347000 ms  DeleteObjects: 0.302600 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 9.319421 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '69ee1801cdbb3f27f04dcc4ccae9dda1') in 0.128105 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bb1d12a4f28178a5018946cec95da1c6') in 0.034388 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000032 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '457aa9786193666bb6dd8188fceca321') in 0.036839 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5c70aca4f440fde680a42d6f19835dde') in 0.039813 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Import Request.
+  Time since last request: 2.166461 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a3188a4692eb88e9b1567439551dfd06') in 0.064686 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab
+  artifactKey: Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Monitor.prefab using Guid(0b731f3e21b40bd48a5ddda31916ec60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8019abfb036522d07c0f9dabbf8b9408') in 0.039959 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 162
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab
+  artifactKey: Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Chickasaw.prefab using Guid(3ce29f4c0dd345b45851a2f1e7b83e6a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1dc2ec3ea81e420446846582238df3a7') in 0.038908 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 240
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab
+  artifactKey: Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Sloop Richmond.prefab using Guid(6f0d8fd7419104546a22cc523434b56a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '065b63b1adc6b54cbff56fd4755aa44c') in 0.034959 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 174
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab
+  artifactKey: Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Frigate Cochrane.prefab using Guid(b335863579f883744baf15e440818b46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b6635ecedd4d5a2b3b1daea87f36d95e') in 0.038556 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 268
+========================================================================
+Received Import Request.
+  Time since last request: 5.446256 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab
+  artifactKey: Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Battleship devastation alt.prefab using Guid(64585c44ad74345449b7491bc7ebad32) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '28450cbf817562d090412e17a73bd3a6') in 0.085159 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 349
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab
+  artifactKey: Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Cruiser Arminius.prefab using Guid(979aa53004b071949b979e9701ef4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '70c966d544fd535face61a26ea6ff612') in 0.040821 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 270
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab
+  artifactKey: Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - Demi-battleship navarino.prefab using Guid(91c96f33a3129b5468e5029ef117edbb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a67d2d13601e4f4fd392c21119fa48ae') in 0.043823 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 313
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab
+  artifactKey: Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted ship prefabs/Terran - carrier Hermes.prefab using Guid(0fc4aee800c05d54ca0dd981409738d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '455e3514adced51bdeae457b3b29704a') in 0.065777 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 300
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.054 seconds
+Refreshing native plugins compatible for Editor in 9.88 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.996 seconds
+Domain Reload Profiling: 2048ms
+	BeginReloadAssembly (444ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (55ms)
+	RebuildCommonClasses (43ms)
+	RebuildNativeTypeToScriptingClass (15ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (519ms)
+		LoadAssemblies (317ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (312ms)
+			TypeCache.Refresh (304ms)
+				TypeCache.ScanAssembly (288ms)
+			ScanForSourceGeneratedMonoScriptInfo (3ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (997ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (560ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (6ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (88ms)
+			ProcessInitializeOnLoadAttributes (257ms)
+			ProcessInitializeOnLoadMethodAttributes (201ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 7.81 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 75 unused Assets / (1.0 MB). Loaded Objects now: 3726.
+Memory consumption went from 161.3 MB to 160.3 MB.
+Total: 10.627700 ms (FindLiveObjects: 0.537200 ms CreateObjectMapping: 0.554800 ms MarkObjects: 9.158100 ms  DeleteObjects: 0.376100 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.992 seconds
+Refreshing native plugins compatible for Editor in 7.97 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.046 seconds
+Domain Reload Profiling: 2035ms
+	BeginReloadAssembly (398ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (10ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (46ms)
+	RebuildCommonClasses (37ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (29ms)
+	LoadAllAssembliesAndSetupDomain (510ms)
+		LoadAssemblies (315ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (294ms)
+			TypeCache.Refresh (288ms)
+				TypeCache.ScanAssembly (268ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (6ms)
+	FinalizeReload (1046ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (591ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (92ms)
+			ProcessInitializeOnLoadAttributes (269ms)
+			ProcessInitializeOnLoadMethodAttributes (213ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Refreshing native plugins compatible for Editor in 10.04 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 75 unused Assets / (1.0 MB). Loaded Objects now: 3730.
+Memory consumption went from 162.4 MB to 161.3 MB.
+Total: 9.519700 ms (FindLiveObjects: 0.287900 ms CreateObjectMapping: 0.296500 ms MarkObjects: 8.650200 ms  DeleteObjects: 0.283900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.132 seconds
+Refreshing native plugins compatible for Editor in 8.77 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.227 seconds
+Domain Reload Profiling: 2357ms
+	BeginReloadAssembly (474ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (7ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (56ms)
+	RebuildCommonClasses (45ms)
+	RebuildNativeTypeToScriptingClass (18ms)
+	initialDomainReloadingComplete (31ms)
+	LoadAllAssembliesAndSetupDomain (560ms)
+		LoadAssemblies (357ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (347ms)
+			TypeCache.Refresh (342ms)
+				TypeCache.ScanAssembly (326ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1228ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (690ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (10ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (95ms)
+			ProcessInitializeOnLoadAttributes (329ms)
+			ProcessInitializeOnLoadMethodAttributes (244ms)
+			AfterProcessingInitializeOnLoad (6ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (13ms)
+Refreshing native plugins compatible for Editor in 10.04 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 75 unused Assets / (1.0 MB). Loaded Objects now: 3734.
+Memory consumption went from 163.4 MB to 162.4 MB.
+Total: 10.140600 ms (FindLiveObjects: 0.298300 ms CreateObjectMapping: 0.280100 ms MarkObjects: 9.248600 ms  DeleteObjects: 0.311200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0

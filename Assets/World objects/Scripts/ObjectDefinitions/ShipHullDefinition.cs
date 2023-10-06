@@ -228,19 +228,19 @@ public struct ShipHullMovementData
     {
         return new ShipHullMovementData()
         {
-            MaxSpeed = s.MaxSpeed,
-            Thrust = s.Thrust,
-            Braking = s.Braking,
-            TurnRate = s.TurnRate
+            MaxSpeed = s.BaseMaxSpeed,
+            Thrust = s.BaseThrust,
+            Braking = s.BaseBraking,
+            TurnRate = s.BaseTurnRate
         };
     }
 
     public void FillShipData(ShipBase s)
     {
-        s.MaxSpeed = MaxSpeed;
-        s.Thrust = Thrust;
-        s.Braking = Braking;
-        s.TurnRate = TurnRate;
+        s.BaseMaxSpeed = MaxSpeed;
+        s.BaseThrust = Thrust;
+        s.BaseBraking = Braking;
+        s.BaseTurnRate = TurnRate;
     }
 }
 

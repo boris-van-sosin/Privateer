@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -43,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcdbe9175492f4846945b1c64db45774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxSpeed: 2
-  Thrust: 3
-  Braking: 3
-  TurnRate: 30
+  BaseMaxSpeed: 2
+  BaseThrust: 3
+  BaseBraking: 3
+  BaseTurnRate: 30
   ProductionKey: Fighter Wing
   Owner: {fileID: 0}
   XStep: 0.3

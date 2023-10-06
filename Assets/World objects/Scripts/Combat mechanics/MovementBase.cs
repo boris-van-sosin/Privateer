@@ -266,12 +266,17 @@ public abstract class MovementBase : MonoBehaviour
     protected enum ControlType { Manual, Maneuver };
 
     // Movement stats
-    public float MaxSpeed;
-    public float Thrust;
-    public float Braking;
-    public float TurnRate;
+    public float BaseMaxSpeed;
+    public float BaseThrust;
+    public float BaseBraking;
+    public float BaseTurnRate;
     protected float _speed;
     private float _targetSpeed;
+
+    public virtual float MaxSpeed { get { return BaseMaxSpeed; } }
+    public virtual float Thrust { get { return BaseThrust; } }
+    public virtual float Braking { get { return BaseBraking; } }
+    public virtual float TurnRate { get { return BaseTurnRate; } }
 
     protected ShipDirection _movementDirection = ShipDirection.Stopped;
     protected ControlType _currControlMode, _prevControlMode;

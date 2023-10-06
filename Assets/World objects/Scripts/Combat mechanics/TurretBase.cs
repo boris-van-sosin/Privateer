@@ -428,36 +428,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         return Vector3.SignedAngle(_containingShip.transform.forward, flatDir, _containingShip.transform.up) + 180;
     }
 
-    /*protected float AngleToGlobal(float angle)
-    {
-        Quaternion rot = Quaternion.AngleAxis(angle, _containingShip.transform.forward);
-        Quaternion worldDir = Quaternion.LookRotation(Vector3.right);
-        return Quaternion.Angle(rot, worldDir);
-    }*/
-
-    /*protected float AngleToShipHeading(float globalAngle, bool inverse)
-    {
-        Vector3 forwardClean = Vector3.forward;
-        forwardClean.y = 0;
-        Vector3 shipHeadingClean = _containingShip.transform.up;
-        shipHeadingClean.y = 0;
-        float angleOffset = Quaternion.FromToRotation(shipHeadingClean, forwardClean).eulerAngles.y;
-        if (inverse)
-        {
-            angleOffset = -angleOffset;
-        }
-        float finalAngle = globalAngle + angleOffset;
-        if (finalAngle > 360f)
-        {
-            finalAngle -= 360f;
-        }
-        else if (finalAngle < 0)
-        {
-            finalAngle += 360;
-        }
-        return finalAngle;
-    }*/
-
     private float AngleToTargetShip
     {
         get
