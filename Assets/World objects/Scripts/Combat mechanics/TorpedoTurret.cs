@@ -206,7 +206,7 @@ public class TorpedoTurret : TurretBase
     public string LoadedTorpedoType;
     private Vector3 _launchDirection;
     private Vector3 LaunchVector { get { return Muzzles[0].TransformDirection(_launchDirection); } }
-    private Vector3 LaunchOrientation => Muzzles[0].up;
+    private Vector3 LaunchOrientation => Muzzles[0].forward;
     private GenericOpenCloseAnim _torpedoTubeDoorsAnim;
     private Vector3 _torpedoTarget;
     private float _torpedoScale;

@@ -29,10 +29,10 @@ CollisionMesh:
   MeshPath: ''
   DoCombine: false
 MovementData:
-  MaxSpeed: 0.83
-  Thrust: 0.085
-  Braking: 0.83
-  TurnRate: 26
+  MaxSpeed: 0.48
+  Thrust: 0.0435
+  Braking: 0.367
+  TurnRate: 21
 TeamColorComponents:
 - Name: Team color
   Position:

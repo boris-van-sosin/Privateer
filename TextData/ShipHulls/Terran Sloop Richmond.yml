@@ -8,13 +8,13 @@ Geometry:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - sloop richmond
@@ -27,10 +27,10 @@ CollisionMesh:
   MeshPath: ''
   DoCombine: false
 MovementData:
-  MaxSpeed: 0.9
-  Thrust: 0.1
-  Braking: 0.8
-  TurnRate: 30
+  MaxSpeed: 0.745
+  Thrust: 0.0845
+  Braking: 0.745
+  TurnRate: 28
 TeamColorComponents:
 - Name: TeamColor
   Position:
@@ -38,13 +38,13 @@ TeamColorComponents:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - sloop richmond
@@ -80,13 +80,13 @@ WeaponHardpoints:
       y: 0
       z: 0.311385185
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Fore fixed gun
@@ -107,13 +107,13 @@ WeaponHardpoints:
       y: 0.00499998778
       z: 0.116002023
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Broadside right 1
@@ -134,13 +134,13 @@ WeaponHardpoints:
       y: 0.005
       z: 0.116
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Broadside left 1
@@ -161,13 +161,13 @@ WeaponHardpoints:
       y: 0.005
       z: 0
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Broadside right 2
@@ -188,13 +188,13 @@ WeaponHardpoints:
       y: 0.005
       z: 0
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Broadside left 2
@@ -215,13 +215,13 @@ WeaponHardpoints:
       y: 0.005
       z: -0.115902036
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Broadside right 3
@@ -242,13 +242,13 @@ WeaponHardpoints:
       y: 0.005
       z: -0.115902036
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Broadside left 3

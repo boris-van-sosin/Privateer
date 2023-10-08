@@ -299,10 +299,10 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         if (HullObject != null)
         {
             Mesh m = HullObject.GetComponent<MeshFilter>().mesh;
-            ShipUnscaledLength = m.bounds.size.y;
+            ShipUnscaledLength = m.bounds.size.z;
             ShipUnscaledWidth = m.bounds.size.x;
 
-            ShipLength = ShipUnscaledLength * HullObject.lossyScale.y;
+            ShipLength = ShipUnscaledLength * HullObject.lossyScale.z;
             ShipWidth = ShipUnscaledWidth * HullObject.lossyScale.x;
         }
         else
@@ -423,7 +423,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
         {
             return false;
         }
-        Quaternion q = Quaternion.LookRotation(-hp.transform.up, hp.transform.forward);
+        Quaternion q = Quaternion.LookRotation(hp.transform.forward, hp.transform.up);
         t.transform.rotation = q;
         t.transform.parent = hp.transform;
         t.transform.localScale = Vector3.one;

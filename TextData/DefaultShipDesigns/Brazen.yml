@@ -1,0 +1,103 @@
+﻿ShipHullProductionKey: Charleston
+ShipClassName: Brazen
+ShipComponents:
+- Section: Center
+  Components:
+  - Power converter - Sloop-grade
+  - Power converter - Sloop-grade
+  - Shield generator - Sloop-grade
+  - Capacitor bank
+- Section: Fore
+  Components:
+  - Heat sink
+- Section: Aft
+  Components:
+  - Damage control center - Sloop-grade
+  - Ship engine - Sloop-grade
+  - Ship engine - Sloop-grade
+- Section: Left
+  Components:
+  - Heat exchange - 24 heat/sec
+- Section: Right
+  Components:
+  - Heat exchange - 24 heat/sec
+- Section: Hidden
+  Components:
+  - 
+Turrets:
+- HardpointKey: Fore gun
+  TurretType: LightBarbette
+  WeaponType: Howitzer
+  WeaponSize: Light
+  WeaponNum: 1
+  InstalledMods:
+  - DualAmmoFeed
+  AmmoTypes:
+  - HE round
+  - Frag round
+  AlternatingFire: false
+- HardpointKey: TorpR1
+  TurretType: TorpedoTube
+  WeaponType: TorpedoWeapon
+  WeaponSize: ''
+  WeaponNum: ''
+  InstalledMods:
+  - None
+  AmmoTypes:
+  - Heavy
+  AlternatingFire: false
+- HardpointKey: TorpL1
+  TurretType: TorpedoTube
+  WeaponType: TorpedoWeapon
+  WeaponSize: ''
+  WeaponNum: ''
+  InstalledMods:
+  - None
+  AmmoTypes:
+  - Heavy
+  AlternatingFire: false
+- HardpointKey: TorpR2
+  TurretType: TorpedoTube
+  WeaponType: TorpedoWeapon
+  WeaponSize: ''
+  WeaponNum: ''
+  InstalledMods:
+  - None
+  AmmoTypes:
+  - Heavy
+  AlternatingFire: false
+- HardpointKey: TorpL2
+  TurretType: TorpedoTube
+  WeaponType: TorpedoWeapon
+  WeaponSize: ''
+  WeaponNum: ''
+  InstalledMods:
+  - None
+  AmmoTypes:
+  - Heavy
+  AlternatingFire: false
+WeaponConfig:
+  WeaponGroups:
+  - GroupNum: 1
+    HardpointKeys:
+    - Fore gun
+    DefaultAuto: true
+  - GroupNum: 2
+    HardpointKeys:
+    - TorpR1
+    - TorpL1
+    - TorpR2
+    - TorpL2
+    DefaultAuto: true
+  - GroupNum: 3
+    HardpointKeys: []
+    DefaultAuto: true
+  - GroupNum: 4
+    HardpointKeys: []
+    DefaultAuto: true
+  - GroupNum: 5
+    HardpointKeys: []
+    DefaultAuto: true
+  - GroupNum: 6
+    HardpointKeys: []
+    DefaultAuto: true

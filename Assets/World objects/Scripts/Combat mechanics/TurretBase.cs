@@ -268,7 +268,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected virtual bool MuzzleOppositeDirCheck(Transform Muzzle, Vector3 vecToTarget)
     {
-        return Vector3.Dot(Muzzle.up, vecToTarget) >= 0;
+        return Vector3.Dot(Muzzle.forward, vecToTarget) >= 0;
     }
 
     public void Fire(Vector3 target)
@@ -379,7 +379,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         get
         {
-            return GlobalDirToShipHeading(-transform.forward);
+            return GlobalDirToShipHeading(transform.forward);
         }
     }
 

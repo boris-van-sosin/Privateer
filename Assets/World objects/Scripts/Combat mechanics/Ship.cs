@@ -592,9 +592,9 @@ public class Ship : ShipBase
         _autoHeading = true;
     }
 
-    public override float MaxSpeed => BaseMaxSpeed * 0.1f + _engines.TotalWorkingEnginePower;
-    public override float Thrust => BaseThrust * 0.01f + _engines.TotalWorkingEnginePower;
-    public override float Braking => BaseBraking * 0.1f + _engines.TotalWorkingEnginePower;
+    public override float MaxSpeed => BaseMaxSpeed + _engines.TotalWorkingEnginePower;
+    public override float Thrust => BaseThrust + _engines.TotalWorkingEnginePower;
+    public override float Braking => BaseBraking + _engines.TotalWorkingEnginePower;
     public override float TurnRate => BaseTurnRate + _engines.SumInnerEnginePower;
 
     public bool TryChangeEnergy(int delta)

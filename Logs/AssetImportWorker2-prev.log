@@ -1,0 +1,866 @@
+Using pre-set license
+Built from '2023.1/staging' branch; Version is '2023.1.0f1 (a008fa768e6c) revision 10488058'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 11  (10.0.22621) 64bit Professional' Language: 'en' Physical Memory: 32556 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\2023.1.0f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker2
+-projectPath
+C:/Users/boris/Documents/Privateer
+-logFile
+Logs/AssetImportWorker2.log
+-srvPort
+59412
+Successfully changed project path to: C:/Users/boris/Documents/Privateer
+C:/Users/boris/Documents/Privateer
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [17368] Host "[IP] 192.168.1.132 [Port] 0 [Flags] 2 [Guid] 3655982083 [EditorId] 3655982083 [Version] 1048832 [Id] WindowsEditor(7,Kremlin2) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined multi-casting on [225.0.0.222:54997]...
+
+Player connection [17368] Host "[IP] 192.168.1.132 [Port] 0 [Flags] 2 [Guid] 3655982083 [EditorId] 3655982083 [Version] 1048832 [Id] WindowsEditor(7,Kremlin2) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" joined alternative multi-casting on [225.0.0.222:34997]...
+
+Library Redirect Path: Library/Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Refreshing native plugins compatible for Editor in 12.43 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2023.1.0f1 (a008fa768e6c)
+[Subsystems] Discovering subsystems at path C:/Program Files/2023.1.0f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/boris/Documents/Privateer/Assets
+GfxDevice: creating device client; threaded=0; jobified=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA Quadro RTX 3000 (ID=0x1f36)
+    Vendor:   NVIDIA
+    VRAM:     5968 MB
+    Driver:   31.0.15.3742
+Initialize mono
+Mono path[0] = 'C:/Program Files/2023.1.0f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/2023.1.0f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/2023.1.0f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56232
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/2023.1.0f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/2023.1.0f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.003392 seconds.
+- Loaded All Assemblies, in  0.452 seconds
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+- Finished resetting the current domain, in  0.313 seconds
+Domain Reload Profiling: 763ms
+	BeginReloadAssembly (126ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (48ms)
+	RebuildNativeTypeToScriptingClass (13ms)
+	initialDomainReloadingComplete (51ms)
+	LoadAllAssembliesAndSetupDomain (212ms)
+		LoadAssemblies (125ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (207ms)
+			TypeCache.Refresh (204ms)
+				TypeCache.ScanAssembly (187ms)
+			ScanForSourceGeneratedMonoScriptInfo (1ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (313ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (264ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (10ms)
+			SetLoadedEditorAssemblies (5ms)
+			BeforeProcessingInitializeOnLoad (7ms)
+			ProcessInitializeOnLoadAttributes (188ms)
+			ProcessInitializeOnLoadMethodAttributes (54ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.925 seconds
+Refreshing native plugins compatible for Editor in 8.20 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.833 seconds
+Domain Reload Profiling: 1756ms
+	BeginReloadAssembly (283ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (6ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (28ms)
+	RebuildCommonClasses (34ms)
+	RebuildNativeTypeToScriptingClass (12ms)
+	initialDomainReloadingComplete (34ms)
+	LoadAllAssembliesAndSetupDomain (559ms)
+		LoadAssemblies (304ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (341ms)
+			TypeCache.Refresh (313ms)
+				TypeCache.ScanAssembly (297ms)
+			ScanForSourceGeneratedMonoScriptInfo (23ms)
+			ResolveRequiredComponents (4ms)
+	FinalizeReload (834ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (607ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (8ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (130ms)
+			ProcessInitializeOnLoadAttributes (272ms)
+			ProcessInitializeOnLoadMethodAttributes (190ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 12.54 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3124 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 86 unused Assets / (1.1 MB). Loaded Objects now: 3664.
+Memory consumption went from 158.5 MB to 157.4 MB.
+Total: 11.443400 ms (FindLiveObjects: 0.281500 ms CreateObjectMapping: 0.269600 ms MarkObjects: 10.479900 ms  DeleteObjects: 0.410400 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1748647.021903 seconds.
+  path: Assets/World objects/Turret prefabs/Hvy barbette auto.prefab
+  artifactKey: Guid(3bad62331a71cbf41af74d43e979119d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Turret prefabs/Hvy barbette auto.prefab using Guid(3bad62331a71cbf41af74d43e979119d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7fc8c2678e610864a46c05ca135489eb') in 0.122524 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 3.695012 seconds.
+  path: Assets/World objects/Turret prefabs/Small barbette howitzer.prefab
+  artifactKey: Guid(9b763ff6eeab19b42b1dad1ed2c9b360) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Turret prefabs/Small barbette howitzer.prefab using Guid(9b763ff6eeab19b42b1dad1ed2c9b360) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a9ab9f073332729b35c10f5e3439307') in 0.012345 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 24
+========================================================================
+Received Import Request.
+  Time since last request: 4.933402 seconds.
+  path: Assets/World objects/Turrets_raw/guns new.fbx
+  artifactKey: Guid(e0a6623216b47b84c93353024d417e5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Turrets_raw/guns new.fbx using Guid(e0a6623216b47b84c93353024d417e5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '165fc33655042c1d929b498f0fd289e3') in 0.622809 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 326
+========================================================================
+Received Import Request.
+  Time since last request: 29.111986 seconds.
+  path: Assets/World objects/Turrets_raw/Materials/material.mat
+  artifactKey: Guid(e8c603d40fae37f40b1d9dfab6aa3b8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Turrets_raw/Materials/material.mat using Guid(e8c603d40fae37f40b1d9dfab6aa3b8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fabb3c41e33fb3dfe01fa65b7a30acde') in 0.014259 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 1
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  1.026 seconds
+Refreshing native plugins compatible for Editor in 6.77 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.135 seconds
+Domain Reload Profiling: 2159ms
+	BeginReloadAssembly (414ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (7ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (51ms)
+	RebuildCommonClasses (36ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (533ms)
+		LoadAssemblies (351ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (292ms)
+			TypeCache.Refresh (287ms)
+				TypeCache.ScanAssembly (272ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1136ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (703ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (116ms)
+			ProcessInitializeOnLoadAttributes (320ms)
+			ProcessInitializeOnLoadMethodAttributes (251ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (8ms)
+Refreshing native plugins compatible for Editor in 12.08 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3075 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3711.
+Memory consumption went from 148.3 MB to 147.3 MB.
+Total: 11.321500 ms (FindLiveObjects: 0.461100 ms CreateObjectMapping: 0.504300 ms MarkObjects: 10.096000 ms  DeleteObjects: 0.257700 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Refreshing native plugins compatible for Editor in 9.10 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 13 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 13 unused Assets / (1.0 MB). Loaded Objects now: 3711.
+Memory consumption went from 101.5 MB to 100.5 MB.
+Total: 12.625800 ms (FindLiveObjects: 0.277100 ms CreateObjectMapping: 0.347200 ms MarkObjects: 11.795400 ms  DeleteObjects: 0.204400 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Refreshing native plugins compatible for Editor in 7.14 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 13 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 13 unused Assets / (1.0 MB). Loaded Objects now: 3711.
+Memory consumption went from 101.1 MB to 100.1 MB.
+Total: 8.689000 ms (FindLiveObjects: 0.263500 ms CreateObjectMapping: 0.270800 ms MarkObjects: 7.945100 ms  DeleteObjects: 0.207900 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Refreshing native plugins compatible for Editor in 7.44 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 13 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 13 unused Assets / (1.0 MB). Loaded Objects now: 3711.
+Memory consumption went from 101.1 MB to 100.1 MB.
+Total: 8.651700 ms (FindLiveObjects: 0.275100 ms CreateObjectMapping: 0.317200 ms MarkObjects: 7.855000 ms  DeleteObjects: 0.203300 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Refreshing native plugins compatible for Editor in 6.75 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 13 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 13 unused Assets / (1.0 MB). Loaded Objects now: 3711.
+Memory consumption went from 101.1 MB to 100.1 MB.
+Total: 7.954800 ms (FindLiveObjects: 0.365500 ms CreateObjectMapping: 0.240100 ms MarkObjects: 7.145000 ms  DeleteObjects: 0.203000 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Prepare
+Platform AndroidPlayer does not support graphics device type OpenGL ES 2
+Begin MonoManager ReloadAssembly
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+C:\build\output\Unity-Technologies\mono\mono\metadata\icall.c:1842:
+Symbol file LoadedFromMemory is not a mono symbol file
+- Loaded All Assemblies, in  0.967 seconds
+Refreshing native plugins compatible for Editor in 7.98 ms, found 2 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.021 seconds
+Domain Reload Profiling: 1985ms
+	BeginReloadAssembly (398ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (7ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (48ms)
+	RebuildCommonClasses (36ms)
+	RebuildNativeTypeToScriptingClass (14ms)
+	initialDomainReloadingComplete (26ms)
+	LoadAllAssembliesAndSetupDomain (491ms)
+		LoadAssemblies (307ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (281ms)
+			TypeCache.Refresh (275ms)
+				TypeCache.ScanAssembly (260ms)
+			ScanForSourceGeneratedMonoScriptInfo (0ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (1021ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (605ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (7ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (123ms)
+			ProcessInitializeOnLoadAttributes (266ms)
+			ProcessInitializeOnLoadMethodAttributes (201ms)
+			AfterProcessingInitializeOnLoad (4ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 9.93 ms, found 2 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3076 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 76 unused Assets / (1.0 MB). Loaded Objects now: 3715.
+Memory consumption went from 149.6 MB to 148.6 MB.
+Total: 8.359800 ms (FindLiveObjects: 0.281800 ms CreateObjectMapping: 0.325300 ms MarkObjects: 7.487300 ms  DeleteObjects: 0.264200 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:AudioImporter_EditorPlatform: d09bf68614088b80899f8185d706f6e7 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 434.255816 seconds.
+  path: Assets/World objects/Turret prefabs/Small barbette howitzer.prefab
+  artifactKey: Guid(9b763ff6eeab19b42b1dad1ed2c9b360) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Turret prefabs/Small barbette howitzer.prefab using Guid(9b763ff6eeab19b42b1dad1ed2c9b360) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5e4f3174ad7240bab635e44dee7f799e') in 0.096780 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 27
+========================================================================
+Received Import Request.
+  Time since last request: 20.349375 seconds.
+  path: Assets/World objects/Scripted turret prefabs
+  artifactKey: Guid(faa934ad6e287f347bf36006f247a428) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs using Guid(faa934ad6e287f347bf36006f247a428) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c3a57cb777c45dbd328c2b230943794a') in 0.000692 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 0.885946 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Bomber Autocannon.prefab
+  artifactKey: Guid(b5949d1fa676c7f4e92ba333f4a2851f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Bomber Autocannon.prefab using Guid(b5949d1fa676c7f4e92ba333f4a2851f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '25d8b858d7c8d6744be89f99b409a7eb') in 0.018919 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 42
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Fighter Autocannon.prefab
+  artifactKey: Guid(5658713b448e79344abdb1f4dea7ece5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Fighter Autocannon.prefab using Guid(5658713b448e79344abdb1f4dea7ece5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '357c2714072d298ece8d1e6bb4d41cdb') in 0.015654 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 27
+========================================================================
+Received Import Request.
+  Time since last request: 0.000440 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette howitzer.prefab
+  artifactKey: Guid(34ae2146c726dc94ba2072501752ece4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette howitzer.prefab using Guid(34ae2146c726dc94ba2072501752ece4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ea42c1d6258027a8998457a7ba022f6') in 0.018335 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 64
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette auto.prefab
+  artifactKey: Guid(01e229aa3b0b8934098c62727e6364d5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette auto.prefab using Guid(01e229aa3b0b8934098c62727e6364d5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '98b074bcc07921f7175b7d623dfdff6c') in 0.018746 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 64
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette single auto.prefab
+  artifactKey: Guid(5c9622f047fe0374a824236e9593a52e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette single auto.prefab using Guid(5c9622f047fe0374a824236e9593a52e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2d0ab29c54dff80b896a62ee65ca1fae') in 0.016468 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 43
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette single laser.prefab
+  artifactKey: Guid(89236fe868b54b1438aeb22b42bcc305) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette single laser.prefab using Guid(89236fe868b54b1438aeb22b42bcc305) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ce171e9ab7f3908c39521c71746a26cc') in 0.022239 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette lance.prefab
+  artifactKey: Guid(227f0e6979e885c4787314d7be333178) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette lance.prefab using Guid(227f0e6979e885c4787314d7be333178) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4d65ac32541e969b1f8c6f845cf7817f') in 0.016337 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 56
+========================================================================
+Received Import Request.
+  Time since last request: 0.000026 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy broadside howitzer.prefab
+  artifactKey: Guid(6c3a1bf2c7dd8304283a3f30318a3729) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy broadside howitzer.prefab using Guid(6c3a1bf2c7dd8304283a3f30318a3729) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '421989d46a087476e100cc0f51476477') in 0.015965 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy broadside auto.prefab
+  artifactKey: Guid(29a11f064947f594b98a9f307825fab9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy broadside auto.prefab using Guid(29a11f064947f594b98a9f307825fab9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9f582c6ec4b745b8029310bd9c013ada') in 0.016200 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000013 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy flat turret lance.prefab
+  artifactKey: Guid(6b936adab2dc746459696ebcf467b25a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy flat turret lance.prefab using Guid(6b936adab2dc746459696ebcf467b25a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '86d9cbd698935e29ccfa632ce087ac0a') in 0.013513 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 41
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy flat turret laser.prefab
+  artifactKey: Guid(acc95dae141ca7b4c9cc02df331cfa59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy flat turret laser.prefab using Guid(acc95dae141ca7b4c9cc02df331cfa59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f7c6a8cfe08923d7ea3dd6109e8a62b4') in 0.012655 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 30
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy flat turret quad howitzer.prefab
+  artifactKey: Guid(1504023efa3258d4e8c9a407527f2c2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy flat turret quad howitzer.prefab using Guid(1504023efa3258d4e8c9a407527f2c2a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0ddcd8d5a1e7ebe0c183f70067569268') in 0.017676 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 71
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med barbette auto.prefab
+  artifactKey: Guid(092af68cb82fb344d96bbc8e08a83608) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med barbette auto.prefab using Guid(092af68cb82fb344d96bbc8e08a83608) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'da4aa6e56548ad92e894ea3eb6a9bfe3') in 0.014648 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 64
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med barbette lance.prefab
+  artifactKey: Guid(c5f08285ce23e464bb42209bbbd050fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med barbette lance.prefab using Guid(c5f08285ce23e464bb42209bbbd050fa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c408a40deec083833e1302d83debe697') in 0.013024 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 56
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy broadside hv.prefab
+  artifactKey: Guid(965c7cad7b38c3547a203f25ea3f623c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy broadside hv.prefab using Guid(965c7cad7b38c3547a203f25ea3f623c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0c5e20851f1900a2195cda895e494a9a') in 0.013943 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med broadside lance.prefab
+  artifactKey: Guid(f4f8e6ce566563540908bdc51d789a2f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med broadside lance.prefab using Guid(f4f8e6ce566563540908bdc51d789a2f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0d027271654b8a492dc6ca05fff102d2') in 0.012794 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 29
+========================================================================
+Received Import Request.
+  Time since last request: 0.000013 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med broadside laser.prefab
+  artifactKey: Guid(d8677ae79aaa8c249baceec70218c71c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med broadside laser.prefab using Guid(d8677ae79aaa8c249baceec70218c71c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'edcccb3cc790f106f31425637658ed9e') in 0.012106 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 23
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret dual small howitzer.prefab
+  artifactKey: Guid(a72a48815b601ce4696bd73a505e5582) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret dual small howitzer.prefab using Guid(a72a48815b601ce4696bd73a505e5582) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd30f361539042d4420154b8de1d2fe7e') in 0.016156 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret dual small laser.prefab
+  artifactKey: Guid(a1be38c39c123f4429b90dc05178576c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret dual small laser.prefab using Guid(a1be38c39c123f4429b90dc05178576c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7ab76451b76da7a5f6b2193f271cba50') in 0.012364 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 30
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret dual small lance.prefab
+  artifactKey: Guid(4add7934aebd4524c9a25a56be78b1c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret dual small lance.prefab using Guid(4add7934aebd4524c9a25a56be78b1c0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6ae05d27424099e090f32906a8223b3c') in 0.015825 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 41
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret hvy hv.prefab
+  artifactKey: Guid(82e673d90507111428a47da2970732b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret hvy hv.prefab using Guid(82e673d90507111428a47da2970732b2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0dec26390edb273a94d29ed8183f139b') in 0.016114 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret plasma.prefab
+  artifactKey: Guid(a5cd5f6941e3d3d488ffd6a458a7cbf6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret plasma.prefab using Guid(a5cd5f6941e3d3d488ffd6a458a7cbf6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f57fdedfbd6bf283bccb94f15537b288') in 0.013078 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 34
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small barbette dual small howitzer.prefab
+  artifactKey: Guid(3abf0cd0a8268c142acb6518824ff62e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small barbette dual small howitzer.prefab using Guid(3abf0cd0a8268c142acb6518824ff62e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1814487ea1fc7366f5bc348669950493') in 0.014792 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 59
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small barbette dual small lance.prefab
+  artifactKey: Guid(e31a5ce14fd370a4183778440a812ec3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small barbette dual small lance.prefab using Guid(e31a5ce14fd370a4183778440a812ec3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '23f949adaa8ad4823988bd3ba573d2b2') in 0.013079 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 51
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small barbette hv.prefab
+  artifactKey: Guid(8d003090dde577042af5adacfe80567e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small barbette hv.prefab using Guid(8d003090dde577042af5adacfe80567e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0d2fc5b5b2097f408a079b1290b20b7b') in 0.015279 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 38
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small barbette lance.prefab
+  artifactKey: Guid(64262e99d9a0fc44384a2b9bfe31e167) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small barbette lance.prefab using Guid(64262e99d9a0fc44384a2b9bfe31e167) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b5e4e28ba2159506469afeb8459ae5ea') in 0.012484 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 34
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small barbette plasma.prefab
+  artifactKey: Guid(ad941b1513584c84fb385dcd58ca5a5d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small barbette plasma.prefab using Guid(ad941b1513584c84fb385dcd58ca5a5d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '65b14636a1facc4aa18e35a85d79d618') in 0.012852 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 23
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small broadside hv.prefab
+  artifactKey: Guid(ebdd5d0b964efe545a6ac7b3c8f73bd1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small broadside hv.prefab using Guid(ebdd5d0b964efe545a6ac7b3c8f73bd1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'add5d6b54a92fc12dd6a2a2a2901b494') in 0.015754 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000014 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small broadside cap.prefab
+  artifactKey: Guid(bdfd0f057d0768c4cb8724d9a1037be4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small broadside cap.prefab using Guid(bdfd0f057d0768c4cb8724d9a1037be4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f6d8c6ab54a57e7f27dbd6b59e74524b') in 0.013888 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret laser.prefab
+  artifactKey: Guid(1997dce5096805c48a9eafaa4b6f61fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret laser.prefab using Guid(1997dce5096805c48a9eafaa4b6f61fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cb642e3f5d82dcd89c0e1c20e8998ede') in 0.015752 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 30
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret dual small auto.prefab
+  artifactKey: Guid(559c992fe452dc74e8224e4b87122a5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret dual small auto.prefab using Guid(559c992fe452dc74e8224e4b87122a5f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '14c6deb247bdefd34b4f744f9201da95') in 0.019570 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small fixed auto.prefab
+  artifactKey: Guid(adc1ba5b3d9f1ce4fbce7e87fd460af4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small fixed auto.prefab using Guid(adc1ba5b3d9f1ce4fbce7e87fd460af4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '18bfd7d1d76069be4e3ce933a72a3ad8') in 0.019755 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette plasma.prefab
+  artifactKey: Guid(daf70844fa53c4a47b48e3aa74b72b51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette plasma.prefab using Guid(daf70844fa53c4a47b48e3aa74b72b51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b13ffb4c3d4ba78249efed64a5c1c041') in 0.023100 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 40
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy broadside laser.prefab
+  artifactKey: Guid(60b7e1ce790e05c47b2f9fb993073570) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy broadside laser.prefab using Guid(60b7e1ce790e05c47b2f9fb993073570) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '12d57654aeb84a7adfe9abc040b26d3c') in 0.015211 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 23
+========================================================================
+Received Import Request.
+  Time since last request: 0.000019 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette single howitzer.prefab
+  artifactKey: Guid(b30fc271318411f429e6c9a8348b7734) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette single howitzer.prefab using Guid(b30fc271318411f429e6c9a8348b7734) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd5ff2d7481edf802c6e282f2d377a38f') in 0.018291 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 43
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med broadside cap.prefab
+  artifactKey: Guid(a91b925608923b049a97075730139ddd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med broadside cap.prefab using Guid(a91b925608923b049a97075730139ddd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ef30681bec563a2b3987f573c07eb093') in 0.015401 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 0.000016 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med barbette hv.prefab
+  artifactKey: Guid(6ba4f63e5cd2b9b4d84ec9860236b3aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med barbette hv.prefab using Guid(6ba4f63e5cd2b9b4d84ec9860236b3aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e7a0e1b44cdc90ad52a6aa447e58691b') in 0.016395 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 64
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy barbette hv.prefab
+  artifactKey: Guid(c8acef96f20d4894fac87269f9dfbbb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy barbette hv.prefab using Guid(c8acef96f20d4894fac87269f9dfbbb9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2477ea315f3d9d6cb527f8a4739bad25') in 0.016353 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 71
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy broadside cap.prefab
+  artifactKey: Guid(bf25c7cfe5568dc4a9f7e4c89e3edc52) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy broadside cap.prefab using Guid(bf25c7cfe5568dc4a9f7e4c89e3edc52) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6aec24e63ce2f452e4595d3aa9c5653a') in 0.017713 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 10
+========================================================================
+Received Import Request.
+  Time since last request: 0.000020 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Hvy flat turret quad hv.prefab
+  artifactKey: Guid(2eda594783c87054a8041249f3a04428) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Hvy flat turret quad hv.prefab using Guid(2eda594783c87054a8041249f3a04428) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5ecba8a7dde1912f444cd987e73ff869') in 0.017560 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 71
+========================================================================
+Received Import Request.
+  Time since last request: 0.000015 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret howitzer.prefab
+  artifactKey: Guid(e38b099d9f50da24382702fc3a8af421) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret howitzer.prefab using Guid(e38b099d9f50da24382702fc3a8af421) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cfbba4945d6de902c2bead9d287d7342') in 0.016070 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Med turret auto.prefab
+  artifactKey: Guid(9e882f5d7602b394d9f63961c99595fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Med turret auto.prefab using Guid(9e882f5d7602b394d9f63961c99595fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '05a972bdea43c677844206579ab3c7c4') in 0.022132 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 49
+========================================================================
+Received Import Request.
+  Time since last request: 0.259715 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small fixed hv.prefab
+  artifactKey: Guid(3bf3532085dc49e4ab1c2c0d3a605a31) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small fixed hv.prefab using Guid(3bf3532085dc49e4ab1c2c0d3a605a31) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a70d596fb8fcd2e2a9c4ffc8af15033e') in 0.013288 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000039 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small fixed laser.prefab
+  artifactKey: Guid(3132b71c531951f4cab2a67db25c0d25) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small fixed laser.prefab using Guid(3132b71c531951f4cab2a67db25c0d25) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '36278ee59b318fd537fc7efbf61d1195') in 0.012207 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 23
+========================================================================
+Received Import Request.
+  Time since last request: 0.000017 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small turret auto.prefab
+  artifactKey: Guid(26f3785b44fd76f4cab8d1fd708aad08) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small turret auto.prefab using Guid(26f3785b44fd76f4cab8d1fd708aad08) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3bfa1fc2f49612aee41660524699bbb5') in 0.014225 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Small turret hv.prefab
+  artifactKey: Guid(31b0f9d38d19885499105b172665d0fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Small turret hv.prefab using Guid(31b0f9d38d19885499105b172665d0fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4eecbd02b52d97089234f09d69fe8ab4') in 0.014117 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 33
+========================================================================
+Received Import Request.
+  Time since last request: 0.000018 seconds.
+  path: Assets/World objects/Scripted turret prefabs/Torpedo Tube.prefab
+  artifactKey: Guid(168a20a7e442d784db06192c86836d6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/World objects/Scripted turret prefabs/Torpedo Tube.prefab using Guid(168a20a7e442d784db06192c86836d6b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1b8ffc047929491398374a8bbe73260c') in 0.017166 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 341
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0

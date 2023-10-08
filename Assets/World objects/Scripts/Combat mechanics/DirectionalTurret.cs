@@ -5,7 +5,7 @@ public abstract class DirectionalTurret : TurretBase
 {
     protected override void SetDefaultAngle()
     {
-        DefaultDirection = _containingShip.transform.InverseTransformDirection(-transform.forward);
+        DefaultDirection = _containingShip.transform.InverseTransformDirection(transform.forward);
     }
 
     protected override void Update()

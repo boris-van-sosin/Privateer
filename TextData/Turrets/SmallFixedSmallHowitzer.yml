@@ -19,10 +19,10 @@ Geometry:
   - Name: Carriage1
     Position:
       x: 0
-      y: 0.0002
-      z: 0.0017
+      y: 0.002
+      z: 0.017
     Rotation:
-      x: 270
+      x: 0
       y: 0
       z: 0
     Scale:
@@ -40,8 +40,8 @@ Geometry:
     - Name: Sleeve1
       Position:
         x: 0
-        y: 0.005
-        z: 0
+        y: 0
+        z: 0.05
       Rotation:
         x: 0
         y: 0
@@ -61,8 +61,8 @@ Geometry:
       - Name: Barrel1
         Position:
           x: 0
-          y: -0.002
-          z: 0.002
+          y: 0.02
+          z: -0.02
         Rotation:
           x: 0
           y: 0
@@ -99,16 +99,16 @@ Geometry:
           - Name: MuzzleFlashEffect
             Position:
               x: 0
-              y: 0.0023
-              z: 0
+              y: 0
+              z: 0.023
             Rotation:
               x: 0
-              y: 0
-              z: 90
+              y: -90
+              z: 0
             Scale:
-              x: 0.1
-              y: 0.1
-              z: 0.1
+              x: 1
+              y: 1
+              z: 1
             NodeMesh: 
             NodeParticleSystem:
               AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'

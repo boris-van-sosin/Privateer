@@ -85,7 +85,7 @@ public class FleetSetupPanel : MonoBehaviour
                     dummyTurret.SetParent(hp.transform, false);
                     dummyTurret.localScale = Vector3.one;
                     dummyTurret.localPosition = Vector3.zero;
-                    Quaternion q = Quaternion.LookRotation(-hp.transform.up, hp.transform.forward);
+                    Quaternion q = Quaternion.LookRotation(hp.transform.forward, hp.transform.up);
                     dummyTurret.transform.rotation = q;
                     break;
                 }

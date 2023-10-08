@@ -87,7 +87,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             }
             if (!_targetReached)
             {
-                Quaternion rotToTarget = Quaternion.FromToRotation(transform.up, vecToTarget);
+                Quaternion rotToTarget = Quaternion.FromToRotation(transform.forward, vecToTarget);
                 Vector3 rotAxis;
                 float rotAngle;
                 rotToTarget.ToAngleAxis(out rotAngle, out rotAxis);
@@ -106,7 +106,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
             float distanceToTravel = Time.deltaTime * Speed;
 
             Vector3 posFlat = new Vector3(transform.position.x, -0.01f, transform.position.z);
-            Vector3 dirFlat = new Vector3(transform.up.x, 0, transform.up.z);
+            Vector3 dirFlat = new Vector3(transform.forward.x, 0, transform.forward.z);
             Ray r = new Ray(posFlat, dirFlat);
             RaycastHit hit;
             if (Physics.Raycast(r, out hit, distanceToTravel, ObjectFactory.AllTargetableLayerMask))
@@ -125,7 +125,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
                     return;
                 }
             }
-            transform.position += distanceToTravel * transform.up.normalized;
+            transform.position += distanceToTravel * transform.forward;
             _distanceTraveled += distanceToTravel;
             if (_distanceTraveled >= Range)
             {
