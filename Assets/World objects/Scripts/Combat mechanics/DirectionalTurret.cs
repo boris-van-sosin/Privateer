@@ -13,12 +13,12 @@ public abstract class DirectionalTurret : TurretBase
         if (CanRotate && Mode != TurretMode.Off && !_rotationAtIdle)
         {
             float maxRotation = RotationSpeed * Time.deltaTime;
-            float angleToRotate = Mathf.Abs(Mathf.MoveTowardsAngle(0, _targetAngle - CurrLocalAngle, maxRotation));
+            float angleToRotate = Mathf.Abs(Mathf.MoveTowardsAngle(0, _targetAngle - CurrAngle, maxRotation));
             if (angleToRotate > GlobalOtherConstants.TurretAngleEps)
             {
                 transform.localRotation = transform.localRotation * Quaternion.AngleAxis(angleToRotate * _rotationDir, TurretAxisVector);
             }
-            else if (Mathf.Abs(CurrLocalAngle - _defaultAngle) < GlobalOtherConstants.TurretAngleEps)
+            else if (Mathf.Abs(CurrAngle - _defaultAngle) < GlobalOtherConstants.TurretAngleEps)
             {
                 _rotationAtIdle = true;
             }
@@ -88,7 +88,7 @@ public abstract class DirectionalTurret : TurretBase
             _targetAngle = closestLegalAngle;
         }
 
-        float currLocal = CurrLocalAngle;
+        float currLocal = CurrAngle;
         if (_minRotation < _maxRotation)
         {
             if (_minRotation == 0.0f && _maxRotation == 360.0f)
@@ -152,7 +152,7 @@ public abstract class DirectionalTurret : TurretBase
         }
         else
         {
-            return Vector3.Angle(flatVec, Muzzles[_nextBarrel].up) <= tolerance;
+            return Vector3.Angle(flatVec, Muzzles[_nextBarrel].forward) <= tolerance;
         }
         return false;
     }

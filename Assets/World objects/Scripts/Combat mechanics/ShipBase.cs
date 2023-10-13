@@ -531,7 +531,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             foreach (ITurret t in _manualTurrets.Where(x => x.GetTurretBehavior() == TurretBase.TurretMode.Manual))
             {
                 t.FireGrapplingTool(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrAngle);
             }
         }
         else
@@ -539,7 +539,7 @@ public abstract class ShipBase : MovementBase, ITargetableEntity
             foreach (ITurret t in WeaponGroups.ManualTurrets)
             {
                 t.FireGrapplingTool(target);
-                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrLocalAngle);
+                sb.AppendFormat("Turret {0}:{1}, ", t, t.CurrAngle);
             }
         }
         //Debug.Log(sb.ToString());

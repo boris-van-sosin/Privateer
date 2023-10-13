@@ -5,6 +5,7 @@ MinShipSize: Destroyer
 MaxShipSize: CapitalShip
 AllowedSlotTypes:
 - ShipSystem
+- ShipSystemAft
 ExtraArmourDefinition:
   ArmourAmount: 50
   MitigationArmourAmount: 100

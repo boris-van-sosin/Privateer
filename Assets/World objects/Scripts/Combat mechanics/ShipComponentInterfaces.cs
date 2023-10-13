@@ -55,7 +55,6 @@ public interface ITurret : IShipActiveComponent
     void SetTurretBehavior(TurretBase.TurretMode newMode);
     TurretBase.TurretMode GetTurretBehavior();
     float CurrAngle { get; }
-    float CurrLocalAngle { get; }
     float GetMaxRange { get; }
     bool IsOutOfAmmo { get; }
     bool ReadyToFire();

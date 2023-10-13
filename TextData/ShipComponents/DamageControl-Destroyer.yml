@@ -6,6 +6,7 @@ MaxShipSize: CapitalShip
 AllowedSlotTypes:
 - ShipSystem
 - ShipSystemCenter
+- ShipSystemAft
 DamageControlDefinition:
   PowerUsage: 3
   HeatGeneration: 0

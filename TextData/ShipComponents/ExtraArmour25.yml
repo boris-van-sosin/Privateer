@@ -5,6 +5,7 @@ MinShipSize: Sloop
 MaxShipSize: CapitalShip
 AllowedSlotTypes:
 - ShipSystem
+- ShipSystemAft
 ExtraArmourDefinition:
   ArmourAmount: 25
   MitigationArmourAmount: 100

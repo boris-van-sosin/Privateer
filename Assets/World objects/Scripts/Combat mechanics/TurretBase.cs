@@ -212,7 +212,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             for (int i = 0; i < _deadZoneAngleRanges.Length; ++i)
             {
-                float currAngle = CurrLocalAngle;
+                float currAngle = CurrAngle;
                 if (_deadZoneAngleRanges[i].Item1 < currAngle && currAngle < _deadZoneAngleRanges[i].Item2)
                 {
                     return false;
@@ -228,23 +228,23 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             }
             Vector3 origin = Muzzles[_nextBarrel].position; //TODO: a different ray computation for torpedo tubes
             origin.y = 0;
-            Vector3 firingVector = Muzzles[_nextBarrel].up;
+            Vector3 firingVector = Muzzles[_nextBarrel].forward;
             firingVector.y = 0;
-            RaycastHit[] hits = Physics.RaycastAll(origin, firingVector, MaxRange, ObjectFactory.NavBoxesAllLayerMask);
+            int numHits = Physics.RaycastNonAlloc(origin, firingVector, _raycastHitCache, MaxRange, ObjectFactory.NavBoxesAllLayerMask);
             int closestHit = -1;
-            for (int i = 0; i < hits.Length; ++i)
+            for (int i = 0; i < numHits; ++i)
             {
-                ShipBase shipDetected = ShipBase.FromCollider(hits[i].collider);
+                ShipBase shipDetected = ShipBase.FromCollider(_raycastHitCache[i].collider);
                 if (shipDetected == ContainingShip)
                 {
                     continue;
                 }
-                if (closestHit < 0 || hits[i].distance < hits[closestHit].distance)
+                if (closestHit < 0 || _raycastHitCache[i].distance < _raycastHitCache[closestHit].distance)
                 {
                     closestHit = i;
                 }
             }
-            if (closestHit >= 0 && _targetShip.Equals(ShipBase.FromCollider(hits[closestHit].collider)))
+            if (closestHit >= 0 && _targetShip.Equals(ShipBase.FromCollider(_raycastHitCache[closestHit].collider)))
             {
                 return true;
             }
@@ -373,9 +373,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-
-    public float CurrAngle { get { return FilterRotation(transform.rotation.eulerAngles); } }
-    public float CurrLocalAngle
+    public float CurrAngle
     {
         get
         {
@@ -396,36 +394,21 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected Vector3 DirectionToLocal(Vector3 dir, bool clean)
     {
         return _containingShip.transform.InverseTransformDirection(dir.x,
-                                                                   clean ? 0 : dir.y,
+                                                                   clean ? 0.0f : dir.y,
                                                                    dir.z);
-    }
-
-    protected Vector3 DirectionToGlobal(Vector3 dir)
-    {
-        return DirectionToGlobal(dir, false);
-    }
-
-    protected Vector3 DirectionToGlobal(Vector3 dir, bool clean)
-    {
-        Vector3 res = _containingShip.transform.TransformDirection(dir);
-        if (clean)
-        {
-            res.y = 0;
-        }
-        return res;
     }
 
     protected float LocalDirToShipHeading(Vector3 dir)
     {
         Vector3 localDir = DirectionToLocal(dir);
-        Vector3 flatDir = Vector3.ProjectOnPlane(localDir, Vector3.forward);
-        return Vector3.SignedAngle(Vector3.up, flatDir, Vector3.forward) + 180;
+        Vector3 flatDir = Vector3.ProjectOnPlane(localDir, Vector3.up);
+        return Vector3.SignedAngle(Vector3.forward, flatDir, Vector3.up) + 180;
     }
 
     protected float GlobalDirToShipHeading(Vector3 dir)
     {
-        Vector3 flatDir = Vector3.ProjectOnPlane(dir, _containingShip.transform.up);
-        return Vector3.SignedAngle(_containingShip.transform.forward, flatDir, _containingShip.transform.up) + 180;
+        Vector3 flatDir = Vector3.ProjectOnPlane(dir, Vector3.up);
+        return Vector3.SignedAngle(_containingShip.transform.forward, flatDir, Vector3.up) + 180;
     }
 
     private float AngleToTargetShip
@@ -438,7 +421,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             }
             Vector3 vecToTargetShip = _targetShip.EntityLocation - transform.position;
             vecToTargetShip.y = 0;
-            return Quaternion.LookRotation(-vecToTargetShip).eulerAngles.y;
+            return GlobalDirToShipHeading(vecToTargetShip);
         }
     }
 
@@ -816,6 +799,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     // Ugly optimization:
     protected Collider[] _collidersCache = new Collider[1024];
+    protected RaycastHit[] _raycastHitCache = new RaycastHit[1024];
 
     protected static readonly WaitForSeconds _autoBehaviorPulseDelay = new WaitForSeconds(0.1f);
     protected static readonly WaitForSeconds _fullBroadsideDelay = new WaitForSeconds(0.1f);

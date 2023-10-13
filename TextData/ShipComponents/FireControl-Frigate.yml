@@ -6,6 +6,7 @@ MaxShipSize: Destroyer
 AllowedSlotTypes:
 - ShipSystem
 - ShipSystemCenter
+- ShipSystemAft
 FireControlGeneralDefinition:
   PowerUsage: 2
   HeatGeneration: 1

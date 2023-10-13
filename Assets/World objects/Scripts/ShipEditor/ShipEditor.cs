@@ -1249,7 +1249,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
                 dummyTurret.parent = hardpoint.transform;
                 dummyTurret.localScale = Vector3.one;
                 dummyTurret.localPosition = Vector3.zero;
-                Quaternion q = Quaternion.LookRotation(-hardpoint.transform.up, hardpoint.transform.forward);
+                Quaternion q = Quaternion.LookRotation(hardpoint.transform.forward, hardpoint.transform.up);
                 dummyTurret.transform.rotation = q;
 
                 string[] ammoTypes = null, turretMods = null;
