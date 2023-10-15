@@ -22,7 +22,7 @@ Geometry:
       y: -0
       z: 0
     Rotation:
-      x: 270
+      x: 0
       y: 0
       z: 0
     Scale:
@@ -40,8 +40,8 @@ Geometry:
     - Name: Howitzer sleeve L
       Position:
         x: 0
-        y: 0.004
-        z: 0.002
+        y: 0.02
+        z: 0.04
       Rotation:
         x: 0
         y: 0
@@ -61,8 +61,8 @@ Geometry:
       - Name: Howitzer barrel
         Position:
           x: 0
-          y: -0.0005
-          z: 0
+          y: 0
+          z: -0.005
         Rotation:
           x: 0
           y: 0
@@ -82,8 +82,8 @@ Geometry:
         - Name: Muzzle1
           Position:
             x: 0
-            y: 0.00462913606
-            z: 0
+            y: 0
+            z: 0.0462913606
           Rotation:
             x: 0
             y: 0
@@ -98,16 +98,16 @@ Geometry:
           - Name: MuzzleFlashEffect
             Position:
               x: 0
-              y: 0.0023
-              z: 0
+              y: 0
+              z: 0.023
             Rotation:
               x: 0
-              y: 0
-              z: 90
+              y: -90
+              z: 0
             Scale:
-              x: 0.1
-              y: 0.1
-              z: 0.1
+              x: 1
+              y: 1
+              z: 1
             NodeMesh: 
             NodeParticleSystem:
               AssetBundlePath: 'AssetBundles\StandaloneWindows\effects'

@@ -8,13 +8,13 @@ Geometry:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - frigate Cochrane
@@ -57,13 +57,13 @@ TeamColorComponents:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - frigate Cochrane
@@ -103,13 +103,13 @@ WeaponHardpoints:
       y: 0.025
       z: 0.32
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Fore gun
@@ -131,13 +131,13 @@ WeaponHardpoints:
       y: 0
       z: 0.081
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right gun
@@ -159,13 +159,13 @@ WeaponHardpoints:
       y: 0
       z: 0.081
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left gun
@@ -187,13 +187,13 @@ WeaponHardpoints:
       y: 0.01
       z: 0.465
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Fore light gun
@@ -214,13 +214,13 @@ WeaponHardpoints:
       y: 0.01
       z: -0.47
     Rotation:
-      x: 270
-      y: 0
+      x: 0
+      y: 180
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Aft light gun

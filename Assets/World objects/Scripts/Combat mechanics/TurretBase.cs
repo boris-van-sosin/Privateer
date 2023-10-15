@@ -230,6 +230,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             origin.y = 0;
             Vector3 firingVector = Muzzles[_nextBarrel].forward;
             firingVector.y = 0;
+            firingVector.Normalize();
             int numHits = Physics.RaycastNonAlloc(origin, firingVector, _raycastHitCache, MaxRange, ObjectFactory.NavBoxesAllLayerMask);
             int closestHit = -1;
             for (int i = 0; i < numHits; ++i)

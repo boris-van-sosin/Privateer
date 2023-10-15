@@ -8,13 +8,13 @@ Geometry:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - fast carrier hermes
@@ -38,13 +38,13 @@ TeamColorComponents:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - fast carrier hermes
@@ -85,13 +85,13 @@ WeaponHardpoints:
       y: 0
       z: 0.39
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right medium gun 1
@@ -111,13 +111,13 @@ WeaponHardpoints:
       y: 0
       z: 0.39
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left medium gun 1
@@ -137,13 +137,13 @@ WeaponHardpoints:
       y: 0
       z: -0.4
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right medium gun 2
@@ -163,13 +163,13 @@ WeaponHardpoints:
       y: 0
       z: -0.4
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left medium gun 2
@@ -189,13 +189,13 @@ WeaponHardpoints:
       y: 0.07
       z: 0.62
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Deck light gun fore
@@ -217,13 +217,13 @@ WeaponHardpoints:
       y: 0.07
       z: -0.53
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Deck light gun aft
@@ -244,13 +244,13 @@ WeaponHardpoints:
       y: -0.07
       z: -1.31022
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left light gun 4
@@ -272,13 +272,13 @@ WeaponHardpoints:
       y: -0.07
       z: -1.31022
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left light gun 4
@@ -690,13 +690,13 @@ CarrierModuleData:
       y: 0.0700000003
       z: 0.564999998
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     OpenCloseData:
       AnimComponentPaths:
       - Cover
@@ -851,13 +851,13 @@ CarrierModuleData:
       y: 0.07
       z: -0.735
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     OpenCloseData:
       AnimComponentPaths:
       - Cover

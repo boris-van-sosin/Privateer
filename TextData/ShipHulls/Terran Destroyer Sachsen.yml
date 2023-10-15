@@ -8,13 +8,13 @@ Geometry:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - destroyer Sachsen
@@ -38,13 +38,13 @@ TeamColorComponents:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - destroyer Sachsen
@@ -88,13 +88,13 @@ WeaponHardpoints:
       y: 0.042
       z: 0.532235265
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Fore medium gun
@@ -116,13 +116,13 @@ WeaponHardpoints:
       y: 0.062
       z: 0.0685850233
     Rotation:
-      x: 270
-      y: 225
+      x: 0
+      y: 45
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Central forward-right gun
@@ -144,13 +144,13 @@ WeaponHardpoints:
       y: 0.062
       z: 0.0685850233
     Rotation:
-      x: 270
-      y: 135
+      x: 0
+      y: -45
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Central forward-left gun
@@ -172,13 +172,13 @@ WeaponHardpoints:
       y: 0.062
       z: -0.178152055
     Rotation:
-      x: 270
-      y: 315
+      x: 0
+      y: 135
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Central aft-right gun
@@ -200,13 +200,13 @@ WeaponHardpoints:
       y: 0.062
       z: -0.178152055
     Rotation:
-      x: 270
-      y: 45
+      x: 0
+      y: -135
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Central aft-left gun
@@ -228,13 +228,13 @@ WeaponHardpoints:
       y: 0.002
       z: 0.36
     Rotation:
-      x: 270
-      y: 225
+      x: 0
+      y: 45
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Fore right light gun
@@ -255,13 +255,13 @@ WeaponHardpoints:
       y: 0.002
       z: 0.36
     Rotation:
-      x: 270
-      y: 135
+      x: 0
+      y: -45
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     NodeMesh: 
     NodeParticleSystem: 
     OpenCloseData: 
@@ -285,13 +285,13 @@ WeaponHardpoints:
       y: 0.002
       z: -0.486140281
     Rotation:
-      x: 270
-      y: 315
+      x: 0
+      y: 135
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Aft right light gun
@@ -312,13 +312,13 @@ WeaponHardpoints:
       y: 0.002
       z: -0.486140281
     Rotation:
-      x: 270
-      y: 45
+      x: 0
+      y: -135
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Aft left light gun
@@ -340,12 +340,12 @@ WeaponHardpoints:
       z: -0.0550960228
     Rotation:
       x: 0
-      y: 90
-      z: 90
+      y: 0
+      z: -90
     Scale:
-      x: 12.5
-      y: 12.5
-      z: 12.5
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TorpedoHardpoint:
     HardpointBaseDefinition:
@@ -371,12 +371,12 @@ WeaponHardpoints:
       z: -0.0550960377
     Rotation:
       x: 0
-      y: 270
-      z: 270
+      y: 0
+      z: 90
     Scale:
-      x: -12.5
-      y: 12.5
-      z: 12.5
+      x: -1
+      y:  1
+      z:  1
     SubNodes: []
   TurretHardpoint: 
   TorpedoHardpoint:

@@ -8,13 +8,13 @@ Geometry:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - cruiser aurora
@@ -57,13 +57,13 @@ TeamColorComponents:
     y: 0
     z: 0
   Rotation:
-    x: 270
-    y: 180
+    x: 0
+    y: 0
     z: 0
   Scale:
-    x: 10
-    y: 10
-    z: 10
+    x: 1
+    y: 1
+    z: 1
   NodeMesh:
     AssetBundlePath: AssetBundles\StandaloneWindows\vanilla_terranships
     AssetPath: terran - cruiser aurora
@@ -113,13 +113,13 @@ WeaponHardpoints:
       y: 0.002
       z: 1.15
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Fore Barbette
@@ -139,13 +139,13 @@ WeaponHardpoints:
       y: 0.0102
       z: 0.978834391
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right light gun 1
@@ -165,13 +165,13 @@ WeaponHardpoints:
       y: 0.0102
       z: 0.978834689
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left light gun 1
@@ -191,13 +191,13 @@ WeaponHardpoints:
       y: 0.0002
       z: 0.763834357
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right light gun 2
@@ -217,13 +217,13 @@ WeaponHardpoints:
       y: 0.0002
       z: 0.763834476
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left light gun 2
@@ -243,13 +243,13 @@ WeaponHardpoints:
       y: 0.002
       z: 0.518834293
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right medium gun 1
@@ -269,13 +269,13 @@ WeaponHardpoints:
       y: 0.002
       z: 0.518834352
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left medium gun 1
@@ -295,13 +295,13 @@ WeaponHardpoints:
       y: 0.002
       z: 0.193834096
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right medium gun 2
@@ -321,13 +321,13 @@ WeaponHardpoints:
       y: 0.002
       z: 0.193834126
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left medium gun 2
@@ -347,13 +347,13 @@ WeaponHardpoints:
       y: 0.002
       z: -0.146166041
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right medium gun 3
@@ -373,13 +373,13 @@ WeaponHardpoints:
       y: 0.002
       z: -0.146166071
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left medium gun 3
@@ -399,13 +399,13 @@ WeaponHardpoints:
       y: 0.002
       z: -0.471166193
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right medium gun 4
@@ -425,13 +425,13 @@ WeaponHardpoints:
       y: 0.002
       z: -0.471166253
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left medium gun 4
@@ -451,13 +451,13 @@ WeaponHardpoints:
       y: 0.0002
       z: -0.716166317
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right light gun 3
@@ -477,13 +477,13 @@ WeaponHardpoints:
       y: 0.0002
       z: -0.716166496
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left light gun 3
@@ -503,13 +503,13 @@ WeaponHardpoints:
       y: 0.0002
       z: -0.931166291
     Rotation:
-      x: 270
-      y: 270
+      x: 0
+      y: 90
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Right light gun 4
@@ -529,13 +529,13 @@ WeaponHardpoints:
       y: 0.0002
       z: -0.93116653
     Rotation:
-      x: 270
-      y: 90
+      x: 0
+      y: -90
       z: 0
     Scale:
-      x: -10
-      y: 10
-      z: 10
+      x: -1
+      y: 1
+      z: 1
     SubNodes: []
   TurretHardpoint:
     DisplayString: Left light gun 4
@@ -555,13 +555,13 @@ WeaponHardpoints:
       y: 0
       z: 0.0155
     Rotation:
-      x: 270
-      y: 240
+      x: 0
+      y: 30
       z: 0
     Scale:
-      x: 12.5
-      y: 12.5
-      z: 12.5
+      x: 1
+      y: 1
+      z: 1
     SubNodes: []
   TorpedoHardpoint:
     HardpointBaseDefinition:
@@ -586,13 +586,13 @@ WeaponHardpoints:
       y: 0
       z: 0.0155
     Rotation:
-      x: 270
-      y: 120
+      x: 0
+      y: -30
       z: 0
     Scale:
-      x: -12.5
-      y: 12.5
-      z: 12.5
+      x: -1
+      y:  1
+      z:  1
     SubNodes: []
   TurretHardpoint: 
   TorpedoHardpoint:
@@ -1008,13 +1008,13 @@ CarrierModuleData:
       y: 0
       z: -0.929243445
     Rotation:
-      x: 270
-      y: 180
+      x: 0
+      y: 0
       z: 0
     Scale:
-      x: 10
-      y: 10
-      z: 10
+      x: 1
+      y: 1
+      z: 1
     OpenCloseData:
       AnimComponentPaths:
       - Cover

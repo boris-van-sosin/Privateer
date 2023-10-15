@@ -22,7 +22,7 @@ Geometry:
       y: 0
       z: 0
     Rotation:
-      x: 270
+      x: 0
       y: 0
       z: 0
     Scale:
@@ -39,9 +39,9 @@ Geometry:
     SubNodes:
     - Name: Sleeve1
       Position:
-        x: 0.00355738634
-        y: 0.0162375309
-        z: 0.00497329235
+        x: 0.0355738634
+        y: 0.0497329235
+        z: 0.162375309
       Rotation:
         x: 0
         y: 0
@@ -61,8 +61,8 @@ Geometry:
       - Name: Barrel1
         Position:
           x: 0
-          y: -0.0009
-          z: 0
+          y: 0
+          z: -0.009
         Rotation:
           x: 0
           y: 0
@@ -82,8 +82,8 @@ Geometry:
         - Name: Muzzle1
           Position:
             x: 0
-            y: 0.006625
-            z: 0
+            y: 0
+            z: 0.06625
           Rotation:
             x: 0
             y: 0
@@ -99,16 +99,16 @@ Geometry:
           - Name: MuzzleFlashEffect
             Position:
               x: 0
-              y: 0.0083
-              z: 0
+              y: 0
+              z: 0.083
             Rotation:
               x: 0
-              y: 0
-              z: 90
+              y: -90
+              z: 0
             Scale:
-              x: 0.8
-              y: 0.4
-              z: 0.4
+              x: 8
+              y: 4
+              z: 4
             NodeMesh: 
             NodeParticleSystem:
               AssetBundlePath: AssetBundles\StandaloneWindows\effects
@@ -118,9 +118,9 @@ Geometry:
             SubNodes: []
     - Name: Sleeve2
       Position:
-        x: -0.00355730997
-        y: 0.0162375309
-        z: 0.00497329235
+        x: -0.0355730997
+        y: 0.0497329235
+        z: 0.162375309
       Rotation:
         x: 0
         y: 0
@@ -140,8 +140,8 @@ Geometry:
       - Name: Barrel2
         Position:
           x: 0
-          y: -0.0009
-          z: 0
+          y: 0
+          z: -0.009
         Rotation:
           x: 0
           y: 0
@@ -161,8 +161,8 @@ Geometry:
         - Name: Muzzle2
           Position:
             x: 0
-            y: 0.006625
-            z: 0
+            y: 0
+            z: 0.06625
           Rotation:
             x: 0
             y: 0
@@ -178,16 +178,16 @@ Geometry:
           - Name: MuzzleFlashEffect
             Position:
               x: 0
-              y: 0.0083
-              z: 0
+              y: 0
+              z: 0.003
             Rotation:
               x: 0
-              y: 0
-              z: 90
+              y: -90
+              z: 0
             Scale:
-              x: 0.8
-              y: 0.4
-              z: 0.4
+              x: 8
+              y: 4
+              z: 4
             NodeMesh: 
             NodeParticleSystem:
               AssetBundlePath: AssetBundles\StandaloneWindows\effects
