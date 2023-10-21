@@ -1228,7 +1228,7 @@ public static class ObjectFactory
     public static StatusProgressBar CreateSubsytemProgressRing(TurretBase t)
     {
         StatusProgressBar res = _prototypes.CreateProgressBarSprite();
-        res.AttachFunction(() => (Time.time - t.LastFire) / t.ActualFiringInterval);
+        res.AttachFunction(() => t.GetReloadProgress());
         return res;
     }
 

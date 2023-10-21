@@ -196,7 +196,10 @@ public class GunTurret : DirectionalTurret
             _currAmmoType = idx;
             if (changed)
             {
-                LastFire = Time.time;
+                for (int i = 0; i < NumBarrels; ++i)
+                {
+                    ResetReloadProgress(i);
+                }
             }
         }
     }

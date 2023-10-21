@@ -9,7 +9,6 @@ public class BomberTorpedoLauncher : TurretBase
     private void ParseMuzzlesInBomber()
     {
         Muzzles = FindDummyTorpedoes(_dummyTorpedoRoot).ToArray();
-        ActualFiringInterval = 0;
         MuzzleFx = null;
     }
     

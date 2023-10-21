@@ -119,14 +119,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         List<Transform> muzzlesFound = FindMuzzles(transform).ToList();
         //Barrels = new Transform[barrelsFound.Count];
         Muzzles = new Transform[muzzlesFound.Count];
-        if (AlternatingFire)
-        {
-            ActualFiringInterval = FiringInterval / NumBarrels;
-        }
-        else
-        {
-            ActualFiringInterval = FiringInterval;
-        }
         MuzzleFx = new ParticleSystem[muzzlesFound.Count];
         for (int i = 0; i < muzzlesFound.Count; ++i)
         {
@@ -164,6 +156,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
 
         int nReloadPoints = MathUtils.lcm(EnergyToReload, HeatToReload);
+        nReloadPoints = Math.Max(nReloadPoints, 1);
         _reloadOrder = new (int, int)[nReloadPoints];
         for (int i = 0; i < nReloadPoints; ++i)
         {
@@ -296,7 +289,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     {
         if (AlternatingFire)
         {
-            return Loaded(_nextBarrel);
+            return Loaded(_nextBarrel) &&
+                   (Time.time - LastFire) > FiringInterval * _firingIntervalCoeff / NumBarrels;
         }
         else
         {
@@ -411,12 +405,45 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     protected bool Loaded(int idx)
     {
+        //DEBUG:
+        /*
+        bool loaded = _reloadProgress[idx].Item1 == _reloadOrder.Length;
+        if (loaded)
+        {
+            float actualTimerPerReloadPt = _timePerReloadPoint * _firingIntervalCoeff;
+            float reloadTarget = actualTimerPerReloadPt * _reloadOrder.Length;
+            float reloadProgress = _reloadProgress[idx].Item1 * actualTimerPerReloadPt + _reloadProgress[idx].Item2;
+            float reloadProgressClamped = Mathf.Clamp(reloadProgress, 0.0f, reloadTarget);
+            float reloadPercent = reloadProgressClamped / reloadTarget;
+            if (loaded != (Mathf.Approximately(reloadPercent, 1.0f)))
+            {
+                Debug.LogWarningFormat("Reloading inconsistent with display: Loaded={0} Progress={1}", loaded, reloadPercent);
+            }
+        }
+        return loaded;
+        */
         return _reloadProgress[idx].Item1 == _reloadOrder.Length;
     }
 
-    protected void ResetReloadProgress(int idx)
+    protected void ResetReloadProgress(int idx, bool setLastFire = true)
     {
         _reloadProgress[idx] = (-1, 0.0f);
+        if (setLastFire)
+            LastFire = Time.time;
+    }
+
+    public float GetReloadProgress()
+    {
+        float actualTimerPerReloadPt = _timePerReloadPoint * _firingIntervalCoeff;
+        float reloadTarget = actualTimerPerReloadPt * _reloadOrder.Length;
+        float progress = 0.0f;
+        for (int i = 0; i < NumBarrels; ++i)
+        {
+            float currProgress = Mathf.Clamp(_reloadProgress[i].Item1 * actualTimerPerReloadPt + _reloadProgress[i].Item2, 0.0f, reloadTarget);
+            if (currProgress > progress)
+                progress = currProgress;
+        }
+        return progress / reloadTarget;
     }
 
     protected virtual bool IsAimedAtTarget()
@@ -659,14 +686,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         set
         {
             _alnternatingFire = value;
-            if (_alnternatingFire)
-            {
-                ActualFiringInterval = FiringInterval / NumBarrels;
-            }
-            else
-            {
-                ActualFiringInterval = FiringInterval;
-            }
         }
     }
     public bool DefaultAlternatingFire;
@@ -720,7 +739,6 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected Warhead[] _warheads;
     public static readonly int MaxWarheads = 2;
 
-    public float ActualFiringInterval { get; protected set; }
     public string TurretWeaponSize;
     public string TurretWeaponType;
     protected float _firingIntervalCoeff;
