@@ -10,11 +10,11 @@ AllowedSlotTypes:
 ShieldGeneratorDefinition:
   MaxShieldPoints: 1000
   MaxShieldPointRegeneration: 2
-  PowerUsage: 2
-  PowerPerShieldRegeneration: 3
-  PowerToRestart: 20
+  PowerUsage: 4
+  PowerPerShieldRegeneration: 6
+  PowerToRestart: 40
   RestartDelay: 20
-  HeatGeneration: 1
-  HeatPerShieldRegeneration: 2
-  HeatToRestart: 10
+  HeatGeneration: 2
+  HeatPerShieldRegeneration: 4
+  HeatToRestart: 20
 

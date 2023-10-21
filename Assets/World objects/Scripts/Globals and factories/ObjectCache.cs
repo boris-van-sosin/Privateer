@@ -154,7 +154,7 @@ public class ObjectCache
 
         private SpecificCache<T> _cache = new SpecificCache<T>();
         private BinaryMinHeap<T, float> _recycler = new BinaryMinHeap<T, float>();
-        private bool _deactivateOnRecycle;
+        private readonly bool _deactivateOnRecycle;
     }
 }
 

@@ -1,4 +1,4 @@
-ComponentName: Heat exchange - 24 heat/sec
+ComponentName: Heat exchange - 48 heat/sec
 ComponentType: Heat exchange
 ComponentGlobalMaxHitPoints: 0
 MinShipSize: Sloop
@@ -8,5 +8,5 @@ AllowedSlotTypes:
 - ShipSystemCenter
 - ShipSystemAft
 HeatExchangeDefinition:
-  CoolignRate: 6
+  CoolignRate: 12
 

@@ -20,7 +20,7 @@ public class BattleSceneParamsReader : MonoBehaviour
     {
         yield return _waitFrame;
 
-        Faction[] factions = FindObjectsOfType<Faction>();
+        Faction[] factions = FindObjectsByType<Faction>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
         Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
 
         _faction1Ships = new (Ship, bool, string)[args.Faction1Ships.Count];

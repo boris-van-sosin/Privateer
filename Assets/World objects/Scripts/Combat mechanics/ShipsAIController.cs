@@ -17,7 +17,7 @@ public class ShipsAIController : MonoBehaviour
 
     public static void AddShip(Ship s)
     {
-        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        ShipsAIController instance = FindFirstObjectByType<ShipsAIController>();
         ShipAIData AIData = instance.AddShipInner(s);
         if (AIData != null)
         {
@@ -48,7 +48,7 @@ public class ShipsAIController : MonoBehaviour
 
     public static void ReactivateShip(Ship s, NavigationGuide navGuide)
     {
-        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        ShipsAIController instance = FindFirstObjectByType<ShipsAIController>();
         instance.ReactivateShipInner(s, navGuide);
     }
 
@@ -69,7 +69,7 @@ public class ShipsAIController : MonoBehaviour
 
     public static void AddStrikeCraft(StrikeCraft s)
     {
-        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        ShipsAIController instance = FindFirstObjectByType<ShipsAIController>();
         StrikeCraftAIData AIData = instance.AddStrikeCraftInner(s);
         if (AIData != null)
         {
@@ -98,7 +98,7 @@ public class ShipsAIController : MonoBehaviour
 
     public static void AddStrikeCraftFormation(StrikeCraftFormation f)
     {
-        ShipsAIController instance = GameObject.FindObjectOfType<ShipsAIController>();
+        ShipsAIController instance = FindFirstObjectByType<ShipsAIController>();
         StrikeCraftFormationAIData AIData = instance.AddStrikeCraftFormationInner(f);
         if (AIData != null)
         {

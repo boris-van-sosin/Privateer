@@ -811,6 +811,8 @@ public static class ObjectFactory
         resTurret.MuzzleVelocity = wpd.MuzzleVelocity;
         resTurret.FiringInterval = wpd.FiringInterval;
         resTurret.Inaccuracy = wpd.MaxSpread;
+        resTurret.EnergyToReload = wpd.EnergyToReload;
+        resTurret.HeatToReload = wpd.HeatToReload;
         resTurret.EnergyToFire = wpd.EnergyToFire;
         resTurret.HeatToFire = wpd.HeatToFire;
         resTurret.DefaultAlternatingFire = (turretDef.WeaponType == "Autocannon");
@@ -1676,7 +1678,7 @@ public static class ObjectFactory
             if (l.Trim().StartsWith("ProjectileWeapon"))
             {
                 WeaponProjectileDataEntry w = WeaponProjectileDataEntry.FromString(l);
-                _weapons_projectile.Add((w.WeaponSize, w.Weapon), w);
+                _weapons_projectile[(w.WeaponSize, w.Weapon)] = w; //TODO: implement levels
                 if (!_weaponTypesAndSizes.Contains((w.Weapon, w.WeaponSize)))
                 {
                     _weaponTypesAndSizes.Add((w.Weapon, w.WeaponSize));
@@ -2115,11 +2117,14 @@ public static class ObjectFactory
     {
         public string WeaponSize;
         public string Weapon;
+        public int WeaponLevel;
         public float MaxRange;
         public float MuzzleVelocity;
         public float FiringInterval;
         public float MaxSpread;
         public float ProjectileScale;
+        public int EnergyToReload;
+        public int HeatToReload;
         public int EnergyToFire;
         public int HeatToFire;
 
@@ -2133,11 +2138,14 @@ public static class ObjectFactory
                 {
                     WeaponSize = elements[i++].Trim(),
                     Weapon = elements[i++].Trim(),
+                    WeaponLevel = int.Parse(elements[i++].Trim()),
                     MaxRange = float.Parse(elements[i++].Trim()),
                     MuzzleVelocity = float.Parse(elements[i++].Trim()),
                     FiringInterval = float.Parse(elements[i++].Trim()),
                     MaxSpread = float.Parse(elements[i++].Trim()),
                     ProjectileScale = float.Parse(elements[i++].Trim()),
+                    EnergyToReload = int.Parse(elements[i++].Trim()),
+                    HeatToReload = int.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())
                 };

@@ -12,7 +12,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         ShipDropdown.AddOptions(ObjectFactory.GetAllShipClassTemplates().ToList());
         //ShipDropdown.AddOptions(ObjectFactory.GetAllStrikeCraftTypes().ToList());
         ShipDropdown.onValueChanged.AddListener(ShipSelectChanged);
-        _weaponsCfgPanel = FindObjectOfType<WeaponControlGroupCfgPanel>();
+        _weaponsCfgPanel = FindFirstObjectByType<WeaponControlGroupCfgPanel>();
         _cfgPanelVisible = false;
         _weaponsCfgPanel.gameObject.SetActive(false);
     }
@@ -41,7 +41,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         ShipTemplate template = ObjectFactory.GetShipClassTemplate(shipKey);
         ShipShadow shadow = template.ToNewShip();
 
-        Faction[] factions = FindObjectsOfType<Faction>();
+        Faction[] factions = FindObjectsByType<Faction>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
         Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
         Faction owner = friendly ? faction1 : faction2;
 
@@ -65,7 +65,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
         UserInput input = null;
         if (friendly && userShip)
         {
-            input = FindObjectOfType<UserInput>();
+            input = FindFirstObjectByType<UserInput>();
         }
         Ship s = BattleSceneShipCreator.CreateAndFitOutShip(shadow, owner, input);
 
@@ -92,7 +92,7 @@ public class ShipFreeCreatePanel : MonoBehaviour
     private void CreateStrikeCraftWingInner(string shipKey, bool friendly)
     {
         StrikeCraftFormation formation = ObjectFactory.CreateStrikeCraftFormation("Fighter Wing");
-        Faction[] factions = FindObjectsOfType<Faction>();
+        Faction[] factions = FindObjectsByType<Faction>(FindObjectsInactive.Exclude, FindObjectsSortMode.InstanceID);
         Faction faction1 = factions.Where(f => f.PlayerFaction).First(), faction2 = factions.Where(f => !f.PlayerFaction).First();
         if (friendly)
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Text;
 
 public abstract class TurretBase : MonoBehaviour, ITurret
 {
@@ -20,6 +21,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         AlternatingFire = DefaultAlternatingFire;
         _allowedSlotTypes = new string[] { turretSlotType };
         _warheads = new Warhead[MaxWarheads];
+        SetupReloadProgress();
         if (IsTurretModCombatible(turretMod))
         {
             _turretMod = turretMod;
@@ -119,7 +121,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         Muzzles = new Transform[muzzlesFound.Count];
         if (AlternatingFire)
         {
-            ActualFiringInterval = FiringInterval / Muzzles.Length;
+            ActualFiringInterval = FiringInterval / NumBarrels;
         }
         else
         {
@@ -153,6 +155,38 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
+    private void SetupReloadProgress()
+    {
+        _reloadProgress = new (int, float)[NumBarrels];
+        for (int i = 0; i < NumBarrels; ++i)
+        {
+            _reloadProgress[i] = (-1, 0.0f);
+        }
+
+        int nReloadPoints = MathUtils.lcm(EnergyToReload, HeatToReload);
+        _reloadOrder = new (int, int)[nReloadPoints];
+        for (int i = 0; i < nReloadPoints; ++i)
+        {
+            int reloadPointEnergy = EnergyToReload == 0 ? 0 : (EnergyToReload % (i + 1) == 0 ? 1 : 0),
+                reloadPointHeat = HeatToReload == 0 ? 0 : (HeatToReload % (i + 1) == 0 ? 1 : 0);
+            _reloadOrder[i] = (reloadPointEnergy, reloadPointHeat);
+        }
+
+        if (true)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < _reloadOrder.Length; ++i)
+            {
+                sb.Append(_reloadOrder[i]);
+                if (i < _reloadOrder.Length - 1)
+                    sb.Append(", ");
+            }
+            Debug.LogFormat("Reload order: [{0}]", sb.ToString());
+        }
+
+        _timePerReloadPoint = FiringInterval / nReloadPoints;
+    }
+
     private static ShipBase FindContainingShip(Transform t)
     {
         if (t == null)
@@ -183,6 +217,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
                 Fire(_targetShip.EntityLocation);
             }
         }
+        AdvanceReload();
     }
 
     public virtual void ManualTarget(Vector3 target)
@@ -259,8 +294,19 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     public virtual bool ReadyToFire()
     {
-        float currTime = Time.time;
-        return currTime - LastFire > ActualFiringInterval * _firingIntervalCoeff;
+        if (AlternatingFire)
+        {
+            return Loaded(_nextBarrel);
+        }
+        else
+        {
+            for (int i = 0; i < NumBarrels; ++i)
+            {
+                if (!Loaded(i))
+                    return false;
+            }
+            return true;
+        }
     }
 
     protected abstract void FireInner(Vector3 firingVector, int barrelIdx);
@@ -283,11 +329,10 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             bool fired = FireFromBarrel(target, _nextBarrel);
             if (fired)
             {
-                LastFire = Time.time;
                 _containingShip.NotifyInComabt();
-                if (Muzzles.Length > 1)
+                if (NumBarrels > 1)
                 {
-                    _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
+                    _nextBarrel = (_nextBarrel + 1) % NumBarrels;
                 }
             }
         }
@@ -312,23 +357,66 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
 
         FireInner(firingVector, barrelIdx);
+        ResetReloadProgress(barrelIdx);
         return true;
     }
 
     protected IEnumerator FireFull(Vector3 target)
     {
         bool firedAny = false;
-        for (int i = 0; i < Muzzles.Length; ++i)
+        for (int i = 0; i < NumBarrels; ++i)
         {
             bool fired = FireFromBarrel(target, i);
             if (fired && !firedAny)
             {
                 firedAny = true;
-                LastFire = Time.time;
+                ResetReloadProgress(i);
                 _containingShip.NotifyInComabt();
             }
             yield return _fullBroadsideDelay;
         }
+    }
+
+    protected void AdvanceReload()
+    {
+        float delta = Time.deltaTime;
+        float actualTimerPerReloadPt = _timePerReloadPoint * _firingIntervalCoeff;
+        for (int i = 0; i < NumBarrels; ++i)
+        {
+            if (Loaded(i))
+            {
+                continue;
+            }
+
+            float progress = _reloadProgress[i].Item2 + delta;
+            int reloadIndex = _reloadProgress[i].Item1;
+            while (reloadIndex < _reloadOrder.Length &&
+                   (progress >= actualTimerPerReloadPt || reloadIndex == -1 && _reloadProgress[i].Item2 < Mathf.Epsilon))
+            {
+                (int, int) reloadCost = reloadIndex < _reloadOrder.Length - 1 ? _reloadOrder[reloadIndex + 1] : (0, 0);
+                if (_containingShip.TryChangeEnergyAndHeat(-reloadCost.Item1, -reloadCost.Item2))
+                {
+                    if (reloadIndex >= 0)
+                        progress -= actualTimerPerReloadPt;
+                    _reloadProgress[i] = (reloadIndex + 1, progress);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            _reloadProgress[i] = (_reloadProgress[i].Item1, progress);
+        }
+    }
+
+    protected bool Loaded(int idx)
+    {
+        return _reloadProgress[idx].Item1 == _reloadOrder.Length;
+    }
+
+    protected void ResetReloadProgress(int idx)
+    {
+        _reloadProgress[idx] = (-1, 0.0f);
     }
 
     protected virtual bool IsAimedAtTarget()
@@ -364,13 +452,13 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         {
             return;
         }
-        LastFire = Time.time;
         FireGrapplingToolInner(firingVector, _nextBarrel);
+        ResetReloadProgress(_nextBarrel);
         _containingShip.NotifyInComabt();
 
-        if (Muzzles.Length > 1)
+        if (NumBarrels > 1)
         {
-            _nextBarrel = (_nextBarrel + 1) % Muzzles.Length;
+            _nextBarrel = (_nextBarrel + 1) % NumBarrels;
         }
     }
 
@@ -573,7 +661,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
             _alnternatingFire = value;
             if (_alnternatingFire)
             {
-                ActualFiringInterval = FiringInterval / Muzzles.Length;
+                ActualFiringInterval = FiringInterval / NumBarrels;
             }
             else
             {
@@ -621,6 +709,9 @@ public abstract class TurretBase : MonoBehaviour, ITurret
     protected ParticleSystem[] MuzzleFx;
     protected int _nextBarrel = 0;
     protected bool _alnternatingFire;
+    protected (int, float)[] _reloadProgress;
+    protected (int, int)[] _reloadOrder;
+    protected float _timePerReloadPoint;
 
     // Weapon data:
     public string TurretType;
@@ -641,6 +732,8 @@ public abstract class TurretBase : MonoBehaviour, ITurret
 
     // Fire delay
     public float LastFire { get; protected set; }
+    public int EnergyToReload;
+    public int HeatToReload;
     public int EnergyToFire;
     public int HeatToFire;
 
