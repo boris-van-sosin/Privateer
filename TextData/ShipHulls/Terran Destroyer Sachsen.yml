@@ -361,8 +361,8 @@ WeaponHardpoints:
       DefaultGroup: 5
     LaunchVector:
       x: 0
-      y: 3
-      z: 1
+      y: 1
+      z: 3
 - HardpointNode:
     Name: Torp L
     Position:
@@ -393,8 +393,8 @@ WeaponHardpoints:
       DefaultGroup: 5
     LaunchVector:
       x: 0
-      y: 3
-      z: 1
+      y: 1
+      z: 3
 HullProtection:
   HullHitpoints: 55000
   Armour:

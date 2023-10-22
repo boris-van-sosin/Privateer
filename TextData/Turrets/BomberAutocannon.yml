@@ -16,13 +16,13 @@ Geometry:
   NodeParticleSystem: 
   OpenCloseData: 
   SubNodes:
-  - Name: Bomber Autocannon
+  - Name: Bomber Autocannon blah
     Position:
       x: 0
       y: 0
       z: 0
     Rotation:
-      x: 270
+      x: 0
       y: 0
       z: 0
     Scale:
@@ -37,11 +37,11 @@ Geometry:
     NodeParticleSystem: 
     OpenCloseData: 
     SubNodes:
-    - Name: Barrel1
+    - Name: Muzzle1
       Position:
         x: 0
-        y: 0.00156
-        z: 0.00066
+        y: 0.0066
+        z: 0.0156
       Rotation:
         x: 0
         y: 0
@@ -54,43 +54,26 @@ Geometry:
       NodeParticleSystem: 
       OpenCloseData: 
       SubNodes:
-      - Name: Muzzle1
+      - Name: MuzzleFlashEffect
         Position:
           x: 0
           y: 0
           z: 0
         Rotation:
           x: 0
-          y: 0
+          y: -90
           z: 0
         Scale:
-          x: 1
-          y: 1
-          z: 1
+          x: 0.2
+          y: 0.2
+          z: 0.2
         NodeMesh: 
-        NodeParticleSystem: 
+        NodeParticleSystem:
+          AssetBundlePath: AssetBundles\StandaloneWindows\effects
+          AssetPath: MuzzleFlashSmallEffect
+          ParticleSystemPath: ''
         OpenCloseData: 
-        SubNodes:
-        - Name: MuzzleFlashEffect
-          Position:
-            x: 0
-            y: 0
-            z: 0
-          Rotation:
-            x: 0
-            y: 0
-            z: 90
-          Scale:
-            x: 0.02
-            y: 0.02
-            z: 0.02
-          NodeMesh: 
-          NodeParticleSystem:
-            AssetBundlePath: AssetBundles\StandaloneWindows\effects
-            AssetPath: MuzzleFlashSmallEffect
-            ParticleSystemPath: ''
-          OpenCloseData: 
-          SubNodes: []
+        SubNodes: []
 TurretAxis: YAxis
 TurretType: BomberAutocannon
 WeaponNum: ''

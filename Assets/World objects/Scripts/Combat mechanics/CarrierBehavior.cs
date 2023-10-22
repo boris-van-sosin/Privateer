@@ -140,7 +140,7 @@ public class CarrierBehavior : MonoBehaviour
                 s.IgnoreHits = true;
                 s.Owner = formation.Owner;
                 s.transform.position = _elevatorBed[i].position;
-                s.transform.rotation = Quaternion.LookRotation(_elevatorBed[i].up, _elevatorBed[i].forward);
+                s.transform.rotation = Quaternion.LookRotation(_elevatorBed[i].forward, _elevatorBed[i].up);
                 s.AddToFormation(formation);
                 s.Activate();
                 s.AttachToHangerElevator(_elevatorBed[i]);

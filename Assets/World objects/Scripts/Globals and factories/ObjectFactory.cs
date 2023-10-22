@@ -258,7 +258,7 @@ public static class ObjectFactory
             t.transform.position = position;
             t.ProjectileWarhead = w;
             t.transform.localScale = Vector3.one * torpedoScale;
-            Quaternion q = Quaternion.LookRotation(Vector3.forward, launchOrientation);
+            Quaternion q = Quaternion.LookRotation(launchOrientation, Vector3.up);
             t.transform.rotation = q;
             t.OriginShip = origShip;
             t.Target = target;

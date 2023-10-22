@@ -147,7 +147,7 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         }
     }
 
-    private void SetupReloadProgress()
+    protected void SetupReloadProgress()
     {
         _reloadProgress = new (int, float)[NumBarrels];
         for (int i = 0; i < NumBarrels; ++i)

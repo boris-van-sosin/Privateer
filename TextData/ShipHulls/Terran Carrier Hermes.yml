@@ -707,8 +707,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -720,8 +720,8 @@ CarrierModuleData:
       OpenState:
         Positions:
         - x: 0
-          y: -0.0455
-          z: 0
+          y: 0
+          z: -0.455
         - x: 0
           y: 0
           z: 0
@@ -739,8 +739,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -751,11 +751,11 @@ CarrierModuleData:
         Duration: 0.1
       - Positions:
         - x: 0
-          y: -0.0455
-          z: 0
-        - x: 0
           y: 0
-          z: -0.01
+          z: -0.455
+        - x: 0
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -768,8 +768,8 @@ CarrierModuleData:
     - Name: Elevator
       Position:
         x: 0
-        y: 0
-        z: -0.01
+        y: -0.1
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -810,8 +810,8 @@ CarrierModuleData:
         z: 0
       Rotation:
         x: 0
-        y: 0
-        z: 180
+        y: 180
+        z: 0
       Scale:
         x: 1
         y: 1
@@ -833,9 +833,9 @@ CarrierModuleData:
       SubNodes: []
     - Name: CarrierRecoveryStartTr
       Position:
-        x: 0.0133
-        y: -0.0251
-        z: 0.053
+        x: 0.133
+        y: 0.53
+        z: -0.251
       Rotation:
         x: 0
         y: 0
@@ -868,8 +868,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -881,8 +881,8 @@ CarrierModuleData:
       OpenState:
         Positions:
         - x: 0
-          y: 0.045
-          z: 0
+          y: 0
+          z: 0.45
         - x: 0
           y: 0
           z: 0
@@ -900,8 +900,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -912,11 +912,11 @@ CarrierModuleData:
         Duration: 0.1
       - Positions:
         - x: 0
-          y: 0.0455
-          z: -9.99999975E-05
-        - x: 0
           y: 0
-          z: -0.01
+          z: 0.455
+        - x: 0
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -929,8 +929,8 @@ CarrierModuleData:
     - Name: Elevator
       Position:
         x: 0
-        y: 0
-        z: -0.01
+        y: -0.1
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -971,8 +971,8 @@ CarrierModuleData:
         z: 0
       Rotation:
         x: 0
-        y: 0
-        z: 180
+        y: 180
+        z: 0
       Scale:
         x: 1
         y: 1
@@ -995,8 +995,8 @@ CarrierModuleData:
     - Name: CarrierRecoveryStartTr
       Position:
         x: 0
-        y: -0.0251
-        z: 0.053
+        y: 0.53
+        z: -0.251
       Rotation:
         x: 0
         y: 0

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2104911845289434751}
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: 0, y: 0, z: 0.0003}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5607936198338950545}
@@ -4805,7 +4805,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3267933641307867731}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.00065999985, z: 0.00156}
+  m_LocalPosition: {x: 0, y: 0.006599998, z: 0.0156}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4838,14 +4838,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3785841321790934771}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7542917724288712545}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3785841321792230133
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -4950,6 +4950,8 @@ MonoBehaviour:
   FiringInterval: 0.75
   TurretWeaponSize: 
   TurretWeaponType: 8
+  EnergyToReload: 0
+  HeatToReload: 0
   EnergyToFire: 3
   HeatToFire: 2
   GlobalMaxHitpoints: 0

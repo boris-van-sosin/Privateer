@@ -14,6 +14,7 @@ public class BomberTorpedoLauncher : TurretBase
     
     protected override void ParseMuzzles()
     {
+        Muzzles = _emptyTranformArr;
     }
 
     private IEnumerable<Transform> FindDummyTorpedoes(Transform root)
@@ -50,6 +51,7 @@ public class BomberTorpedoLauncher : TurretBase
             _dummyTorpedoRoot = transform;
         }
         ParseMuzzlesInBomber();
+        SetupReloadProgress();
         base.PostInstallTurret(s);
         (int, float, float, Warhead) launchData = ObjectFactory.TorpedoLaunchDataFromTorpedoType(LoadedTorpedoType);
         MaxRange = launchData.Item2;
@@ -127,7 +129,7 @@ public class BomberTorpedoLauncher : TurretBase
         {
             int idx = TorpedoesLoaded - 1;
             Vector3 actualLaunchVector = (LaunchVector + (UnityEngine.Random.onUnitSphere * GlobalDistances.TorpedoLaunchNoiseMagnitude)).normalized;
-            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[idx].position, LaunchVector, Muzzles[idx].up, _torpedoTarget, MaxRange, _warheads[0], Muzzles[idx].lossyScale.x, ContainingShip);
+            Torpedo t = ObjectFactory.AcquireTorpedo(Muzzles[idx].position, LaunchVector, Muzzles[idx].forward, _torpedoTarget, MaxRange, _warheads[0], Muzzles[idx].lossyScale.x, ContainingShip);
             t.WeaponEffectKey = ObjectFactory.GetEffectKey(LoadedTorpedoType);
             t.ColdLaunchDist = GlobalDistances.TorpedoBomberColdLaunchDist;
             t.IsTracking = (LoadedTorpedoType == "Tracking");
@@ -189,14 +191,14 @@ public class BomberTorpedoLauncher : TurretBase
 
     protected override void SetDefaultAngle()
     {
-        DefaultDirection = _containingShip.transform.InverseTransformDirection(transform.up);
+        DefaultDirection = _containingShip.transform.InverseTransformDirection(transform.forward);
     }
 
     private Vector3 LaunchVector
     {
         get
         {
-            return Vector3.Slerp(transform.TransformDirection(_launchDirection).normalized, _containingShip.transform.up, 0.5f);
+            return Vector3.Slerp(transform.TransformDirection(_launchDirection).normalized, _containingShip.transform.forward, 0.5f);
         }
     }
 
@@ -214,4 +216,5 @@ public class BomberTorpedoLauncher : TurretBase
     private Transform _dummyTorpedoRoot;
 
     private static readonly WaitForSeconds _spreadDelay = new WaitForSeconds(0.1f);
+    private static readonly Transform[] _emptyTranformArr = new Transform[0];
 }

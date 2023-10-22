@@ -585,8 +585,8 @@ WeaponHardpoints:
       DefaultGroup: 5
     LaunchVector:
       x: 0
-      y: 3
-      z: 1
+      y: 1
+      z: 3
 - HardpointNode:
     Name: Torp L
     Position:
@@ -616,8 +616,8 @@ WeaponHardpoints:
       DefaultGroup: 5
     LaunchVector:
       x: 0
-      y: 3
-      z: 1
+      y: 1
+      z: 3
 HullProtection:
   HullHitpoints: 240000
   Armour:
@@ -1029,11 +1029,11 @@ CarrierModuleData:
       ClosedState:
         Positions:
         - x: 0
-          y: 0
-          z: 0.016
+          y: 0.16
+          z: 0
         - x: 0
-          y: 0
-          z: 0.007
+          y: 0.07
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1045,11 +1045,11 @@ CarrierModuleData:
       OpenState:
         Positions:
         - x: 0
-          y: -0.02
-          z: 0.0155
+          y: 0.155
+          z: -0.2
         - x: 0
-          y: 0
-          z: 0.016
+          y: 0.16
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1061,26 +1061,26 @@ CarrierModuleData:
       AnimWaypoints:
       - Positions:
         - x: 0
-          y: 0
-          z: 0.0155
+          y: 0.155
+          z: 0
         - x: 0
-          y: 0
-          z: 0.007
+          y: 0.07
+          z: 0
         Rotations:
         - x: 0
           y: 0
-          z: 0.026
+          z: 0
         - x: 0
           y: 0
           z: 0
         Duration: 0.1
       - Positions:
         - x: 0
-          y: -0.02
-          z: 0.0155
+          y: 0.155
+          z: -0.2
         - x: 0
-          y: 0
-          z: 0.007
+          y: 0.07
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1093,8 +1093,8 @@ CarrierModuleData:
     - Name: Elevator
       Position:
         x: 0
-        y: 0
-        z: 0.007
+        y: 0.07
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1112,8 +1112,8 @@ CarrierModuleData:
     - Name: Cover
       Position:
         x: 0
-        y: 0
-        z: 0.016
+        y: 0.16
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1131,8 +1131,8 @@ CarrierModuleData:
     - Name: CarrierLaunchTr
       Position:
         x: 0
-        y: 0
-        z: 0.016
+        y: 0.16
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1145,8 +1145,8 @@ CarrierModuleData:
     - Name: CarrierRecoveryEndTr
       Position:
         x: 0
-        y: 0
-        z: 0.016
+        y: 0.16
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1158,9 +1158,9 @@ CarrierModuleData:
       SubNodes: []
     - Name: CarrierRecoveryStartTr
       Position:
-        x: -0.018
-        y: -0.012
-        z: 0.075
+        x: -0.18
+        y: 0.75
+        z: -0.12
       Rotation:
         x: 0
         y: 0
@@ -1190,11 +1190,11 @@ CarrierModuleData:
       ClosedState:
         Positions:
         - x: 0
-          y: 0
-          z: 0.016
+          y: 0.16
+          z: 0
         - x: 0
-          y: 0
-          z: 0.007
+          y: 0.07
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1206,11 +1206,11 @@ CarrierModuleData:
       OpenState:
         Positions:
         - x: 0
-          y: -0.02
-          z: 0.0155
+          y: 0.155
+          z: -0.2
         - x: 0
-          y: 0
-          z: 0.016
+          y: 0.16
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1222,26 +1222,26 @@ CarrierModuleData:
       AnimWaypoints:
       - Positions:
         - x: 0
-          y: 0
-          z: 0.0155
+          y: 0.155
+          z: 0
         - x: 0
-          y: 0
-          z: 0.007
+          y: 0.07
+          z: 0
         Rotations:
         - x: 0
           y: 0
-          z: 0.026
+          z: 0
         - x: 0
           y: 0
           z: 0
         Duration: 0.1
       - Positions:
         - x: 0
-          y: -0.02
-          z: 0.0155
+          y: 0.155
+          z: -0.2
         - x: 0
-          y: 0
-          z: 0.007
+          y: 0.07
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1254,8 +1254,8 @@ CarrierModuleData:
     - Name: Elevator
       Position:
         x: 0
-        y: 0
-        z: 0.007
+        y: 0.07
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1273,8 +1273,8 @@ CarrierModuleData:
     - Name: Cover
       Position:
         x: 0
-        y: 0
-        z: 0.016
+        y: 0.16
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1292,8 +1292,8 @@ CarrierModuleData:
     - Name: CarrierLaunchTr
       Position:
         x: 0
-        y: 0
-        z: 0.016
+        y: 0.16
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1306,8 +1306,8 @@ CarrierModuleData:
     - Name: CarrierRecoveryEndTr
       Position:
         x: 0
-        y: 0
-        z: 0.016
+        y: 0.16
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1322,9 +1322,9 @@ CarrierModuleData:
       SubNodes: []
     - Name: CarrierRecoveryStartTr
       Position:
-        x: 0.018
-        y: -0.012
-        z: 0.075
+        x: 0.18
+        y: 0.75
+        z: -0.12
       Rotation:
         x: 0
         y: 0

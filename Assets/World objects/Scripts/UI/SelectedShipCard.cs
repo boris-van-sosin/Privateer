@@ -340,11 +340,14 @@ public class SelectedShipCard : MonoBehaviour, ICollapsable
             IReadOnlyList<(StrikeCraftFormation, FormationAIHandle, string)> formations = _controlledCarrierModule.ActiveFormations;
             for (int i = 0; i < formations.Count; ++i)
             {
-                StrikeCraftFormation formation = formations[i].Item1;
-                StrikeCraftCard card = ObjectFactory.AcquireStrikeCraftCard(formation);
-                if (card.transform.parent == null)
+                if (formations[i].Item1)
                 {
-                    card.transform.SetParent(StrikeCraftPanel);
+                    StrikeCraftFormation formation = formations[i].Item1;
+                    StrikeCraftCard card = ObjectFactory.AcquireStrikeCraftCard(formation);
+                    if (card.transform.parent == null)
+                    {
+                        card.transform.SetParent(StrikeCraftPanel);
+                    }
                 }
             }
         }

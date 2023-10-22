@@ -299,8 +299,8 @@ WeaponHardpoints:
       DefaultGroup: 3
     LaunchVector:
       x: 0
-      y: 3
-      z: 1
+      y: 1
+      z: 3
 - HardpointNode:
     Name: Torp L1
     Position:
@@ -330,8 +330,8 @@ WeaponHardpoints:
       DefaultGroup: 3
     LaunchVector:
       x: 0
-      y: 3
-      z: 1
+      y: 1
+      z: 3
 HullProtection:
   HullHitpoints: 135000
   Armour:
@@ -750,8 +750,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -763,8 +763,8 @@ CarrierModuleData:
       OpenState:
         Positions:
         - x: 0
-          y: -0.03
-          z: 0
+          y: 0
+          z: -0.3
         - x: 0
           y: 0
           z: 0
@@ -782,8 +782,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01
+          y: -0.1
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -794,8 +794,8 @@ CarrierModuleData:
         Duration: 0.1
       - Positions:
         - x: 0
-          y: -0.03
-          z: 0
+          y: 0
+          z: -0.3
         - x: 0
           y: 0
           z: -0.01
@@ -832,8 +832,8 @@ CarrierModuleData:
     - Name: Elevator
       Position:
         x: 0
-        y: 0
-        z: -0.01
+        y: -0.1
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -881,8 +881,8 @@ CarrierModuleData:
     - Name: CarrierRecoveryStartTr
       Position:
         x: 0
-        y: -0.084
-        z: 0.053
+        y: 0.53
+        z: -0.84
       Rotation:
         x: 0
         y: 0

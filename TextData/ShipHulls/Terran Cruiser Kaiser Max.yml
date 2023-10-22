@@ -541,9 +541,9 @@ WeaponHardpoints:
       WeaponAIHint: Secondary
       DefaultGroup: 5
     LaunchVector:
-      x: 0.1
+      x: 0
       y: 1
-      z: 0.3
+      z: 3
 - HardpointNode:
     Name: Torpedo tube L
     Position:
@@ -576,9 +576,9 @@ WeaponHardpoints:
       WeaponAIHint: Secondary
       DefaultGroup: 5
     LaunchVector:
-      x: -0.1
+      x: 0
       y: 1
-      z: 0.3
+      z: 3
 HullProtection:
   HullHitpoints: 100000
   Armour:
@@ -1042,8 +1042,8 @@ CarrierModuleData:
           y: 0
           z: 0
         - x: 0
-          y: 0
-          z: -0.01335
+          y: -0.1335
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1055,8 +1055,8 @@ CarrierModuleData:
       OpenState:
         Positions:
         - x: 0
-          y: 0.034
-          z: -0.0055
+          y: -0.055
+          z: 0.34
         - x: 0
           y: 0
           z: 0
@@ -1071,11 +1071,11 @@ CarrierModuleData:
       AnimWaypoints:
       - Positions:
         - x: 0
-          y: 0
-          z: -0.0055
+          y: -0.055
+          z: 0
         - x: 0
-          y: 0
-          z: -0.01335
+          y: -0.1335
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1086,11 +1086,11 @@ CarrierModuleData:
         Duration: 0.1
       - Positions:
         - x: 0
-          y: 0.034
-          z: -0.0055
+          y: -0.055
+          z: 0.34
         - x: 0
-          y: 0
-          z: -0.01335
+          y: -0.1335
+          z: 0
         Rotations:
         - x: 0
           y: 0
@@ -1124,8 +1124,8 @@ CarrierModuleData:
     - Name: Elevator
       Position:
         x: 0
-        y: 0
-        z: -0.01335
+        y: -0.1335
+        z: 0
       Rotation:
         x: 0
         y: 0
@@ -1149,8 +1149,8 @@ CarrierModuleData:
         z: 0
       Rotation:
         x: 0
-        y: 0
-        z: 180
+        y: 180
+        z: 0
       Scale:
         x: 1
         y: 1
@@ -1179,8 +1179,8 @@ CarrierModuleData:
     - Name: CarrierRecoveryStartTr
       Position:
         x: 0
-        y: -0.0839948952
-        z: 0.053
+        y: 0.53
+        z: -0.839948952
       Rotation:
         x: 0
         y: 0
