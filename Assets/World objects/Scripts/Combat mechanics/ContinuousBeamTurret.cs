@@ -41,7 +41,7 @@ public class ContinuousBeamTurret : GeneralBeamTurret
         Warhead pulseWarhead = new Warhead()
         {
             ShieldDamage = w.ShieldDamage / 10,
-            ArmourPenetration = w.ArmourPenetration,
+            ArmourPenetrationMedian = w.ArmourPenetrationMedian,
             ArmourDamage = w.ArmourDamage / 10,
             SystemDamage = w.SystemDamage / 10,
             HullDamage = w.HullDamage / 10,

@@ -335,15 +335,15 @@ WeaponHardpoints:
 HullProtection:
   HullHitpoints: 135000
   Armour:
-    ForeValue: 675
+    ForeValue: 575
     AftValue: 650
-    LeftValue: 700
-    RightValue: 700
+    LeftValue: 600
+    RightValue: 600
   ReducedArmour:
-    ForeValue: 250
-    AftValue: 240
-    LeftValue: 250
-    RightValue: 250
+    ForeValue: 180
+    AftValue: 175
+    LeftValue: 220
+    RightValue: 220
   MitigationArmour:
     ForeValue: 450
     AftValue: 350

@@ -1715,7 +1715,7 @@ public static class ObjectFactory
         Warhead dummyWarhead = new Warhead()
         {
             ShieldDamage = 40,
-            ArmourPenetration = 150,
+            ArmourPenetrationMedian = 150,
             ArmourDamage = 5,
             SystemDamage = 10,
             HullDamage = 5,
@@ -1903,7 +1903,8 @@ public static class ObjectFactory
                 LaunchWeaponType,
                 Ammo,
                 WarheadData.ShieldDamage.ToString(),
-                WarheadData.ArmourPenetration.ToString(),
+                WarheadData.ArmourPenetrationMedian.ToString(),
+                WarheadData.ArmourPenetrationFactor.ToString(),
                 WarheadData.ArmourDamage.ToString(),
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
@@ -1932,7 +1933,8 @@ public static class ObjectFactory
                     WarheadData = new Warhead()
                     {
                         ShieldDamage = int.Parse(elements[i++].Trim()),
-                        ArmourPenetration = int.Parse(elements[i++].Trim()),
+                        ArmourPenetrationMedian = int.Parse(elements[i++].Trim()),
+                        ArmourPenetrationFactor = int.Parse(elements[i++].Trim()),
                         ArmourDamage = int.Parse(elements[i++].Trim()),
                         SystemDamage = int.Parse(elements[i++].Trim()),
                         HullDamage = int.Parse(elements[i++].Trim()),
@@ -1970,7 +1972,8 @@ public static class ObjectFactory
                 LaunchWeaponSize,
                 LaunchWeaponType,
                 WarheadData.ShieldDamage.ToString(),
-                WarheadData.ArmourPenetration.ToString(),
+                WarheadData.ArmourPenetrationMedian.ToString(),
+                WarheadData.ArmourPenetrationFactor.ToString(),
                 WarheadData.ArmourDamage.ToString(),
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
@@ -1997,7 +2000,8 @@ public static class ObjectFactory
                     WarheadData = new Warhead()
                     {
                         ShieldDamage = int.Parse(elements[i++].Trim()),
-                        ArmourPenetration = int.Parse(elements[i++].Trim()),
+                        ArmourPenetrationMedian = int.Parse(elements[i++].Trim()),
+                        ArmourPenetrationFactor = int.Parse(elements[i++].Trim()),
                         ArmourDamage = int.Parse(elements[i++].Trim()),
                         SystemDamage = int.Parse(elements[i++].Trim()),
                         HullDamage = int.Parse(elements[i++].Trim()),
@@ -2036,7 +2040,8 @@ public static class ObjectFactory
                 SpeardSize.ToString(),
                 MaxRange.ToString(),
                 WarheadData.ShieldDamage.ToString(),
-                WarheadData.ArmourPenetration.ToString(),
+                WarheadData.ArmourPenetrationMedian.ToString(),
+                WarheadData.ArmourPenetrationFactor.ToString(),
                 WarheadData.ArmourDamage.ToString(),
                 WarheadData.SystemDamage.ToString(),
                 WarheadData.HullDamage.ToString(),
@@ -2065,7 +2070,8 @@ public static class ObjectFactory
                     WarheadData = new Warhead()
                     {
                         ShieldDamage = int.Parse(elements[i++].Trim()),
-                        ArmourPenetration = int.Parse(elements[i++].Trim()),
+                        ArmourPenetrationMedian = int.Parse(elements[i++].Trim()),
+                        ArmourPenetrationFactor = int.Parse(elements[i++].Trim()),
                         ArmourDamage = int.Parse(elements[i++].Trim()),
                         SystemDamage = int.Parse(elements[i++].Trim()),
                         HullDamage = int.Parse(elements[i++].Trim()),

@@ -72,7 +72,7 @@ public class GunTurret : DirectionalTurret
                         rangeFactor += _turretModBuffs[j].RangeBuff;
                     }
                 }
-                _warheadsAfterBuffs[i].ArmourPenetration = Mathf.FloorToInt(_warheadsAfterBuffs[i].ArmourPenetration * APFactor);
+                _warheadsAfterBuffs[i].ArmourPenetrationMedian = Mathf.FloorToInt(_warheadsAfterBuffs[i].ArmourPenetrationMedian * APFactor);
                 _warheadsAfterBuffs[i].ArmourDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].ArmourDamage * damageFactor);
                 _warheadsAfterBuffs[i].ShieldDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].ShieldDamage * damageFactor);
                 _warheadsAfterBuffs[i].HullDamage = Mathf.FloorToInt(_warheadsAfterBuffs[i].HullDamage * damageFactor);
@@ -133,7 +133,7 @@ public class GunTurret : DirectionalTurret
                         continue;
                     }
                     else if (shipTarget.ShipTotalShields < _warheads[i].ShieldDamage &&
-                        _warheads[i].ArmourPenetration > _warheads[bestAmmoType].ArmourPenetration)
+                        _warheads[i].ArmourPenetrationMedian > _warheads[bestAmmoType].ArmourPenetrationMedian)
                     {
                         bestAmmoType = i;
                     }

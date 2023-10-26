@@ -158,10 +158,12 @@ public abstract class TurretBase : MonoBehaviour, ITurret
         int nReloadPoints = MathUtils.lcm(EnergyToReload, HeatToReload);
         nReloadPoints = Math.Max(nReloadPoints, 1);
         _reloadOrder = new (int, int)[nReloadPoints];
+        int energyPointFreq = EnergyToReload != 0 ? nReloadPoints / EnergyToReload : 0,
+            heatPointFreq = HeatToReload != 0 ? nReloadPoints / HeatToReload : 0;
         for (int i = 0; i < nReloadPoints; ++i)
         {
-            int reloadPointEnergy = EnergyToReload == 0 ? 0 : (EnergyToReload % (i + 1) == 0 ? 1 : 0),
-                reloadPointHeat = HeatToReload == 0 ? 0 : (HeatToReload % (i + 1) == 0 ? 1 : 0);
+            int reloadPointEnergy = EnergyToReload == 0 ? 0 : (i % energyPointFreq == 0 ? 1 : 0),
+                reloadPointHeat = HeatToReload == 0 ? 0 : (i % heatPointFreq == 0 ? 1 : 0);
             _reloadOrder[i] = (reloadPointEnergy, reloadPointHeat);
         }
 

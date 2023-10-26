@@ -54,7 +54,7 @@ public class TurretInfoPanel : MonoBehaviour
                         break;
                 }
                 FirepowerBoxes[i].ArmourDamage.text = string.Format("{0}\n{1:0.#}/s", w.ArmourDamage, w.ArmourDamage * numWeapons / firingInterval);
-                FirepowerBoxes[i].ArmourPenetration.text = w.ArmourPenetration.ToString();
+                FirepowerBoxes[i].ArmourPenetration.text = w.ArmourPenetrationMedian.ToString();
                 FirepowerBoxes[i].HullDamage.text = string.Format("{0}\n{1:0.#}/s", w.HullDamage, w.HullDamage * numWeapons / firingInterval);
                 FirepowerBoxes[i].ShieldDamage.text = string.Format("{0}\n{1:0.#}/s", w.ShieldDamage, w.ShieldDamage * numWeapons / firingInterval);
                 FirepowerBoxes[i].CompDamage.text = string.Format("{0}\n{1:0.#}/s", w.SystemDamage, w.SystemDamage * numWeapons / firingInterval);

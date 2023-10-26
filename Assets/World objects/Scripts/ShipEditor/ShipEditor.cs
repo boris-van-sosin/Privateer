@@ -1399,7 +1399,6 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
 
     private static void SetArmourPenetartionChartInner(Warhead w, (AreaGraphRenderer, Image) graph)
     {
-        ArmourPenetrationTable penetrationTable = ObjectFactory.GetArmourPenetrationTable();
         int minArmor = 0, maxArmor = 1000, samplePoints = 50;
         graph.Item1.DataPoints = new Vector2[samplePoints + 1];
 
@@ -1407,7 +1406,7 @@ public class ShipEditor : MonoBehaviour, IDropHandler, IPointerClickHandler
         for (int i = 0; i <= samplePoints; ++i)
         {
             float currStep = i / fSamplePoints;
-            float penetrationProb = penetrationTable.PenetrationProbability(Mathf.RoundToInt(Mathf.Lerp(minArmor, maxArmor, currStep)), w.ArmourPenetration);
+            float penetrationProb = Combat.PenetrationProbablity(Mathf.RoundToInt(Mathf.Lerp(minArmor, maxArmor, currStep)),  w.ArmourPenetrationMedian, w.ArmourPenetrationFactor);
             graph.Item1.DataPoints[i] = new Vector2(currStep, penetrationProb);
         }
         graph.Item1.RequireUpdate();

@@ -8,6 +8,13 @@ TurretModBuffs:
   AccuracyBuff: 0
   RateOfFireBuff: 0
   RangeBuff: 0.1
+- ApplyToAmmo: APHE round
+  MuzzleVelocityBuff: 0.05
+  DamageBuff: 0
+  ArmourPenetrationBuff: 0.1025
+  AccuracyBuff: 0
+  RateOfFireBuff: 0
+  RangeBuff: 0.1
 - ApplyToAmmo: HE round
   MuzzleVelocityBuff: 0.05
   DamageBuff: 0

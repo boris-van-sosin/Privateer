@@ -9,7 +9,8 @@ public struct Warhead
 {
     public int ShieldDamage { get; set; }
     public int ArmourDamage { get; set; }
-    public int ArmourPenetration { get; set; }
+    public int ArmourPenetrationMedian { get; set; }
+    public int ArmourPenetrationFactor { get; set; }
     public int SystemDamage { get; set; }
     public int HullDamage { get; set; }
     public int HeatGenerated { get; set; }
@@ -61,15 +62,31 @@ public static class Combat
         return true;
     }
 
-    public static bool ArmourPenetration(int armourRating, int armourPenetration)
+    public static bool ArmourPenetration(int armourRating, int armourPenetrationMedian, int armourPenetrationFactor)
     {
-        ArmourPenetrationTable penetrationTable = ObjectFactory.GetArmourPenetrationTable();
-        float penetrateChance = penetrationTable.PenetrationProbability(armourRating, armourPenetration);
+        float penetrateProb = PenetrationProbablity(armourRating, armourPenetrationMedian, armourPenetrationFactor);
         //float armourDifference = armourPenetration - armourRating;
         //float penetrateChance = _minArmourPenetration + (_maxArmourPenetration - _minArmourPenetration) / (1 + Mathf.Exp(-_armourPenetrationSteepness * armourDifference));
         float penetrateRoll = UnityEngine.Random.value;
-        //Debug.LogFormat("Hit on armour. Armour rating: {0}. Armour penetration: {1}. Chance to penetrate: {2}. Roll: {3}.", armourRating, armourPenetration, penetrateChance, penetrateRoll);
-        return penetrateRoll < penetrateChance;
+        Debug.LogFormat("Hit on armour. Armour rating: {0}. Armour penetration: median={1} factor={2}. Chance to penetrate: {3}. Roll: {4}.", armourRating, armourPenetrationMedian, armourPenetrationFactor, penetrateProb, penetrateRoll);
+        return penetrateRoll < penetrateProb;
+    }
+
+    public static float PenetrationProbablity(int armourRating, int armourPenetrationMedian, int armourPenetrationFactor)
+    {
+        return PenetrationProbablity(armourPenetrationMedian - armourRating, armourPenetrationFactor);
+    }
+
+    public static float PenetrationProbablity(int armourPenetrationDiff, int armourPenetrationFactor)
+    {
+        float p;
+        if (!_armourPenetrationCache.TryGetValue((armourPenetrationDiff, armourPenetrationFactor), out p))
+        {
+            float diff = ((float)armourPenetrationDiff) / armourPenetrationFactor;
+            p = MathF.Tanh(diff) * 0.45f + 0.5f;
+            _armourPenetrationCache[(armourPenetrationDiff, armourPenetrationFactor)] = p;
+        }
+        return p;
     }
 
     public static IEnumerator BoardingCombat(Ship attacker, Ship defender)
@@ -197,6 +214,8 @@ public static class Combat
     private static readonly WaitForSeconds _boardingPreCombatDelay = new WaitForSeconds(0.1f);
     private static readonly WaitForSeconds _boardingCombatPulseDelay = new WaitForSeconds(1f);
     public static readonly int CrewHit = 5;
+
+    private static readonly Dictionary<(int, int), float> _armourPenetrationCache = new Dictionary<(int, int), float>();
 }
 
 public class ArmourPenetrationTable
@@ -233,10 +252,10 @@ public class ArmourPenetrationTable
         _maxPenetration = _penetrationKeys.Last();
     }
 
-    public float PenetrationProbability(int Armour, int Penetration)
+    public float PenetrationProbability(int armour, int penetration)
     {
-        float fixedArmour = MapToTable(Armour, _minArmour, _maxArmour);
-        float fixedPenetration = MapToTable(Penetration, _minPenetration, _maxPenetration);
+        float fixedArmour = MapToTable(armour, _minArmour, _maxArmour);
+        float fixedPenetration = MapToTable(penetration, _minPenetration, _maxPenetration);
         int intArmour = Mathf.FloorToInt(fixedArmour);
         int intPenetration = Mathf.FloorToInt(fixedPenetration);
         int armourIdxBelow = ApproxBinarySearch(_armourKeys, intArmour);

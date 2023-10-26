@@ -1,62 +1,71 @@
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
-3,Light,Autocannon,AP round,5,90,3,8,20,0,1,0,0.075,0.015,0.2,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Light,Autocannon,HE round,8,70,5,7,40,0,1,0,0.075,0.015,0.2,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Light,Autocannon,Frag round,10,0,3,8,10,0,1,0.5,0.1,0.1,0.3,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-3,Light,HVGun,AP round,30,250,8,40,80,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Light,HVGun,HE round,40,145,12,28,160,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Light,HVGun,Frag round,45,35,6,30,60,0,1,0.291666667,0.125,0.18,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-3,Light,Howitzer,AP round,25,180,6,36,60,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Light,Howitzer,HE round,45,175,16,34,240,0,1,0,0.075,0.017,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Light,Howitzer,Frag round,50,45,6,35,60,0,1,0.291666667,0.15,0.22,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,,,
-2,Light,Lance,25,225,10,32,8,80,1,0,0.017,,,,,
-2,Light,Laser,45,125,5,30,7,100,1,0,0.017,,,,,
-2,Light,PlasmaCannon,35,110,7,31,7,120,1,0.1,0.2,AssetBundles\StandaloneWindows\effects,,PlasmaExplosionEffect,,
-,,,,,,,,,,,,,,,,
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
-3,Medium,Autocannon,AP round,11,155,9,24,60,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Medium,Autocannon,HE round,18,140,15,21,120,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Medium,Autocannon,Frag round,22,50,9,24,30,0,1,0.291666667,0.25,0.25,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-3,Medium,HVGun,AP round,90,500,32,120,320,0,1,0,0.1,0.045,0.35,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Medium,HVGun,HE round,120,280,48,112,640,0,1,0,0.15,0.035,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Medium,HVGun,Frag round,135,100,24,120,240,0,1,0.333333333,0.325,0.3,0.4,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-3,Medium,Howitzer,AP round,75,380,24,144,240,0,1,0,0.1,0.035,0.35,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Medium,Howitzer,HE round,135,350,64,136,1200,0,1,0,0.1,0.045,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Medium,Howitzer,Frag round,150,130,24,140,240,0,1,0.375,0.4,0.4,0.45,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,WeaponEffectObj,,
-2,Medium,Lance,80,450,22,80,20,8,1,0,0.045,,,,,
-2,Medium,Laser,135,250,12,70,18,10,1,0,0.045,,,,,
-2,Medium,PlasmaCannon,115,180,16,75,16,12,1,0.125,0.35,AssetBundles\StandaloneWindows\effects,,PlasmaExplosionEffect,,
-,,,,,,,,,,,,,,,,
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
-3,Heavy,Autocannon,AP round,30,270,30,80,200,0,1,0,0.05,0.03,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Heavy,Autocannon,HE round,48,250,50,70,400,0,1,0,0.05,0.03,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Heavy,Autocannon,Frag round,60,100,30,80,100,0,1,0.291666667,0.5,0.4,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-3,Heavy,HVGun,AP round,360,850,160,600,1600,0,1,0,0.025,0.07,0.4,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Heavy,HVGun,HE round,480,600,240,560,3840,0,1,0,0.025,0.05,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Heavy,HVGun,Frag round,540,160,120,600,1200,0,1,0.416666667,0.625,0.6,0.5,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-3,Heavy,Howitzer,AP round,375,770,120,720,1200,0,1,0,0.025,0.05,0.4,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,Heavy,Howitzer,HE round,540,700,320,680,7200,0,1,0,0.025,0.07,0.5,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
-3,Heavy,Howitzer,Frag round,600,180,120,700,1200,0,1,0.458333333,0.75,0.8,0.55,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
-,,,,,,,,,,,,,,,,
-#,Size,Weapon,SD,AP,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,WeaponEffectObj,,
-2,Heavy,Lance,350,800,50,165,41,12,1,0,0.07,,,,,
-2,Heavy,Laser,540,450,25,150,38,14,1,0,0.07,,,,,
-2,Heavy,PlasmaCannon,410,240,35,160,36,16,1,1.5,0.75,AssetBundles\StandaloneWindows\effects,,PlasmaExplosionEffect,,
-,,,,,,,,,,,,,,,,
-#,Size,Weapon,Ammo,SD,AP,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
-3,StrikeCraft,FighterCannon,AP round,22,175,9,24,50,0,1,0,1,0.03,0.15,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-3,StrikeCraft,FighterAutocannon,AP round,0,0,0,0,2,0,0,0,0.65,0,0.1,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
-,,,,,,,,,,,,,,,,
-#,Torpedo Type,Spread Size,Range,SD,AP,AD,CD,HD,HT,Systems hit,Anti personnel,Weapon effect size,Projectile Size,WeaponEffectAssetBundle,WeaponEffectObj,
-4,LongRange,4,26,95,350,80,442,3000,0,2,0.5,0.225,0.6,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect,
-4,Heavy,2,15,150,700,200,510,4500,0,3,0.6,0.25,0.9,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect,
-4,Tracking,2,19,95,280,80,442,2700,0,2,0.4,0.225,0.7,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect,
+#,Size,Weapon,Ammo,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
+3,Light,Autocannon,AP round,5,90,100,3,7,20,0,1,0,0.075,0.015,0.2,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Light,Autocannon,APHE round,6,80,100,4,9,30,0,1,0,0.075,0.015,0.2,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Light,Autocannon,HE round     ,8,70,75,5,8,40,0,1,0,0.075,0.015,0.2,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Light,Autocannon,Frag round    ,10,10,75,3,8,10,0,1,0.5,0.1,0.1,0.3,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+3,Light,HVGun,AP round,30,400,150,8,28,80,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Light,HVGun,APHE round,35,300,150,10,30,110,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Light,HVGun,HE round     ,40,200,100,12,32,140,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Light,HVGun,Frag round    ,45,45,100,6,40,60,0,1,0.291666667,0.125,0.18,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+3,Light,Howitzer,AP round,25,250,100,6,30,60,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Light,Howitzer,APHE round,30,200,100,12,33,120,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Light,Howitzer,HE round     ,45,300,100,16,35,240,0,1,0,0.075,0.017,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Light,Howitzer,Frag round    ,50,35,100,6,55,60,0,1,0.291666667,0.15,0.22,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+#,Size,Weapon,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,,,
+2,Light,Lance       ,25,225,100,10,32,8,80,1,0,0.017,,,,,
+2,Light,Laser       ,45,125,100,5,30,7,100,1,0,0.017,,,,,
+2,Light,PlasmaCannon,35,110,100,7,31,7,120,1,0.1,0.2,AssetBundles\StandaloneWindows\effects,PlasmaExplosionEffect,,,
+,,,,,,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
+3,Medium,Autocannon,AP round,15,150,150,12,28,80,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Medium,Autocannon,APHE round,18,125,100,16,45,120,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Medium,Autocannon,HE round     ,24,100,100,20,40,160,0,1,0,0.075,0.017,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Medium,Autocannon,Frag round    ,30,50,100,12,40,40,0,1,0.291666667,0.25,0.25,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+3,Medium,HVGun,AP round,90,600,200,32,112,320,0,1,0,0.1,0.045,0.35,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Medium,HVGun,APHE round,105,450,150,40,120,440,0,1,0,0.15,0.035,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Medium,HVGun,HE round     ,120,300,100,48,128,560,0,1,0,0.15,0.035,0.35,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Medium,HVGun,Frag round    ,135,100,150,24,160,240,0,1,0.333333333,0.325,0.3,0.4,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+3,Medium,Howitzer,AP round,75,350,125,24,120,240,0,1,0,0.1,0.035,0.35,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Medium,Howitzer,APHE round,90,300,125,48,132,600,0,1,0,0.1,0.045,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Medium,Howitzer,HE round     ,135,450,150,64,140,1200,0,1,0,0.1,0.045,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Medium,Howitzer,Frag round    ,150,75,100,24,220,240,0,1,0.375,0.4,0.4,0.45,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+#,Size,Weapon,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,WeaponEffectObj,,
+2,Medium,Lance       ,80,450,100,22,80,20,8,1,0,0.045,,,,,
+2,Medium,Laser       ,135,250,100,12,70,18,10,1,0,0.045,,,,,
+2,Medium,PlasmaCannon,115,180,100,16,75,16,12,1,0.125,0.35,AssetBundles\StandaloneWindows\effects,,PlasmaExplosionEffect,,
+,,,,,,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
+3,Heavy,Autocannon,AP round,45,300,150,45,105,300,0,1,0,0.05,0.03,0.3,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Heavy,Autocannon,APHE round,54,275,100,60,168,450,0,1,0,0.05,0.03,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Heavy,Autocannon,HE round     ,72,250,100,75,150,600,0,1,0,0.05,0.03,0.3,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Heavy,Autocannon,Frag round    ,90,100,100,45,150,150,0,1,0.291666667,0.5,0.4,0.35,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+3,Heavy,HVGun,AP round,360,750,200,160,560,1600,0,1,0,0.025,0.07,0.4,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Heavy,HVGun,APHE round,420,600,175,200,600,2640,0,1,0,0.025,0.05,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Heavy,HVGun,HE round     ,480,500,150,240,640,3360,0,1,0,0.025,0.05,0.45,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Heavy,HVGun,Frag round    ,540,150,150,120,800,1200,0,1,0.416666667,0.625,0.6,0.5,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+3,Heavy,Howitzer,AP round,375,750,125,120,600,1200,0,1,0,0.025,0.05,0.4,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,Heavy,Howitzer,APHE round,360,725,125,240,660,3600,0,1,0,0.025,0.07,0.5,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Heavy,Howitzer,HE round     ,540,700,150,320,700,7200,0,1,0,0.025,0.07,0.5,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect
+3,Heavy,Howitzer,Frag round    ,600,200,100,120,1100,1200,0,1,0.458333333,0.75,0.8,0.55,AssetBundles\StandaloneWindows\effects,FlakSmallExplosionEffect
+,,,,,,,,,,,,,,,,,
+#,Size,Weapon,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Weapon effect size,Anti personnel,WeaponEffectAssetBundle,,WeaponEffectObj,,
+2,Heavy,Lance       ,350,750,100,50,165,41,12,1,0,0.07,,,,,
+2,Heavy,Laser       ,540,450,100,25,150,38,14,1,0,0.07,,,,,
+2,Heavy,PlasmaCannon,410,240,100,35,160,36,16,1,1.5,0.75,AssetBundles\StandaloneWindows\effects,,PlasmaExplosionEffect,,
+,,,,,,,,,,,,,,,,,
+#,Size,Weapon,Ammo,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Blast Radius,Anti strike craft,Anti personnel,Weapon effect size,WeaponEffectAssetBundle,WeaponEffectObj
+3,StrikeCraft,FighterCannon,AP round,45,175,100,18,42,50,0,1,0,1,0.03,0.15,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+3,StrikeCraft,FighterAutocannon,AP round,0,0,1,0,0,2,0,0,0,0.65,0,0.1,AssetBundles\StandaloneWindows\effects,BulletImpactMetalEffect no Decal
+,,,,,,,,,,,,,,,,,
+#,Torpedo Type,Spread Size,Range,SD,AP median,AP variance,AD,CD,HD,HT,Systems hit,Anti personnel,Weapon effect size,Projectile Size,WeaponEffectAssetBundle,WeaponEffectObj,
+4,LongRange,4,26,95,450,200,80,455,3000,0,2,0.5,0.225,0.6,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect,
+4,Heavy,2,15,300,700,200,200,525,4500,0,3,0.6,0.25,0.9,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect,
+4,Tracking,2,19,95,300,200,80,455,2700,0,2,0.4,0.225,0.7,AssetBundles\StandaloneWindows\effects,SmallExplosionEffect,

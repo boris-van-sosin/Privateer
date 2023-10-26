@@ -151,7 +151,7 @@ public class Ship : ShipBase
 
         _energyCapacityComps = AllComponents.Where(x => x is IEnergyCapacityComponent).Select(y => y as IEnergyCapacityComponent).ToArray();
         _heatCapacityComps = AllComponents.Where(x => x is IHeatCapacityComponent).Select(y => y as IHeatCapacityComponent).ToArray();
-        _updateComponents = SortedPeriodicActionComponents(AllComponents.Where(x => x is IPeriodicActionComponent).Select(y => y as IPeriodicActionComponent)).ToArray();
+        _updateComponents = SortedPeriodicActionComponents(AllComponents.Where(x => x is IPeriodicActionComponent && !(x is ShipEngine)).Select(y => y as IPeriodicActionComponent)).ToArray();
         _shieldComponents = AllComponents.Where(x => x is IShieldComponent).Select(y => y as IShieldComponent).ToArray();
         _combatDetachments = AllComponents.Where(x => x is ShipArmoury).Select(y => y as ShipArmoury).ToArray();
         _totalMaxShield = 0;
@@ -723,7 +723,7 @@ public class Ship : ShipBase
         bool tookDamage = false;
         for (int i = 0; i < w.HitMultiplicity; ++i)
         {
-            if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetration))
+            if (Combat.ArmourPenetration(armourAtLocation, w.ArmourPenetrationMedian, w.ArmourPenetrationFactor))
             {
                 tookDamage = true;
                 if (_currMitigationArmour[sec] > 0)
