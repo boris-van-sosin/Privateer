@@ -22,6 +22,7 @@ public class Ship : ShipBase
     public override void PostAwake()
     {
         base.PostAwake();
+        _minEnergyForActive = -1;
         InitComponentSlots();
         InitCrew();
     }
@@ -49,7 +50,6 @@ public class Ship : ShipBase
     {
         TurretHardpoint[] hardpoints = GetComponentsInChildren<TurretHardpoint>();
         List<ITurret> turrets = new List<ITurret>(hardpoints.Length);
-        _minEnergyForActive = -1;
         foreach (List<Tuple<string, IShipComponent>> l in _turretSlotsOccupied.Values)
         {
             l.Clear();
@@ -69,6 +69,7 @@ public class Ship : ShipBase
     private void SetMinEergyToAct()
     {
         _minEnergyForActive = -1;
+        /*
         foreach (TurretBase t in _turrets.OfType<TurretBase>().Where(a => a.ComponentIsWorking))
         {
             if (_minEnergyForActive < 0)
@@ -80,6 +81,7 @@ public class Ship : ShipBase
                 _minEnergyForActive = System.Math.Min(_minEnergyForActive, t.EnergyToFire);
             }
         }
+        */
         foreach (DamageControlNode comp in _updateComponents.OfType<DamageControlNode>().Where(c => c.ComponentIsWorking))
         {
             if (_minEnergyForActive < 0)
@@ -235,6 +237,7 @@ public class Ship : ShipBase
             return false;
         }
 
+        /*
         if (_minEnergyForActive < 0)
         {
             _minEnergyForActive = t.EnergyToFire;
@@ -243,6 +246,7 @@ public class Ship : ShipBase
         {
             _minEnergyForActive = System.Math.Min(_minEnergyForActive, t.EnergyToFire);
         }
+        */
         _turretSlotsOccupied[hp.LocationOnShip].Add(new Tuple<string, IShipComponent>(t.AllowedSlotTypes.First(), t));
         return true;
     }
@@ -732,13 +736,13 @@ public class Ship : ShipBase
                     mitigationFactor = 1f - ArmourMitigation;
                 }
                 // a random component at the section is damaged.
-                List<IShipActiveComponent> damageableComps = new List<IShipActiveComponent>(_componentSlotsOccupied[sec].Length + _turretSlotsOccupied[sec].Count);
+                _damageableCompsCache.Clear();
                 foreach (IShipComponent c in AllComponentsInSection(sec, true))
                 {
                     IShipActiveComponent c2 = c as IShipActiveComponent;
                     if (c2 != null && c2.Status != ComponentStatus.Destroyed)
                     {
-                        damageableComps.Add(c2);
+                        _damageableCompsCache.Add(c2);
                     }
                 }
                 foreach (IShipComponent c in AllComponentsInSection(ShipSection.Center, true))
@@ -746,12 +750,12 @@ public class Ship : ShipBase
                     IShipActiveComponent c2 = c as IShipActiveComponent;
                     if (c2 != null && c2.Status != ComponentStatus.Destroyed)
                     {
-                        damageableComps.Add(c2);
+                        _damageableCompsCache.Add(c2);
                     }
                 }
-                if (damageableComps.Count > 0)
+                if (_damageableCompsCache.Count > 0)
                 {
-                    IShipActiveComponent comp = ObjectFactory.GetRandom(damageableComps);
+                    IShipActiveComponent comp = ObjectFactory.GetRandom(_damageableCompsCache);
                     comp.ComponentHitPoints -= Mathf.CeilToInt(w.SystemDamage * mitigationFactor);
                     if (!comp.ComponentIsWorking && comp is TurretBase)
                     {
@@ -1482,7 +1486,9 @@ public class Ship : ShipBase
 
     private bool _explosionPlayed = false;
 
-    // Get current mitigatio armour values, for debugging purposes:
+    private List<IShipActiveComponent> _damageableCompsCache = new List<IShipActiveComponent>();
+
+    // Get current mitigation armour values, for debugging purposes:
     public IReadOnlyDictionary<ShipSection, int> CurrMitigationArmour => _currMitigationArmour;
 
     internal class ShipSectionComparer : IEqualityComparer<ShipSection>

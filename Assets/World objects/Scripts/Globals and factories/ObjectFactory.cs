@@ -886,6 +886,8 @@ public static class ObjectFactory
 
         WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
         resTurret.FiringInterval = tordpedoData.FiringInterval;
+        resTurret.EnergyToReload = tordpedoData.EnergyToReload;
+        resTurret.HeatToReload = tordpedoData.HeatToReload;
         resTurret.EnergyToFire = tordpedoData.EnergyToFire;
         resTurret.HeatToFire = tordpedoData.HeatToFire;
 
@@ -902,6 +904,8 @@ public static class ObjectFactory
 
         WeaponTorpedoDataEntry tordpedoData = _weapons_torpedo;
         resTurret.FiringInterval = tordpedoData.FiringInterval;
+        resTurret.EnergyToReload = tordpedoData.EnergyToReload;
+        resTurret.HeatToReload = tordpedoData.HeatToReload;
         resTurret.EnergyToFire = tordpedoData.EnergyToFire;
         resTurret.HeatToFire = tordpedoData.HeatToFire;
 
@@ -2202,6 +2206,8 @@ public static class ObjectFactory
     public class WeaponTorpedoDataEntry
     {
         public float FiringInterval;
+        public int EnergyToReload;
+        public int HeatToReload;
         public int EnergyToFire;
         public int HeatToFire;
 
@@ -2214,6 +2220,8 @@ public static class ObjectFactory
                 return new WeaponTorpedoDataEntry()
                 {
                     FiringInterval = float.Parse(elements[i++].Trim()),
+                    EnergyToReload = int.Parse(elements[i++].Trim()),
+                    HeatToReload = int.Parse(elements[i++].Trim()),
                     EnergyToFire = int.Parse(elements[i++].Trim()),
                     HeatToFire = int.Parse(elements[i++].Trim())
                 };

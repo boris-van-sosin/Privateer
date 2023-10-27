@@ -295,7 +295,7 @@ public class Torpedo : MonoBehaviour, ITargetableEntity
     public ShipBase TargetShip { get; set; }
     public bool IsTracking { get; set; }
     public Vector3 ColdLaunchVec { get; set; }
-    public float Speed { get; set; }
+    public float Speed { get; private set; }
 
     private ParticleSystem _exhaustPatricleSystem;
     private TrailRenderer _trail;
